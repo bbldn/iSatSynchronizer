@@ -3,6 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CategoryStore;
+use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,8 +13,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CategoryStore[]    findAll()
  * @method CategoryStore[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CategoryStoreRepository extends ServiceEntityRepository
+class CategoryStoreRepository extends BaseRepository
 {
+    protected $entityManagerName = 'front';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CategoryStore::class);

@@ -3,6 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductImage;
+use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,8 +13,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductImage[]    findAll()
  * @method ProductImage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductImageRepository extends ServiceEntityRepository
+class ProductImageRepository extends BaseRepository
 {
+    protected $entityManagerName = 'front';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductImage::class);

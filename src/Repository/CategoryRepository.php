@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Repository\Front;
+namespace App\Repository;
 
-use App\Entity\Front\Category;
-use App\Repository\BaseRepository;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -15,26 +14,29 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends BaseRepository
 {
-    protected $entityManagerName = 'front';
+    protected $entityManagerName = 'default';
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
-        $this->_em = $registry->getManager('front');
     }
 
-    public function checkExistsByCategoryId(?int $id)
+    public function findOneByBackId(int $value): ?Category
     {
-        if ($id === null) {
-            return 0;
-        }
-
         return $this->createQueryBuilder('c')
-            ->select('count(c.category)')
-            ->andWhere('c.id = :val')
-            ->setParameter('val', $id)
+            ->andWhere('c.back_id = :val')
+            ->setParameter('val', $value)
             ->getQuery()
-            ->getScalarResult() > 0;
+            ->getOneOrNullResult();
+    }
+
+    public function findOneByFrontId(int $value): ?Category
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.front_id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     // /**

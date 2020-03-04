@@ -1,29 +1,30 @@
 <?php
 
-namespace App\Repository\Front;
+namespace App\Repository\Back;
 
-use App\Entity\Front\CategoryPath;
+use App\Entity\Back\Category;
 use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method CategoryPath|null find($id, $lockMode = null, $lockVersion = null)
- * @method CategoryPath|null findOneBy(array $criteria, array $orderBy = null)
- * @method CategoryPath[]    findAll()
- * @method CategoryPath[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Category|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Category|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Category[]    findAll()
+ * @method Category[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CategoryPathRepository extends BaseRepository
+class CategoryRepository extends BaseRepository
 {
-    protected $entityManagerName = 'front';
+    protected $entityManagerName = 'back';
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CategoryPath::class);
+        parent::__construct($registry, Category::class);
     }
 
+
     // /**
-    //  * @return CategoryPath[] Returns an array of CategoryPath objects
+    //  * @return Category[] Returns an array of Category objects
     //  */
     /*
     public function findByExampleField($value)
@@ -40,7 +41,7 @@ class CategoryPathRepository extends BaseRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?CategoryPath
+    public function findOneBySomeField($value): ?Category
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')

@@ -50,6 +50,13 @@ class CategoryDescription
         return $this->category_id;
     }
 
+    public function setCategoryId(int $category_id)
+    {
+        $this->category_id = $category_id;
+
+        return $this;
+    }
+
     public function getLanguageId(): ?int
     {
         return $this->language_id;
