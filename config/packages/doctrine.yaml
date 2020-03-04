@@ -1,0 +1,56 @@
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                url: '%env(DATABASE_URL)%'
+                driver: 'pdo_mysql'
+                server_version: '5.7'
+                charset: utf8mb4
+            back:
+                url: '%env(DATABASE_URL_BACK)%'
+                driver: 'pdo_mysql'
+                server_version: '5.7'
+                charset: cp1251_general_ci
+            front:
+                url: '%env(DATABASE_URL_FRONT)%'
+                driver: 'pdo_mysql'
+                server_version: '5.7'
+                charset: utf8mb4
+    orm:
+        auto_generate_proxy_classes: true
+        #auto_mapping: true
+        #default_entity_manager: default
+        entity_managers:
+            defalt:
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: default
+                mappings:
+                    App:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity'
+                        alias: App
+            back:
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: back
+                mappings:
+                    Back:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity/Back'
+                        prefix: 'App\Entity\Back'
+                        alias: Back
+            front:
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: front
+                mappings:
+                    Front:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity/Front'
+                        prefix: 'App\Entity\Front'
+                        alias: Front
+
+
