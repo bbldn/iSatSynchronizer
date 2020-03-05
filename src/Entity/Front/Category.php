@@ -13,46 +13,53 @@ class Category
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="category_id")
      */
-    private $category_id;
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $image;
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $parent_id = 0;
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $top;
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $column;
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $sort_order = 0;
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $status;
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $date_added;
+    private $categoryId;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", name="image", nullable=true)
      */
-    private $date_modified;
+    private $image;
+
+    /**
+     * @ORM\Column(type="integer", name="parent_id")
+     */
+    private $parentId = 0;
+
+    /**
+     * @ORM\Column(type="boolean", name="top")
+     */
+    private $top;
+
+    /**
+     * @ORM\Column(type="integer", name="column")
+     */
+    private $column;
+
+    /**
+     * @ORM\Column(type="integer", name="sort_order")
+     */
+    private $sortOrder = 0;
+
+    /**
+     * @ORM\Column(type="boolean", name="status")
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="datetime", name="date_added")
+     */
+    private $dateAdded;
+
+    /**
+     * @ORM\Column(type="datetime", name="date_added")
+     */
+    private $dateModified;
 
     public function getCategoryId(): ?int
     {
-        return $this->category_id;
+        return $this->categoryId;
     }
 
     public function getImage(): ?string
@@ -69,12 +76,12 @@ class Category
 
     public function getParentId(): ?int
     {
-        return $this->parent_id;
+        return $this->parentId;
     }
 
-    public function setParentId(int $parent_id): self
+    public function setParentId(int $parentId): self
     {
-        $this->parent_id = $parent_id;
+        $this->parentId = $parentId;
 
         return $this;
     }
@@ -105,12 +112,12 @@ class Category
 
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
-    public function setSortOrder(int $sort_order): self
+    public function setSortOrder(int $sortOrder): self
     {
-        $this->sort_order = $sort_order;
+        $this->sortOrder = $sortOrder;
 
         return $this;
     }
@@ -129,24 +136,24 @@ class Category
 
     public function getDateAdded(): ?\DateTimeInterface
     {
-        return $this->date_added;
+        return $this->dateAdded;
     }
 
-    public function setDateAdded(\DateTimeInterface $date_added): self
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
     {
-        $this->date_added = $date_added;
+        $this->dateAdded = $dateAdded;
 
         return $this;
     }
 
     public function getDateModified(): ?\DateTimeInterface
     {
-        return $this->date_modified;
+        return $this->dateModified;
     }
 
-    public function setDateModified(\DateTimeInterface $date_modified): self
+    public function setDateModified(\DateTimeInterface $dateModified): self
     {
-        $this->date_modified = $date_modified;
+        $this->dateModified = $dateModified;
 
         return $this;
     }

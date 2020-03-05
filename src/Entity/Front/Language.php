@@ -13,53 +13,53 @@ class Language
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="language_id")
      */
-    private $language_id;
+    private $languageId;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", name="name", length=32)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="string", name="code", length=5)
      */
     private $code;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="locale", length=255)
      */
     private $locale;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", name="image", length=64)
      */
     private $image;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", name="directory", length=32)
      */
     private $directory;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="sort_order")
      */
-    private $sort_order;
+    private $sortOrder;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="status")
      */
     private $status;
 
     public function getLanguageId(): ?int
     {
-        return $this->language_id;
+        return $this->languageId;
     }
 
-    public function setLanguageId(int $language_id): self
+    public function setLanguageId(int $languageId): self
     {
-        $this->language_id = $language_id;
+        $this->languageId = $languageId;
 
         return $this;
     }
@@ -126,12 +126,12 @@ class Language
 
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
-    public function setSortOrder(int $sort_order): self
+    public function setSortOrder(int $sortOrder): self
     {
-        $this->sort_order = $sort_order;
+        $this->sortOrder = $sortOrder;
 
         return $this;
     }

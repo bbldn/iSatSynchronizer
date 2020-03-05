@@ -13,40 +13,40 @@ class CategoryPath
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="category_id")
      */
-    private $category_id;
+    private $categoryId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="path_id")
      */
-    private $path_id;
+    private $pathId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="level")
      */
     private $level;
 
     public function getCategoryId(): ?int
     {
-        return $this->category_id;
+        return $this->categoryId;
     }
 
-    public function setCategoryId(int $category_id): self
+    public function setCategoryId(int $categoryId): self
     {
-        $this->category_id = $category_id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }
 
     public function getPathId(): ?int
     {
-        return $this->path_id;
+        return $this->pathId;
     }
 
-    public function setPathId(int $path_id): self
+    public function setPathId(int $pathId): self
     {
-        $this->path_id = $path_id;
+        $this->pathId = $pathId;
 
         return $this;
     }

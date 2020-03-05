@@ -13,62 +13,62 @@ class ProductOption
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_option_id")
      */
-    private $product_option_id;
+    private $productOptionId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_id")
      */
-    private $product_id;
+    private $productId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="option_id")
      */
-    private $option_id;
+    private $optionId;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="value", length=255)
      */
     private $value;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="required")
      */
     private $required;
 
     public function getProductOptionId(): ?int
     {
-        return $this->product_option_id;
+        return $this->productOptionId;
     }
 
-    public function setProductOptionId(int $product_option_id): self
+    public function setProductOptionId(int $productOptionId): self
     {
-        $this->product_option_id = $product_option_id;
+        $this->productOptionId = $productOptionId;
 
         return $this;
     }
 
     public function getProductId(): ?int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
-    public function setProductId(int $product_id): self
+    public function setProductId(int $productId): self
     {
-        $this->product_id = $product_id;
+        $this->productId = $productId;
 
         return $this;
     }
 
     public function getOptionId(): ?int
     {
-        return $this->option_id;
+        return $this->optionId;
     }
 
-    public function setOptionId(int $option_id): self
+    public function setOptionId(int $optionId): self
     {
-        $this->option_id = $option_id;
+        $this->optionId = $optionId;
 
         return $this;
     }

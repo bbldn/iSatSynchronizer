@@ -13,173 +13,173 @@ class Product
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_id")
      */
-    private $product_id;
+    private $productId;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", name="model", length=64)
      */
     private $model;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", name="sku", length=64)
      */
     private $sku;
 
     /**
-     * @ORM\Column(type="string", length=12)
+     * @ORM\Column(type="string", name="upc", length=12)
      */
     private $upc;
 
     /**
-     * @ORM\Column(type="string", length=14)
+     * @ORM\Column(type="string", name="ean", length=14)
      */
     private $ean;
 
     /**
-     * @ORM\Column(type="string", length=13)
+     * @ORM\Column(type="string", name="jan", length=13)
      */
     private $jan;
 
     /**
-     * @ORM\Column(type="string", length=17)
+     * @ORM\Column(type="string", name="isbn", length=17)
      */
     private $isbn;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", name="mpn", length=64)
      */
     private $mpn;
 
     /**
-     * @ORM\Column(type="string", length=128)
+     * @ORM\Column(type="string", name="location", length=128)
      */
     private $location;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="quantity")
      */
     private $quantity = 0;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="stock_status_id")
      */
-    private $stock_status_id;
+    private $stockStatusId;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="image", length=255)
      */
     private $image;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="manufacturer_id")
      */
-    private $manufacturer_id;
+    private $manufacturerId;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="shipping")
      */
     private $shipping = true;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="price")
      */
     private $price = 0.0;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="points")
      */
     private $points = 0;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="tax_class_id")
      */
-    private $tax_class_id;
+    private $taxClassId;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", name="date_available")
      */
-    private $date_available;
+    private $dateAvailable;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="weight")
      */
     private $weight = 0.0;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="weight_class_id")
      */
-    private $weight_class_id = 0;
+    private $weightClassId = 0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="length")
      */
     private $length = 0.0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="width")
      */
     private $width = 0.0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="height")
      */
     private $height = 0.0;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="length_class_id")
      */
-    private $length_class_id = 0;
+    private $lengthClassId = 0;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="subtract")
      */
     private $subtract = true;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="minimum")
      */
     private $minimum = 1;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="sort_order")
      */
-    private $sort_order = 0;
+    private $sortOrder = 0;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="status")
      */
     private $status = false;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="viewed")
      */
     private $viewed = 0;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="date_added")
      */
-    private $date_added;
+    private $dateAdded;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="date_modified")
      */
-    private $date_modified;
+    private $dateModified;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="oct_product_stickers", length=255)
      */
-    private $oct_product_stickers;
+    private $octProductStickers;
 
     public function getProductId(): ?int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
-    public function setProductId(int $product_id): self
+    public function setProductId(int $productId): self
     {
-        $this->product_id = $product_id;
+        $this->productId = $productId;
 
         return $this;
     }
@@ -294,12 +294,12 @@ class Product
 
     public function getStockStatusId(): ?int
     {
-        return $this->stock_status_id;
+        return $this->stockStatusId;
     }
 
-    public function setStockStatusId(int $stock_status_id): self
+    public function setStockStatusId(int $stockStatusId): self
     {
-        $this->stock_status_id = $stock_status_id;
+        $this->stockStatusId = $stockStatusId;
 
         return $this;
     }
@@ -318,12 +318,12 @@ class Product
 
     public function getManufacturerId(): ?int
     {
-        return $this->manufacturer_id;
+        return $this->manufacturerId;
     }
 
-    public function setManufacturerId(int $manufacturer_id): self
+    public function setManufacturerId(int $manufacturerId): self
     {
-        $this->manufacturer_id = $manufacturer_id;
+        $this->manufacturerId = $manufacturerId;
 
         return $this;
     }
@@ -366,24 +366,24 @@ class Product
 
     public function getTaxClassId(): ?int
     {
-        return $this->tax_class_id;
+        return $this->taxClassId;
     }
 
-    public function setTaxClassId(int $tax_class_id): self
+    public function setTaxClassId(int $taxClassId): self
     {
-        $this->tax_class_id = $tax_class_id;
+        $this->taxClassId = $taxClassId;
 
         return $this;
     }
 
     public function getDateAvailable(): ?\DateTimeInterface
     {
-        return $this->date_available;
+        return $this->dateAvailable;
     }
 
-    public function setDateAvailable(\DateTimeInterface $date_available): self
+    public function setDateAvailable(\DateTimeInterface $dateAvailable): self
     {
-        $this->date_available = $date_available;
+        $this->dateAvailable = $dateAvailable;
 
         return $this;
     }
@@ -402,12 +402,12 @@ class Product
 
     public function getWeightClassId(): ?int
     {
-        return $this->weight_class_id;
+        return $this->weightClassId;
     }
 
-    public function setWeightClassId(int $weight_class_id): self
+    public function setWeightClassId(int $weightClassId): self
     {
-        $this->weight_class_id = $weight_class_id;
+        $this->weightClassId = $weightClassId;
 
         return $this;
     }
@@ -450,12 +450,12 @@ class Product
 
     public function getLengthClassId(): ?int
     {
-        return $this->length_class_id;
+        return $this->lengthClassId;
     }
 
-    public function setLengthClassId(int $length_class_id): self
+    public function setLengthClassId(int $lengthClassId): self
     {
-        $this->length_class_id = $length_class_id;
+        $this->lengthClassId = $lengthClassId;
 
         return $this;
     }
@@ -486,12 +486,12 @@ class Product
 
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
-    public function setSortOrder(int $sort_order): self
+    public function setSortOrder(int $sortOrder): self
     {
-        $this->sort_order = $sort_order;
+        $this->sortOrder = $sortOrder;
 
         return $this;
     }
@@ -522,36 +522,36 @@ class Product
 
     public function getDateAdded(): ?\DateTimeInterface
     {
-        return $this->date_added;
+        return $this->dateAdded;
     }
 
-    public function setDateAdded(\DateTimeInterface $date_added): self
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
     {
-        $this->date_added = $date_added;
+        $this->dateAdded = $dateAdded;
 
         return $this;
     }
 
     public function getDateModified(): ?\DateTimeInterface
     {
-        return $this->date_modified;
+        return $this->dateModified;
     }
 
-    public function setDateModified(\DateTimeInterface $date_modified): self
+    public function setDateModified(\DateTimeInterface $dateModified): self
     {
-        $this->date_modified = $date_modified;
+        $this->dateModified = $dateModified;
 
         return $this;
     }
 
     public function getOctProductStickers(): ?string
     {
-        return $this->oct_product_stickers;
+        return $this->octProductStickers;
     }
 
-    public function setOctProductStickers(string $oct_product_stickers): self
+    public function setOctProductStickers(string $octProductStickers): self
     {
-        $this->oct_product_stickers = $oct_product_stickers;
+        $this->octProductStickers = $octProductStickers;
 
         return $this;
     }

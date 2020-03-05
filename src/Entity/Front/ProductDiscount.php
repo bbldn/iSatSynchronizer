@@ -13,77 +13,77 @@ class ProductDiscount
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_discount_id")
      */
-    private $product_discount_id;
+    private $productDiscountId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_id")
      */
-    private $product_id;
+    private $productId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="customer_group_id")
      */
-    private $customer_group_id;
+    private $customerGroupId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="quantity")
      */
     private $quantity;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="priority")
      */
     private $priority;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="price")
      */
     private $price;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", name="date_start")
      */
-    private $date_start;
+    private $dateStart;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", name="date_end")
      */
-    private $date_end;
+    private $dateEnd;
 
     public function getProductDiscountId(): ?int
     {
-        return $this->product_discount_id;
+        return $this->productDiscountId;
     }
 
-    public function setProductDiscountId(int $product_discount_id): self
+    public function setProductDiscountId(int $productDiscountId): self
     {
-        $this->product_discount_id = $product_discount_id;
+        $this->productDiscountId = $productDiscountId;
 
         return $this;
     }
 
     public function getProductId(): ?int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
-    public function setProductId(int $product_id): self
+    public function setProductId(int $productId): self
     {
-        $this->product_id = $product_id;
+        $this->productId = $productId;
 
         return $this;
     }
 
     public function getCustomerGroupId(): ?int
     {
-        return $this->customer_group_id;
+        return $this->customerGroupId;
     }
 
-    public function setCustomerGroupId(int $customer_group_id): self
+    public function setCustomerGroupId(int $customerGroupId): self
     {
-        $this->customer_group_id = $customer_group_id;
+        $this->customerGroupId = $customerGroupId;
 
         return $this;
     }
@@ -126,24 +126,24 @@ class ProductDiscount
 
     public function getDateStart(): ?\DateTimeInterface
     {
-        return $this->date_start;
+        return $this->dateStart;
     }
 
-    public function setDateStart(\DateTimeInterface $date_start): self
+    public function setDateStart(\DateTimeInterface $dateStart): self
     {
-        $this->date_start = $date_start;
+        $this->dateStart = $dateStart;
 
         return $this;
     }
 
     public function getDateEnd(): ?\DateTimeInterface
     {
-        return $this->date_end;
+        return $this->dateEnd;
     }
 
-    public function setDateEnd(\DateTimeInterface $date_end): self
+    public function setDateEnd(\DateTimeInterface $dateEnd): self
     {
-        $this->date_end = $date_end;
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }

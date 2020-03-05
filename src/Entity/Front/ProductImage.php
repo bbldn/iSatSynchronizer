@@ -13,50 +13,45 @@ class ProductImage
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_image_id")
      */
-    private $product_image_id;
+    private $productImageId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_id")
      */
-    private $product_id;
+    private $productId;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="image", length=255)
      */
     private $image;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="sort_order")
      */
-    private $sort_order;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    private $sortOrder;
 
     public function getProductImageId(): ?int
     {
-        return $this->product_image_id;
+        return $this->productImageId;
     }
 
-    public function setProductImageId(int $product_image_id): self
+    public function setProductImageId(int $productImageId): self
     {
-        $this->product_image_id = $product_image_id;
+        $this->productImageId = $productImageId;
 
         return $this;
     }
 
     public function getProductId(): ?int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
-    public function setProductId(int $product_id): self
+    public function setProductId(int $productId): self
     {
-        $this->product_id = $product_id;
+        $this->productId = $productId;
 
         return $this;
     }
@@ -75,12 +70,12 @@ class ProductImage
 
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
-    public function setSortOrder(int $sort_order): self
+    public function setSortOrder(int $sortOrder): self
     {
-        $this->sort_order = $sort_order;
+        $this->sortOrder = $sortOrder;
 
         return $this;
     }

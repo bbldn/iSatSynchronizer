@@ -15,166 +15,166 @@ class Category
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="categoryID")
      */
-    private $category_id;
+    private $categoryId;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, name="name", nullable=true)
      */
     private $name = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="parent", nullable=true)
      */
     private $parent = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="products_count", nullable=true)
      */
-    private $products_count = null;
+    private $productsCount = null;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", name="description", nullable=true)
      */
     private $description = null;
 
     /**
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="string", name="description", length=30, nullable=true)
      */
     private $picture = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="products_count_admin", nullable=true)
      */
-    private $products_count_admin = null;
+    private $productsCountAdmin = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="sort_order", nullable=true)
      */
-    private $sort_order = 0;
+    private $sortOrder = 0;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="viewed_times", nullable=true)
      */
-    private $viewed_times = 0;
+    private $viewedTimes = 0;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="allow_products_comparison", nullable=true)
      */
-    private $allow_products_comparison = 0;
+    private $allowProductsComparison = 0;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="allow_products_search", nullable=true)
      */
-    private $allow_products_search = 1;
+    private $allowProductsSearch = 1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="show_subcategories_products", nullable=true)
      */
-    private $show_subcategories_products = 1;
+    private $showSubcategoriesProducts = 1;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", name="meta_description" length=255, nullable=true)
      */
-    private $meta_description = null;
+    private $metaDescription = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", name="meta_keywords" length=255, nullable=true)
      */
-    private $meta_keywords = null;
+    private $metaKeywords = null;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", name="big_image", nullable=true)
      */
-    private $big_image = null;
+    private $bigImage = null;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", name="big_image_width", length=25)
      */
-    private $big_image_width;
+    private $bigImageWidth;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", name="big_image_height", length=25)
      */
-    private $big_image_height;
+    private $bigImageHeight;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", name="link_from_big_image", nullable=true)
      */
-    private $link_from_big_image = null;
+    private $linkFromBigImage = null;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="columns")
      */
     private $columns = 5;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="rows")
      */
     private $rows = 10;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="height")
      */
     private $height = 380;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="active")
      */
     private $active = true;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="kol_products_on_showcase")
      */
-    private $kol_products_on_showcase = 10;
+    private $kolProductsOnShowcase = 10;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="enabled")
      */
     private $enabled = true;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="swf", length=255)
      */
     private $swf;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", name="swf_width", length=25)
      */
-    private $swf_width;
+    private $swfWidth;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", name="swf_height", length=25)
      */
-    private $swf_height;
+    private $swfHeight;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean", name="enable_sale", nullable=true)
      */
-    private $enable_sale = 0;
+    private $enableSale = 0;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="brands", length=255)
      */
     private $brands;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="h1", length=255)
      */
     private $h1;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="slug", length=255)
      */
     private $slug;
 
     public function getCategoryId(): ?int
     {
-        return $this->category_id;
+        return $this->categoryId;
     }
 
-    public function setCategoryId(int $category_id): self
+    public function setCategoryId(int $categoryId): self
     {
-        $this->category_id = $category_id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }
@@ -205,12 +205,12 @@ class Category
 
     public function getProductsCount(): ?int
     {
-        return $this->products_count;
+        return $this->productsCount;
     }
 
-    public function setProductsCount(int $products_count): self
+    public function setProductsCount(int $productsCount): self
     {
-        $this->products_count = $products_count;
+        $this->productsCount = $productsCount;
 
         return $this;
     }
@@ -241,144 +241,144 @@ class Category
 
     public function getProductsCountAdmin(): ?int
     {
-        return $this->products_count_admin;
+        return $this->productsCountAdmin;
     }
 
-    public function setProductsCountAdmin(int $products_count_admin): self
+    public function setProductsCountAdmin(int $productsCountAdmin): self
     {
-        $this->products_count_admin = $products_count_admin;
+        $this->productsCountAdmin = $productsCountAdmin;
 
         return $this;
     }
 
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
-    public function setSortOrder(int $sort_order): self
+    public function setSortOrder(int $sortOrder): self
     {
-        $this->sort_order = $sort_order;
+        $this->sortOrder = $sortOrder;
 
         return $this;
     }
 
     public function getViewedTimes(): ?int
     {
-        return $this->viewed_times;
+        return $this->viewedTimes;
     }
 
-    public function setViewedTimes(int $viewed_times): self
+    public function setViewedTimes(int $viewedTimes): self
     {
-        $this->viewed_times = $viewed_times;
+        $this->viewedTimes = $viewedTimes;
 
         return $this;
     }
 
     public function getAllowProductsComparison(): ?int
     {
-        return $this->allow_products_comparison;
+        return $this->allowProductsComparison;
     }
 
-    public function setAllowProductsComparison(int $allow_products_comparison): self
+    public function setAllowProductsComparison(int $allowProductsComparison): self
     {
-        $this->allow_products_comparison = $allow_products_comparison;
+        $this->allowProductsComparison = $allowProductsComparison;
 
         return $this;
     }
 
     public function getAllowProductsSearch(): ?int
     {
-        return $this->allow_products_search;
+        return $this->allowProductsSearch;
     }
 
-    public function setAllowProductsSearch(int $allow_products_search): self
+    public function setAllowProductsSearch(int $allowProductsSearch): self
     {
-        $this->allow_products_search = $allow_products_search;
+        $this->allowProductsSearch = $allowProductsSearch;
 
         return $this;
     }
 
     public function getShowSubcategoriesProducts(): ?int
     {
-        return $this->show_subcategories_products;
+        return $this->showSubcategoriesProducts;
     }
 
-    public function setShowSubcategoriesProducts(int $show_subcategories_products): self
+    public function setShowSubcategoriesProducts(int $showSubcategoriesProducts): self
     {
-        $this->show_subcategories_products = $show_subcategories_products;
+        $this->showSubcategoriesProducts = $showSubcategoriesProducts;
 
         return $this;
     }
 
     public function getMetaDescription(): ?string
     {
-        return $this->meta_description;
+        return $this->metaDescription;
     }
 
-    public function setMetaDescription(string $meta_description): self
+    public function setMetaDescription(string $metaDescription): self
     {
-        $this->meta_description = $meta_description;
+        $this->metaDescription = $metaDescription;
 
         return $this;
     }
 
     public function getMetaKeywords(): ?string
     {
-        return $this->meta_keywords;
+        return $this->metaKeywords;
     }
 
-    public function setMetaKeywords(string $meta_keywords): self
+    public function setMetaKeywords(string $metaKeywords): self
     {
-        $this->meta_keywords = $meta_keywords;
+        $this->metaKeywords = $metaKeywords;
 
         return $this;
     }
 
     public function getBigImage(): ?string
     {
-        return $this->big_image;
+        return $this->bigImage;
     }
 
-    public function setBigImage(string $big_image): self
+    public function setBigImage(string $bigImage): self
     {
-        $this->big_image = $big_image;
+        $this->bigImage = $bigImage;
 
         return $this;
     }
 
     public function getBigImageWidth(): ?string
     {
-        return $this->big_image_width;
+        return $this->bigImageWidth;
     }
 
-    public function setBigImageWidth(string $big_image_width): self
+    public function setBigImageWidth(string $bigImageWidth): self
     {
-        $this->big_image_width = $big_image_width;
+        $this->bigImageWidth = $bigImageWidth;
 
         return $this;
     }
 
     public function getBigImageHeight(): ?string
     {
-        return $this->big_image_height;
+        return $this->bigImageHeight;
     }
 
-    public function setBigImageHeight(string $big_image_height): self
+    public function setBigImageHeight(string $bigImageHeight): self
     {
-        $this->big_image_height = $big_image_height;
+        $this->bigImageHeight = $bigImageHeight;
 
         return $this;
     }
 
     public function getLinkFromBigImage(): ?string
     {
-        return $this->link_from_big_image;
+        return $this->linkFromBigImage;
     }
 
-    public function setLinkFromBigImage(string $link_from_big_image): self
+    public function setLinkFromBigImage(string $linkFromBigImage): self
     {
-        $this->link_from_big_image = $link_from_big_image;
+        $this->linkFromBigImage = $linkFromBigImage;
 
         return $this;
     }
@@ -433,12 +433,12 @@ class Category
 
     public function getKolProductsOnShowcase(): ?int
     {
-        return $this->kol_products_on_showcase;
+        return $this->kolProductsOnShowcase;
     }
 
-    public function setKolProductsOnShowcase(int $kol_products_on_showcase): self
+    public function setKolProductsOnShowcase(int $kolProductsOnShowcase): self
     {
-        $this->kol_products_on_showcase = $kol_products_on_showcase;
+        $this->kolProductsOnShowcase = $kolProductsOnShowcase;
 
         return $this;
     }
@@ -469,36 +469,36 @@ class Category
 
     public function getSwfWidth(): ?string
     {
-        return $this->swf_width;
+        return $this->swfWidth;
     }
 
-    public function setSwfWidth(string $swf_width): self
+    public function setSwfWidth(string $swfWidth): self
     {
-        $this->swf_width = $swf_width;
+        $this->swfWidth = $swfWidth;
 
         return $this;
     }
 
     public function getSwfHeight(): ?string
     {
-        return $this->swf_height;
+        return $this->swfHeight;
     }
 
-    public function setSwfHeight(string $swf_height): self
+    public function setSwfHeight(string $swfHeight): self
     {
-        $this->swf_height = $swf_height;
+        $this->swfHeight = $swfHeight;
 
         return $this;
     }
 
     public function getEnableSale(): ?bool
     {
-        return $this->enable_sale;
+        return $this->enableSale;
     }
 
-    public function setEnableSale(bool $enable_sale): self
+    public function setEnableSale(bool $enableSale): self
     {
-        $this->enable_sale = $enable_sale;
+        $this->enableSale = $enableSale;
 
         return $this;
     }

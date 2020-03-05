@@ -13,19 +13,19 @@ class Category
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="id")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="front_id")
      */
-    private $front_id;
+    private $frontId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="back_id")
      */
-    private $back_id;
+    private $backId;
 
     public function getId(): ?int
     {
@@ -34,24 +34,24 @@ class Category
 
     public function getFrontId(): ?int
     {
-        return $this->front_id;
+        return $this->frontId;
     }
 
-    public function setFrontId(int $front_id): self
+    public function setFrontId(int $frontId): self
     {
-        $this->front_id = $front_id;
+        $this->frontId = $frontId;
 
         return $this;
     }
 
     public function getBackId(): ?int
     {
-        return $this->back_id;
+        return $this->backId;
     }
 
-    public function setBackId(int $back_id): self
+    public function setBackId(int $backId): self
     {
-        $this->back_id = $back_id;
+        $this->backId = $backId;
 
         return $this;
     }

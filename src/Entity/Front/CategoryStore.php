@@ -13,35 +13,35 @@ class CategoryStore
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="category_id")
      */
-    private $category_id;
+    private $categoryId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="store_id")
      */
-    private $store_id;
+    private $storeId;
 
     public function getCategoryId(): ?int
     {
-        return $this->category_id;
+        return $this->categoryId;
     }
 
-    public function setCategoryId(int $category_id): self
+    public function setCategoryId(int $categoryId): self
     {
-        $this->category_id = $category_id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }
 
     public function getStoreId(): ?int
     {
-        return $this->store_id;
+        return $this->storeId;
     }
 
-    public function setStoreId(int $store_id): self
+    public function setStoreId(int $storeId): self
     {
-        $this->store_id = $store_id;
+        $this->storeId = $storeId;
 
         return $this;
     }

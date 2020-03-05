@@ -13,57 +13,57 @@ class ProductAttribute
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_id")
      */
-    private $product_id;
+    private $productId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="attribute_id")
      */
-    private $attribute_id;
+    private $attributeId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="language_id")
      */
-    private $language_id;
+    private $languageId;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="text")
      */
     private $text;
 
     public function getProductId(): ?int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
-    public function setProductId(int $product_id): self
+    public function setProductId(int $productId): self
     {
-        $this->product_id = $product_id;
+        $this->productId = $productId;
 
         return $this;
     }
 
     public function getAttributeId(): ?int
     {
-        return $this->attribute_id;
+        return $this->attributeId;
     }
 
-    public function setAttributeId(int $attribute_id): self
+    public function setAttributeId(int $attributeId): self
     {
-        $this->attribute_id = $attribute_id;
+        $this->attributeId = $attributeId;
 
         return $this;
     }
 
     public function getLanguageId(): ?int
     {
-        return $this->language_id;
+        return $this->languageId;
     }
 
-    public function setLanguageId(int $language_id): self
+    public function setLanguageId(int $languageId): self
     {
-        $this->language_id = $language_id;
+        $this->languageId = $languageId;
 
         return $this;
     }

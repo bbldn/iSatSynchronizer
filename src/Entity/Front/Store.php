@@ -13,43 +13,33 @@ class Store
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="store_id")
      */
-    private $id;
+    private $storeId;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $store_id;
-
-    /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", name="name", length=64)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="url", length=255)
      */
     private $url;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="ssl", length=255)
      */
     private $ssl;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getStoreId(): ?int
     {
-        return $this->store_id;
+        return $this->storeId;
     }
 
-    public function setStoreId(int $store_id): self
+    public function setStoreId(int $storeId): self
     {
-        $this->store_id = $store_id;
+        $this->storeId = $storeId;
 
         return $this;
     }

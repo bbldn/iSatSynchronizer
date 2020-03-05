@@ -79,10 +79,10 @@ class CategorySynchronize
 
         $categoryFrontId = $categoryFront->getCategoryId();
 
-        $categoryDescriptionFront = new CategoryDescription();
+        $categoryDescription = new CategoryDescription();
         $languageId = $this->getDefaultLanguageId();
-        CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescriptionFront, $categoryFrontId, $languageId);
-        $this->categoryDescriptionRepositoryFront->saveAndFlush($categoryDescriptionFront);
+        CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
+        $this->categoryDescriptionRepositoryFront->saveAndFlush($categoryDescription);
 
         $categoryLayout = new CategoryLayout();
         $storeId = $this->getStoreId();
@@ -99,7 +99,40 @@ class CategorySynchronize
 
     protected function updateCategoryFrontFromBackCategory(CategoryBack $categoryBack, CategoryFront $categoryFront)
     {
+        $parentBackId = $categoryBack->getParent();
+        $parentId = 0;
+        if (!in_array($parentBackId, $this->getRootCategoryId())) {
+            $parentId = $this->getParentFrontIdByBackId($parentBackId);
+        }
+        CategoryFiller::backToFront($categoryBack, $categoryFront, $parentId);
+        $this->categoryRepositoryFront->saveAndFlush($categoryFront);
 
+        $categoryFrontId = $categoryFront->getCategoryId();
+        $categoryDescription = $this->categoryDescriptionRepositoryFront->find($categoryFrontId);
+        if ($categoryDescription === null) {
+            $categoryDescription = new CategoryDescription();
+        }
+        $languageId = $this->getDefaultLanguageId();
+        CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
+        $this->categoryDescriptionRepositoryFront->saveAndFlush($categoryDescription);
+
+        $categoryLayout = $this->categoryLayoutRepositoryFront->find($categoryFrontId);
+        if ($categoryLayout === null) {
+            $categoryLayout = new CategoryLayout();
+        }
+        $storeId = $this->getStoreId();
+        $layoutId = $this->getLayoutId();
+        CategoryLayoutFiller::backToFront($categoryLayout, $categoryFrontId, $storeId, $layoutId);
+        $this->categoryLayoutRepositoryFront->saveAndFlush($categoryLayout);
+
+        $categoryStore = $this->categoryStoreRepositoryFront->find($categoryFrontId);
+        if ($categoryStore === null) {
+            $categoryStore = new CategoryStore();
+        }
+        CategoryStoreFiller::backToFront($categoryStore, $categoryFrontId, $storeId);
+        $this->categoryStoreRepositoryFront->saveAndFlush($categoryStore);
+
+        return $categoryFrontId;
     }
 
     protected function createCategoryFromBackAndFrontCategoryId(int $backId, int $frontId)

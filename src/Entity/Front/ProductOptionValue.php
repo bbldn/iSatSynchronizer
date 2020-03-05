@@ -13,141 +13,141 @@ class ProductOptionValue
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_option_value_id")
      */
-    private $product_option_value_id;
+    private $productOptionValueId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_option_id")
      */
-    private $product_option_id;
+    private $productOptionId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="product_id")
      */
-    private $product_id;
+    private $productId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="option_id")
      */
-    private $option_id;
+    private $optionId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="option_value_id")
      */
-    private $option_value_id;
+    private $optionValueId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="quantity")
      */
     private $quantity;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="subtract")
      */
     private $subtract;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="price")
      */
     private $price;
 
     /**
-     * @ORM\Column(type="string", length=1)
+     * @ORM\Column(type="string", name="price_prefix", length=1)
      */
-    private $price_prefix;
+    private $pricePrefix;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="points")
      */
     private $points;
 
     /**
-     * @ORM\Column(type="string", length=1)
+     * @ORM\Column(type="string", name="points_prefix", length=1)
      */
-    private $points_prefix;
+    private $pointsPrefix;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", name="weight")
      */
     private $weight;
 
     /**
-     * @ORM\Column(type="string", length=1)
+     * @ORM\Column(type="string", name="weight_prefix", length=1)
      */
-    private $weight_prefix;
+    private $weightPrefix;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="sku")
      */
     private $sku;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="model")
      */
     private $model;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="o_v_image", length=255)
      */
-    private $o_v_image;
+    private $OVImage;
 
     public function getProductOptionValueId(): ?int
     {
-        return $this->product_option_value_id;
+        return $this->productOptionValueId;
     }
 
-    public function setProductOptionValueId(int $product_option_value_id): self
+    public function setProductOptionValueId(int $productOptionValueId): self
     {
-        $this->product_option_value_id = $product_option_value_id;
+        $this->productOptionValueId = $productOptionValueId;
 
         return $this;
     }
 
     public function getProductOptionId(): ?int
     {
-        return $this->product_option_id;
+        return $this->productOptionId;
     }
 
-    public function setProductOptionId(int $product_option_id): self
+    public function setProductOptionId(int $productOptionId): self
     {
-        $this->product_option_id = $product_option_id;
+        $this->productOptionId = $productOptionId;
 
         return $this;
     }
 
     public function getProductId(): ?int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
-    public function setProductId(int $product_id): self
+    public function setProductId(int $productId): self
     {
-        $this->product_id = $product_id;
+        $this->productId = $productId;
 
         return $this;
     }
 
     public function getOptionId(): ?int
     {
-        return $this->option_id;
+        return $this->optionId;
     }
 
-    public function setOptionId(int $option_id): self
+    public function setOptionId(int $optionId): self
     {
-        $this->option_id = $option_id;
+        $this->optionId = $optionId;
 
         return $this;
     }
 
     public function getOptionValueId(): ?int
     {
-        return $this->option_value_id;
+        return $this->optionValueId;
     }
 
-    public function setOptionValueId(int $option_value_id): self
+    public function setOptionValueId(int $optionValueId): self
     {
-        $this->option_value_id = $option_value_id;
+        $this->optionValueId = $optionValueId;
 
         return $this;
     }
@@ -190,12 +190,12 @@ class ProductOptionValue
 
     public function getPricePrefix(): ?string
     {
-        return $this->price_prefix;
+        return $this->pricePrefix;
     }
 
-    public function setPricePrefix(string $price_prefix): self
+    public function setPricePrefix(string $pricePrefix): self
     {
-        $this->price_prefix = $price_prefix;
+        $this->pricePrefix = $pricePrefix;
 
         return $this;
     }
@@ -214,12 +214,12 @@ class ProductOptionValue
 
     public function getPointsPrefix(): ?string
     {
-        return $this->points_prefix;
+        return $this->pointsPrefix;
     }
 
-    public function setPointsPrefix(string $points_prefix): self
+    public function setPointsPrefix(string $pointsPrefix): self
     {
-        $this->points_prefix = $points_prefix;
+        $this->pointsPrefix = $pointsPrefix;
 
         return $this;
     }
@@ -238,12 +238,12 @@ class ProductOptionValue
 
     public function getWeightPrefix(): ?string
     {
-        return $this->weight_prefix;
+        return $this->weightPrefix;
     }
 
-    public function setWeightPrefix(string $weight_prefix): self
+    public function setWeightPrefix(string $weightPrefix): self
     {
-        $this->weight_prefix = $weight_prefix;
+        $this->weightPrefix = $weightPrefix;
 
         return $this;
     }
@@ -274,12 +274,12 @@ class ProductOptionValue
 
     public function getOVImage(): ?string
     {
-        return $this->o_v_image;
+        return $this->OVImage;
     }
 
-    public function setOVImage(string $o_v_image): self
+    public function setOVImage(string $OVImage): self
     {
-        $this->o_v_image = $o_v_image;
+        $this->OVImage = $OVImage;
 
         return $this;
     }

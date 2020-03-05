@@ -13,58 +13,65 @@ class CategoryDescription
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="category_id")
      */
-    private $category_id;
+    private $categoryId;
+
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="language_id")
      */
-    private $language_id;
+    private $languageId;
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="name", length=255)
      */
     private $name;
+
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="description")
      */
     private $description;
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="meta_title", length=255)
      */
-    private $meta_title;
+    private $metaTitle;
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="meta_h1", length=255)
      */
-    private $meta_h1;
+    private $metaH1;
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="meta_description", length=255)
      */
-    private $meta_description;
+    private $metaDescription;
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", name="meta_keyword", length=255)
      */
-    private $meta_keyword;
+    private $metaKeyword;
 
     public function getCategoryId(): ?int
     {
-        return $this->category_id;
+        return $this->categoryId;
     }
 
-    public function setCategoryId(int $category_id)
+    public function setCategoryId(int $categoryId)
     {
-        $this->category_id = $category_id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }
 
     public function getLanguageId(): ?int
     {
-        return $this->language_id;
+        return $this->languageId;
     }
 
-    public function setLanguageId(int $language_id): self
+    public function setLanguageId(int $languageId): self
     {
-        $this->language_id = $language_id;
+        $this->languageId = $languageId;
 
         return $this;
     }
@@ -95,48 +102,48 @@ class CategoryDescription
 
     public function getMetaTitle(): ?string
     {
-        return $this->meta_title;
+        return $this->metaTitle;
     }
 
-    public function setMetaTitle(string $meta_title): self
+    public function setMetaTitle(string $metaTitle): self
     {
-        $this->meta_title = $meta_title;
+        $this->metaTitle = $metaTitle;
 
         return $this;
     }
 
     public function getMetaH1(): ?string
     {
-        return $this->meta_h1;
+        return $this->metaH1;
     }
 
-    public function setMetaH1(string $meta_h1): self
+    public function setMetaH1(string $metaH1): self
     {
-        $this->meta_h1 = $meta_h1;
+        $this->metaH1 = $metaH1;
 
         return $this;
     }
 
     public function getMetaDescription(): ?string
     {
-        return $this->meta_description;
+        return $this->metaDescription;
     }
 
-    public function setMetaDescription(string $meta_description): self
+    public function setMetaDescription(string $metaDescription): self
     {
-        $this->meta_description = $meta_description;
+        $this->metaDescription = $metaDescription;
 
         return $this;
     }
 
     public function getMetaKeyword(): ?string
     {
-        return $this->meta_keyword;
+        return $this->metaKeyword;
     }
 
-    public function setMetaKeyword(string $meta_keyword): self
+    public function setMetaKeyword(string $metaKeyword): self
     {
-        $this->meta_keyword = $meta_keyword;
+        $this->metaKeyword = $metaKeyword;
 
         return $this;
     }
