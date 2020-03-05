@@ -13,42 +13,42 @@ class ProductDiscount
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="product_discount_id")
+     * @ORM\Column(type="integer", name="`product_discount_id`")
      */
     private $productDiscountId;
 
     /**
-     * @ORM\Column(type="integer", name="product_id")
+     * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;
 
     /**
-     * @ORM\Column(type="integer", name="customer_group_id")
+     * @ORM\Column(type="integer", name="`customer_group_id`")
      */
     private $customerGroupId;
 
     /**
-     * @ORM\Column(type="integer", name="quantity")
+     * @ORM\Column(type="integer", name="`quantity`")
      */
     private $quantity;
 
     /**
-     * @ORM\Column(type="integer", name="priority")
+     * @ORM\Column(type="integer", name="`priority`")
      */
     private $priority;
 
     /**
-     * @ORM\Column(type="float", name="price")
+     * @ORM\Column(type="float", name="`price`")
      */
     private $price;
 
     /**
-     * @ORM\Column(type="date", name="date_start")
+     * @ORM\Column(type="date", name="`date_start`")
      */
     private $dateStart;
 
     /**
-     * @ORM\Column(type="date", name="date_end")
+     * @ORM\Column(type="date", name="`date_end`")
      */
     private $dateEnd;
 

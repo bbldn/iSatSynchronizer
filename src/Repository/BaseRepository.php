@@ -9,7 +9,7 @@ class BaseRepository extends ServiceEntityRepository
 {
     protected $entityManagerName = 'default';
 
-    public function __construct(ManagerRegistry $registry, $entityClass)
+    public function __construct(ManagerRegistry $registry, $entityClass = '')
     {
         parent::__construct($registry, $entityClass);
         $this->_em = $registry->getManager($this->entityManagerName);

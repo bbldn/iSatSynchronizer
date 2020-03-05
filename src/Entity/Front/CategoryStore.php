@@ -12,13 +12,12 @@ class CategoryStore
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="category_id")
+     * @ORM\Column(type="integer", name="`category_id`")
      */
     private $categoryId;
 
     /**
-     * @ORM\Column(type="integer", name="store_id")
+     * @ORM\Column(type="integer", name="`store_id`")
      */
     private $storeId;
 

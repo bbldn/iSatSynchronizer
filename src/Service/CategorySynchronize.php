@@ -43,7 +43,7 @@ class CategorySynchronize
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function synchronize()
+    public function synchronize($synchronizeImage = false)
     {
         $categoriesBack = $this->categoryRepositoryBack->findAll();
         foreach ($categoriesBack as $categoryBack) {
@@ -54,11 +54,11 @@ class CategorySynchronize
             } else {
                 $categoryFront = $this->categoryRepositoryFront->find($category->getFrontId());
                 if ($categoryFront === null) {
-                    $this->updateCategoryFrontFromBackCategory($categoryBack, $categoryFront);
-                } else {
                     $this->categoryRepository->remove($category);
                     $frontId = $this->createCategoryFrontFromBackCategory($categoryBack);
                     $this->createCategoryFromBackAndFrontCategoryId($categoryBack->getCategoryId(), $frontId);
+                } else {
+                    $this->updateCategoryFrontFromBackCategory($categoryBack, $categoryFront);
                 }
             }
         }
@@ -169,7 +169,7 @@ class CategorySynchronize
 
     protected function getDefaultLanguageId()
     {
-        return 3;
+        return 1;
     }
 
     protected function getStoreId()

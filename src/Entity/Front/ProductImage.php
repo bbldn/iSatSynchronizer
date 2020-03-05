@@ -13,22 +13,22 @@ class ProductImage
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="product_image_id")
+     * @ORM\Column(type="integer", name="`product_image_id`")
      */
     private $productImageId;
 
     /**
-     * @ORM\Column(type="integer", name="product_id")
+     * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;
 
     /**
-     * @ORM\Column(type="string", name="image", length=255)
+     * @ORM\Column(type="string", name="`image`", length=255)
      */
     private $image;
 
     /**
-     * @ORM\Column(type="integer", name="sort_order")
+     * @ORM\Column(type="integer", name="`sort_order`")
      */
     private $sortOrder;
 

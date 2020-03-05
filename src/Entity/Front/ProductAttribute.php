@@ -13,22 +13,22 @@ class ProductAttribute
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="product_id")
+     * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;
 
     /**
-     * @ORM\Column(type="integer", name="attribute_id")
+     * @ORM\Column(type="integer", name="`attribute_id`")
      */
     private $attributeId;
 
     /**
-     * @ORM\Column(type="integer", name="language_id")
+     * @ORM\Column(type="integer", name="`language_id`")
      */
     private $languageId;
 
     /**
-     * @ORM\Column(type="string", name="text")
+     * @ORM\Column(type="string", name="`text`")
      */
     private $text;
 

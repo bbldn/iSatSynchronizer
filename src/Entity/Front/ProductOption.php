@@ -13,27 +13,27 @@ class ProductOption
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="product_option_id")
+     * @ORM\Column(type="integer", name="`product_option_id`")
      */
     private $productOptionId;
 
     /**
-     * @ORM\Column(type="integer", name="product_id")
+     * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;
 
     /**
-     * @ORM\Column(type="integer", name="option_id")
+     * @ORM\Column(type="integer", name="`option_id`")
      */
     private $optionId;
 
     /**
-     * @ORM\Column(type="string", name="value", length=255)
+     * @ORM\Column(type="string", name="`value`", length=255)
      */
     private $value;
 
     /**
-     * @ORM\Column(type="boolean", name="required")
+     * @ORM\Column(type="boolean", name="`required`")
      */
     private $required;
 

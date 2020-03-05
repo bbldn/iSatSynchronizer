@@ -13,82 +13,82 @@ class ProductOptionValue
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="product_option_value_id")
+     * @ORM\Column(type="integer", name="`product_option_value_id`")
      */
     private $productOptionValueId;
 
     /**
-     * @ORM\Column(type="integer", name="product_option_id")
+     * @ORM\Column(type="integer", name="`product_option_id`")
      */
     private $productOptionId;
 
     /**
-     * @ORM\Column(type="integer", name="product_id")
+     * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;
 
     /**
-     * @ORM\Column(type="integer", name="option_id")
+     * @ORM\Column(type="integer", name="`option_id`")
      */
     private $optionId;
 
     /**
-     * @ORM\Column(type="integer", name="option_value_id")
+     * @ORM\Column(type="integer", name="`option_value_id`")
      */
     private $optionValueId;
 
     /**
-     * @ORM\Column(type="integer", name="quantity")
+     * @ORM\Column(type="integer", name="`quantity`")
      */
     private $quantity;
 
     /**
-     * @ORM\Column(type="boolean", name="subtract")
+     * @ORM\Column(type="boolean", name="`subtract`")
      */
     private $subtract;
 
     /**
-     * @ORM\Column(type="float", name="price")
+     * @ORM\Column(type="float", name="`price`")
      */
     private $price;
 
     /**
-     * @ORM\Column(type="string", name="price_prefix", length=1)
+     * @ORM\Column(type="string", name="`price_prefix`", length=1)
      */
     private $pricePrefix;
 
     /**
-     * @ORM\Column(type="integer", name="points")
+     * @ORM\Column(type="integer", name="`points`")
      */
     private $points;
 
     /**
-     * @ORM\Column(type="string", name="points_prefix", length=1)
+     * @ORM\Column(type="string", name="`points_prefix`", length=1)
      */
     private $pointsPrefix;
 
     /**
-     * @ORM\Column(type="float", name="weight")
+     * @ORM\Column(type="float", name="`weight`")
      */
     private $weight;
 
     /**
-     * @ORM\Column(type="string", name="weight_prefix", length=1)
+     * @ORM\Column(type="string", name="`weight_prefix`", length=1)
      */
     private $weightPrefix;
 
     /**
-     * @ORM\Column(type="string", name="sku")
+     * @ORM\Column(type="string", name="`sku`")
      */
     private $sku;
 
     /**
-     * @ORM\Column(type="string", name="model")
+     * @ORM\Column(type="string", name="`model`")
      */
     private $model;
 
     /**
-     * @ORM\Column(type="string", name="o_v_image", length=255)
+     * @ORM\Column(type="string", name="`o_v_image`", length=255)
      */
     private $OVImage;
 

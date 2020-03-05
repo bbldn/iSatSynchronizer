@@ -13,27 +13,27 @@ class Category
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="category_id")
+     * @ORM\Column(type="integer", name="`category_id`")
      */
     private $categoryId;
 
     /**
-     * @ORM\Column(type="string", name="image", nullable=true)
+     * @ORM\Column(type="string", name="`image`", nullable=true)
      */
     private $image;
 
     /**
-     * @ORM\Column(type="integer", name="parent_id")
+     * @ORM\Column(type="integer", name="`parent_id`")
      */
     private $parentId = 0;
 
     /**
-     * @ORM\Column(type="boolean", name="top")
+     * @ORM\Column(type="boolean", name="`top`")
      */
     private $top;
 
     /**
-     * @ORM\Column(type="integer", name="column")
+     * @ORM\Column(type="integer", name="`column`")
      */
     private $column;
 
@@ -43,17 +43,17 @@ class Category
     private $sortOrder = 0;
 
     /**
-     * @ORM\Column(type="boolean", name="status")
+     * @ORM\Column(type="boolean", name="`status`")
      */
     private $status;
 
     /**
-     * @ORM\Column(type="datetime", name="date_added")
+     * @ORM\Column(type="datetime", name="`date_added`")
      */
     private $dateAdded;
 
     /**
-     * @ORM\Column(type="datetime", name="date_added")
+     * @ORM\Column(type="datetime", name="`date_modified`")
      */
     private $dateModified;
 
@@ -156,6 +156,12 @@ class Category
         $this->dateModified = $dateModified;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->dateAdded = new \DateTime('now');
+        $this->dateModified = new \DateTime('now');
     }
 
     /**

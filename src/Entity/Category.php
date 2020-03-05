@@ -13,17 +13,17 @@ class Category
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="`id`")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer", name="front_id")
+     * @ORM\Column(type="integer", name="`front_id`")
      */
     private $frontId;
 
     /**
-     * @ORM\Column(type="integer", name="back_id")
+     * @ORM\Column(type="integer", name="`back_id`")
      */
     private $backId;
 

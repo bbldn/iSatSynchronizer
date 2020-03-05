@@ -12,13 +12,12 @@ class CategoryDescriptionFiller
     {
         $categoryDescriptionFront->setCategoryId($categoryId);
         $categoryDescriptionFront->setLanguageId($languageId);
-        $categoryDescriptionFront->setName($categoryBack->getName());
-        $categoryDescriptionFront->setDescription($categoryBack->getDescription());
-        $categoryDescriptionFront->setMetaTitle($categoryBack->getName());
-        $categoryDescriptionFront->setMetaH1($categoryBack->getH1());
+        $categoryDescriptionFront->setName(mb_convert_encoding($categoryBack->getName(), 'utf-8', 'windows-1251'));
+        $categoryDescriptionFront->setDescription(mb_convert_encoding($categoryBack->getDescription(), 'utf-8', 'windows-1251'));
+        $categoryDescriptionFront->setMetaTitle(mb_convert_encoding($categoryBack->getName(), 'utf-8', 'windows-1251'));
+        $categoryDescriptionFront->setMetaH1(mb_convert_encoding($categoryBack->getH1(), 'utf-8', 'windows-1251'));
         $categoryDescriptionFront->setMetaDescription('');
         $categoryDescriptionFront->setMetaKeyword('');
-
         return $categoryDescriptionFront;
     }
 }

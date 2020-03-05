@@ -12,43 +12,42 @@ class CategoryDescription
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="category_id")
+     * @ORM\Column(type="integer", name="`category_id`")
      */
     private $categoryId;
 
     /**
-     * @ORM\Column(type="integer", name="language_id")
+     * @ORM\Column(type="integer", name="`language_id`")
      */
     private $languageId;
 
     /**
-     * @ORM\Column(type="string", name="name", length=255)
+     * @ORM\Column(type="string", name="`name`", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", name="description")
+     * @ORM\Column(type="string", name="`description`")
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string", name="meta_title", length=255)
+     * @ORM\Column(type="string", name="`meta_title`", length=255)
      */
     private $metaTitle;
 
     /**
-     * @ORM\Column(type="string", name="meta_h1", length=255)
+     * @ORM\Column(type="string", name="`meta_h1`", length=255)
      */
     private $metaH1;
 
     /**
-     * @ORM\Column(type="string", name="meta_description", length=255)
+     * @ORM\Column(type="string", name="`meta_description`", length=255)
      */
     private $metaDescription;
 
     /**
-     * @ORM\Column(type="string", name="meta_keyword", length=255)
+     * @ORM\Column(type="string", name="`meta_keyword`", length=255)
      */
     private $metaKeyword;
 

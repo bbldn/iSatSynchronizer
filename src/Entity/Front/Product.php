@@ -13,162 +13,162 @@ class Product
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="product_id")
+     * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;
 
     /**
-     * @ORM\Column(type="string", name="model", length=64)
+     * @ORM\Column(type="string", name="`model`", length=64)
      */
     private $model;
 
     /**
-     * @ORM\Column(type="string", name="sku", length=64)
+     * @ORM\Column(type="string", name="`sku`", length=64)
      */
     private $sku;
 
     /**
-     * @ORM\Column(type="string", name="upc", length=12)
+     * @ORM\Column(type="string", name="`upc`", length=12)
      */
     private $upc;
 
     /**
-     * @ORM\Column(type="string", name="ean", length=14)
+     * @ORM\Column(type="string", name="`ean`", length=14)
      */
     private $ean;
 
     /**
-     * @ORM\Column(type="string", name="jan", length=13)
+     * @ORM\Column(type="string", name="`jan`", length=13)
      */
     private $jan;
 
     /**
-     * @ORM\Column(type="string", name="isbn", length=17)
+     * @ORM\Column(type="string", name="`isbn`", length=17)
      */
     private $isbn;
 
     /**
-     * @ORM\Column(type="string", name="mpn", length=64)
+     * @ORM\Column(type="string", name="`mpn`", length=64)
      */
     private $mpn;
 
     /**
-     * @ORM\Column(type="string", name="location", length=128)
+     * @ORM\Column(type="string", name="`location`", length=128)
      */
     private $location;
 
     /**
-     * @ORM\Column(type="integer", name="quantity")
+     * @ORM\Column(type="integer", name="`quantity`")
      */
     private $quantity = 0;
 
     /**
-     * @ORM\Column(type="integer", name="stock_status_id")
+     * @ORM\Column(type="integer", name="`stock_status_id`")
      */
     private $stockStatusId;
 
     /**
-     * @ORM\Column(type="string", name="image", length=255)
+     * @ORM\Column(type="string", name="`image`", length=255)
      */
     private $image;
 
     /**
-     * @ORM\Column(type="integer", name="manufacturer_id")
+     * @ORM\Column(type="integer", name="`manufacturer_id`")
      */
     private $manufacturerId;
 
     /**
-     * @ORM\Column(type="boolean", name="shipping")
+     * @ORM\Column(type="boolean", name="`shipping`")
      */
     private $shipping = true;
 
     /**
-     * @ORM\Column(type="float", name="price")
+     * @ORM\Column(type="float", name="`price`")
      */
     private $price = 0.0;
 
     /**
-     * @ORM\Column(type="integer", name="points")
+     * @ORM\Column(type="integer", name="`points`")
      */
     private $points = 0;
 
     /**
-     * @ORM\Column(type="integer", name="tax_class_id")
+     * @ORM\Column(type="integer", name="`tax_class_id`")
      */
     private $taxClassId;
 
     /**
-     * @ORM\Column(type="date", name="date_available")
+     * @ORM\Column(type="date", name="`date_available`")
      */
     private $dateAvailable;
 
     /**
-     * @ORM\Column(type="float", name="weight")
+     * @ORM\Column(type="float", name="`weight`")
      */
     private $weight = 0.0;
 
     /**
-     * @ORM\Column(type="integer", name="weight_class_id")
+     * @ORM\Column(type="integer", name="`weight_class_id`")
      */
     private $weightClassId = 0;
 
     /**
-     * @ORM\Column(type="float", name="length")
+     * @ORM\Column(type="float", name="`length`")
      */
     private $length = 0.0;
 
     /**
-     * @ORM\Column(type="float", name="width")
+     * @ORM\Column(type="float", name="`width`")
      */
     private $width = 0.0;
 
     /**
-     * @ORM\Column(type="float", name="height")
+     * @ORM\Column(type="float", name="`height`")
      */
     private $height = 0.0;
 
     /**
-     * @ORM\Column(type="integer", name="length_class_id")
+     * @ORM\Column(type="integer", name="`length_class_id`")
      */
     private $lengthClassId = 0;
 
     /**
-     * @ORM\Column(type="boolean", name="subtract")
+     * @ORM\Column(type="boolean", name="`subtract`")
      */
     private $subtract = true;
 
     /**
-     * @ORM\Column(type="boolean", name="minimum")
+     * @ORM\Column(type="boolean", name="`minimum`")
      */
     private $minimum = 1;
 
     /**
-     * @ORM\Column(type="integer", name="sort_order")
+     * @ORM\Column(type="integer", name="`sort_order`")
      */
     private $sortOrder = 0;
 
     /**
-     * @ORM\Column(type="boolean", name="status")
+     * @ORM\Column(type="boolean", name="`status`")
      */
     private $status = false;
 
     /**
-     * @ORM\Column(type="integer", name="viewed")
+     * @ORM\Column(type="integer", name="`viewed`")
      */
     private $viewed = 0;
 
     /**
-     * @ORM\Column(type="datetime", name="date_added")
+     * @ORM\Column(type="datetime", name="`date_added`")
      */
     private $dateAdded;
 
     /**
-     * @ORM\Column(type="datetime", name="date_modified")
+     * @ORM\Column(type="datetime", name="`date_modified`")
      */
     private $dateModified;
 
     /**
-     * @ORM\Column(type="string", name="oct_product_stickers", length=255)
+     * @ORM\Column(type="string", name="`oct_product_stickers`", length=255)
      */
     private $octProductStickers;
 

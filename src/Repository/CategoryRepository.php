@@ -24,7 +24,7 @@ class CategoryRepository extends BaseRepository
     public function findOneByBackId(int $value): ?Category
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.back_id = :val')
+            ->andWhere('c.backId = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();
@@ -33,7 +33,7 @@ class CategoryRepository extends BaseRepository
     public function findOneByFrontId(int $value): ?Category
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.front_id = :val')
+            ->andWhere('c.frontId = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();

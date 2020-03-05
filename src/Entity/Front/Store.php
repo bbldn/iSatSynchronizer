@@ -13,22 +13,22 @@ class Store
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="store_id")
+     * @ORM\Column(type="integer", name="`store_id`")
      */
     private $storeId;
 
     /**
-     * @ORM\Column(type="string", name="name", length=64)
+     * @ORM\Column(type="string", name="`name`", length=64)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", name="url", length=255)
+     * @ORM\Column(type="string", name="`url`", length=255)
      */
     private $url;
 
     /**
-     * @ORM\Column(type="string", name="ssl", length=255)
+     * @ORM\Column(type="string", name="`ssl`", length=255)
      */
     private $ssl;
 

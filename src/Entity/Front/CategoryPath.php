@@ -12,18 +12,17 @@ class CategoryPath
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="category_id")
+     * @ORM\Column(type="integer", name="`category_id`")
      */
     private $categoryId;
 
     /**
-     * @ORM\Column(type="integer", name="path_id")
+     * @ORM\Column(type="integer", name="`path_id`")
      */
     private $pathId;
 
     /**
-     * @ORM\Column(type="integer", name="level")
+     * @ORM\Column(type="integer", name="`level`")
      */
     private $level;
 

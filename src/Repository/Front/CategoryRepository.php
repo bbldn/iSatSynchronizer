@@ -31,7 +31,7 @@ class CategoryRepository extends BaseRepository
 
         return $this->createQueryBuilder('c')
             ->select('count(c.category)')
-            ->andWhere('c.id = :val')
+            ->andWhere('c.categoryId = :val')
             ->setParameter('val', $id)
             ->getQuery()
             ->getScalarResult() > 0;

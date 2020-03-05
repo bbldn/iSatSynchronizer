@@ -13,157 +13,157 @@ class Category
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="categoryID")
+     * @ORM\Column(type="integer", name="`categoryID`")
      */
     private $categoryId;
 
     /**
-     * @ORM\Column(type="string", length=255, name="name", nullable=true)
+     * @ORM\Column(type="string", name="`name`", length=255, nullable=true)
      */
     private $name = null;
 
     /**
-     * @ORM\Column(type="integer", name="parent", nullable=true)
+     * @ORM\Column(type="integer", name="`parent`", nullable=true)
      */
     private $parent = null;
 
     /**
-     * @ORM\Column(type="integer", name="products_count", nullable=true)
+     * @ORM\Column(type="integer", name="`products_count`", nullable=true)
      */
     private $productsCount = null;
 
     /**
-     * @ORM\Column(type="string", name="description", nullable=true)
+     * @ORM\Column(type="string", name="`description`", nullable=true)
      */
     private $description = null;
 
     /**
-     * @ORM\Column(type="string", name="description", length=30, nullable=true)
+     * @ORM\Column(type="string", name="`picture`", length=30, nullable=true)
      */
     private $picture = null;
 
     /**
-     * @ORM\Column(type="integer", name="products_count_admin", nullable=true)
+     * @ORM\Column(type="integer", name="`products_count_admin`", nullable=true)
      */
     private $productsCountAdmin = null;
 
     /**
-     * @ORM\Column(type="integer", name="sort_order", nullable=true)
+     * @ORM\Column(type="integer", name="`sort_order`", nullable=true)
      */
     private $sortOrder = 0;
 
     /**
-     * @ORM\Column(type="integer", name="viewed_times", nullable=true)
+     * @ORM\Column(type="integer", name="`viewed_times`", nullable=true)
      */
     private $viewedTimes = 0;
 
     /**
-     * @ORM\Column(type="integer", name="allow_products_comparison", nullable=true)
+     * @ORM\Column(type="integer", name="`allow_products_comparison`", nullable=true)
      */
     private $allowProductsComparison = 0;
 
     /**
-     * @ORM\Column(type="integer", name="allow_products_search", nullable=true)
+     * @ORM\Column(type="integer", name="`allow_products_search`", nullable=true)
      */
     private $allowProductsSearch = 1;
 
     /**
-     * @ORM\Column(type="integer", name="show_subcategories_products", nullable=true)
+     * @ORM\Column(type="integer", name="`show_subcategories_products`", nullable=true)
      */
     private $showSubcategoriesProducts = 1;
 
     /**
-     * @ORM\Column(type="string", name="meta_description" length=255, nullable=true)
+     * @ORM\Column(type="string", name="`meta_description`", length=255, nullable=true)
      */
     private $metaDescription = null;
 
     /**
-     * @ORM\Column(type="string", name="meta_keywords" length=255, nullable=true)
+     * @ORM\Column(type="string", name="`meta_keywords`", length=255, nullable=true)
      */
     private $metaKeywords = null;
 
     /**
-     * @ORM\Column(type="string", name="big_image", nullable=true)
+     * @ORM\Column(type="string", name="`big_image`", nullable=true)
      */
     private $bigImage = null;
 
     /**
-     * @ORM\Column(type="string", name="big_image_width", length=25)
+     * @ORM\Column(type="string", name="`big_image_width`", length=25)
      */
     private $bigImageWidth;
 
     /**
-     * @ORM\Column(type="string", name="big_image_height", length=25)
+     * @ORM\Column(type="string", name="`big_image_height`", length=25)
      */
     private $bigImageHeight;
 
     /**
-     * @ORM\Column(type="string", name="link_from_big_image", nullable=true)
+     * @ORM\Column(type="string", name="`link_from_big_image`", nullable=true)
      */
     private $linkFromBigImage = null;
 
     /**
-     * @ORM\Column(type="integer", name="columns")
+     * @ORM\Column(type="integer", name="`columns`")
      */
     private $columns = 5;
 
     /**
-     * @ORM\Column(type="integer", name="rows")
+     * @ORM\Column(type="integer", name="`rows`")
      */
     private $rows = 10;
 
     /**
-     * @ORM\Column(type="integer", name="height")
+     * @ORM\Column(type="integer", name="`height`")
      */
     private $height = 380;
 
     /**
-     * @ORM\Column(type="boolean", name="active")
+     * @ORM\Column(type="boolean", name="`active`")
      */
     private $active = true;
 
     /**
-     * @ORM\Column(type="integer", name="kol_products_on_showcase")
+     * @ORM\Column(type="integer", name="`kol_products_on_showcase`")
      */
     private $kolProductsOnShowcase = 10;
 
     /**
-     * @ORM\Column(type="boolean", name="enabled")
+     * @ORM\Column(type="boolean", name="`enabled`")
      */
     private $enabled = true;
 
     /**
-     * @ORM\Column(type="string", name="swf", length=255)
+     * @ORM\Column(type="string", name="`swf`", length=255)
      */
     private $swf;
 
     /**
-     * @ORM\Column(type="string", name="swf_width", length=25)
+     * @ORM\Column(type="string", name="`swf_width`", length=25)
      */
     private $swfWidth;
 
     /**
-     * @ORM\Column(type="string", name="swf_height", length=25)
+     * @ORM\Column(type="string", name="`swf_height`", length=25)
      */
     private $swfHeight;
 
     /**
-     * @ORM\Column(type="boolean", name="enable_sale", nullable=true)
+     * @ORM\Column(type="boolean", name="`enable_sale`", nullable=true)
      */
     private $enableSale = 0;
 
     /**
-     * @ORM\Column(type="string", name="brands", length=255)
+     * @ORM\Column(type="string", name="`brands`", length=255)
      */
     private $brands;
 
     /**
-     * @ORM\Column(type="string", name="h1", length=255)
+     * @ORM\Column(type="string", name="`h1`", length=255)
      */
     private $h1;
 
     /**
-     * @ORM\Column(type="string", name="slug", length=255)
+     * @ORM\Column(type="string", name="`slug`", length=255)
      */
     private $slug;
 
