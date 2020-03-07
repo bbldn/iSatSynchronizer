@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="oc_product")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
@@ -556,6 +557,11 @@ class Product
         return $this;
     }
 
+    public function __construct()
+    {
+        $this->dateAdded = new \DateTime('now');
+    }
+
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
@@ -564,7 +570,7 @@ class Product
     {
         $this->setDateModified(new \DateTime('now'));
 
-        if ($this->getDateAdded() == null) {
+        if ($this->getDateAdded() === null) {
             $this->setDateAdded(new \DateTime('now'));
         }
     }

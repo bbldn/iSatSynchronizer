@@ -4,7 +4,6 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\Category;
 use App\Repository\BaseRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

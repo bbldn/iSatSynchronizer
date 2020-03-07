@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Back\Category as CategoryBack;
-use App\Entity\Category as Category;
+use App\Entity\Category;
 use App\Entity\Front\Category as CategoryFront;
 use App\Entity\Front\CategoryDescription;
 use App\Entity\Front\CategoryLayout;

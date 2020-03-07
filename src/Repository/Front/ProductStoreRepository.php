@@ -2,27 +2,27 @@
 
 namespace App\Repository\Front;
 
-use App\Entity\Front\ProductOption;
+use App\Entity\Front\ProductStore;
 use App\Repository\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method ProductOption|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProductOption|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProductOption[]    findAll()
- * @method ProductOption[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductStore|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ProductStore|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ProductStore[]    findAll()
+ * @method ProductStore[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductOptionRepository extends BaseRepository
+class ProductStoreRepository extends BaseRepository
 {
     protected $entityManagerName = 'front';
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductOption::class);
+        parent::__construct($registry, ProductStore::class);
     }
 
     // /**
-    //  * @return ProductOption[] Returns an array of ProductOption objects
+    //  * @return ProductStore[] Returns an array of ProductStore objects
     //  */
     /*
     public function findByExampleField($value)
@@ -39,7 +39,7 @@ class ProductOptionRepository extends BaseRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ProductOption
+    public function findOneBySomeField($value): ?ProductStore
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')
