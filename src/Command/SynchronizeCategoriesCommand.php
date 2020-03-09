@@ -24,6 +24,7 @@ class SynchronizeCategoriesCommand extends Command
     protected function configure()
     {
         $this->setDescription('Synchronize categories');
+        $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Load image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -12,7 +12,6 @@ class ProductOptionValue
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_option_value_id`")
      */
     private $productOptionValueId;

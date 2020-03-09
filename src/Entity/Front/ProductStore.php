@@ -12,12 +12,12 @@ class ProductStore
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="product_id")
+     * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;
 
     /**
-     * @ORM\Column(type="integer", name="store_id")
+     * @ORM\Column(type="integer", name="`store_id`")
      */
     private $storeId = 0;
 

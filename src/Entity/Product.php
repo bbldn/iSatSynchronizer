@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="products")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
@@ -26,6 +27,16 @@ class Product
      * @ORM\Column(type="integer", name="`back_id`")
      */
     private $backId;
+
+    /**
+     * @ORM\Column(type="datetime", name="`created_at`", nullable=true)
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", name="`updated_at`", nullable=true)
+     */
+    private $updatedAt;
 
     public function getId(): ?int
     {
@@ -54,5 +65,48 @@ class Product
         $this->backId = $backId;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setUpdatedAt(new \DateTime('now'));
+
+        if (null === $this->getCreatedAt()) {
+            $this->setCreatedAt(new \DateTime('now'));
+        }
     }
 }

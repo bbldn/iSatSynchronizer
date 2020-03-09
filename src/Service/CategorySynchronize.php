@@ -12,6 +12,7 @@ use App\Other\Fillers\CategoryDescriptionFiller;
 use App\Other\Fillers\CategoryFiller;
 use App\Other\Fillers\CategoryLayoutFiller;
 use App\Other\Fillers\CategoryStoreFiller;
+use App\Other\Store;
 use App\Repository\Back\CategoryRepository as CategoryRepositoryBack;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionRepositoryFront;
@@ -48,17 +49,18 @@ class CategorySynchronize
         $categoriesBack = $this->categoryRepositoryBack->findAll();
         foreach ($categoriesBack as $categoryBack) {
             $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
-            if ($category === null) {
+            if (null === $category) {
                 $frontId = $this->createCategoryFrontFromBackCategory($categoryBack);
                 $this->createCategoryFromBackAndFrontCategoryId($categoryBack->getCategoryId(), $frontId);
             } else {
                 $categoryFront = $this->categoryRepositoryFront->find($category->getFrontId());
-                if ($categoryFront === null) {
+                if (null === $categoryFront) {
                     $this->categoryRepository->remove($category);
                     $frontId = $this->createCategoryFrontFromBackCategory($categoryBack);
                     $this->createCategoryFromBackAndFrontCategoryId($categoryBack->getCategoryId(), $frontId);
                 } else {
                     $this->updateCategoryFrontFromBackCategory($categoryBack, $categoryFront);
+                    $this->categoryRepository->saveAndFlush($category);
                 }
             }
         }
@@ -67,9 +69,9 @@ class CategorySynchronize
     protected function createCategoryFrontFromBackCategory(CategoryBack $categoryBack)
     {
         $parentBackId = $categoryBack->getParent();
-        $parentId = 0;
+        $parentId = Store::getDefaultCategoryFrontId();
 
-        if (!in_array($parentBackId, $this->getRootCategoryId())) {
+        if (!in_array($parentBackId, Store::getRootCategories())) {
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
 
@@ -80,13 +82,13 @@ class CategorySynchronize
         $categoryFrontId = $categoryFront->getCategoryId();
 
         $categoryDescription = new CategoryDescription();
-        $languageId = $this->getDefaultLanguageId();
+        $languageId = Store::getDefaultLanguageId();
         CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
         $this->categoryDescriptionRepositoryFront->saveAndFlush($categoryDescription);
 
         $categoryLayout = new CategoryLayout();
-        $storeId = $this->getStoreId();
-        $layoutId = $this->getLayoutId();
+        $storeId = Store::getDefaultStoreId();
+        $layoutId = Store::getDefaultLayoutId();
         CategoryLayoutFiller::backToFront($categoryLayout, $categoryFrontId, $storeId, $layoutId);
         $this->categoryLayoutRepositoryFront->saveAndFlush($categoryLayout);
 
@@ -100,8 +102,8 @@ class CategorySynchronize
     protected function updateCategoryFrontFromBackCategory(CategoryBack $categoryBack, CategoryFront $categoryFront)
     {
         $parentBackId = $categoryBack->getParent();
-        $parentId = 0;
-        if (!in_array($parentBackId, $this->getRootCategoryId())) {
+        $parentId = Store::getDefaultCategoryFrontId();
+        if (!in_array($parentBackId, Store::getRootCategories())) {
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
         CategoryFiller::backToFront($categoryBack, $categoryFront, $parentId);
@@ -109,24 +111,24 @@ class CategorySynchronize
 
         $categoryFrontId = $categoryFront->getCategoryId();
         $categoryDescription = $this->categoryDescriptionRepositoryFront->find($categoryFrontId);
-        if ($categoryDescription === null) {
+        if (null === $categoryDescription) {
             $categoryDescription = new CategoryDescription();
         }
-        $languageId = $this->getDefaultLanguageId();
+        $languageId = Store::getDefaultLanguageId();
         CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
         $this->categoryDescriptionRepositoryFront->saveAndFlush($categoryDescription);
 
         $categoryLayout = $this->categoryLayoutRepositoryFront->find($categoryFrontId);
-        if ($categoryLayout === null) {
+        if (null === $categoryLayout) {
             $categoryLayout = new CategoryLayout();
         }
-        $storeId = $this->getStoreId();
-        $layoutId = $this->getLayoutId();
+        $storeId = Store::getDefaultStoreId();
+        $layoutId = Store::getDefaultLayoutId();
         CategoryLayoutFiller::backToFront($categoryLayout, $categoryFrontId, $storeId, $layoutId);
         $this->categoryLayoutRepositoryFront->saveAndFlush($categoryLayout);
 
         $categoryStore = $this->categoryStoreRepositoryFront->find($categoryFrontId);
-        if ($categoryStore === null) {
+        if (null === $categoryStore) {
             $categoryStore = new CategoryStore();
         }
         CategoryStoreFiller::backToFront($categoryStore, $categoryFrontId, $storeId);
@@ -145,45 +147,25 @@ class CategorySynchronize
 
     protected function getParentFrontIdByBackId(int $backId)
     {
-        $back = $this->categoryRepository->findOneByBackId($backId);
-        if ($back === null) {
+        $category = $this->categoryRepository->findOneByBackId($backId);
+        if (null === $category) {
             //@TODO Notify
-            return 0;
+            return Store::getDefaultCategoryFrontId();
         }
 
-        $frontId = $back->getFrontId();
-        if ($frontId === null) {
+        $frontId = $category->getFrontId();
+        if (null === $frontId) {
             //@TODO Notify
-            return 0;
+            return Store::getDefaultCategoryFrontId();
         }
 
         $front = $this->categoryRepositoryFront->find($frontId);
 
-        if ($front === null) {
+        if (null === $front) {
             //@TODO Notify
-            return 0;
+            return Store::getDefaultCategoryFrontId();
         }
 
         return $front->getCategoryId();
-    }
-
-    protected function getDefaultLanguageId()
-    {
-        return 1;
-    }
-
-    protected function getStoreId()
-    {
-        return 0;
-    }
-
-    protected function getLayoutId()
-    {
-        return 0;
-    }
-
-    protected function getRootCategoryId()
-    {
-        return [0, 1];
     }
 }

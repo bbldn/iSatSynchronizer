@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Repository\Front;
+namespace App\Repository\Back;
 
-use App\Entity\Front\ProductDescription;
+use App\Entity\Back\ProductOptions;
 use App\Repository\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method ProductDescription|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProductDescription|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProductDescription[]    findAll()
- * @method ProductDescription[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductOptions|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ProductOptions|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ProductOptions[]    findAll()
+ * @method ProductOptions[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductDescriptionRepository extends BaseRepository
+class ProductOptionsRepository extends BaseRepository
 {
-    protected $entityManagerName = 'front';
+    protected $entityManagerName = 'back';
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductDescription::class);
+        parent::__construct($registry, ProductOptions::class);
     }
 
     // /**
-    //  * @return ProductDescription[] Returns an array of ProductDescription objects
+    //  * @return ProductOptions[] Returns an array of ProductOptions objects
     //  */
     /*
     public function findByExampleField($value)
@@ -39,7 +39,7 @@ class ProductDescriptionRepository extends BaseRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ProductDescription
+    public function findOneBySomeField($value): ?ProductOptions
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

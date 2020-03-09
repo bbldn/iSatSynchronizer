@@ -5,15 +5,16 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="categories")
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Table(name="attributes")
+ * @ORM\Entity(repositoryClass="App\Repository\AttributeRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
-class Category
+class Attribute
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", name="`id`")
+     * @ORM\Column(type="integer")
      */
     private $id;
 
@@ -71,7 +72,7 @@ class Category
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -83,7 +84,7 @@ class Category
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

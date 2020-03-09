@@ -4,7 +4,6 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\ProductCategory;
 use App\Repository\BaseRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

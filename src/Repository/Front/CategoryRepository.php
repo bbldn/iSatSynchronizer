@@ -4,7 +4,6 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\Category;
 use App\Repository\BaseRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -30,11 +29,11 @@ class CategoryRepository extends BaseRepository
         }
 
         return $this->createQueryBuilder('c')
-            ->select('count(c.category)')
-            ->andWhere('c.categoryId = :val')
-            ->setParameter('val', $id)
-            ->getQuery()
-            ->getScalarResult() > 0;
+                ->select('count(c.category)')
+                ->andWhere('c.categoryId = :val')
+                ->setParameter('val', $id)
+                ->getQuery()
+                ->getScalarResult() > 0;
     }
 
     // /**

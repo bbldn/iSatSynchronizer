@@ -318,7 +318,7 @@ class Product
     private $tags;
 
     /**
-     * @ORM\Column(type="brand", name="`brand`", length=255)
+     * @ORM\Column(type="string", name="`brand`", length=255)
      */
     private $brand;
 

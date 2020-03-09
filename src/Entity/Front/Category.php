@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="oc_category")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Category
 {
@@ -172,7 +173,7 @@ class Category
     {
         $this->setDateModified(new \DateTime('now'));
 
-        if ($this->getDateAdded() == null) {
+        if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
     }

@@ -12,7 +12,6 @@ class ProductDiscount
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_discount_id`")
      */
     private $productDiscountId;

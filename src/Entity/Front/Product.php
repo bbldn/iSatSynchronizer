@@ -570,7 +570,7 @@ class Product
     {
         $this->setDateModified(new \DateTime('now'));
 
-        if ($this->getDateAdded() === null) {
+        if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
     }
