@@ -15,6 +15,11 @@ class BaseRepository extends ServiceEntityRepository
         $this->_em = $registry->getManager($this->entityManagerName);
     }
 
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
     public function save(object $object)
     {
         $this->_em->persist($object);
@@ -35,5 +40,10 @@ class BaseRepository extends ServiceEntityRepository
     {
         $this->_em->remove($object);
         $this->_em->flush();
+    }
+
+    public function removeAll()
+    {
+        return $this->createQueryBuilder('c')->delete()->getQuery()->execute();
     }
 }

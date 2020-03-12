@@ -2,17 +2,15 @@
 
 namespace App\Command;
 
-use App\Service\CategorySynchronize;
+use App\Service\Synchronizer\CategorySynchronize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
-class SynchronizeCategoriesCommand extends Command
+class CategoriesSynchronizeCommand extends Command
 {
-    protected static $defaultName = 'synchronize:categories';
+    protected static $defaultName = 'categories:synchronize';
     private $categorySynchronize;
 
     public function __construct(CategorySynchronize $categorySynchronize)

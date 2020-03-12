@@ -21,6 +21,19 @@ class ProductOptionsValuesRepository extends BaseRepository
         parent::__construct($registry, ProductOptionsValues::class);
     }
 
+    /**
+     * @param $value
+     * @return ProductOptionsValues[] Returns an array of ProductOptionsValues objects
+     */
+    public function findAllByProductBackId($value)
+    {
+        return $this->createQueryBuilder('po')
+            ->andWhere('po.productId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return ProductOptionsValues[] Returns an array of ProductOptionsValues objects
     //  */

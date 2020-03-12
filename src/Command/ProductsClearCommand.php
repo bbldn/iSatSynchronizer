@@ -2,15 +2,15 @@
 
 namespace App\Command;
 
-use App\Service\ProductSynchronize;
+use App\Service\Synchronizer\ProductSynchronize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SynchronizeProductCommand extends Command
+class ProductsClearCommand extends Command
 {
-    protected static $defaultName = 'synchronize:products';
+    protected static $defaultName = 'products:clear';
     private $productSynchronize;
 
     public function __construct(ProductSynchronize $productSynchronize)
@@ -21,13 +21,14 @@ class SynchronizeProductCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Synchronize categories');
-        $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Load image');
+        $this->setDescription('Clear products');
+        $this->addArgument('removeImage', InputArgument::OPTIONAL, 'remove image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSynchronize->synchronize();
+        $this->productSynchronize->clear();
+
         return 0;
     }
 }

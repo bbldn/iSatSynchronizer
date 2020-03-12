@@ -20,6 +20,23 @@ class AttributeRepository extends BaseRepository
         parent::__construct($registry, Attribute::class);
     }
 
+    public function findOneByBackId(int $value): ?Attribute
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.backId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findOneByFrontId(int $value): ?Attribute
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.frontId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     // /**
     //  * @return Attribute[] Returns an array of Attribute objects
     //  */

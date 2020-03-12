@@ -24,8 +24,8 @@ class CategoryRepository extends BaseRepository
 
     public function checkExistsByCategoryId(?int $id)
     {
-        if ($id === null) {
-            return 0;
+        if (null === $id) {
+            return false;
         }
 
         return $this->createQueryBuilder('c')

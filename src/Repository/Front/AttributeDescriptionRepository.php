@@ -21,6 +21,15 @@ class AttributeDescriptionRepository extends BaseRepository
         parent::__construct($registry, AttributeDescription::class);
     }
 
+    public function findByName($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.name = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return AttributeDescription[] Returns an array of AttributeDescription objects
     //  */

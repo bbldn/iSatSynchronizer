@@ -21,6 +21,17 @@ class ProductAttributeRepository extends BaseRepository
         parent::__construct($registry, ProductAttribute::class);
     }
 
+    public function findOneByAttributeFrontIdAndProductFrontId($attributeId, $productId): ?ProductAttribute
+    {
+        return $this->createQueryBuilder('par')
+            ->andWhere('par.attributeId = :attributeId')
+            ->andWhere('par.productId = :productId')
+            ->setParameter('attributeId', $attributeId)
+            ->setParameter('productId', $productId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return ProductAttribute[] Returns an array of ProductAttribute objects
     //  */

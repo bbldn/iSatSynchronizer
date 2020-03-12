@@ -21,6 +21,20 @@ class AttributeRepository extends BaseRepository
         parent::__construct($registry, Attribute::class);
     }
 
+    public function checkExistsById(?int $id)
+    {
+        if (null === $id) {
+            return false;
+        }
+
+        return $this->createQueryBuilder('c')
+                ->select('count(c.attribute_id)')
+                ->andWhere('c.attribute_id = :val')
+                ->setParameter('val', $id)
+                ->getQuery()
+                ->getScalarResult() > 0;
+    }
+
     // /**
     //  * @return Attribute[] Returns an array of Attribute objects
     //  */

@@ -2,72 +2,104 @@
 
 namespace App\Other;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store
 {
-    protected static $instance = null;
-
     protected $availableStatusId = 7;
     protected $notAvailableStatusId = 5;
     protected $defaultLanguageId = 1;
     protected $defaultStoreId = 0;
     protected $defaultLayoutId = 0;
     protected $defaultCategoryFrontId = 0;
+    protected $defaultSortOrder = 0;
+    protected $defaultAttributeGroupId = 1;
     protected $rootCategories = [0, 1];
+    protected $backSiteUrl = 'http://172.17.0.2';
+    protected $frontSiteUrl = 'http://172.17.0.3';
+    protected $backSitePath = '/home/user/PhpstormProjects/isat.com.ua';
+    protected $frontSitePath = '/home/user/PhpstormProjects/uclan.com.ua';
 
-    public static function getAvailableStatusId()
+    public function getAvailableStatusId(): int
     {
-        return static::getInstance()->availableStatusId;
+        return $this->availableStatusId;
     }
 
-    public static function getNotAvailableStatusId(): int
+    public function getNotAvailableStatusId(): int
     {
-        return static::getInstance()->notAvailableStatusId;
+        return $this->notAvailableStatusId;
     }
 
-    public static function getDefaultLanguageId(): int
+    public function getDefaultLanguageId(): int
     {
-        return static::getInstance()->defaultLanguageId;
+        return $this->defaultLanguageId;
     }
 
-    public static function getDefaultStoreId(): int
+    public function getDefaultStoreId(): int
     {
-        return static::getInstance()->defaultStoreId;
+        return $this->defaultStoreId;
     }
 
-    public static function getDefaultLayoutId(): int
+    public function getDefaultLayoutId(): int
     {
-        return static::getInstance()->defaultLayoutId;
+        return $this->defaultLayoutId;
     }
 
-    public static function getDefaultCategoryFrontId(): int
+    public function getDefaultCategoryFrontId(): int
     {
-        return static::getInstance()->defaultCategoryFrontId;
+        return $this->defaultCategoryFrontId;
     }
 
-    public static function getRootCategories(): array
+    public function getDefaultSortOrder(): int
     {
-        return static::getInstance()->rootCategories;
+        return $this->defaultSortOrder;
     }
 
-    protected function __construct()
+    public function getDefaultAttributeGroupId(): int
     {
-        $this->availableStatusId = 7;
-        $this->notAvailableStatusId = 5;
-        $this->defaultLanguageId = 1;
-        $this->defaultStoreId = 0;
-        $this->defaultLayoutId = 0;
-        $this->defaultCategoryFrontId = 0;
-        $this->rootCategories = [0, 1];
+        return $this->defaultAttributeGroupId;
     }
 
-    public static function getInstance(): Store
+    public function getRootCategories(): array
     {
-        if (null === static::$instance) {
-            static::$instance = new static();
-        }
+        return $this->rootCategories;
+    }
 
-        return static::$instance;
+    public function getBackSiteUrl(): string
+    {
+        return $this->backSiteUrl;
+    }
+
+    public function getFrontSiteUrl(): string
+    {
+        return $this->frontSiteUrl;
+    }
+
+    public function getBackSitePath(): string
+    {
+        return $this->backSitePath;
+    }
+
+    public function getFrontSitePath(): string
+    {
+        return $this->frontSitePath;
+    }
+
+    public function __construct(ContainerBagInterface $params)
+    {
+        $this->availableStatusId = $params->get('front.available_status_id');
+        $this->notAvailableStatusId = $params->get('front.not_available_status_id');
+        $this->defaultLanguageId = $params->get('front.default_language_id');
+        $this->defaultStoreId = $params->get('front.default_store_id');
+        $this->defaultLayoutId = $params->get('front.default_layout_id');
+        $this->defaultCategoryFrontId = $params->get('front.default_category_front_id');
+        $this->defaultSortOrder = $params->get('front.default_sort_order');
+        $this->defaultAttributeGroupId = $params->get('front.default_attribute_group_id');
+        $this->rootCategories = $params->get('front.root_categories');
+        $this->frontSitePath = $params->get('front.site_path');
+        $this->frontSiteUrl = $params->get('front.site_url');
+        $this->backSitePath = $params->get('back.site_path');
+        $this->backSiteUrl = $params->get('back.site_url');
     }
 
 }

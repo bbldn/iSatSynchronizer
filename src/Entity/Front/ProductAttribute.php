@@ -12,7 +12,6 @@ class ProductAttribute
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_id`")
      */
     private $productId;

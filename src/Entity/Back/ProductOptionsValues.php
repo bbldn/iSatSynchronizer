@@ -5,7 +5,7 @@ namespace App\Entity\Back;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="SS_product_options")
+ * @ORM\Table(name="SS_product_options_values")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductOptionsValuesRepository")
  */
 class ProductOptionsValues
@@ -33,7 +33,7 @@ class ProductOptionsValues
     private $optionType = false;
 
     /**
-     * @ORM\Column(type="integer", name="`option_show_times`" nullable=true)
+     * @ORM\Column(type="integer", name="`option_show_times`", nullable=true)
      */
     private $optionShowTimes = 1;
 
