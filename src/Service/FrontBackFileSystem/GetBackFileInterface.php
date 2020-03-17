@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Service;
-
+namespace App\Service\FrontBackFileSystem;
 
 interface GetBackFileInterface
 {

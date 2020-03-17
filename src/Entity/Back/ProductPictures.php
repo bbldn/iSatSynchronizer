@@ -25,7 +25,7 @@ class ProductPictures
     /**
      * @ORM\Column(type="string", name="`filename`", length=255, nullable=true)
      */
-    private $filename;
+    private $fileName;
 
     /**
      * @ORM\Column(type="string", name="`thumbnail`", length=255, nullable=true)
@@ -48,9 +48,9 @@ class ProductPictures
     private $thumbnailVm;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="`enlarged_vm`")
      */
-    private $enlarged_vm;
+    private $enlargedVm;
 
     public function getPhotoId(): ?int
     {
@@ -76,14 +76,14 @@ class ProductPictures
         return $this;
     }
 
-    public function getFilename(): ?string
+    public function getFileName(): ?string
     {
-        return $this->filename;
+        return $this->fileName;
     }
 
-    public function setFilename(?string $filename): self
+    public function setFileName(?string $fileName): self
     {
-        $this->filename = $filename;
+        $this->fileName = $fileName;
 
         return $this;
     }
@@ -138,12 +138,12 @@ class ProductPictures
 
     public function getEnlargedVm(): ?string
     {
-        return $this->enlarged_vm;
+        return $this->enlargedVm;
     }
 
-    public function setEnlargedVm(string $enlarged_vm): self
+    public function setEnlargedVm(string $enlargedVm): self
     {
-        $this->enlarged_vm = $enlarged_vm;
+        $this->enlargedVm = $enlargedVm;
 
         return $this;
     }

@@ -19,6 +19,21 @@ class ProductPicturesRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductPictures::class);
     }
 
+    /**
+     * @param int $value
+     * @return ProductPictures[] Returns an array of ProductPictures objects
+     */
+    public function findByProductBackId(int $value)
+    {
+        return $this->createQueryBuilder('pp')
+            ->andWhere('pp.productId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
     // /**
     //  * @return ProductPictures[] Returns an array of ProductPictures objects
     //  */

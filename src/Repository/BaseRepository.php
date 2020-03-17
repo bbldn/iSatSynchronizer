@@ -8,11 +8,13 @@ use Doctrine\Persistence\ManagerRegistry;
 class BaseRepository extends ServiceEntityRepository
 {
     protected $entityManagerName = 'default';
+    protected $tableName = 'default';
 
     public function __construct(ManagerRegistry $registry, $entityClass = '')
     {
         parent::__construct($registry, $entityClass);
         $this->_em = $registry->getManager($this->entityManagerName);
+        $this->tableName = $this->getEntityManager()->getClassMetadata($this->getEntityName())->getTableName();
     }
 
     public function flush()
@@ -45,5 +47,16 @@ class BaseRepository extends ServiceEntityRepository
     public function removeAll()
     {
         return $this->createQueryBuilder('c')->delete()->getQuery()->execute();
+    }
+
+    /**
+     * @return bool
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function resetAutoIncrements()
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        return $connection->prepare("ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = 1")->execute();
     }
 }
