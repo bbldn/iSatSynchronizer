@@ -19,7 +19,8 @@ use App\Other\Fillers\ProductStoreFiller;
 use App\Other\Store;
 use App\Repository\AttributeRepository;
 use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
-use App\Repository\Back\ProductRepository as ProductRepositoryBack;
+use App\Repository\Back\ProductRepository as ProductBackRepository;
+use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
@@ -28,8 +29,8 @@ use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFront
 use App\Repository\Front\ProductLayoutRepository as ProductLayoutFrontRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
+use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
 use App\Repository\ProductRepository;
-
 
 class ProductSynchronize
 {
@@ -45,6 +46,9 @@ class ProductSynchronize
     private $productDescriptionFrontRepository;
     private $productLayoutFrontRepository;
     private $productStoreFrontRepository;
+    private $productPicturesBackRepository;
+    private $productImageFrontRepository;
+    private $productImageSynchronizer;
     private $store;
 
     public function __construct(
@@ -52,7 +56,7 @@ class ProductSynchronize
         AttributeBackRepository $attributeBackRepository,
         CategoryRepository $categoryRepository,
         CategoryFrontRepository $categoryFrontRepository,
-        ProductRepositoryBack $productBackRepository,
+        ProductBackRepository $productBackRepository,
         ProductFrontRepository $productFrontRepository,
         ProductAttributeFrontRepository $productAttributeFrontRepository,
         ProductRepository $productRepository,
@@ -60,6 +64,9 @@ class ProductSynchronize
         ProductCategoryFrontRepository $productCategoryFrontRepository,
         ProductLayoutFrontRepository $productLayoutFrontRepository,
         ProductStoreFrontRepository $productStoreFrontRepository,
+        ProductPicturesBackRepository $productPicturesBackRepository,
+        ProductImageFrontRepository $productImageFrontRepository,
+        ProductImageSynchronizer $productImageSynchronizer,
         Store $store)
     {
         $this->attributeRepository = $attributeRepository;
@@ -67,24 +74,40 @@ class ProductSynchronize
         $this->categoryRepository = $categoryRepository;
         $this->categoryFrontRepository = $categoryFrontRepository;
         $this->productRepository = $productRepository;
+        $this->productBackRepository = $productBackRepository;
+
         $this->productFrontRepository = $productFrontRepository;
         $this->productAttributeFrontRepository = $productAttributeFrontRepository;
-        $this->productBackRepository = $productBackRepository;
         $this->productCategoryFrontRepository = $productCategoryFrontRepository;
         $this->productDescriptionFrontRepository = $productDescriptionFrontRepository;
         $this->productLayoutFrontRepository = $productLayoutFrontRepository;
         $this->productStoreFrontRepository = $productStoreFrontRepository;
+        $this->productImageFrontRepository = $productImageFrontRepository;
+
+        $this->productPicturesBackRepository = $productPicturesBackRepository;
+        $this->productImageSynchronizer = $productImageSynchronizer;
         $this->store = $store;
     }
 
     public function clear($clearImage = false)
     {
+        $this->productRepository->removeAll();
         $this->productFrontRepository->removeAll();
         $this->productCategoryFrontRepository->removeAll();
         $this->productDescriptionFrontRepository->removeAll();
-        $this->productDescriptionFrontRepository->removeAll();
+        $this->productStoreFrontRepository->removeAll();
         $this->productLayoutFrontRepository->removeAll();
         $this->productAttributeFrontRepository->removeAll();
+        $this->productImageFrontRepository->removeAll();
+
+        $this->productRepository->resetAutoIncrements();
+        $this->productFrontRepository->resetAutoIncrements();
+        $this->productImageFrontRepository->resetAutoIncrements();
+        $this->productAttributeFrontRepository->resetAutoIncrements();
+
+        if (true === $clearImage) {
+            
+        }
     }
 
     public function reload($reloadImage = false)
@@ -99,18 +122,22 @@ class ProductSynchronize
         foreach ($productsBack as $productBack) {
             $product = $this->productRepository->findOneByBackId($productBack->getProductId());
             if (null === $product) {
-                $frontId = $this->createProductFrontFromBackProduct($productBack);
-                $this->createProductFromBackAndFrontProductId($productBack->getProductId(), $frontId);
+                $productFront = $this->createProductFrontFromBackProduct($productBack);
+                $this->createProductFromBackAndFrontProductId($productBack->getProductId(), $productFront->getProductId());
             } else {
                 $productFront = $this->productFrontRepository->find($product->getFrontId());
                 if (null === $productFront) {
                     $this->productRepository->remove($product);
-                    $frontId = $this->createProductFrontFromBackProduct($productBack);
-                    $this->createProductFromBackAndFrontProductId($productBack->getProductId(), $frontId);
+                    $productFront = $this->createProductFrontFromBackProduct($productBack);
+                    $this->createProductFromBackAndFrontProductId($productBack->getProductId(), $productFront->getProductId());
                 } else {
                     $this->updateProductFrontFromBackProduct($productBack, $productFront);
                     $this->productRepository->saveAndFlush($product);
                 }
+            }
+
+            if (true === $synchronizeImage && null !== $productFront) {
+                $this->synchronizeImage($productBack, $productFront);
             }
         }
     }
@@ -158,7 +185,7 @@ class ProductSynchronize
         }
         $this->productAttributeFrontRepository->flush();
 
-        return $productFrontId;
+        return $productFront;
     }
 
     protected function getCategoryFrontIdByBack(?int $categoryBackId)
@@ -256,5 +283,15 @@ class ProductSynchronize
         $this->productAttributeFrontRepository->flush();
 
         return $productFrontId;
+    }
+
+    public function synchronizeImage(ProductBack $productBack, ProductFront $productFront)
+    {
+        $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
+
+        foreach ($productBackImages as $key => $productBackImage) {
+            $productFrontImage = $this->productImageSynchronizer->synchronizeImage($productBackImage, $productFront, $key + 1);
+            $this->productImageFrontRepository->saveAndFlush($productFrontImage);
+        }
     }
 }

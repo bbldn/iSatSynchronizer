@@ -19,6 +19,12 @@ class GetBackFileFromFileSystem implements GetBackFileInterface
             return null;
         }
 
-        return file_get_contents($path);
+        $content = file_get_contents($path);
+
+        if (false === $content || 0 === strlen($content)) {
+            return null;
+        }
+
+        return $content;
     }
 }

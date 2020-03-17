@@ -35,4 +35,24 @@ class SaveFrontFileToNetwork implements SaveFrontFileInterface
             throw new UploadException();
         }
     }
+
+    /**
+     * @param string $path
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function clearFolder(string $path): void
+    {
+        $formFields = [
+            'action' => 'remove',
+        ];
+        $formData = new FormDataPart($formFields);
+        $response = $this->httpClient->request('POST', $path, [
+            'headers' => $formData->getPreparedHeaders()->toArray(),
+            'body' => $formData->bodyToIterable(),
+        ]);
+
+        if (200 !== $response->getStatusCode()) {
+            throw new UploadException('The request failed');
+        }
+    }
 }

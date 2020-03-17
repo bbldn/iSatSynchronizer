@@ -17,4 +17,9 @@ class SaveFrontFileToFileSystem implements SaveFrontFileInterface
     {
         $this->fileSystem->appendToFile($path, $content);
     }
+
+    public function clearFolder(string $path): void
+    {
+        $this->fileSystem->remove(scandir($path));
+    }
 }

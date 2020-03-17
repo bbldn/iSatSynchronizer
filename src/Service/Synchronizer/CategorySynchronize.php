@@ -19,10 +19,6 @@ use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFro
 use App\Repository\Front\CategoryLayoutRepository as CategoryLayoutFrontRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository;
-use App\Service\GetBackFileInterface;
-use App\Service\SaveFrontFileInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CategorySynchronize
@@ -33,9 +29,7 @@ class CategorySynchronize
     private $categoryLayoutFrontRepository;
     private $categoryStoreFrontRepository;
     private $categoryRepository;
-    private $filesystem;
-    private $fileReader;
-    private $fileWriter;
+    private $categoryImageSynchronizer;
     private $httpClient;
     private $store;
 
@@ -45,10 +39,8 @@ class CategorySynchronize
                                 CategoryLayoutFrontRepository $categoryLayoutFrontRepository,
                                 CategoryStoreFrontRepository $categoryStoreFrontRepository,
                                 CategoryRepository $categoryRepository,
-                                Filesystem $filesystem,
-                                GetBackFileInterface $fileReader,
+                                CategoryImageSynchronizer $categoryImageSynchronizer,
                                 HttpClientInterface $httpClient,
-                                SaveFrontFileInterface $fileWriter,
                                 Store $store)
     {
         $this->categoryBackRepository = $categoryBackRepository;
@@ -57,9 +49,7 @@ class CategorySynchronize
         $this->categoryLayoutFrontRepository = $categoryLayoutFrontRepository;
         $this->categoryStoreFrontRepository = $categoryStoreFrontRepository;
         $this->categoryRepository = $categoryRepository;
-        $this->fileReader = $fileReader;
-        $this->fileWriter = $fileWriter;
-        $this->filesystem = $filesystem;
+        $this->categoryImageSynchronizer = $categoryImageSynchronizer;
         $this->httpClient = $httpClient;
         $this->store = $store;
     }
@@ -99,7 +89,8 @@ class CategorySynchronize
                     $this->categoryRepository->saveAndFlush($category);
                 }
             }
-            if ($synchronizeImage && null !== $categoryFront) {
+
+            if (true === $synchronizeImage && null !== $categoryFront) {
                 $this->synchronizeImage($categoryBack, $categoryFront);
             }
         }
@@ -212,39 +203,9 @@ class CategorySynchronize
      * @param CategoryBack $categoryBack
      * @param CategoryFront $categoryFront
      */
-    protected function synchronizeImage(CategoryBack $categoryBack,
-                                        CategoryFront $categoryFront)
+    protected function synchronizeImage(CategoryBack $categoryBack, CategoryFront $categoryFront)
     {
-        $picture = $categoryBack->getBigImage();
-        $path = '/images_big/';
-
-        if (null === $picture) {
-            $picture = $categoryBack->getPicture();
-            $path = '/products_pictures/';
-        }
-
-        if (null === $picture) {
-            return;
-        }
-
-        $path = $this->store->getBackSitePath() . $path;
-        $content = $this->fileReader->getFile($path . $picture);
-        if (null === $content) {
-            //@TODO Notify
-            return;
-        }
-
-        $name = $categoryFront->getCategoryId() . '.jpg';
-        $path = '/date/categories/' . $name;
-
-        try {
-            $this->fileWriter->saveFile($this->store->getFrontSitePath() . $path, $content);
-        } catch (UploadException $exception) {
-            //@TODO Notify
-            return;
-        }
-
-        $categoryFront->setImage($path);
+        $this->categoryImageSynchronizer->synchronizeImage($categoryBack, $categoryFront);
         $this->categoryFrontRepository->saveAndFlush($categoryFront);
     }
 }

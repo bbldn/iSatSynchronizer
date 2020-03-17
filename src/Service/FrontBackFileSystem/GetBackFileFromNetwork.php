@@ -29,6 +29,12 @@ class GetBackFileFromNetwork implements GetBackFileInterface
             return null;
         }
 
-        return $response->getContent();
+        $content = $response->getContent();
+
+        if (false === $content || 0 === strlen($content)) {
+            return null;
+        }
+
+        return $content;
     }
 }
