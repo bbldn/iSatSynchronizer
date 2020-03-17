@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="attributes")
+ * @ORM\Table(name="`attributes`")
  * @ORM\Entity(repositoryClass="App\Repository\AttributeRepository")
  * @ORM\HasLifecycleCallbacks()
  */

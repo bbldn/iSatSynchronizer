@@ -5,7 +5,7 @@ namespace App\Entity\Front;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="oc_attribute")
+ * @ORM\Table(name="`oc_attribute`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\AttributeRepository")
  */
 class Attribute

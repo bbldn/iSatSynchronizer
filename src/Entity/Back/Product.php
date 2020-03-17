@@ -5,7 +5,7 @@ namespace App\Entity\Back;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="SS_products")
+ * @ORM\Table(name="`SS_products`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductRepository")
  */
 class Product

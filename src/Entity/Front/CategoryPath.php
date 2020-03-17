@@ -5,7 +5,7 @@ namespace App\Entity\Front;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="oc_category_path")
+ * @ORM\Table(name="`oc_category_path`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryPathRepository")
  */
 class CategoryPath

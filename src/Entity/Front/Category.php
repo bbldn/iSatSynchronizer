@@ -5,7 +5,7 @@ namespace App\Entity\Front;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="oc_category")
+ * @ORM\Table(name="`oc_category`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */

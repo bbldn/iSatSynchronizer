@@ -5,7 +5,7 @@ namespace App\Entity\Front;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="oc_product_description")
+ * @ORM\Table(name="`oc_product_description`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductDescriptionRepository")
  */
 class ProductDescription
