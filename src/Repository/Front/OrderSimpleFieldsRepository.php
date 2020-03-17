@@ -2,27 +2,27 @@
 
 namespace App\Repository\Front;
 
-use App\Entity\Front\Order;
+use App\Entity\Front\OrderSimpleFields;
 use App\Repository\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method Order|null find($id, $lockMode = null, $lockVersion = null)
- * @method Order|null findOneBy(array $criteria, array $orderBy = null)
- * @method Order[]    findAll()
- * @method Order[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderSimpleFields|null find($id, $lockMode = null, $lockVersion = null)
+ * @method OrderSimpleFields|null findOneBy(array $criteria, array $orderBy = null)
+ * @method OrderSimpleFields[]    findAll()
+ * @method OrderSimpleFields[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrderRepository extends BaseRepository
+class OrderSimpleFieldsRepository extends BaseRepository
 {
     protected $entityManagerName = 'front';
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Order::class);
+        parent::__construct($registry, OrderSimpleFields::class);
     }
 
     // /**
-    //  * @return Order[] Returns an array of Order objects
+    //  * @return OrderSimpleFields[] Returns an array of OrderSimpleFields objects
     //  */
     /*
     public function findByExampleField($value)
@@ -39,7 +39,7 @@ class OrderRepository extends BaseRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Order
+    public function findOneBySomeField($value): ?OrderSimpleFields
     {
         return $this->createQueryBuilder('o')
             ->andWhere('o.exampleField = :val')

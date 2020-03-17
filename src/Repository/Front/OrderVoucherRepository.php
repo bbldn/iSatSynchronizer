@@ -2,27 +2,28 @@
 
 namespace App\Repository\Front;
 
-use App\Entity\Front\Order;
+use App\Entity\Front\OrderVoucher;
 use App\Repository\BaseRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method Order|null find($id, $lockMode = null, $lockVersion = null)
- * @method Order|null findOneBy(array $criteria, array $orderBy = null)
- * @method Order[]    findAll()
- * @method Order[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderVoucher|null find($id, $lockMode = null, $lockVersion = null)
+ * @method OrderVoucher|null findOneBy(array $criteria, array $orderBy = null)
+ * @method OrderVoucher[]    findAll()
+ * @method OrderVoucher[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrderRepository extends BaseRepository
+class OrderVoucherRepository extends BaseRepository
 {
     protected $entityManagerName = 'front';
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Order::class);
+        parent::__construct($registry, OrderVoucher::class);
     }
 
     // /**
-    //  * @return Order[] Returns an array of Order objects
+    //  * @return OrderVoucher[] Returns an array of OrderVoucher objects
     //  */
     /*
     public function findByExampleField($value)
@@ -39,7 +40,7 @@ class OrderRepository extends BaseRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Order
+    public function findOneBySomeField($value): ?OrderVoucher
     {
         return $this->createQueryBuilder('o')
             ->andWhere('o.exampleField = :val')
