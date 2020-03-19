@@ -36,10 +36,6 @@ class ProductOption
      */
     private $required;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $product_option_id;
 
     public function getProductOptionId(): ?int
     {

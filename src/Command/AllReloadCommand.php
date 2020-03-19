@@ -6,6 +6,7 @@ use App\Service\Synchronizer\AttributeSynchronize;
 use App\Service\Synchronizer\CategorySynchronize;
 use App\Service\Synchronizer\ProductSynchronize;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -28,14 +29,16 @@ class AllReloadCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Clear all');
+        $this->setDescription('Reload all');
+        $this->addArgument('reloadImage', InputArgument::OPTIONAL, 'Reload image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->categorySynchronize->reload();
+        $reloadImage = $input->hasArgument('reloadImage');
+        $this->categorySynchronize->reload($reloadImage);
         $this->attributeSynchronize->reload();
-        $this->productSynchronize->reload();
+        $this->productSynchronize->reload($reloadImage);
 
         return 0;
     }

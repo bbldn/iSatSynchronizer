@@ -8,21 +8,26 @@ parameters:
     front.not_available_status_id: '%env(FRONT_NOT_AVAILABLE_STATUSID)%'
     front.default_language_id: '%env(FRONT_DEFAULT_LANGUAGE_ID)%'
     front.default_store_id: '%env(FRONT_DEFAULT_STORE_ID)%'
-    front.default_layout_id: '%env(FRONT_DEFAULT_LAYOUT_ID)'
-    front.default_category_front_id: '%env(FRONT_DEFAULT_CATEGORY_FRONT_ID)'
-    front.default_sort_order: '%env(FRONT_DEFAULT_SORT_ORDER)'
-    front.default_attribute_group_id: '%env(FRONT_DEFAULT_ATTRIBUTE_GROUP_ID)'
-    front.root_categories: '%env(json:FRONT_ROOT_CATEGORIES)'
-    front.site_path: '%env(FRONT_SITE_PATH)'
-    front.site_url: '%env(FRONT_SITE_URL)'
-    back.site_path: '%env(BACK_SITE_PATH)'
-    back.site_url: '%env(BACK_SITE_URL)'
+    front.default_layout_id: '%env(FRONT_DEFAULT_LAYOUT_ID)%'
+    front.default_category_front_id: '%env(FRONT_DEFAULT_CATEGORY_FRONT_ID)%'
+    front.default_sort_order: '%env(FRONT_DEFAULT_SORT_ORDER)%'
+    front.default_attribute_group_id: '%env(FRONT_DEFAULT_ATTRIBUTE_GROUP_ID)%'
+    front.root_categories: '%env(json:FRONT_ROOT_CATEGORIES)%'
+    front.site_path: '%env(FRONT_SITE_PATH)%'
+    front.site_url: '%env(FRONT_SITE_URL)%'
+    back.site_path: '%env(BACK_SITE_PATH)%'
+    back.site_url: '%env(BACK_SITE_URL)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $productImageBackPath: '%env(PRODUCT_IMAGE_BACK_PATH)%'
+            $productImageFrontPath: '%env(PRODUCT_IMAGE_FRONT_PATH)%'
+            $categoryImageBackPath: '%env(json:CATEGORY_IMAGE_BACK_PATH)%'
+            $categoryImageFrontPath: '%env(CATEGORY_IMAGE_FRONT_PATH)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

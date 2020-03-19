@@ -18,13 +18,17 @@ class ProductImageSynchronizer
     private $backPath = '/products_pictures/';
     private $frontPath = '/date/products1/';
 
-    public function __construct(GetBackFileInterface $fileReader, SaveFrontFileInterface $fileWriter, Store $store)
+    public function __construct(GetBackFileInterface $fileReader,
+                                SaveFrontFileInterface $fileWriter,
+                                Store $store,
+                                string $productImageBackPath,
+                                string $productImageFrontPath)
     {
         $this->fileReader = $fileReader;
         $this->fileWriter = $fileWriter;
         $this->store = $store;
-        $this->backPath = '/products_pictures/';
-        $this->frontPath = '/date/products1/';
+        $this->backPath = $productImageBackPath;
+        $this->frontPath = $productImageFrontPath;
     }
 
     public function clearFolder()

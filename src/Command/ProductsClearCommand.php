@@ -27,7 +27,8 @@ class ProductsClearCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSynchronize->clear();
+        $removeImage = $input->hasArgument('removeImage');
+        $this->productSynchronize->clear($removeImage);
 
         return 0;
     }

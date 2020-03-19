@@ -17,11 +17,17 @@ class CategoryImageSynchronizer
     private $backPath = ['/images_big/', '/products_pictures/',];
     private $frontPath = '/date/categories1/';
 
-    public function __construct(GetBackFileInterface $fileReader, SaveFrontFileInterface $fileWriter, Store $store)
+    public function __construct(GetBackFileInterface $fileReader,
+                                SaveFrontFileInterface $fileWriter,
+                                Store $store,
+                                array $categoryImageBackPath,
+                                string $categoryImageFrontPath)
     {
         $this->fileReader = $fileReader;
         $this->fileWriter = $fileWriter;
         $this->store = $store;
+        $this->backPath = $categoryImageBackPath;
+        $this->frontPath = $categoryImageFrontPath;
     }
 
     public function clearFolder()

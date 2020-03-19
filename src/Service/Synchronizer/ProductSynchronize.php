@@ -41,8 +41,6 @@ use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepositor
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
 
-
-
 class ProductSynchronize
 {
     private $store;

@@ -27,7 +27,8 @@ class ProductsSynchronizeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSynchronize->synchronize();
+        $loadImage = $input->hasArgument('loadImage');
+        $this->productSynchronize->synchronize($loadImage);
 
         return 0;
     }

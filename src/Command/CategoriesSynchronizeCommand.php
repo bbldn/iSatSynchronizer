@@ -27,7 +27,8 @@ class CategoriesSynchronizeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->categorySynchronize->synchronize();
+        $loadImage = $input->hasArgument('loadImage');
+        $this->categorySynchronize->synchronize($loadImage);
 //        $io = new SymfonyStyle($input, $output);
 //        $arg1 = $input->getArgument('arg1');
 //

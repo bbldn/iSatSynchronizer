@@ -2,8 +2,8 @@
 
 namespace App\Service\Synchronizer;
 
-use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Category;
+use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
 use App\Entity\Front\CategoryDescription;
 use App\Entity\Front\CategoryLayout;
@@ -13,54 +13,68 @@ use App\Other\Fillers\CategoryFiller;
 use App\Other\Fillers\CategoryLayoutFiller;
 use App\Other\Fillers\CategoryStoreFiller;
 use App\Other\Store;
-use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
-use App\Repository\Front\CategoryLayoutRepository as CategoryLayoutFrontRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
+use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
+use App\Repository\Front\CategoryFilterRepository as CategoryFilterFrontRepository;
+use App\Repository\Front\CategoryPathRepository as CategoryPathFrontRepository;
+use App\Repository\Front\CategoryLayoutRepository as CategoryLayoutFrontRepository;
 use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 
 class CategorySynchronize
 {
-    private $categoryBackRepository;
+    private $store;
     private $categoryFrontRepository;
     private $categoryDescriptionFrontRepository;
+    private $categoryFilterFrontRepository;
+    private $categoryPathFrontRepository;
     private $categoryLayoutFrontRepository;
     private $categoryStoreFrontRepository;
     private $categoryRepository;
+    private $categoryBackRepository;
     private $categoryImageSynchronizer;
-    private $httpClient;
-    private $store;
 
-    public function __construct(CategoryBackRepository $categoryBackRepository,
+    public function __construct(Store $store,
                                 CategoryFrontRepository $categoryFrontRepository,
                                 CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
+                                CategoryFilterFrontRepository $categoryFilterFrontRepository,
+                                CategoryPathFrontRepository $categoryPathFrontRepository,
                                 CategoryLayoutFrontRepository $categoryLayoutFrontRepository,
                                 CategoryStoreFrontRepository $categoryStoreFrontRepository,
                                 CategoryRepository $categoryRepository,
-                                CategoryImageSynchronizer $categoryImageSynchronizer,
-                                HttpClientInterface $httpClient,
-                                Store $store)
+                                CategoryBackRepository $categoryBackRepository,
+                                CategoryImageSynchronizer $categoryImageSynchronizer)
     {
-        $this->categoryBackRepository = $categoryBackRepository;
+        $this->store = $store;
         $this->categoryFrontRepository = $categoryFrontRepository;
         $this->categoryDescriptionFrontRepository = $categoryDescriptionFrontRepository;
+        $this->categoryFilterFrontRepository = $categoryFilterFrontRepository;
+        $this->categoryPathFrontRepository = $categoryPathFrontRepository;
         $this->categoryLayoutFrontRepository = $categoryLayoutFrontRepository;
         $this->categoryStoreFrontRepository = $categoryStoreFrontRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->categoryBackRepository = $categoryBackRepository;
         $this->categoryImageSynchronizer = $categoryImageSynchronizer;
-        $this->httpClient = $httpClient;
-        $this->store = $store;
     }
 
     public function clear(bool $synchronizeImage = false)
     {
+        $this->categoryRepository->removeAll();
+
         $this->categoryFrontRepository->removeAll();
         $this->categoryDescriptionFrontRepository->removeAll();
+        $this->categoryFilterFrontRepository->removeAll();
+        $this->categoryPathFrontRepository->removeAll();
         $this->categoryLayoutFrontRepository->removeAll();
         $this->categoryStoreFrontRepository->removeAll();
-        $this->categoryRepository->removeAll();
+
+        $this->categoryRepository->resetAutoIncrements();
+        $this->categoryFrontRepository->resetAutoIncrements();
+
+        if (true === $synchronizeImage) {
+            $this->categoryImageSynchronizer->clearFolder();
+        }
     }
 
     public function reload(bool $synchronizeImage = false)

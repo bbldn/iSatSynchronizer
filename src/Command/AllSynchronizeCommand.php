@@ -6,6 +6,7 @@ use App\Service\Synchronizer\AttributeSynchronize;
 use App\Service\Synchronizer\CategorySynchronize;
 use App\Service\Synchronizer\ProductSynchronize;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -29,13 +30,15 @@ class AllSynchronizeCommand extends Command
     protected function configure()
     {
         $this->setDescription('Synchronize all');
+        $this->addArgument('resetImage', InputArgument::OPTIONAL, 'Reset image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->categorySynchronize->synchronize();
+        $resetImage = $input->hasArgument('resetImage');
+        $this->categorySynchronize->synchronize($resetImage);
         $this->attributeSynchronize->synchronize();
-        $this->productSynchronize->synchronize();
+        $this->productSynchronize->synchronize($resetImage);
 
         return 0;
     }
