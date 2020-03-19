@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerGroupDescription;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -12,8 +12,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerGroupDescription[]    findAll()
  * @method CustomerGroupDescription[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CustomerGroupDescriptionRepository extends ServiceEntityRepository
+class CustomerGroupDescriptionRepository extends BaseRepository
 {
+    protected $entityManagerName = 'front';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerGroupDescription::class);

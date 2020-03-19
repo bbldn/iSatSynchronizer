@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerWishList;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -12,8 +12,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerWishList[]    findAll()
  * @method CustomerWishList[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CustomerWishListRepository extends ServiceEntityRepository
+class CustomerWishListRepository extends BaseRepository
 {
+    protected $entityManagerName = 'front';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerWishList::class);
