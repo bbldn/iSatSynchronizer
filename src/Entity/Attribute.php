@@ -91,12 +91,6 @@ class Attribute
         return $this;
     }
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime('now');
-        $this->updatedAt = new \DateTime('now');
-    }
-
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate

@@ -159,12 +159,6 @@ class Category
         return $this;
     }
 
-    public function __construct()
-    {
-        $this->dateAdded = new \DateTime('now');
-        $this->dateModified = new \DateTime('now');
-    }
-
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate

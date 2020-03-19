@@ -43,7 +43,7 @@ class OrderVoucher
     private $fromName;
 
     /**
-     * @ORM\Column(type="string", name="`from_email`" length=96)
+     * @ORM\Column(type="string", name="`from_email`", length=96)
      */
     private $fromEmail;
 
