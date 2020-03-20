@@ -3,6 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\OrderStatusChangeLog;
+use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,8 +13,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderStatusChangeLog[]    findAll()
  * @method OrderStatusChangeLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrderStatusChangeLogRepository extends ServiceEntityRepository
+class OrderStatusChangeLogRepository extends BaseRepository
 {
+    protected $entityManagerName = 'back';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderStatusChangeLog::class);

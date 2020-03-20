@@ -3,6 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGroupsExtra;
+use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,8 +13,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method BuyersGroupsExtra[]    findAll()
  * @method BuyersGroupsExtra[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BuyersGroupsExtraRepository extends ServiceEntityRepository
+class BuyersGroupsExtraRepository extends BaseRepository
 {
+    protected $entityManagerName = 'back';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BuyersGroupsExtra::class);

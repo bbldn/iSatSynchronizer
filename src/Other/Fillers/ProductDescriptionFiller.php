@@ -18,7 +18,6 @@ class ProductDescriptionFiller
         $productDescriptionFront->setDescription(mb_convert_encoding($productBack->getDescription(), 'utf-8', 'windows-1251'));
         $productDescriptionFront->setTag('');
         $productDescriptionFront->setMetaTitle(mb_convert_encoding($productBack->getName(), 'utf-8', 'windows-1251'));
-        $productDescriptionFront->setMetaH1('');
         $productDescriptionFront->setMetaDescription('');
         $productDescriptionFront->setMetaKeyword('');
 

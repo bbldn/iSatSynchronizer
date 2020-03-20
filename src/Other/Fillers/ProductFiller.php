@@ -47,9 +47,6 @@ class ProductFiller
         $productFront->setSortOrder(0);
         $productFront->setStatus($productBack->getEnabled() !== 0);
         $productFront->setViewed(0);
-//        $productFront->setDateAdded(new \DateTime('now'));
-//        $productFront->setDateModified(new \DateTime('now'));
-        $productFront->setOctProductStickers('a:0:{}');
 
         return $productFront;
     }

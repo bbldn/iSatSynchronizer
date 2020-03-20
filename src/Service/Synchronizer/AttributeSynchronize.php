@@ -16,23 +16,24 @@ use App\Repository\Front\AttributeRepository as AttributeFrontRepository;
 
 class AttributeSynchronize
 {
-    private $attributeBackRepository;
+    private $store;
+    private $attributeRepository;
     private $attributeFrontRepository;
     private $attributeDescriptionFrontRepository;
-    private $attributeRepository;
-    private $store;
+    private $attributeBackRepository;
 
-    public function __construct(AttributeBackRepository $attributeBackRepository,
-                                AttributeFrontRepository $attributeFrontRepository,
-                                AttributeDescriptionFrontRepository $attributeDescriptionFrontRepository,
-                                AttributeRepository $attributeRepository,
-                                Store $store)
+    public function __construct(
+        Store $store,
+        AttributeRepository $attributeRepository,
+        AttributeFrontRepository $attributeFrontRepository,
+        AttributeDescriptionFrontRepository $attributeDescriptionFrontRepository,
+        AttributeBackRepository $attributeBackRepository)
     {
-        $this->attributeBackRepository = $attributeBackRepository;
+        $this->store = $store;
+        $this->attributeRepository = $attributeRepository;
         $this->attributeFrontRepository = $attributeFrontRepository;
         $this->attributeDescriptionFrontRepository = $attributeDescriptionFrontRepository;
-        $this->attributeRepository = $attributeRepository;
-        $this->store = $store;
+        $this->attributeBackRepository = $attributeBackRepository;
     }
 
     public function clear()
@@ -57,7 +58,7 @@ class AttributeSynchronize
                     $this->createAttributeFromBackAndFrontAttributeId($attributeBack->getOptionId(), $frontId);
                 } else {
                     $this->updateAttributeFrontFromBackProduct($attributeBack, $attributeFront);
-                    $this->attributeRepository->saveAndFlush($attributeBack);
+                    $this->attributeRepository->saveAndFlush($attribute);
                 }
             }
         }

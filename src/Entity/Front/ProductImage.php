@@ -12,6 +12,7 @@ class ProductImage
 {
     /**
      * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_image_id`")
      */
     private $productImageId;

@@ -3,6 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\OrderPriceDiscount;
+use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,8 +13,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderPriceDiscount[]    findAll()
  * @method OrderPriceDiscount[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrderPriceDiscountRepository extends ServiceEntityRepository
+class OrderPriceDiscountRepository extends BaseRepository
 {
+    protected $entityManagerName = 'back';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderPriceDiscount::class);

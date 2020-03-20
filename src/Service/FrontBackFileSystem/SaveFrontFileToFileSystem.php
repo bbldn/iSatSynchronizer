@@ -20,7 +20,12 @@ class SaveFrontFileToFileSystem implements SaveFrontFileInterface
 
     public function clearFolder(string $path): void
     {
-        $files = array_diff(scandir($path), ['.', '..']);
-        $this->fileSystem->remove($files);
+        foreach (scandir($path) as $link) {
+            if (in_array($link, ['.', '..',])) {
+                continue;
+            }
+
+            $this->fileSystem->remove($path . $link);
+        }
     }
 }

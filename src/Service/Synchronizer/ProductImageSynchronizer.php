@@ -60,7 +60,7 @@ class ProductImageSynchronizer
 
         $pathInfo = pathinfo($picture);
 
-        $name = $productFront->getProductId() . '_' . $number . $pathInfo['extension'];
+        $name = $productFront->getProductId() . '_' . $number . '.' . mb_strtolower($pathInfo['extension']);
         $path = $this->frontPath . $name;
 
         try {

@@ -8,12 +8,10 @@ class ProductCategoryFiller
 {
     public static function backToFront(ProductCategoryFront $productCategoryFront,
                                        int $productFrontId,
-                                       int $categoryFrontId,
-                                       bool $mainCategory)
+                                       int $categoryFrontId)
     {
         $productCategoryFront->setProductId($productFrontId);
         $productCategoryFront->setCategoryId($categoryFrontId);
-        $productCategoryFront->setMainCategory($mainCategory);
 
         return $productCategoryFront;
     }

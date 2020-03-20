@@ -168,11 +168,6 @@ class Product
      */
     private $dateModified;
 
-    /**
-     * @ORM\Column(type="string", name="`oct_product_stickers`", length=255)
-     */
-    private $octProductStickers;
-
     public function getProductId(): ?int
     {
         return $this->productId;
@@ -541,18 +536,6 @@ class Product
     public function setDateModified(\DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
-
-        return $this;
-    }
-
-    public function getOctProductStickers(): ?string
-    {
-        return $this->octProductStickers;
-    }
-
-    public function setOctProductStickers(string $octProductStickers): self
-    {
-        $this->octProductStickers = $octProductStickers;
 
         return $this;
     }

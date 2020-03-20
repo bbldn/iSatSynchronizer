@@ -21,11 +21,6 @@ class ProductCategory
      */
     private $categoryId;
 
-    /**
-     * @ORM\Column(type="boolean", name="main_category")
-     */
-    private $mainCategory = false;
-
     public function getProductId(): ?int
     {
         return $this->productId;
@@ -46,18 +41,6 @@ class ProductCategory
     public function setCategoryId(int $categoryId): self
     {
         $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    public function getMainCategory(): ?bool
-    {
-        return $this->mainCategory;
-    }
-
-    public function setMainCategory(bool $mainCategory): self
-    {
-        $this->mainCategory = $mainCategory;
 
         return $this;
     }

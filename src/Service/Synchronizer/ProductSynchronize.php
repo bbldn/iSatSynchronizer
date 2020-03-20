@@ -9,7 +9,7 @@ use App\Entity\Front\ProductCategory as ProductCategoryFront;
 use App\Entity\Front\ProductDescription as ProductDescriptionFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
-use App\Entity\Product as Product;
+use App\Entity\Product;
 use App\Other\Fillers\ProductAttributeFiller;
 use App\Other\Fillers\ProductCategoryFiller;
 use App\Other\Fillers\ProductDescriptionFiller;
@@ -193,17 +193,37 @@ class ProductSynchronize
     protected function createProductFrontFromBackProduct(ProductBack $productBack)
     {
         $productFront = new ProductFront();
-        ProductFiller::backToFront($productBack, $productFront, $this->store->getAvailableStatusId(), $this->store->getNotAvailableStatusId());
+        ProductFiller::backToFront(
+            $productBack,
+            $productFront,
+            $this->store->getAvailableStatusId(),
+            $this->store->getNotAvailableStatusId()
+        );
         $this->productFrontRepository->saveAndFlush($productFront);
 
         $productFrontId = $productFront->getProductId();
         $productDescriptionFront = new ProductDescriptionFront();
-        ProductDescriptionFiller::backToFront($productBack, $productDescriptionFront, $productFrontId, $this->store->getDefaultLanguageId());
+
+        if (null === $productFrontId) {
+            die(var_dump($productFront));
+        }
+
+        ProductDescriptionFiller::backToFront(
+            $productBack,
+            $productDescriptionFront,
+            $productFrontId,
+            $this->store->getDefaultLanguageId()
+        );
         $this->productDescriptionFrontRepository->saveAndFlush($productDescriptionFront);
 
         $storeId = $this->store->getDefaultStoreId();
         $productLayoutFront = new ProductLayoutFront();
-        ProductLayoutFiller::backToFront($productLayoutFront, $productFrontId, $storeId, $this->store->getDefaultLayoutId());
+        ProductLayoutFiller::backToFront(
+            $productLayoutFront,
+            $productFrontId,
+            $storeId,
+            $this->store->getDefaultLayoutId()
+        );
         $this->productLayoutFrontRepository->saveAndFlush($productDescriptionFront);
 
         $productStoreFront = new ProductStoreFront();
@@ -212,7 +232,7 @@ class ProductSynchronize
 
         $categoryFrontId = $this->getCategoryFrontIdByBack($productBack->getCategoryId());
         $productCategoryFront = new ProductCategoryFront();
-        ProductCategoryFiller::backToFront($productCategoryFront, $productFrontId, $categoryFrontId, true);
+        ProductCategoryFiller::backToFront($productCategoryFront, $productFrontId, $categoryFrontId);
         $this->productCategoryFrontRepository->saveAndFlush($productCategoryFront);
 
         $productAttributes = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
@@ -229,9 +249,8 @@ class ProductSynchronize
                 $this->store->getDefaultLanguageId(),
                 $productAttribute->getOptionValue()
             );
-            $this->productAttributeFrontRepository->save($productAttributeFront);
+            $this->productAttributeFrontRepository->saveAndFlush($productAttributeFront);
         }
-        $this->productAttributeFrontRepository->flush();
 
         return $productFront;
     }
@@ -316,17 +335,22 @@ class ProductSynchronize
                 // @TODO Notify
                 continue;
             }
-            $productAttributeFront = $this->productAttributeFrontRepository->findOneByAttributeFrontIdAndProductFrontId($attribute->getFrontId(), $productFrontId);
-            if (null === $productAttributeFront) {
-                $productAttributeFront = new ProductAttributeFront();
+            $text = trim($productAttribute->getOptionValue());
+            if (mb_strlen($text) > 0) {
+                $productAttributeFront = $this
+                    ->productAttributeFrontRepository
+                    ->findOneByAttributeFrontIdAndProductFrontId($attribute->getFrontId(), $productFrontId);
+                if (null === $productAttributeFront) {
+                    $productAttributeFront = new ProductAttributeFront();
+                }
+                ProductAttributeFiller::backToFront($productAttributeFront,
+                    $productFrontId,
+                    $attribute->getFrontId(),
+                    $this->store->getDefaultLanguageId(),
+                    $text
+                );
+                $this->productAttributeFrontRepository->save($productAttributeFront);
             }
-            ProductAttributeFiller::backToFront($productAttributeFront,
-                $productFrontId,
-                $attribute->getFrontId(),
-                $this->store->getDefaultLanguageId(),
-                $productAttribute->getOptionValue()
-            );
-            $this->productAttributeFrontRepository->save($productAttributeFront);
         }
         $this->productAttributeFrontRepository->flush();
 

@@ -3,6 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGamePost;
+use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,8 +13,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method BuyersGamePost[]    findAll()
  * @method BuyersGamePost[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BuyersGamePostRepository extends ServiceEntityRepository
+class BuyersGamePostRepository extends BaseRepository
 {
+    protected $entityManagerName = 'back';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BuyersGamePost::class);

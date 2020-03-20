@@ -3,6 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\OrderHistory;
+use App\Repository\BaseRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -12,8 +13,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderHistory[]    findAll()
  * @method OrderHistory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrderHistoryRepository extends ServiceEntityRepository
+class OrderHistoryRepository extends BaseRepository
 {
+    protected $entityManagerName = 'back';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderHistory::class);

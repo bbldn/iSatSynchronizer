@@ -15,9 +15,9 @@ class CategoryDescriptionFiller
         $categoryDescriptionFront->setName(mb_convert_encoding($categoryBack->getName(), 'utf-8', 'windows-1251'));
         $categoryDescriptionFront->setDescription(mb_convert_encoding($categoryBack->getDescription(), 'utf-8', 'windows-1251'));
         $categoryDescriptionFront->setMetaTitle(mb_convert_encoding($categoryBack->getName(), 'utf-8', 'windows-1251'));
-        $categoryDescriptionFront->setMetaH1(mb_convert_encoding($categoryBack->getH1(), 'utf-8', 'windows-1251'));
         $categoryDescriptionFront->setMetaDescription('');
         $categoryDescriptionFront->setMetaKeyword('');
+
         return $categoryDescriptionFront;
     }
 }

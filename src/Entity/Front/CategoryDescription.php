@@ -37,11 +37,6 @@ class CategoryDescription
     private $metaTitle;
 
     /**
-     * @ORM\Column(type="string", name="`meta_h1`", length=255)
-     */
-    private $metaH1;
-
-    /**
      * @ORM\Column(type="string", name="`meta_description`", length=255)
      */
     private $metaDescription;
@@ -107,18 +102,6 @@ class CategoryDescription
     public function setMetaTitle(string $metaTitle): self
     {
         $this->metaTitle = $metaTitle;
-
-        return $this;
-    }
-
-    public function getMetaH1(): ?string
-    {
-        return $this->metaH1;
-    }
-
-    public function setMetaH1(string $metaH1): self
-    {
-        $this->metaH1 = $metaH1;
 
         return $this;
     }
