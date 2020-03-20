@@ -364,6 +364,11 @@ class ProductSynchronize
         foreach ($productBackImages as $key => $productBackImage) {
             $productFrontImage = $this->productImageSynchronizer->synchronizeImage($productBackImage, $productFront, $key + 1);
             $this->productImageFrontRepository->saveAndFlush($productFrontImage);
+
+            if (0 === $key) {
+                $productFront->setImage($productFrontImage->getImage());
+                $this->productFrontRepository->saveAndFlush($productFront);
+            }
         }
     }
 }

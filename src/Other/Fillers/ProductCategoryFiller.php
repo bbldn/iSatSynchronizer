@@ -6,9 +6,13 @@ use App\Entity\Front\ProductCategory as ProductCategoryFront;
 
 class ProductCategoryFiller
 {
-    public static function backToFront(ProductCategoryFront $productCategoryFront,
-                                       int $productFrontId,
-                                       int $categoryFrontId)
+    /**
+     * @param ProductCategoryFront $productCategoryFront
+     * @param int $productFrontId
+     * @param int $categoryFrontId
+     * @return ProductCategoryFront
+     */
+    public static function backToFront(ProductCategoryFront $productCategoryFront, int $productFrontId, int $categoryFrontId)
     {
         $productCategoryFront->setProductId($productFrontId);
         $productCategoryFront->setCategoryId($categoryFrontId);

@@ -7,6 +7,12 @@ use App\Entity\Front\Category as CategoryFront;
 
 class CategoryFiller
 {
+    /**
+     * @param CategoryBack $categoryBack
+     * @param CategoryFront $categoryFront
+     * @param int $parentId
+     * @return CategoryFront
+     */
     public static function backToFront(CategoryBack $categoryBack, CategoryFront $categoryFront, int $parentId)
     {
         $categoryFront->setImage('');

@@ -70,7 +70,7 @@ class ProductImageSynchronizer
             return $productPicturesFront;
         }
 
-        $productPicturesFront->setImage($path);
+        $productPicturesFront->setImage(str_replace('/image', '', $path));
 
         return $productPicturesFront;
     }

@@ -38,9 +38,12 @@ class AttributeSynchronize
 
     public function clear()
     {
+        $this->attributeRepository->removeAll();
         $this->attributeFrontRepository->removeAll();
         $this->attributeDescriptionFrontRepository->removeAll();
-        $this->attributeRepository->removeAll();
+
+        $this->attributeRepository->resetAutoIncrements();
+        $this->attributeFrontRepository->resetAutoIncrements();
     }
 
     public function synchronize()

@@ -12,6 +12,7 @@ class ProductAttributeFiller
      * @param int $attributeId
      * @param int $languageId
      * @param string $text
+     * @return ProductAttributeFront
      */
     public static function backToFront(ProductAttributeFront $productAttributeFront,
                                        int $productId,
@@ -23,5 +24,7 @@ class ProductAttributeFiller
         $productAttributeFront->setAttributeId($attributeId);
         $productAttributeFront->setLanguageId($languageId);
         $productAttributeFront->setText(mb_convert_encoding($text, 'utf-8', 'windows-1251'));
+
+        return $productAttributeFront;
     }
 }

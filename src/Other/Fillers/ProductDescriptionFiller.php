@@ -7,6 +7,13 @@ use App\Entity\Back\Product as ProductBack;
 
 class ProductDescriptionFiller
 {
+    /**
+     * @param ProductBack $productBack
+     * @param ProductDescriptionFront $productDescriptionFront
+     * @param int $productFrontId
+     * @param int $languageId
+     * @return ProductDescriptionFront
+     */
     public static function backToFront(ProductBack $productBack,
                                        ProductDescriptionFront $productDescriptionFront,
                                        int $productFrontId,

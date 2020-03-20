@@ -21,6 +21,23 @@ class CategoryPathRepository extends BaseRepository
         parent::__construct($registry, CategoryPath::class);
     }
 
+    /**
+     * @param int $categoryId
+     * @param int $pathId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findByCategoryFrontIdAndPathId(int $categoryId, int $pathId)
+    {
+        return $this->createQueryBuilder('cp')
+            ->andWhere('cp.categoryId = :categoryId')
+            ->andWhere('cp.pathId = :pathId')
+            ->setParameter('categoryId', $categoryId)
+            ->setParameter('pathId', $pathId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return CategoryPath[] Returns an array of CategoryPath objects
     //  */

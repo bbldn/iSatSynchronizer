@@ -8,6 +8,13 @@ use App\Entity\Front\CategoryDescription;
 
 class CategoryDescriptionFiller
 {
+    /**
+     * @param CategoryBack $categoryBack
+     * @param CategoryDescription $categoryDescriptionFront
+     * @param int $categoryId
+     * @param int $languageId
+     * @return CategoryDescription
+     */
     public static function backToFront(CategoryBack $categoryBack, CategoryDescription $categoryDescriptionFront, int $categoryId, int $languageId)
     {
         $categoryDescriptionFront->setCategoryId($categoryId);

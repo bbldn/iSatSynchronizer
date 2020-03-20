@@ -73,6 +73,6 @@ class CategoryImageSynchronizer
             return;
         }
 
-        $categoryFront->setImage($path);
+        $categoryFront->setImage(str_replace('/image', '', $path));
     }
 }

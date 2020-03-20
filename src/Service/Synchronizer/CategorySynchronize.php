@@ -7,10 +7,12 @@ use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
 use App\Entity\Front\CategoryDescription;
 use App\Entity\Front\CategoryLayout;
+use App\Entity\Front\CategoryPath as CategoryPathFront;
 use App\Entity\Front\CategoryStore;
 use App\Other\Fillers\CategoryDescriptionFiller;
 use App\Other\Fillers\CategoryFiller;
 use App\Other\Fillers\CategoryLayoutFiller;
+use App\Other\Fillers\CategoryPathFiller;
 use App\Other\Fillers\CategoryStoreFiller;
 use App\Other\Store;
 use App\Repository\CategoryRepository;
@@ -125,6 +127,16 @@ class CategorySynchronize
 
         $categoryFrontId = $categoryFront->getCategoryId();
 
+        if ($this->store->getDefaultCategoryFrontId() !== $parentId) {
+            $categoryPath = new CategoryPathFront();
+            CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $parentId, 0);
+            $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
+        }
+
+        $categoryPath = new CategoryPathFront();
+        CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $categoryFrontId, 1);
+        $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
+
         $categoryDescription = new CategoryDescription();
         $languageId = $this->store->getDefaultLanguageId();
         CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
@@ -186,6 +198,24 @@ class CategorySynchronize
         $this->categoryFrontRepository->saveAndFlush($categoryFront);
 
         $categoryFrontId = $categoryFront->getCategoryId();
+
+        if ($this->store->getDefaultCategoryFrontId() !== $parentId) {
+            $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId($categoryFrontId, $parentId);
+            if (null === $categoryPath) {
+                $categoryPath = new CategoryPathFront();
+            }
+            CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $parentId, 0);
+            $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
+        }
+
+        $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId($categoryFrontId, $categoryFrontId);
+        if (null === $categoryPath) {
+            $categoryPath = new CategoryPathFront();
+        }
+        CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $categoryFrontId, 1);
+        $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
+
+
         $categoryDescription = $this->categoryDescriptionFrontRepository->find($categoryFrontId);
         if (null === $categoryDescription) {
             $categoryDescription = new CategoryDescription();
