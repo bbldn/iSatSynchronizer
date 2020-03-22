@@ -21,6 +21,19 @@ class ProductCategoryRepository extends BaseRepository
         parent::__construct($registry, ProductCategory::class);
     }
 
+    /**
+     * @param int $value
+     * @return ProductCategory[] Returns an array of Category objects
+     */
+    public function findByProductFrontId(int $value)
+    {
+        return $this->createQueryBuilder('cr')
+            ->andWhere('cr.productId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return ProductCategory[] Returns an array of ProductCategory objects
     //  */

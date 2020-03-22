@@ -36,6 +36,12 @@ class AttributeSynchronize
         $this->attributeBackRepository = $attributeBackRepository;
     }
 
+    public function reload()
+    {
+        $this->clear();
+        $this->synchronize();
+    }
+
     public function clear()
     {
         $this->attributeRepository->removeAll();
@@ -65,12 +71,6 @@ class AttributeSynchronize
                 }
             }
         }
-    }
-
-    public function reload()
-    {
-        $this->clear();
-        $this->synchronize();
     }
 
     protected function createAttributeFrontFromBackProduct(AttributeBack $attributeBack)

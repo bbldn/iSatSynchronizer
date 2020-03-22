@@ -18,28 +18,28 @@ use App\Other\Fillers\ProductLayoutFiller;
 use App\Other\Fillers\ProductStoreFiller;
 use App\Other\Store;
 use App\Repository\AttributeRepository;
+use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
+use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
+use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
-use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
+use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
 use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
+use App\Repository\Front\ProductDownloadRepository as ProductDownloadFrontRepository;
 use App\Repository\Front\ProductFilterRepository as ProductFilterFrontRepository;
 use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
+use App\Repository\Front\ProductLayoutRepository as ProductLayoutFrontRepository;
 use App\Repository\Front\ProductOptionRepository as ProductOptionFrontRepository;
 use App\Repository\Front\ProductOptionValueRepository as ProductOptionValueFrontRepository;
 use App\Repository\Front\ProductRecurringRepository as ProductRecurringFrontRepository;
 use App\Repository\Front\ProductRelatedRepository as ProductRelatedFrontRepository;
+use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\Front\ProductRewardRepository as ProductRewardFrontRepository;
 use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontRepository;
-use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
-use App\Repository\Front\ProductDownloadRepository as ProductDownloadFrontRepository;
-use App\Repository\Front\ProductLayoutRepository as ProductLayoutFrontRepository;
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
-use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
-use App\Repository\Back\ProductRepository as ProductBackRepository;
-use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
+use App\Repository\ProductRepository;
 
 class ProductSynchronize
 {
@@ -123,6 +123,12 @@ class ProductSynchronize
         $this->productImageSynchronizer = $productImageSynchronizer;
     }
 
+    public function reload($reloadImage = false)
+    {
+        $this->clear($reloadImage);
+        $this->synchronize($reloadImage);
+    }
+
     public function clear($clearImage = false)
     {
         $this->productRepository->removeAll();
@@ -156,12 +162,6 @@ class ProductSynchronize
         if (true === $clearImage) {
             $this->productImageSynchronizer->clearFolder();
         }
-    }
-
-    public function reload($reloadImage = false)
-    {
-        $this->clear($reloadImage);
-        $this->synchronize($reloadImage);
     }
 
     public function synchronize($synchronizeImage = false)

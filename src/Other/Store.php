@@ -102,4 +102,21 @@ class Store
         $this->backSiteUrl = $params->get('back.site_url');
     }
 
+    public function convertFrontToBackCurrency(string $currency)
+    {
+        switch (mb_strtolower(trim($currency))) {
+            case 'uah':
+            case 'ua':
+                return 'грн';
+            case 'rub':
+            case 'ru':
+                return 'р';
+            case 'usd':
+                return '$';
+            case 'eur':
+                return '€';
+            default:
+                return '';
+        }
+    }
 }

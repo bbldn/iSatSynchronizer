@@ -2,8 +2,8 @@
 
 namespace App\Service\Synchronizer;
 
-use App\Entity\Category;
 use App\Entity\Back\Category as CategoryBack;
+use App\Entity\Category;
 use App\Entity\Front\Category as CategoryFront;
 use App\Entity\Front\CategoryDescription;
 use App\Entity\Front\CategoryLayout;
@@ -15,14 +15,14 @@ use App\Other\Fillers\CategoryLayoutFiller;
 use App\Other\Fillers\CategoryPathFiller;
 use App\Other\Fillers\CategoryStoreFiller;
 use App\Other\Store;
+use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
 use App\Repository\Front\CategoryFilterRepository as CategoryFilterFrontRepository;
-use App\Repository\Front\CategoryPathRepository as CategoryPathFrontRepository;
 use App\Repository\Front\CategoryLayoutRepository as CategoryLayoutFrontRepository;
+use App\Repository\Front\CategoryPathRepository as CategoryPathFrontRepository;
+use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository;
-use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 
 class CategorySynchronize
 {
@@ -60,6 +60,12 @@ class CategorySynchronize
         $this->categoryImageSynchronizer = $categoryImageSynchronizer;
     }
 
+    public function reload(bool $synchronizeImage = false)
+    {
+        $this->clear($synchronizeImage);
+        $this->synchronize($synchronizeImage);
+    }
+
     public function clear(bool $synchronizeImage = false)
     {
         $this->categoryRepository->removeAll();
@@ -77,12 +83,6 @@ class CategorySynchronize
         if (true === $synchronizeImage) {
             $this->categoryImageSynchronizer->clearFolder();
         }
-    }
-
-    public function reload(bool $synchronizeImage = false)
-    {
-        $this->clear($synchronizeImage);
-        $this->synchronize($synchronizeImage);
     }
 
     public function synchronize(bool $synchronizeImage = false)
