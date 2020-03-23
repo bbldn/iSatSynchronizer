@@ -22,6 +22,15 @@ class BuyersGamePostRepository extends BaseRepository
         parent::__construct($registry, BuyersGamePost::class);
     }
 
+    public function findOneByTelephone($value): ?BuyersGamePost
+    {
+        return $this->createQueryBuilder('bgp')
+            ->andWhere('bgp.telephone = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return BuyersGamePost[] Returns an array of BuyersGamePost objects
     //  */

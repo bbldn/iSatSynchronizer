@@ -6,6 +6,8 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Other\Store;
+use App\Repository\Back\BuyersGamePostRepository as CustomerBack;
+use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
 use App\Repository\Front\CustomerActivityRepository as CustomerActivityFrontRepository;
@@ -30,12 +32,13 @@ use App\Repository\Front\OrderShipmentRepository as OrderShipmentFrontRepository
 use App\Repository\Front\OrderStatusRepository as OrderStatusFrontRepository;
 use App\Repository\Front\OrderTotalRepository as OrderTotalFrontRepository;
 use App\Repository\Front\OrderVoucherRepository as OrderVoucherFrontRepository;
+use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
-use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 
 class OrderSynchronize
 {
+    private $customerBack;
     private $orderFrontRepository;
     private $orderHistoryRepository;
     private $orderOptionRepository;
@@ -48,6 +51,7 @@ class OrderSynchronize
     private $orderVoucherFrontRepository;
     private $orderRepository;
     private $addressFrontRepository;
+    private $currencyBackRepository;
     private $categoryDescriptionFrontRepository;
     private $customerFrontRepository;
     private $customerActivityFrontRepository;
@@ -65,7 +69,8 @@ class OrderSynchronize
     private $productCategoryFrontRepository;
     private $store;
 
-    public function __construct(OrderFrontRepository $orderFrontRepository,
+    public function __construct(CustomerBack $customerBack,
+                                OrderFrontRepository $orderFrontRepository,
                                 OrderHistoryFrontRepository $orderHistoryRepository,
                                 OrderOptionFrontRepository $orderOptionRepository,
                                 OrderProductFrontRepository $orderProductRepository,
@@ -77,6 +82,7 @@ class OrderSynchronize
                                 OrderVoucherFrontRepository $orderVoucherFrontRepository,
                                 OrderRepository $orderRepository,
                                 AddressFrontRepository $addressFrontRepository,
+                                CurrencyBackRepository $currencyBackRepository,
                                 CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
                                 CustomerFrontRepository $customerFrontRepository,
                                 CustomerActivityFrontRepository $customerActivityFrontRepository,
@@ -94,6 +100,7 @@ class OrderSynchronize
                                 ProductCategoryFrontRepository $productCategoryFrontRepository,
                                 Store $store)
     {
+        $this->customerBack = $customerBack;
         $this->orderFrontRepository = $orderFrontRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
         $this->orderOptionRepository = $orderOptionRepository;
@@ -106,6 +113,7 @@ class OrderSynchronize
         $this->orderVoucherFrontRepository = $orderVoucherFrontRepository;
         $this->orderRepository = $orderRepository;
         $this->addressFrontRepository = $addressFrontRepository;
+        $this->currencyBackRepository = $currencyBackRepository;
         $this->categoryDescriptionFrontRepository = $categoryDescriptionFrontRepository;
         $this->customerFrontRepository = $customerFrontRepository;
         $this->customerActivityFrontRepository = $customerActivityFrontRepository;
@@ -174,12 +182,12 @@ class OrderSynchronize
 
     public function synchronize()
     {
-        $ordersFront = $this->orderFrontRepository->findAll();
-
-        foreach ($ordersFront as $orderFront) {
-            $orderBack = $this->createOrderFrontFromBackOrder($orderFront);
-            $this->createOrder($orderBack, $orderFront);
-        }
+//        $ordersFront = $this->orderFrontRepository->findAll();
+//
+//        foreach ($ordersFront as $orderFront) {
+//            $orderBack = $this->createOrderFrontFromBackOrder($orderFront);
+//            $this->createOrder($orderBack, $orderFront);
+//        }
     }
 
     protected function createOrder(OrderBack $orderBack, OrderFront $orderFront)
@@ -223,20 +231,24 @@ class OrderSynchronize
         $orderBack->setHouse('');
         $orderBack->setWarehouse('');
         $orderBack->setMail($orderFront->getEmail());
-//        $orderBack->setStatus(0);
+        $orderBack->setStatus($this->store->getDefaultOrderStatus());
         $orderBack->setComments($orderFront->getComment());
         $orderBack->setArchive(0);
         $orderBack->setRead(0);
         $orderBack->setSynchronize(0);
-//        $orderBack->setClientId(0);
+
+        $orderBack->setClientId($this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()));
         $orderBack->setPayment(13);
-//        $orderBack->setDelivery(0);
+
+        //TODO Пока так потом надо будет писать решение
+        $orderBack->setDelivery(21);
+
         $orderBack->setTrackNumber('');
         $orderBack->setTrackNumberDate(new \DateTime());
         $orderBack->setMoneyGiven(0);
         $orderBack->setTrackSent(0);
         $orderBack->setSerialNum('');
-//        $orderBack->setShopId(0);
+        $orderBack->setShopId($this->store->getDefaultShop());
         $orderBack->setShopIdCounterparty(0);
         $orderBack->setPaymentWaitDays(0);
         $orderBack->setPaymentWaitFirstSum(0);
@@ -244,8 +256,12 @@ class OrderSynchronize
         $orderBack->setDocumentId(0);
         $orderBack->setDocumentType(2);
         $orderBack->setInvoiceSent(new \DateTime());
-//        $orderBack->setCurrencyValue(1);
-//        $orderBack->setCurrencyValueWhenPurchasing('{"\u0433\u0440\u043d":"24","\u0440":"65","$":"1"}');
+
+        //TODO Разобраться с курсом для разных валют
+        $orderBack->setCurrencyValue(1);
+        $orderBack->setCurrencyValueWhenPurchasing(json_encode($this->getCurrentCourse()));
+
+
         $orderBack->setShippingPrice(0);
         $orderBack->setShippingPriceOld(0);
         $orderBack->setShippingCurrencyName('');
@@ -254,7 +270,7 @@ class OrderSynchronize
         return $orderBack;
     }
 
-    protected function getMainCategoryNameByProductFrontId(int $frontId)
+    protected function getMainCategoryNameByProductFrontId(int $frontId): string
     {
         $productCategories = $this->productCategoryFrontRepository->findByProductFrontId($frontId);
 
@@ -273,5 +289,21 @@ class OrderSynchronize
         }
 
         return $categoryDescription->getName();
+    }
+
+    protected function getCurrentCourse(): array
+    {
+        return $this->currencyBackRepository->getCurrentCourse();
+    }
+
+    protected function getClientIdByFrontCustomerPhone(string $phone): int
+    {
+//        $customer = $this->customerBack->findOneByTelephone($orderFront->getTelephone());
+        $customer = $this->customerBack->findOneByTelephone($phone);
+        if (null === $customer) {
+            return 0;
+        }
+
+        return $customer->getId();
     }
 }

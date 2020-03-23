@@ -14,6 +14,8 @@ class Store
     protected $defaultCategoryFrontId = 0;
     protected $defaultSortOrder = 0;
     protected $defaultAttributeGroupId = 1;
+    protected $defaultOrderStatus = 1;
+    protected $defaultShop = 0;
     protected $rootCategories = [0, 1];
     protected $backSiteUrl = 'http://172.17.0.2';
     protected $frontSiteUrl = 'http://172.17.0.3';
@@ -60,6 +62,16 @@ class Store
         return $this->defaultAttributeGroupId;
     }
 
+    public function getDefaultOrderStatus(): int
+    {
+        return $this->defaultOrderStatus;
+    }
+
+    public function getDefaultShop(): int
+    {
+        return $this->defaultShop;
+    }
+
     public function getRootCategories(): array
     {
         return $this->rootCategories;
@@ -95,6 +107,7 @@ class Store
         $this->defaultCategoryFrontId = $params->get('front.default_category_front_id');
         $this->defaultSortOrder = $params->get('front.default_sort_order');
         $this->defaultAttributeGroupId = $params->get('front.default_attribute_group_id');
+        $this->defaultOrderStatus = $params->get('back.default_order_status');
         $this->rootCategories = $params->get('front.root_categories');
         $this->frontSitePath = $params->get('front.site_path');
         $this->frontSiteUrl = $params->get('front.site_url');
