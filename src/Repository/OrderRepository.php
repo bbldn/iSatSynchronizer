@@ -21,6 +21,24 @@ class OrderRepository extends BaseRepository
         parent::__construct($registry, Order::class);
     }
 
+    public function findOneByBackId(int $value): ?Order
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.backId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findOneByFrontId(int $value): ?Order
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.frontId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return Order[] Returns an array of Order objects
     //  */

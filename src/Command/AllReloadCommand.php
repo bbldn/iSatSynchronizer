@@ -35,7 +35,7 @@ class AllReloadCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $reloadImage = $input->hasArgument('reloadImage');
+        $reloadImage = $input->getArgument('reloadImage') !== null;
         $this->categorySynchronize->reload($reloadImage);
         $this->attributeSynchronize->reload();
         $this->productSynchronize->reload($reloadImage);

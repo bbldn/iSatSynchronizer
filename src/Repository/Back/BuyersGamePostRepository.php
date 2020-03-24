@@ -25,7 +25,7 @@ class BuyersGamePostRepository extends BaseRepository
     public function findOneByTelephone($value): ?BuyersGamePost
     {
         return $this->createQueryBuilder('bgp')
-            ->andWhere('bgp.telephone = :val')
+            ->andWhere('bgp.phone = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();

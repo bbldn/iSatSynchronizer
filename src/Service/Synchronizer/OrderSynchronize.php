@@ -5,9 +5,12 @@ namespace App\Service\Synchronizer;
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
+use App\Exception\OrderFrontNotFoundException;
+use App\Other\Fillers\OrderFiller;
 use App\Other\Store;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBack;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
+use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
 use App\Repository\Front\CustomerActivityRepository as CustomerActivityFrontRepository;
@@ -39,6 +42,7 @@ use App\Repository\ProductRepository;
 class OrderSynchronize
 {
     private $customerBack;
+    private $orderBackRepository;
     private $orderFrontRepository;
     private $orderHistoryRepository;
     private $orderOptionRepository;
@@ -70,6 +74,7 @@ class OrderSynchronize
     private $store;
 
     public function __construct(CustomerBack $customerBack,
+                                OrderBackRepository $orderBackRepository,
                                 OrderFrontRepository $orderFrontRepository,
                                 OrderHistoryFrontRepository $orderHistoryRepository,
                                 OrderOptionFrontRepository $orderOptionRepository,
@@ -101,6 +106,7 @@ class OrderSynchronize
                                 Store $store)
     {
         $this->customerBack = $customerBack;
+        $this->orderBackRepository = $orderBackRepository;
         $this->orderFrontRepository = $orderFrontRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
         $this->orderOptionRepository = $orderOptionRepository;
@@ -180,14 +186,45 @@ class OrderSynchronize
         $this->customerWishListFrontRepository->resetAutoIncrements();
     }
 
-    public function synchronize()
+    public function synchronizeAll()
     {
-//        $ordersFront = $this->orderFrontRepository->findAll();
-//
-//        foreach ($ordersFront as $orderFront) {
-//            $orderBack = $this->createOrderFrontFromBackOrder($orderFront);
-//            $this->createOrder($orderBack, $orderFront);
-//        }
+        $ordersFront = $this->orderFrontRepository->findAll();
+
+        foreach ($ordersFront as $orderFront) {
+            $this->synchronizeByOrder($orderFront);
+        }
+    }
+
+    /**
+     * @param int $id
+     * @throws OrderFrontNotFoundException
+     */
+    public function synchronizeOne(int $id)
+    {
+        $orderFront = $this->orderFrontRepository->find($id);
+        if (null === $orderFront) {
+            throw new OrderFrontNotFoundException();
+        }
+
+        $this->synchronizeByOrder($orderFront);
+    }
+
+    protected function synchronizeByOrder(OrderFront $orderFront)
+    {
+        $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
+        if (null === $order) {
+            $orderBack = $this->createOrderFrontFromBackOrder($orderFront);
+            $this->createOrder($orderBack, $orderFront);
+        } else {
+            $orderBack = $this->orderBackRepository->find($order->getBackId());
+            if (null === $orderBack) {
+                $orderBack = $this->createOrderFrontFromBackOrder($orderFront);
+                $order->setBackId($orderBack->getId());
+            } else {
+                $this->updateOrderFrontFromBackOrder($orderFront, $orderBack);
+            }
+            $this->orderRepository->saveAndFlush($order);
+        }
     }
 
     protected function createOrder(OrderBack $orderBack, OrderFront $orderFront)
@@ -200,72 +237,99 @@ class OrderSynchronize
 
     protected function createOrderFrontFromBackOrder(OrderFront $orderFront)
     {
-        $orderBack = new OrderBack();
-        $orderBack->setType('Покупка');
+        $orderBackMain = new OrderBack();
+        $currentOrderBack = $orderBackMain;
+        $orderNum = 0;
 
-        $orderProductFront = $this->orderProductRepository->find($orderFront->getOrderId());
+        $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
 
-        if (null === $orderProductFront) {
+        if (0 === count($orderProductsFront)) {
+            //@TODO Notify
+            return $orderBackMain;
+        }
+
+        foreach ($orderProductsFront as $orderProductFront) {
+            if (null !== $orderBackMain->getId()) {
+                $currentOrderBack = new OrderBack();
+                $orderNum = $orderBackMain->getId();
+            }
+
+            $product = $this->productRepository->findOneByFrontId($orderProductFront->getProductId());
+
+            if (null === $product) {
+                //@TODO Notify
+                return $orderBackMain;
+            }
+
+            OrderFiller::frontToBack(
+                $orderFront,
+                $orderProductFront,
+                $product->getBackId(),
+                $this->store->convertFrontToBackCurrency($orderFront->getCurrencyCode()),
+                $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
+                $this->store->getDefaultOrderStatus(),
+                $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
+                $this->store->getDefaultShop(),
+                json_encode($this->getCurrentCourse()),
+                $orderNum,
+                $currentOrderBack
+            );
+
+            $this->orderBackRepository->saveAndFlush($currentOrderBack);
+            if (0 === $orderNum) {
+                $currentOrderBack->setOrderNum($orderBackMain->getId());
+                $this->orderBackRepository->saveAndFlush($currentOrderBack);
+            }
+        }
+
+        return $orderBackMain;
+    }
+
+    protected function updateOrderFrontFromBackOrder(OrderFront $orderFront, OrderBack $orderBack)
+    {
+        $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
+        $currentOrderBack = $orderBack;
+
+        if (0 === count($orderProductsFront)) {
             //@TODO Notify
             return $orderBack;
         }
 
-        $product = $this->productRepository->findOneByFrontId($orderProductFront->getProductId());
+        foreach ($orderProductsFront as $orderProductFront) {
+            $product = $this->productRepository->findOneByFrontId($orderProductFront->getProductId());
 
-        if (null === $product) {
-            //@TODO Notify
-            return $orderBack;
+            if (null === $product) {
+                //@TODO Notify
+                return $orderBack;
+            }
+
+            if ($currentOrderBack->getProductId() !== $product->getFrontId()) {
+                $currentOrderBack = $this->orderBackRepository->findOneByOrderNumAndProductBackId(
+                    $orderBack->getOrderNum(),
+                    $product->getBackId()
+                );
+            }
+
+            if (null === $currentOrderBack) {
+                $currentOrderBack = new OrderBack();
+            }
+
+            OrderFiller::frontToBack(
+                $orderFront,
+                $orderProductFront,
+                $product->getBackId(),
+                $this->store->convertFrontToBackCurrency($orderFront->getCurrencyCode()),
+                $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
+                $this->store->getDefaultOrderStatus(),
+                $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
+                $this->store->getDefaultShop(),
+                json_encode($this->getCurrentCourse()),
+                $orderBack->getId(),
+                $currentOrderBack
+            );
+
+            $this->orderBackRepository->saveAndFlush($currentOrderBack);
         }
-
-        $orderBack->setProductName($orderProductFront->getName());
-        $orderBack->setProductId($product->getBackId());
-        $orderBack->setPrice($orderProductFront->getPrice());
-        $orderBack->setAmount($orderProductFront->getQuantity());
-        $orderBack->setCurrencyName($this->store->convertFrontToBackCurrency($orderFront->getCurrencyCode()));
-        $orderBack->setParentName($this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()));
-        $orderBack->setPhone($orderFront->getTelephone());
-        $orderBack->setFio($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
-        $orderBack->setRegion($orderFront->getShippingZone());
-        $orderBack->setCity($orderFront->getShippingCity());
-        $orderBack->setStreet('');
-        $orderBack->setHouse('');
-        $orderBack->setWarehouse('');
-        $orderBack->setMail($orderFront->getEmail());
-        $orderBack->setStatus($this->store->getDefaultOrderStatus());
-        $orderBack->setComments($orderFront->getComment());
-        $orderBack->setArchive(0);
-        $orderBack->setRead(0);
-        $orderBack->setSynchronize(0);
-
-        $orderBack->setClientId($this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()));
-        $orderBack->setPayment(13);
-
-        //TODO Пока так потом надо будет писать решение
-        $orderBack->setDelivery(21);
-
-        $orderBack->setTrackNumber('');
-        $orderBack->setTrackNumberDate(new \DateTime());
-        $orderBack->setMoneyGiven(0);
-        $orderBack->setTrackSent(0);
-        $orderBack->setSerialNum('');
-        $orderBack->setShopId($this->store->getDefaultShop());
-        $orderBack->setShopIdCounterparty(0);
-        $orderBack->setPaymentWaitDays(0);
-        $orderBack->setPaymentWaitFirstSum(0);
-        $orderBack->setPaymentDate(new \DateTime());
-        $orderBack->setDocumentId(0);
-        $orderBack->setDocumentType(2);
-        $orderBack->setInvoiceSent(new \DateTime());
-
-        //TODO Разобраться с курсом для разных валют
-        $orderBack->setCurrencyValue(1);
-        $orderBack->setCurrencyValueWhenPurchasing(json_encode($this->getCurrentCourse()));
-
-
-        $orderBack->setShippingPrice(0);
-        $orderBack->setShippingPriceOld(0);
-        $orderBack->setShippingCurrencyName('');
-        $orderBack->setShippingCurrencyValue(0);
 
         return $orderBack;
     }
@@ -298,7 +362,6 @@ class OrderSynchronize
 
     protected function getClientIdByFrontCustomerPhone(string $phone): int
     {
-//        $customer = $this->customerBack->findOneByTelephone($orderFront->getTelephone());
         $customer = $this->customerBack->findOneByTelephone($phone);
         if (null === $customer) {
             return 0;

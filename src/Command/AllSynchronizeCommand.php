@@ -35,7 +35,7 @@ class AllSynchronizeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $resetImage = $input->hasArgument('resetImage');
+        $resetImage = $input->getArgument('resetImage') !== null;
         $this->categorySynchronize->synchronize($resetImage);
         $this->attributeSynchronize->synchronize();
         $this->productSynchronize->synchronize($resetImage);

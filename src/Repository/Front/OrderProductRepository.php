@@ -21,6 +21,19 @@ class OrderProductRepository extends BaseRepository
         parent::__construct($registry, OrderProduct::class);
     }
 
+    /**
+     * @param int $value
+     * @return OrderProduct[] Returns an array of OrderProduct objects
+     */
+    public function findByOrderFrontId(int $value)
+    {
+        return $this->createQueryBuilder('op')
+            ->andWhere('op.orderId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return OrderProduct[] Returns an array of OrderProduct objects
     //  */

@@ -26,6 +26,7 @@ class OrderClearCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->orderSynchronize->clear();
+
         return 0;
     }
 }
