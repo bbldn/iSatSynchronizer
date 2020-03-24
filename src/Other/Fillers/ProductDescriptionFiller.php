@@ -2,10 +2,11 @@
 
 namespace App\Other\Fillers;
 
-use App\Entity\Front\ProductDescription as ProductDescriptionFront;
 use App\Entity\Back\Product as ProductBack;
+use App\Entity\Front\ProductDescription as ProductDescriptionFront;
+use App\Other\Store;
 
-class ProductDescriptionFiller
+class ProductDescriptionFiller extends Filler
 {
     /**
      * @param ProductBack $productBack
@@ -21,10 +22,10 @@ class ProductDescriptionFiller
     {
         $productDescriptionFront->setProductId($productFrontId);
         $productDescriptionFront->setLanguageId($languageId);
-        $productDescriptionFront->setName(mb_convert_encoding($productBack->getName(), 'utf-8', 'windows-1251'));
-        $productDescriptionFront->setDescription(mb_convert_encoding($productBack->getDescription(), 'utf-8', 'windows-1251'));
+        $productDescriptionFront->setName(Filler::securityString(Store::encodingConvert($productBack->getName())));
+        $productDescriptionFront->setDescription(Filler::securityString(Store::encodingConvert($productBack->getDescription())));
         $productDescriptionFront->setTag('');
-        $productDescriptionFront->setMetaTitle(mb_convert_encoding($productBack->getName(), 'utf-8', 'windows-1251'));
+        $productDescriptionFront->setMetaTitle(Filler::securityString(Store::encodingConvert($productBack->getName())));
         $productDescriptionFront->setMetaDescription('');
         $productDescriptionFront->setMetaKeyword('');
 

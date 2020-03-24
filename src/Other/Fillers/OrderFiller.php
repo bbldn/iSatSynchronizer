@@ -6,7 +6,7 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
 
-class OrderFiller
+class OrderFiller extends Filler
 {
     public static function frontToBack(OrderFront $orderFront,
                                        OrderProductFront $orderProductFront,

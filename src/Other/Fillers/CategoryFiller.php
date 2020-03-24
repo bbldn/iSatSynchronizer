@@ -5,7 +5,7 @@ namespace App\Other\Fillers;
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
 
-class CategoryFiller
+class CategoryFiller extends Filler
 {
     /**
      * @param CategoryBack $categoryBack

@@ -4,7 +4,7 @@ namespace App\Other\Fillers;
 
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
 
-class ProductCategoryFiller
+class ProductCategoryFiller extends Filler
 {
     /**
      * @param ProductCategoryFront $productCategoryFront

@@ -4,7 +4,7 @@ namespace App\Other\Fillers;
 
 use App\Entity\Front\CategoryStore;
 
-class CategoryStoreFiller
+class CategoryStoreFiller extends Filler
 {
     /**
      * @param CategoryStore $categoryStore

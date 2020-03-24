@@ -4,9 +4,10 @@ namespace App\Other\Fillers;
 
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\CategoryDescription;
+use App\Other\Store;
 
 
-class CategoryDescriptionFiller
+class CategoryDescriptionFiller extends Filler
 {
     /**
      * @param CategoryBack $categoryBack
@@ -19,9 +20,9 @@ class CategoryDescriptionFiller
     {
         $categoryDescriptionFront->setCategoryId($categoryId);
         $categoryDescriptionFront->setLanguageId($languageId);
-        $categoryDescriptionFront->setName(mb_convert_encoding($categoryBack->getName(), 'utf-8', 'windows-1251'));
-        $categoryDescriptionFront->setDescription(mb_convert_encoding($categoryBack->getDescription(), 'utf-8', 'windows-1251'));
-        $categoryDescriptionFront->setMetaTitle(mb_convert_encoding($categoryBack->getName(), 'utf-8', 'windows-1251'));
+        $categoryDescriptionFront->setName(Filler::securityString(Store::encodingConvert($categoryBack->getName())));
+        $categoryDescriptionFront->setDescription(Filler::securityString(Store::encodingConvert($categoryBack->getDescription())));
+        $categoryDescriptionFront->setMetaTitle(Filler::securityString(Store::encodingConvert($categoryBack->getName())));
         $categoryDescriptionFront->setMetaDescription('');
         $categoryDescriptionFront->setMetaKeyword('');
 

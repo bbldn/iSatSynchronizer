@@ -4,7 +4,7 @@ namespace App\Other\Fillers;
 
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 
-class ProductLayoutFiller
+class ProductLayoutFiller extends Filler
 {
     /**
      * @param ProductLayoutFront $productLayoutFront

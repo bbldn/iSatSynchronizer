@@ -3,8 +3,9 @@
 namespace App\Other\Fillers;
 
 use App\Entity\Front\AttributeDescription as AttributeDescriptionFront;
+use App\Other\Store;
 
-class AttributeDescriptionFiller
+class AttributeDescriptionFiller extends Filler
 {
     /**
      * @param AttributeDescriptionFront $attributeDescriptionFront
@@ -17,7 +18,7 @@ class AttributeDescriptionFiller
     {
         $attributeDescriptionFront->setAttributeId($attributeId);
         $attributeDescriptionFront->setLanguageId($languageId);
-        $name = trim(mb_convert_encoding($name, 'utf-8', 'windows-1251'));
+        $name = trim(Filler::securityString(Store::encodingConvert($name)));
         $attributeDescriptionFront->setName($name);
 
         return $attributeDescriptionFront;

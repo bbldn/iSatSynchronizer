@@ -3,8 +3,9 @@
 namespace App\Other\Fillers;
 
 use App\Entity\Front\ProductAttribute as ProductAttributeFront;
+use App\Other\Store;
 
-class ProductAttributeFiller
+class ProductAttributeFiller extends Filler
 {
     /**
      * @param ProductAttributeFront $productAttributeFront
@@ -23,7 +24,7 @@ class ProductAttributeFiller
         $productAttributeFront->setProductId($productId);
         $productAttributeFront->setAttributeId($attributeId);
         $productAttributeFront->setLanguageId($languageId);
-        $productAttributeFront->setText(mb_convert_encoding($text, 'utf-8', 'windows-1251'));
+        $productAttributeFront->setText(Filler::securityString(Store::encodingConvert($text)));
 
         return $productAttributeFront;
     }

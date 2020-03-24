@@ -5,7 +5,7 @@ namespace App\Other\Fillers;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 
-class ProductFiller
+class ProductFiller extends Filler
 {
     /**
      * @param ProductBack $productBack
