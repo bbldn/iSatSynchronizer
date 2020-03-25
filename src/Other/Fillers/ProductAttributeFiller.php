@@ -5,7 +5,7 @@ namespace App\Other\Fillers;
 use App\Entity\Front\ProductAttribute as ProductAttributeFront;
 use App\Other\Store;
 
-class ProductAttributeFiller extends Filler
+class ProductAttributeFiller
 {
     /**
      * @param ProductAttributeFront $productAttributeFront

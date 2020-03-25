@@ -18,6 +18,7 @@ use App\Other\Fillers\ProductLayoutFiller;
 use App\Other\Fillers\ProductStoreFiller;
 use App\Other\Store;
 use App\Repository\AttributeRepository;
+use App\Repository\Back\PhotoRepository as PhotoBackRepository;
 use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
 use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
@@ -46,6 +47,7 @@ class ProductSynchronize
     private $store;
     private $attributeRepository;
     private $categoryRepository;
+    private $photoBackRepository;
     private $productRepository;
     private $categoryFrontRepository;
     private $productFrontRepository;
@@ -75,6 +77,7 @@ class ProductSynchronize
         CategoryRepository $categoryRepository,
         ProductRepository $productRepository,
         CategoryFrontRepository $categoryFrontRepository,
+        PhotoBackRepository $photoBackRepository,
         ProductFrontRepository $productFrontRepository,
         ProductAttributeFrontRepository $productAttributeFrontRepository,
         ProductDescriptionFrontRepository $productDescriptionFrontRepository,
@@ -101,6 +104,7 @@ class ProductSynchronize
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
         $this->categoryFrontRepository = $categoryFrontRepository;
+        $this->photoBackRepository = $photoBackRepository;
         $this->productFrontRepository = $productFrontRepository;
         $this->productAttributeFrontRepository = $productAttributeFrontRepository;
         $this->productDescriptionFrontRepository = $productDescriptionFrontRepository;
@@ -360,15 +364,29 @@ class ProductSynchronize
     public function synchronizeImage(ProductBack $productBack, ProductFront $productFront)
     {
         $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
-
         foreach ($productBackImages as $key => $productBackImage) {
-            $productFrontImage = $this->productImageSynchronizer->synchronizeImage($productBackImage, $productFront, $key + 1);
-            $this->productImageFrontRepository->saveAndFlush($productFrontImage);
-
+            $productFrontImage = $this->productImageSynchronizer->synchronizeProductImage(
+                $productBackImage,
+                $productFront,
+                $key + 1
+            );
             if (0 === $key) {
                 $productFront->setImage($productFrontImage->getImage());
                 $this->productFrontRepository->saveAndFlush($productFront);
+                continue;
             }
+            $this->productImageFrontRepository->saveAndFlush($productFrontImage);
+        }
+
+        $count = count($productBackImages) + 1;
+        $photosBack = $this->photoBackRepository->findByProductBackId($productBack->getProductId());
+        foreach ($photosBack as $key => $photoBack) {
+            $productFrontImage = $this->productImageSynchronizer->synchronizePhoto(
+                $photoBack,
+                $productFront,
+                $key + $count
+            );
+            $this->productImageFrontRepository->saveAndFlush($productFrontImage);
         }
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Service\Synchronizer;
 
+use App\Entity\Back\Photo as PhotoBack;
 use App\Entity\Back\ProductPictures as ProductPicturesBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductImage as ProductImageFront;
+use App\Other\Fillers\Filler;
 use App\Other\Store;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
@@ -15,13 +17,13 @@ class ProductImageSynchronizer
     private $fileReader;
     private $fileWriter;
     private $store;
-    private $backPath = '/products_pictures/';
-    private $frontPath = '/date/products1/';
+    private $backPath = ['/products_pictures/', '/gal/files/'];
+    private $frontPath = '/date/products/';
 
     public function __construct(GetBackFileInterface $fileReader,
                                 SaveFrontFileInterface $fileWriter,
                                 Store $store,
-                                string $productImageBackPath,
+                                array $productImageBackPath,
                                 string $productImageFrontPath)
     {
         $this->fileReader = $fileReader;
@@ -37,25 +39,36 @@ class ProductImageSynchronizer
         $this->fileWriter->clearFolder($path);
     }
 
-    public function synchronizeImage(ProductPicturesBack $productPicturesBack, ProductFront $productFront, $number = 1)
+    public function synchronizeProductImage(ProductPicturesBack $productPicturesBack, ProductFront $productFront, $number = 1)
+    {
+        return $this->synchronize($productPicturesBack->getFileName(), $productFront, $number);
+    }
+
+    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1)
+    {
+        return $this->synchronize($photoBack->getBig(), $productFront, $number);
+    }
+
+    protected function synchronize(string $picture, ProductFront $productFront, $number = 1)
     {
         $productPicturesFront = new ProductImageFront();
         $productPicturesFront->setProductId($productFront->getProductId());
         $productPicturesFront->setSortOrder($this->store->getDefaultSortOrder());
-        $productPicturesFront->setImage('');
-
-        $picture = $productPicturesBack->getFileName();
-        $path = $this->backPath;
+        $productPicturesFront->setImage(Filler::securityString(null));
 
         if (null === $picture) {
             return $productPicturesFront;
         }
 
-        $path = $this->store->getBackSitePath() . $path;
+        $path = $this->store->getBackSitePath() . $this->backPath[0];
         $content = $this->fileReader->getFile($path . $picture);
         if (null === $content) {
-            //@TODO Notify
-            return $productPicturesFront;
+            $path = $this->store->getBackSitePath() . $this->backPath[1];
+            $content = $this->fileReader->getFile($path . $picture);
+            if (null === $content) {
+                //@TODO Notify
+                return $productPicturesFront;
+            }
         }
 
         $pathInfo = pathinfo($picture);

@@ -4,7 +4,7 @@ namespace App\Other\Fillers;
 
 use App\Entity\Front\Attribute as AttributeFront;
 
-class AttributeFiller extends Filler
+class AttributeFiller
 {
     /**
      * @param AttributeFront $attributeFront

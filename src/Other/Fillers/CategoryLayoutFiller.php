@@ -4,7 +4,7 @@ namespace App\Other\Fillers;
 
 use App\Entity\Front\CategoryLayout;
 
-class CategoryLayoutFiller extends Filler
+class CategoryLayoutFiller
 {
     /**
      * @param CategoryLayout $categoryLayout

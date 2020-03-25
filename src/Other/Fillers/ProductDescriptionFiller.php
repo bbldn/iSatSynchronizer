@@ -6,7 +6,7 @@ use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\ProductDescription as ProductDescriptionFront;
 use App\Other\Store;
 
-class ProductDescriptionFiller extends Filler
+class ProductDescriptionFiller
 {
     /**
      * @param ProductBack $productBack
@@ -24,10 +24,10 @@ class ProductDescriptionFiller extends Filler
         $productDescriptionFront->setLanguageId($languageId);
         $productDescriptionFront->setName(Filler::securityString(Store::encodingConvert($productBack->getName())));
         $productDescriptionFront->setDescription(Filler::securityString(Store::encodingConvert($productBack->getDescription())));
-        $productDescriptionFront->setTag('');
+        $productDescriptionFront->setTag(Filler::securityString(null));
         $productDescriptionFront->setMetaTitle(Filler::securityString(Store::encodingConvert($productBack->getName())));
-        $productDescriptionFront->setMetaDescription('');
-        $productDescriptionFront->setMetaKeyword('');
+        $productDescriptionFront->setMetaDescription(Filler::securityString(null));
+        $productDescriptionFront->setMetaKeyword(Filler::securityString(null));
 
         return $productDescriptionFront;
     }

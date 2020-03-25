@@ -4,7 +4,7 @@ namespace App\Other\Fillers;
 
 use App\Entity\Front\CategoryPath as CategoryPathFront;
 
-class CategoryPathFiller extends Filler
+class CategoryPathFiller
 {
     /**
      * @param CategoryPathFront $categoryPathFront

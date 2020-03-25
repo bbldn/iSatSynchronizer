@@ -4,7 +4,7 @@ namespace App\Other\Fillers;
 
 use App\Entity\Front\ProductStore as ProductStoreFront;
 
-class ProductStoreFiller extends Filler
+class ProductStoreFiller
 {
     /**
      * @param ProductStoreFront $productStoreFront

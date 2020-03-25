@@ -7,7 +7,7 @@ use App\Entity\Front\CategoryDescription;
 use App\Other\Store;
 
 
-class CategoryDescriptionFiller extends Filler
+class CategoryDescriptionFiller
 {
     /**
      * @param CategoryBack $categoryBack
@@ -23,8 +23,8 @@ class CategoryDescriptionFiller extends Filler
         $categoryDescriptionFront->setName(Filler::securityString(Store::encodingConvert($categoryBack->getName())));
         $categoryDescriptionFront->setDescription(Filler::securityString(Store::encodingConvert($categoryBack->getDescription())));
         $categoryDescriptionFront->setMetaTitle(Filler::securityString(Store::encodingConvert($categoryBack->getName())));
-        $categoryDescriptionFront->setMetaDescription('');
-        $categoryDescriptionFront->setMetaKeyword('');
+        $categoryDescriptionFront->setMetaDescription(Filler::securityString(null));
+        $categoryDescriptionFront->setMetaKeyword(Filler::securityString(null));
 
         return $categoryDescriptionFront;
     }

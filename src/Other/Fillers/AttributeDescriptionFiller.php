@@ -5,7 +5,7 @@ namespace App\Other\Fillers;
 use App\Entity\Front\AttributeDescription as AttributeDescriptionFront;
 use App\Other\Store;
 
-class AttributeDescriptionFiller extends Filler
+class AttributeDescriptionFiller
 {
     /**
      * @param AttributeDescriptionFront $attributeDescriptionFront

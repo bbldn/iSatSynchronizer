@@ -25,7 +25,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            $productImageBackPath: '%env(PRODUCT_IMAGE_BACK_PATH)%'
+            $productImageBackPath: '%env(json:PRODUCT_IMAGE_BACK_PATH)%'
             $productImageFrontPath: '%env(PRODUCT_IMAGE_FRONT_PATH)%'
             $categoryImageBackPath: '%env(json:CATEGORY_IMAGE_BACK_PATH)%'
             $categoryImageFrontPath: '%env(CATEGORY_IMAGE_FRONT_PATH)%'

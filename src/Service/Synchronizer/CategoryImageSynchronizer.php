@@ -15,7 +15,7 @@ class CategoryImageSynchronizer
     private $fileWriter;
     private $store;
     private $backPath = ['/images_big/', '/products_pictures/',];
-    private $frontPath = '/date/categories1/';
+    private $frontPath = '/date/categories/';
 
     public function __construct(GetBackFileInterface $fileReader,
                                 SaveFrontFileInterface $fileWriter,

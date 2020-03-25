@@ -5,7 +5,7 @@ namespace App\Other\Fillers;
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
 
-class CategoryFiller extends Filler
+class CategoryFiller
 {
     /**
      * @param CategoryBack $categoryBack
@@ -15,7 +15,7 @@ class CategoryFiller extends Filler
      */
     public static function backToFront(CategoryBack $categoryBack, CategoryFront $categoryFront, int $parentId)
     {
-        $categoryFront->setImage('');
+        $categoryFront->setImage(Filler::securityString(null));
         $categoryFront->setParentId($parentId);
         $categoryFront->setTop(0);
         $categoryFront->setColumn(1);

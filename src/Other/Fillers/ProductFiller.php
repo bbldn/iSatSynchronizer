@@ -21,12 +21,12 @@ class ProductFiller extends Filler
     {
         $productFront->setModel('art' . $productBack->getProductId());
         $productFront->setSku($productBack->getProductId());
-        $productFront->setUpc('');
-        $productFront->setEan('');
-        $productFront->setJan('');
-        $productFront->setIsbn('');
-        $productFront->setMpn('');
-        $productFront->setLocation('');
+        $productFront->setUpc(Filler::securityString(null));
+        $productFront->setEan(Filler::securityString(null));
+        $productFront->setJan(Filler::securityString(null));
+        $productFront->setIsbn(Filler::securityString(null));
+        $productFront->setMpn(Filler::securityString(null));
+        $productFront->setLocation(Filler::securityString(null));
         $quantity = $productBack->getInStock();
         $productFront->setQuantity($quantity);
 
@@ -36,7 +36,7 @@ class ProductFiller extends Filler
             $productFront->setStockStatusId($notAvailableStatus);
         }
 
-        $productFront->setImage('');
+        $productFront->setImage(Filler::securityString(null));
         $productFront->setManufacturerId(1);//Временно
         $productFront->setShipping(true);
         $productFront->setPrice($productBack->getPrice());

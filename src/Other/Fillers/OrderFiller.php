@@ -6,8 +6,22 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
 
-class OrderFiller extends Filler
+class OrderFiller
 {
+    /**
+     * @param OrderFront $orderFront
+     * @param OrderProductFront $orderProductFront
+     * @param int $backId
+     * @param string $backCurrency
+     * @param string $parentName
+     * @param int $status
+     * @param int $clientId
+     * @param int $defaultShop
+     * @param string $currencyValueWhenPurchasing
+     * @param int $orderNum
+     * @param OrderBack $orderBack
+     * @return OrderBack
+     */
     public static function frontToBack(OrderFront $orderFront,
                                        OrderProductFront $orderProductFront,
                                        int $backId,
@@ -32,11 +46,11 @@ class OrderFiller extends Filler
         $orderBack->setRegion($orderFront->getShippingZone());
         $orderBack->setCity($orderFront->getShippingCity());
         $orderBack->setStreet($orderFront->getShippingAddress1());
-        $orderBack->setHouse('');
-        $orderBack->setWarehouse('');
+        $orderBack->setHouse(Filler::securityString(null));
+        $orderBack->setWarehouse(Filler::securityString(null));
         $orderBack->setMail($orderFront->getEmail());
         $orderBack->setWhant('');
-        $orderBack->setVipNum('');
+        $orderBack->setVipNum(Filler::securityString(null));
         $orderBack->setStatus($status);
         $orderBack->setComments($orderFront->getComment());
         $orderBack->setArchive(0);
@@ -51,7 +65,7 @@ class OrderFiller extends Filler
 
         $orderBack->setOrderNum($orderNum);
 
-        $orderBack->setTrackNumber('');
+        $orderBack->setTrackNumber(Filler::securityString(null));
         $orderBack->setTrackNumberDate(new \DateTime());
         $orderBack->setMoneyGiven(0);
         $orderBack->setTrackSent(0);
@@ -72,7 +86,7 @@ class OrderFiller extends Filler
 
         $orderBack->setShippingPrice(0);
         $orderBack->setShippingPriceOld(0);
-        $orderBack->setShippingCurrencyName('');
+        $orderBack->setShippingCurrencyName(Filler::securityString(null));
         $orderBack->setShippingCurrencyValue(0);
 
         return $orderBack;
