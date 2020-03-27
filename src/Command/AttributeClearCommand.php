@@ -2,14 +2,14 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\AttributeSynchronize;
+use App\Service\Synchronizer\BackToFront\AttributeSynchronize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AttributesClearCommand extends Command
+class AttributeClearCommand extends Command
 {
-    protected static $defaultName = 'attributes:clear';
+    protected static $defaultName = 'attribute:clear';
     private $attributeSynchronize;
 
     public function __construct(AttributeSynchronize $attributeSynchronize)

@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\AttributeSynchronize;
-use App\Service\Synchronizer\CategorySynchronize;
-use App\Service\Synchronizer\ProductSynchronize;
+use App\Service\Synchronizer\BackToFront\AttributeSynchronize;
+use App\Service\Synchronizer\BackToFront\CategorySynchronize;
+use App\Service\Synchronizer\BackToFront\ProductSynchronize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,7 +36,7 @@ class AllSynchronizeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $resetImage = $input->getArgument('resetImage') !== null;
-        $this->categorySynchronize->synchronize($resetImage);
+        $this->categorySynchronize->synchronizeAll($resetImage);
         $this->attributeSynchronize->synchronize();
         $this->productSynchronize->synchronize($resetImage);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer;
+namespace App\Service\Synchronizer\BackToFront;
 
 use App\Entity\Back\Photo as PhotoBack;
 use App\Entity\Back\ProductPictures as ProductPicturesBack;

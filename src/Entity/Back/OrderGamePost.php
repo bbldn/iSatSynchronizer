@@ -209,7 +209,7 @@ class OrderGamePost
     private $documentId;
 
     /**
-     * @ORM\Column(type="boolean", name="`document_type`")
+     * @ORM\Column(type="integer", name="`document_type`")
      */
     private $documentType = 2;
 
@@ -709,12 +709,12 @@ class OrderGamePost
         return $this;
     }
 
-    public function getDocumentType(): ?bool
+    public function getDocumentType(): ?int
     {
         return $this->documentType;
     }
 
-    public function setDocumentType(bool $documentType): self
+    public function setDocumentType(int $documentType): self
     {
         $this->documentType = $documentType;
 

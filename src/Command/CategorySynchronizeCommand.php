@@ -2,15 +2,15 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\CategorySynchronize;
+use App\Service\Synchronizer\BackToFront\CategorySynchronize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CategoriesSynchronizeCommand extends Command
+class CategorySynchronizeCommand extends Command
 {
-    protected static $defaultName = 'categories:synchronize';
+    protected static $defaultName = 'category:synchronize';
     private $categorySynchronize;
 
     public function __construct(CategorySynchronize $categorySynchronize)
@@ -28,7 +28,7 @@ class CategoriesSynchronizeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->categorySynchronize->synchronize($loadImage);
+        $this->categorySynchronize->synchronizeAll($loadImage);
 //        $io = new SymfonyStyle($input, $output);
 //        $arg1 = $input->getArgument('arg1');
 //

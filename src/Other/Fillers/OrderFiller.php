@@ -19,6 +19,8 @@ class OrderFiller
      * @param int $defaultShop
      * @param string $currencyValueWhenPurchasing
      * @param int $orderNum
+     * @param float $currencyValue
+     * @param float $price
      * @param OrderBack $orderBack
      * @return OrderBack
      */
@@ -32,12 +34,16 @@ class OrderFiller
                                        int $defaultShop,
                                        string $currencyValueWhenPurchasing,
                                        int $orderNum,
+                                       float $currencyValue,
+                                       float $price,
                                        OrderBack $orderBack)
     {
         $orderBack->setType('Покупка');
         $orderBack->setProductName($orderProductFront->getName());
         $orderBack->setProductId($backId);
-        $orderBack->setPrice($orderProductFront->getPrice());
+
+//        $orderBack->setPrice($orderProductFront->getPrice());
+        $orderBack->setPrice($price);
         $orderBack->setAmount($orderProductFront->getQuantity());
         $orderBack->setCurrencyName($backCurrency);
         $orderBack->setParentName($parentName);
@@ -80,7 +86,7 @@ class OrderFiller
         $orderBack->setInvoiceSent(new \DateTime());
 
         //TODO Разобраться с курсом для разных валют
-        $orderBack->setCurrencyValue(1);
+        $orderBack->setCurrencyValue($currencyValue);
         $orderBack->setCurrencyValueWhenPurchasing($currencyValueWhenPurchasing);
 
 

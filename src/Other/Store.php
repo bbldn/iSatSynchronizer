@@ -133,6 +133,15 @@ class Store
         }
     }
 
+    public function convertToDollar(float $value, float $course = 0)
+    {
+        if (0 === $course) {
+            return round($value);
+        }
+
+        return round($value / $course);
+    }
+
     public static function encodingConvert(?string $value)
     {
         if (null === $value) {
@@ -146,5 +155,10 @@ class Store
         }
 
         return mb_convert_encoding($value, 'utf-8', $encoding);
+    }
+
+    public function hashPassword(string $value, string $salt)
+    {
+        return sha1($salt . sha1($salt . sha1($value)));
     }
 }

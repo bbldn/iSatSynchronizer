@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer;
+namespace App\Service\Synchronizer\FrontToBack;
 
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
@@ -191,7 +191,7 @@ class OrderSynchronize
         $ordersFront = $this->orderFrontRepository->findAll();
 
         foreach ($ordersFront as $orderFront) {
-            $this->synchronizeByOrder($orderFront);
+            $this->synchronizeOrder($orderFront);
         }
     }
 
@@ -206,10 +206,10 @@ class OrderSynchronize
             throw new OrderFrontNotFoundException();
         }
 
-        $this->synchronizeByOrder($orderFront);
+        $this->synchronizeOrder($orderFront);
     }
 
-    protected function synchronizeByOrder(OrderFront $orderFront)
+    protected function synchronizeOrder(OrderFront $orderFront)
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
         if (null === $order) {
@@ -261,17 +261,22 @@ class OrderSynchronize
                 return $orderBackMain;
             }
 
+            $currencyCode = $orderFront->getCurrencyCode();
+            $courses = $this->getCurrentCourse();
+            $currentCourse = $courses[$this->store->convertFrontToBackCurrency($currencyCode)];
             OrderFiller::frontToBack(
                 $orderFront,
                 $orderProductFront,
                 $product->getBackId(),
-                $this->store->convertFrontToBackCurrency($orderFront->getCurrencyCode()),
+                $this->store->convertFrontToBackCurrency($currencyCode),
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
                 $this->store->getDefaultOrderStatus(),
                 $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
                 $this->store->getDefaultShop(),
-                json_encode($this->getCurrentCourse()),
+                json_encode($courses),
                 $orderNum,
+                $currentCourse,
+                $this->store->convertToDollar($orderProductFront->getPrice(), (float)$currentCourse),
                 $currentOrderBack
             );
 
@@ -314,17 +319,22 @@ class OrderSynchronize
                 $currentOrderBack = new OrderBack();
             }
 
+            $currencyCode = $orderFront->getCurrencyCode();
+            $courses = $this->getCurrentCourse();
+            $currentCourse = $courses[$this->store->convertFrontToBackCurrency($currencyCode)];
             OrderFiller::frontToBack(
                 $orderFront,
                 $orderProductFront,
                 $product->getBackId(),
-                $this->store->convertFrontToBackCurrency($orderFront->getCurrencyCode()),
+                $this->store->convertFrontToBackCurrency($currencyCode),
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
                 $this->store->getDefaultOrderStatus(),
                 $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
                 $this->store->getDefaultShop(),
-                json_encode($this->getCurrentCourse()),
+                json_encode($courses),
                 $orderBack->getId(),
+                $currentCourse,
+                $this->store->convertToDollar($orderProductFront->getPrice(), (float)$currentCourse),
                 $currentOrderBack
             );
 

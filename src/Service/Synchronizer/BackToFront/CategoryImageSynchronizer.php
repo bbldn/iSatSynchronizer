@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer;
+namespace App\Service\Synchronizer\BackToFront;
 
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;

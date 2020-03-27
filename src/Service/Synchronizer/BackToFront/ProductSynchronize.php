@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer;
+namespace App\Service\Synchronizer\BackToFront;
 
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
@@ -10,6 +10,7 @@ use App\Entity\Front\ProductDescription as ProductDescriptionFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
 use App\Entity\Product;
+use App\Exception\ProductBackNotFoundException;
 use App\Other\Fillers\ProductAttributeFiller;
 use App\Other\Fillers\ProductCategoryFiller;
 use App\Other\Fillers\ProductDescriptionFiller;
@@ -172,25 +173,46 @@ class ProductSynchronize
     {
         $productsBack = $this->productBackRepository->findAll();
         foreach ($productsBack as $productBack) {
-            $product = $this->productRepository->findOneByBackId($productBack->getProductId());
-            if (null === $product) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+    }
+
+    /**
+     * @param int $id
+     * @param bool $synchronizeImage
+     * @throws ProductBackNotFoundException
+     */
+    public function synchronizeOne(int $id, $synchronizeImage = false)
+    {
+        $productBack = $this->productBackRepository->find($id);
+
+        if ($productBack === null) {
+            throw new ProductBackNotFoundException();
+        }
+
+        $this->synchronizeProduct($productBack, $synchronizeImage);
+    }
+
+    protected function synchronizeProduct(ProductBack $productBack, $synchronizeImage = false)
+    {
+        $product = $this->productRepository->findOneByBackId($productBack->getProductId());
+        if (null === $product) {
+            $productFront = $this->createProductFrontFromBackProduct($productBack);
+            $this->createProductFromBackAndFrontProductId($productBack->getProductId(), $productFront->getProductId());
+        } else {
+            $productFront = $this->productFrontRepository->find($product->getFrontId());
+            if (null === $productFront) {
+                $this->productRepository->remove($product);
                 $productFront = $this->createProductFrontFromBackProduct($productBack);
                 $this->createProductFromBackAndFrontProductId($productBack->getProductId(), $productFront->getProductId());
             } else {
-                $productFront = $this->productFrontRepository->find($product->getFrontId());
-                if (null === $productFront) {
-                    $this->productRepository->remove($product);
-                    $productFront = $this->createProductFrontFromBackProduct($productBack);
-                    $this->createProductFromBackAndFrontProductId($productBack->getProductId(), $productFront->getProductId());
-                } else {
-                    $this->updateProductFrontFromBackProduct($productBack, $productFront);
-                    $this->productRepository->saveAndFlush($product);
-                }
+                $this->updateProductFrontFromBackProduct($productBack, $productFront);
+                $this->productRepository->saveAndFlush($product);
             }
+        }
 
-            if (true === $synchronizeImage && null !== $productFront) {
-                $this->synchronizeImage($productBack, $productFront);
-            }
+        if (true === $synchronizeImage && null !== $productFront) {
+            $this->synchronizeImage($productBack, $productFront);
         }
     }
 

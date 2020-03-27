@@ -10,6 +10,7 @@ class OnConnect
         "SET SQL_MODE='ALLOW_INVALID_DATES'",
         "SET NAMES UTF8",
     ];
+
     /**
      * @param ConnectionEventArgs $event
      * @throws \Doctrine\DBAL\DBALException

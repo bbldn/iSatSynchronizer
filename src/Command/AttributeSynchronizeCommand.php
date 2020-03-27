@@ -2,14 +2,14 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\AttributeSynchronize;
+use App\Service\Synchronizer\BackToFront\AttributeSynchronize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AttributesSynchronizeCommand extends Command
+class AttributeSynchronizeCommand extends Command
 {
-    protected static $defaultName = 'attributes:synchronize';
+    protected static $defaultName = 'attribute:synchronize';
     private $attributeSynchronize;
 
     public function __construct(AttributeSynchronize $attributeSynchronize)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer;
+namespace App\Service\Synchronizer\BackToFront;
 
 use App\Entity\Attribute;
 use App\Entity\Back\ProductOptions as AttributeBack;

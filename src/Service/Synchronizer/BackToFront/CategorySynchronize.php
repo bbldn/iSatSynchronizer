@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer;
+namespace App\Service\Synchronizer\BackToFront;
 
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Category;
@@ -9,6 +9,7 @@ use App\Entity\Front\CategoryDescription;
 use App\Entity\Front\CategoryLayout;
 use App\Entity\Front\CategoryPath as CategoryPathFront;
 use App\Entity\Front\CategoryStore;
+use App\Exception\CategoryBackNotFoundException;
 use App\Other\Fillers\CategoryDescriptionFiller;
 use App\Other\Fillers\CategoryFiller;
 use App\Other\Fillers\CategoryLayoutFiller;
@@ -63,7 +64,7 @@ class CategorySynchronize
     public function reload(bool $synchronizeImage = false)
     {
         $this->clear($synchronizeImage);
-        $this->synchronize($synchronizeImage);
+        $this->synchronizeAll($synchronizeImage);
     }
 
     public function clear(bool $synchronizeImage = false)
@@ -85,30 +86,51 @@ class CategorySynchronize
         }
     }
 
-    public function synchronize(bool $synchronizeImage = false)
+    protected function synchronizeCategory(CategoryBack $categoryBack, bool $synchronizeImage = false)
     {
-        $categoriesBack = $this->categoryBackRepository->findAll();
-        foreach ($categoriesBack as $categoryBack) {
-            $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
-            $categoryFront = null;
-            if (null === $category) {
+        $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
+        $categoryFront = null;
+        if (null === $category) {
+            $categoryFront = $this->createCategoryFrontFromBackCategory($categoryBack);
+            $this->createCategoryFromBackAndFrontCategoryId($categoryBack->getCategoryId(), $categoryFront->getCategoryId());
+        } else {
+            $categoryFront = $this->categoryFrontRepository->find($category->getFrontId());
+            if (null === $categoryFront) {
+                $this->categoryRepository->remove($category);
                 $categoryFront = $this->createCategoryFrontFromBackCategory($categoryBack);
                 $this->createCategoryFromBackAndFrontCategoryId($categoryBack->getCategoryId(), $categoryFront->getCategoryId());
             } else {
-                $categoryFront = $this->categoryFrontRepository->find($category->getFrontId());
-                if (null === $categoryFront) {
-                    $this->categoryRepository->remove($category);
-                    $categoryFront = $this->createCategoryFrontFromBackCategory($categoryBack);
-                    $this->createCategoryFromBackAndFrontCategoryId($categoryBack->getCategoryId(), $categoryFront->getCategoryId());
-                } else {
-                    $this->updateCategoryFrontFromBackCategory($categoryBack, $categoryFront);
-                    $this->categoryRepository->saveAndFlush($category);
-                }
+                $this->updateCategoryFrontFromBackCategory($categoryBack, $categoryFront);
+                $this->categoryRepository->saveAndFlush($category);
             }
+        }
 
-            if (true === $synchronizeImage && null !== $categoryFront) {
-                $this->synchronizeImage($categoryBack, $categoryFront);
-            }
+        if (true === $synchronizeImage && null !== $categoryFront) {
+            $this->synchronizeImage($categoryBack, $categoryFront);
+        }
+    }
+
+    /**
+     * @param int $id
+     * @param bool $synchronizeImage
+     * @throws CategoryBackNotFoundException
+     */
+    public function synchronizeOne(int $id, bool $synchronizeImage = false)
+    {
+        $categoryBack = $this->categoryBackRepository->find($id);
+
+        if (null === $categoryBack) {
+            throw new CategoryBackNotFoundException();
+        }
+
+        $this->synchronizeCategory($categoryBack, $synchronizeImage);
+    }
+
+    public function synchronizeAll(bool $synchronizeImage = false)
+    {
+        $categoriesBack = $this->categoryBackRepository->findAll();
+        foreach ($categoriesBack as $categoryBack) {
+            $this->synchronizeCategory($categoryBack, $synchronizeImage);
         }
     }
 
