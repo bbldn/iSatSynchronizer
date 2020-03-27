@@ -30,7 +30,7 @@ class CategoryImageSynchronizer
         $this->frontPath = $categoryImageFrontPath;
     }
 
-    public function clearFolder()
+    public function clearFolder(): void
     {
         $path = $this->store->getFrontSitePath() . $this->frontPath;
         $this->fileWriter->clearFolder($path);
@@ -40,7 +40,7 @@ class CategoryImageSynchronizer
      * @param CategoryBack $categoryBack
      * @param CategoryFront $categoryFront
      */
-    public function synchronizeImage(CategoryBack $categoryBack, CategoryFront $categoryFront)
+    public function synchronizeImage(CategoryBack $categoryBack, CategoryFront $categoryFront): void
     {
         $picture = $categoryBack->getBigImage();
         $path = $this->backPath[0];

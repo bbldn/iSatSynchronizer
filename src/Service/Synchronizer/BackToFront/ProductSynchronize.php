@@ -134,7 +134,7 @@ class ProductSynchronize
         $this->synchronize($reloadImage);
     }
 
-    public function clear($clearImage = false)
+    public function clear($clearImage = false): void
     {
         $this->productRepository->removeAll();
 
@@ -169,7 +169,7 @@ class ProductSynchronize
         }
     }
 
-    public function synchronize($synchronizeImage = false)
+    public function synchronize($synchronizeImage = false): void
     {
         $productsBack = $this->productBackRepository->findAll();
         foreach ($productsBack as $productBack) {
@@ -182,7 +182,7 @@ class ProductSynchronize
      * @param bool $synchronizeImage
      * @throws ProductBackNotFoundException
      */
-    public function synchronizeOne(int $id, $synchronizeImage = false)
+    public function synchronizeOne(int $id, $synchronizeImage = false): void
     {
         $productBack = $this->productBackRepository->find($id);
 
@@ -193,7 +193,7 @@ class ProductSynchronize
         $this->synchronizeProduct($productBack, $synchronizeImage);
     }
 
-    protected function synchronizeProduct(ProductBack $productBack, $synchronizeImage = false)
+    protected function synchronizeProduct(ProductBack $productBack, $synchronizeImage = false): void
     {
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         if (null === $product) {
@@ -216,7 +216,7 @@ class ProductSynchronize
         }
     }
 
-    protected function createProductFrontFromBackProduct(ProductBack $productBack)
+    protected function createProductFrontFromBackProduct(ProductBack $productBack): ProductFront
     {
         $productFront = new ProductFront();
         ProductFiller::backToFront(
@@ -281,7 +281,7 @@ class ProductSynchronize
         return $productFront;
     }
 
-    protected function getCategoryFrontIdByBack(?int $categoryBackId)
+    protected function getCategoryFrontIdByBack(?int $categoryBackId): int
     {
         if (null === $categoryBackId) {
             //@TODO Notify
@@ -309,7 +309,7 @@ class ProductSynchronize
         return $categoryFront->getCategoryId();
     }
 
-    protected function createProductFromBackAndFrontProductId(int $backId, int $frontId)
+    protected function createProductFromBackAndFrontProductId(int $backId, int $frontId): void
     {
         $category = new Product();
         $category->setBackId($backId);
@@ -317,7 +317,7 @@ class ProductSynchronize
         $this->productRepository->saveAndFlush($category);
     }
 
-    protected function updateProductFrontFromBackProduct(ProductBack $productBack, ProductFront $productFront)
+    protected function updateProductFrontFromBackProduct(ProductBack $productBack, ProductFront $productFront): int
     {
         ProductFiller::backToFront($productBack, $productFront, $this->store->getAvailableStatusId(), $this->store->getNotAvailableStatusId());
         $this->productFrontRepository->saveAndFlush($productFront);
@@ -383,7 +383,7 @@ class ProductSynchronize
         return $productFrontId;
     }
 
-    public function synchronizeImage(ProductBack $productBack, ProductFront $productFront)
+    public function synchronizeImage(ProductBack $productBack, ProductFront $productFront): void
     {
         $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
         foreach ($productBackImages as $key => $productBackImage) {

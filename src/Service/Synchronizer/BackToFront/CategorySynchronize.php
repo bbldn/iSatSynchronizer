@@ -61,13 +61,13 @@ class CategorySynchronize
         $this->categoryImageSynchronizer = $categoryImageSynchronizer;
     }
 
-    public function reload(bool $synchronizeImage = false)
+    public function reload(bool $synchronizeImage = false): void
     {
         $this->clear($synchronizeImage);
         $this->synchronizeAll($synchronizeImage);
     }
 
-    public function clear(bool $synchronizeImage = false)
+    public function clear(bool $synchronizeImage = false): void
     {
         $this->categoryRepository->removeAll();
 
@@ -86,7 +86,7 @@ class CategorySynchronize
         }
     }
 
-    protected function synchronizeCategory(CategoryBack $categoryBack, bool $synchronizeImage = false)
+    protected function synchronizeCategory(CategoryBack $categoryBack, bool $synchronizeImage = false): void
     {
         $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
         $categoryFront = null;
@@ -115,7 +115,7 @@ class CategorySynchronize
      * @param bool $synchronizeImage
      * @throws CategoryBackNotFoundException
      */
-    public function synchronizeOne(int $id, bool $synchronizeImage = false)
+    public function synchronizeOne(int $id, bool $synchronizeImage = false): void
     {
         $categoryBack = $this->categoryBackRepository->find($id);
 
@@ -126,7 +126,7 @@ class CategorySynchronize
         $this->synchronizeCategory($categoryBack, $synchronizeImage);
     }
 
-    public function synchronizeAll(bool $synchronizeImage = false)
+    public function synchronizeAll(bool $synchronizeImage = false): void
     {
         $categoriesBack = $this->categoryBackRepository->findAll();
         foreach ($categoriesBack as $categoryBack) {
@@ -134,7 +134,7 @@ class CategorySynchronize
         }
     }
 
-    protected function createCategoryFrontFromBackCategory(CategoryBack $categoryBack)
+    protected function createCategoryFrontFromBackCategory(CategoryBack $categoryBack): CategoryFront
     {
         $parentBackId = $categoryBack->getParent();
         $parentId = $this->store->getDefaultCategoryFrontId();
@@ -177,7 +177,7 @@ class CategorySynchronize
         return $categoryFront;
     }
 
-    protected function getParentFrontIdByBackId(int $backId)
+    protected function getParentFrontIdByBackId(int $backId): int
     {
         $category = $this->categoryRepository->findOneByBackId($backId);
         if (null === $category) {
@@ -201,7 +201,7 @@ class CategorySynchronize
         return $front->getCategoryId();
     }
 
-    protected function createCategoryFromBackAndFrontCategoryId(int $backId, int $frontId)
+    protected function createCategoryFromBackAndFrontCategoryId(int $backId, int $frontId): void
     {
         $category = new Category();
         $category->setBackId($backId);
@@ -209,7 +209,7 @@ class CategorySynchronize
         $this->categoryRepository->saveAndFlush($category);
     }
 
-    protected function updateCategoryFrontFromBackCategory(CategoryBack $categoryBack, CategoryFront $categoryFront)
+    protected function updateCategoryFrontFromBackCategory(CategoryBack $categoryBack, CategoryFront $categoryFront): int
     {
         $parentBackId = $categoryBack->getParent();
         $parentId = $this->store->getDefaultCategoryFrontId();
@@ -269,7 +269,7 @@ class CategorySynchronize
      * @param CategoryBack $categoryBack
      * @param CategoryFront $categoryFront
      */
-    protected function synchronizeImage(CategoryBack $categoryBack, CategoryFront $categoryFront)
+    protected function synchronizeImage(CategoryBack $categoryBack, CategoryFront $categoryFront): void
     {
         $this->categoryImageSynchronizer->synchronizeImage($categoryBack, $categoryFront);
         $this->categoryFrontRepository->saveAndFlush($categoryFront);

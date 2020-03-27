@@ -4,12 +4,11 @@ namespace App\Command;
 
 use App\Exception\OrderFrontNotFoundException;
 use App\Service\Synchronizer\FrontToBack\OrderSynchronize;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class OrderOneSynchronizeCommand extends Command
+class OrderOneSynchronizeCommand extends OneSynchronizeCommand
 {
     protected static $defaultName = 'order:one:synchronize';
     private $orderSynchronize;
@@ -23,28 +22,17 @@ class OrderOneSynchronizeCommand extends Command
     protected function configure()
     {
         $this->setDescription('Order one synchronize');
-        $this->addArgument('idOrder', InputArgument::OPTIONAL, 'Reset image');
+        $this->addArgument('id', InputArgument::REQUIRED, 'Reset image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getArgument('idOrder') === null) {
-            $output->writeln("Parameter `id` not found");
-        }
-
-        $id = $input->getArgument('idOrder');
-        if (0 === preg_match('/[0-9]+/', $id)) {
-            $output->writeln("`id` must be int: {$id}");
-
-            return -1;
-        }
+        $id = $this->parseId($input);
 
         try {
-            $this->orderSynchronize->synchronizeOne((int)$id);
+            $this->orderSynchronize->synchronizeOne($id);
         } catch (OrderFrontNotFoundException $notFoundException) {
-            $output->writeln("Order Front with `id`: {$id} not found");
-
-            return -1;
+            throw new \InvalidArgumentException("Order Front with `id`: {$id} not found");
         }
 
         return 0;

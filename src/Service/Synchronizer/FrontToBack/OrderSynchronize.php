@@ -138,7 +138,7 @@ class OrderSynchronize
         $this->store = $store;
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->orderRepository->removeAll();
         $this->orderFrontRepository->removeAll();
@@ -186,7 +186,7 @@ class OrderSynchronize
         $this->customerWishListFrontRepository->resetAutoIncrements();
     }
 
-    public function synchronizeAll()
+    public function synchronizeAll(): void
     {
         $ordersFront = $this->orderFrontRepository->findAll();
 
@@ -199,7 +199,7 @@ class OrderSynchronize
      * @param int $id
      * @throws OrderFrontNotFoundException
      */
-    public function synchronizeOne(int $id)
+    public function synchronizeOne(int $id): void
     {
         $orderFront = $this->orderFrontRepository->find($id);
         if (null === $orderFront) {
@@ -209,7 +209,7 @@ class OrderSynchronize
         $this->synchronizeOrder($orderFront);
     }
 
-    protected function synchronizeOrder(OrderFront $orderFront)
+    protected function synchronizeOrder(OrderFront $orderFront): void
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
         if (null === $order) {
@@ -227,7 +227,7 @@ class OrderSynchronize
         }
     }
 
-    protected function createOrder(OrderBack $orderBack, OrderFront $orderFront)
+    protected function createOrder(OrderBack $orderBack, OrderFront $orderFront): void
     {
         $order = new Order();
         $order->setFrontId($orderFront->getOrderId());
@@ -235,7 +235,7 @@ class OrderSynchronize
         $this->orderRepository->saveAndFlush($order);
     }
 
-    protected function createOrderFrontFromBackOrder(OrderFront $orderFront)
+    protected function createOrderFrontFromBackOrder(OrderFront $orderFront): OrderBack
     {
         $orderBackMain = new OrderBack();
         $currentOrderBack = $orderBackMain;
@@ -290,7 +290,7 @@ class OrderSynchronize
         return $orderBackMain;
     }
 
-    protected function updateOrderFrontFromBackOrder(OrderFront $orderFront, OrderBack $orderBack)
+    protected function updateOrderFrontFromBackOrder(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
         $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
         $currentOrderBack = $orderBack;

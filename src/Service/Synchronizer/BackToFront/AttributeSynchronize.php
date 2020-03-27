@@ -36,13 +36,13 @@ class AttributeSynchronize
         $this->attributeBackRepository = $attributeBackRepository;
     }
 
-    public function reload()
+    public function reload(): void
     {
         $this->clear();
         $this->synchronize();
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->attributeRepository->removeAll();
         $this->attributeFrontRepository->removeAll();
@@ -52,7 +52,7 @@ class AttributeSynchronize
         $this->attributeFrontRepository->resetAutoIncrements();
     }
 
-    public function synchronize()
+    public function synchronize(): void
     {
         $attributes = $this->attributeBackRepository->findAll();
         foreach ($attributes as $attributeBack) {
@@ -73,7 +73,7 @@ class AttributeSynchronize
         }
     }
 
-    protected function createAttributeFrontFromBackProduct(AttributeBack $attributeBack)
+    protected function createAttributeFrontFromBackProduct(AttributeBack $attributeBack): int
     {
         $attributeFront = new AttributeFront();
         AttributeFiller::backToFront($attributeFront, $this->store->getDefaultSortOrder(), $this->store->getDefaultAttributeGroupId());
@@ -94,7 +94,7 @@ class AttributeSynchronize
      * @param int $backId
      * @param int $frontId
      */
-    protected function createAttributeFromBackAndFrontAttributeId(int $backId, int $frontId)
+    protected function createAttributeFromBackAndFrontAttributeId(int $backId, int $frontId): void
     {
         $attribute = new Attribute();
         $attribute->setBackId($backId);
@@ -102,7 +102,7 @@ class AttributeSynchronize
         $this->attributeRepository->saveAndFlush($attribute);
     }
 
-    protected function updateAttributeFrontFromBackProduct(AttributeBack $attributeBack, AttributeFront $attributeFront)
+    protected function updateAttributeFrontFromBackProduct(AttributeBack $attributeBack, AttributeFront $attributeFront): int
     {
         AttributeFiller::backToFront($attributeFront, $this->store->getDefaultSortOrder(), $this->store->getDefaultAttributeGroupId());
         $this->attributeFrontRepository->saveAndFlush($attributeFront);

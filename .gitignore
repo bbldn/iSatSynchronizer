@@ -13,4 +13,5 @@ symfony.lock
 
 ###> symfony/framework-bundle ###
 .idea
+*.code-workspace
 ###< symfony/framework-bundle ###

@@ -33,23 +33,26 @@ class ProductImageSynchronizer
         $this->frontPath = $productImageFrontPath;
     }
 
-    public function clearFolder()
+    public function clearFolder(): void
     {
         $path = $this->store->getFrontSitePath() . $this->frontPath;
         $this->fileWriter->clearFolder($path);
     }
 
-    public function synchronizeProductImage(ProductPicturesBack $productPicturesBack, ProductFront $productFront, $number = 1)
+    public function synchronizeProductImage(
+        ProductPicturesBack $productPicturesBack,
+        ProductFront $productFront, $number = 1
+    ): ProductImageFront
     {
         return $this->synchronize($productPicturesBack->getFileName(), $productFront, $number);
     }
 
-    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1)
+    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ProductImageFront
     {
         return $this->synchronize($photoBack->getBig(), $productFront, $number);
     }
 
-    protected function synchronize(string $picture, ProductFront $productFront, $number = 1)
+    protected function synchronize(string $picture, ProductFront $productFront, $number = 1): ProductImageFront
     {
         $productPicturesFront = new ProductImageFront();
         $productPicturesFront->setProductId($productFront->getProductId());
