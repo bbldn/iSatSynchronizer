@@ -6,7 +6,9 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Exception\OrderFrontNotFoundException;
+use App\Other\Back\Store as StoreBack;
 use App\Other\Fillers\OrderFiller;
+use App\Other\Front\Store as StoreFront;
 use App\Other\Store;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBack;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
@@ -41,6 +43,8 @@ use App\Repository\ProductRepository;
 
 class OrderSynchronize
 {
+    private $storeFront;
+    private $storeBack;
     private $customerBack;
     private $orderBackRepository;
     private $orderFrontRepository;
@@ -71,40 +75,45 @@ class OrderSynchronize
     private $customerWishListFrontRepository;
     private $productRepository;
     private $productCategoryFrontRepository;
-    private $store;
 
-    public function __construct(CustomerBack $customerBack,
-                                OrderBackRepository $orderBackRepository,
-                                OrderFrontRepository $orderFrontRepository,
-                                OrderHistoryFrontRepository $orderHistoryRepository,
-                                OrderOptionFrontRepository $orderOptionRepository,
-                                OrderProductFrontRepository $orderProductRepository,
-                                OrderRecurringFrontRepository $orderRecurringFrontRepository,
-                                OrderRecurringTransactionFrontRepository $orderRecurringTransactionFrontRepository,
-                                OrderShipmentFrontRepository $orderShipmentFrontRepository,
-                                OrderStatusFrontRepository $orderStatusFrontRepository,
-                                OrderTotalFrontRepository $orderTotalFrontRepository,
-                                OrderVoucherFrontRepository $orderVoucherFrontRepository,
-                                OrderRepository $orderRepository,
-                                AddressFrontRepository $addressFrontRepository,
-                                CurrencyBackRepository $currencyBackRepository,
-                                CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
-                                CustomerFrontRepository $customerFrontRepository,
-                                CustomerActivityFrontRepository $customerActivityFrontRepository,
-                                CustomerAffiliateFrontRepository $customerAffiliateFrontRepository,
-                                CustomerApprovalFrontRepository $customerApprovalFrontRepository,
-                                CustomerHistoryFrontRepository $customerHistoryFrontRepository,
-                                CustomerIpFrontRepository $customerIpFrontRepository,
-                                CustomerLoginFrontRepository $customerLoginFrontRepository,
-                                CustomerOnlineFrontRepository $customerOnlineFrontRepository,
-                                CustomerRewardFrontRepository $customerRewardFrontRepository,
-                                CustomerSearchFrontRepository $customerSearchFrontRepository,
-                                CustomerTransactionFrontRepository $customerTransactionFrontRepository,
-                                CustomerWishListFrontRepository $customerWishListFrontRepository,
-                                ProductRepository $productRepository,
-                                ProductCategoryFrontRepository $productCategoryFrontRepository,
-                                Store $store)
+
+    public function __construct(
+        StoreFront $storeFront,
+        StoreBack $storeBack,
+        CustomerBack $customerBack,
+        OrderBackRepository $orderBackRepository,
+        OrderFrontRepository $orderFrontRepository,
+        OrderHistoryFrontRepository $orderHistoryRepository,
+        OrderOptionFrontRepository $orderOptionRepository,
+        OrderProductFrontRepository $orderProductRepository,
+        OrderRecurringFrontRepository $orderRecurringFrontRepository,
+        OrderRecurringTransactionFrontRepository $orderRecurringTransactionFrontRepository,
+        OrderShipmentFrontRepository $orderShipmentFrontRepository,
+        OrderStatusFrontRepository $orderStatusFrontRepository,
+        OrderTotalFrontRepository $orderTotalFrontRepository,
+        OrderVoucherFrontRepository $orderVoucherFrontRepository,
+        OrderRepository $orderRepository,
+        AddressFrontRepository $addressFrontRepository,
+        CurrencyBackRepository $currencyBackRepository,
+        CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
+        CustomerFrontRepository $customerFrontRepository,
+        CustomerActivityFrontRepository $customerActivityFrontRepository,
+        CustomerAffiliateFrontRepository $customerAffiliateFrontRepository,
+        CustomerApprovalFrontRepository $customerApprovalFrontRepository,
+        CustomerHistoryFrontRepository $customerHistoryFrontRepository,
+        CustomerIpFrontRepository $customerIpFrontRepository,
+        CustomerLoginFrontRepository $customerLoginFrontRepository,
+        CustomerOnlineFrontRepository $customerOnlineFrontRepository,
+        CustomerRewardFrontRepository $customerRewardFrontRepository,
+        CustomerSearchFrontRepository $customerSearchFrontRepository,
+        CustomerTransactionFrontRepository $customerTransactionFrontRepository,
+        CustomerWishListFrontRepository $customerWishListFrontRepository,
+        ProductRepository $productRepository,
+        ProductCategoryFrontRepository $productCategoryFrontRepository
+    )
     {
+        $this->storeFront = $storeFront;
+        $this->storeBack = $storeBack;
         $this->customerBack = $customerBack;
         $this->orderBackRepository = $orderBackRepository;
         $this->orderFrontRepository = $orderFrontRepository;
@@ -135,7 +144,6 @@ class OrderSynchronize
         $this->customerWishListFrontRepository = $customerWishListFrontRepository;
         $this->productRepository = $productRepository;
         $this->productCategoryFrontRepository = $productCategoryFrontRepository;
-        $this->store = $store;
     }
 
     public function clear(): void
@@ -263,20 +271,20 @@ class OrderSynchronize
 
             $currencyCode = $orderFront->getCurrencyCode();
             $courses = $this->getCurrentCourse();
-            $currentCourse = $courses[$this->store->convertFrontToBackCurrency($currencyCode)];
+            $currentCourse = $courses[StoreFront::convertCurrency($currencyCode)];
             OrderFiller::frontToBack(
                 $orderFront,
                 $orderProductFront,
                 $product->getBackId(),
-                $this->store->convertFrontToBackCurrency($currencyCode),
+                StoreFront::convertCurrency($currencyCode),
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
-                $this->store->getDefaultOrderStatus(),
+                $this->storeFront->getDefaultOrderStatus(),
                 $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
-                $this->store->getDefaultShop(),
+                $this->storeFront->getDefaultShop(),
                 json_encode($courses),
                 $orderNum,
                 $currentCourse,
-                $this->store->convertToDollar($orderProductFront->getPrice(), (float)$currentCourse),
+                Store::convertToCurrency($orderProductFront->getPrice(), (float)$currentCourse),
                 $currentOrderBack
             );
 
@@ -321,20 +329,20 @@ class OrderSynchronize
 
             $currencyCode = $orderFront->getCurrencyCode();
             $courses = $this->getCurrentCourse();
-            $currentCourse = $courses[$this->store->convertFrontToBackCurrency($currencyCode)];
+            $currentCourse = $courses[StoreFront::convertCurrency($currencyCode)];
             OrderFiller::frontToBack(
                 $orderFront,
                 $orderProductFront,
                 $product->getBackId(),
-                $this->store->convertFrontToBackCurrency($currencyCode),
+                StoreFront::convertCurrency($currencyCode),
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
-                $this->store->getDefaultOrderStatus(),
+                $this->storeFront->getDefaultOrderStatus(),
                 $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
-                $this->store->getDefaultShop(),
+                $this->storeFront->getDefaultShop(),
                 json_encode($courses),
                 $orderBack->getId(),
                 $currentCourse,
-                $this->store->convertToDollar($orderProductFront->getPrice(), (float)$currentCourse),
+                Store::convertToCurrency($orderProductFront->getPrice(), (float)$currentCourse),
                 $currentOrderBack
             );
 

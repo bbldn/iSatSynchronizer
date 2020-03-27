@@ -4,35 +4,41 @@ namespace App\Service\Synchronizer\BackToFront;
 
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
-use App\Other\Store;
+use App\Other\Front\Store as StoreFront;
+use App\Other\Back\Store as StoreBack;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class CategoryImageSynchronizer
 {
+    private $storeFront;
+    private $storeBack;
     private $fileReader;
     private $fileWriter;
-    private $store;
     private $backPath = ['/images_big/', '/products_pictures/',];
     private $frontPath = '/date/categories/';
 
-    public function __construct(GetBackFileInterface $fileReader,
-                                SaveFrontFileInterface $fileWriter,
-                                Store $store,
-                                array $categoryImageBackPath,
-                                string $categoryImageFrontPath)
+    public function __construct(
+        StoreFront $storeFront,
+        StoreBack $storeBack,
+        GetBackFileInterface $fileReader,
+        SaveFrontFileInterface $fileWriter,
+        array $categoryImageBackPath,
+        string $categoryImageFrontPath
+    )
     {
+        $this->storeFront = $storeFront;
+        $this->storeBack = $storeBack;
         $this->fileReader = $fileReader;
         $this->fileWriter = $fileWriter;
-        $this->store = $store;
         $this->backPath = $categoryImageBackPath;
         $this->frontPath = $categoryImageFrontPath;
     }
 
     public function clearFolder(): void
     {
-        $path = $this->store->getFrontSitePath() . $this->frontPath;
+        $path = $this->storeFront->getSitePath() . $this->frontPath;
         $this->fileWriter->clearFolder($path);
     }
 
@@ -54,7 +60,7 @@ class CategoryImageSynchronizer
             return;
         }
 
-        $path = $this->store->getBackSitePath() . $path;
+        $path = $this->storeBack->getSitePath() . $path;
         $content = $this->fileReader->getFile($path . $picture);
         if (null === $content) {
             //@TODO Notify
@@ -67,7 +73,7 @@ class CategoryImageSynchronizer
         $path = $this->frontPath . $name;
 
         try {
-            $this->fileWriter->saveFile($this->store->getFrontSitePath() . $path, $content);
+            $this->fileWriter->saveFile($this->storeFront->getSitePath() . $path, $content);
         } catch (UploadException $exception) {
             //@TODO Notify
             return;

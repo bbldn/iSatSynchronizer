@@ -6,42 +6,49 @@ use App\Entity\Back\Photo as PhotoBack;
 use App\Entity\Back\ProductPictures as ProductPicturesBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductImage as ProductImageFront;
+use App\Other\Back\Store as StoreBack;
 use App\Other\Fillers\Filler;
-use App\Other\Store;
+use App\Other\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class ProductImageSynchronizer
 {
+    private $storeFront;
+    private $storeBack;
     private $fileReader;
     private $fileWriter;
-    private $store;
     private $backPath = ['/products_pictures/', '/gal/files/'];
     private $frontPath = '/date/products/';
 
-    public function __construct(GetBackFileInterface $fileReader,
-                                SaveFrontFileInterface $fileWriter,
-                                Store $store,
-                                array $productImageBackPath,
-                                string $productImageFrontPath)
+    public function __construct(
+        StoreFront $storeFront,
+        StoreBack $storeBack,
+        GetBackFileInterface $fileReader,
+        SaveFrontFileInterface $fileWriter,
+        array $productImageBackPath,
+        string $productImageFrontPath
+    )
     {
+        $this->storeFront = $storeFront;
+        $this->storeBack = $storeBack;
         $this->fileReader = $fileReader;
         $this->fileWriter = $fileWriter;
-        $this->store = $store;
         $this->backPath = $productImageBackPath;
         $this->frontPath = $productImageFrontPath;
     }
 
     public function clearFolder(): void
     {
-        $path = $this->store->getFrontSitePath() . $this->frontPath;
+        $path = $this->storeFront->getSitePath() . $this->frontPath;
         $this->fileWriter->clearFolder($path);
     }
 
     public function synchronizeProductImage(
         ProductPicturesBack $productPicturesBack,
-        ProductFront $productFront, $number = 1
+        ProductFront $productFront,
+        $number = 1
     ): ProductImageFront
     {
         return $this->synchronize($productPicturesBack->getFileName(), $productFront, $number);
@@ -56,17 +63,17 @@ class ProductImageSynchronizer
     {
         $productPicturesFront = new ProductImageFront();
         $productPicturesFront->setProductId($productFront->getProductId());
-        $productPicturesFront->setSortOrder($this->store->getDefaultSortOrder());
+        $productPicturesFront->setSortOrder($this->storeFront->getDefaultSortOrder());
         $productPicturesFront->setImage(Filler::securityString(null));
 
         if (null === $picture) {
             return $productPicturesFront;
         }
 
-        $path = $this->store->getBackSitePath() . $this->backPath[0];
+        $path = $this->storeBack->getSitePath() . $this->backPath[0];
         $content = $this->fileReader->getFile($path . $picture);
         if (null === $content) {
-            $path = $this->store->getBackSitePath() . $this->backPath[1];
+            $path = $this->storeBack->getSitePath() . $this->backPath[1];
             $content = $this->fileReader->getFile($path . $picture);
             if (null === $content) {
                 //@TODO Notify
@@ -80,7 +87,7 @@ class ProductImageSynchronizer
         $path = $this->frontPath . $name;
 
         try {
-            $this->fileWriter->saveFile($this->store->getFrontSitePath() . $path, $content);
+            $this->fileWriter->saveFile($this->storeFront->getSitePath() . $path, $content);
         } catch (UploadException $exception) {
             //@TODO Notify
             return $productPicturesFront;

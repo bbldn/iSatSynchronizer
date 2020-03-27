@@ -49,10 +49,6 @@ class BaseRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')->delete()->getQuery()->execute();
     }
 
-    /**
-     * @return bool
-     * @throws \Doctrine\DBAL\DBALException
-     */
     public function resetAutoIncrements()
     {
         $connection = $this->getEntityManager()->getConnection();

@@ -22,12 +22,6 @@ class OrderGamePostRepository extends BaseRepository
         parent::__construct($registry, OrderGamePost::class);
     }
 
-    /**
-     * @param int $orderNum
-     * @param int $productId
-     * @return OrderGamePost|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
     public function findOneByOrderNumAndProductBackId(int $orderNum, int $productId): ?OrderGamePost
     {
         return $this->createQueryBuilder('o')

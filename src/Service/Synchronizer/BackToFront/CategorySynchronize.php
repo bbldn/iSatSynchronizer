@@ -15,7 +15,8 @@ use App\Other\Fillers\CategoryFiller;
 use App\Other\Fillers\CategoryLayoutFiller;
 use App\Other\Fillers\CategoryPathFiller;
 use App\Other\Fillers\CategoryStoreFiller;
-use App\Other\Store;
+use App\Other\Front\Store as StoreFront;
+use App\Other\Back\Store as StoreBack;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
@@ -27,7 +28,8 @@ use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository
 
 class CategorySynchronize
 {
-    private $store;
+    private $storeFront;
+    private $storeBack;
     private $categoryFrontRepository;
     private $categoryDescriptionFrontRepository;
     private $categoryFilterFrontRepository;
@@ -38,18 +40,22 @@ class CategorySynchronize
     private $categoryBackRepository;
     private $categoryImageSynchronizer;
 
-    public function __construct(Store $store,
-                                CategoryFrontRepository $categoryFrontRepository,
-                                CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
-                                CategoryFilterFrontRepository $categoryFilterFrontRepository,
-                                CategoryPathFrontRepository $categoryPathFrontRepository,
-                                CategoryLayoutFrontRepository $categoryLayoutFrontRepository,
-                                CategoryStoreFrontRepository $categoryStoreFrontRepository,
-                                CategoryRepository $categoryRepository,
-                                CategoryBackRepository $categoryBackRepository,
-                                CategoryImageSynchronizer $categoryImageSynchronizer)
+    public function __construct(
+        StoreFront $storeFront,
+        StoreBack $storeBack,
+        CategoryFrontRepository $categoryFrontRepository,
+        CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
+        CategoryFilterFrontRepository $categoryFilterFrontRepository,
+        CategoryPathFrontRepository $categoryPathFrontRepository,
+        CategoryLayoutFrontRepository $categoryLayoutFrontRepository,
+        CategoryStoreFrontRepository $categoryStoreFrontRepository,
+        CategoryRepository $categoryRepository,
+        CategoryBackRepository $categoryBackRepository,
+        CategoryImageSynchronizer $categoryImageSynchronizer
+    )
     {
-        $this->store = $store;
+        $this->storeFront = $storeFront;
+        $this->storeBack = $storeBack;
         $this->categoryFrontRepository = $categoryFrontRepository;
         $this->categoryDescriptionFrontRepository = $categoryDescriptionFrontRepository;
         $this->categoryFilterFrontRepository = $categoryFilterFrontRepository;
@@ -137,9 +143,9 @@ class CategorySynchronize
     protected function createCategoryFrontFromBackCategory(CategoryBack $categoryBack): CategoryFront
     {
         $parentBackId = $categoryBack->getParent();
-        $parentId = $this->store->getDefaultCategoryFrontId();
+        $parentId = $this->storeFront->getDefaultCategoryFrontId();
 
-        if (!in_array($parentBackId, $this->store->getRootCategories())) {
+        if (!in_array($parentBackId, $this->storeBack->getRootCategories())) {
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
 
@@ -149,7 +155,7 @@ class CategorySynchronize
 
         $categoryFrontId = $categoryFront->getCategoryId();
 
-        if ($this->store->getDefaultCategoryFrontId() !== $parentId) {
+        if ($this->storeFront->getDefaultCategoryFrontId() !== $parentId) {
             $categoryPath = new CategoryPathFront();
             CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $parentId, 0);
             $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
@@ -160,13 +166,13 @@ class CategorySynchronize
         $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
 
         $categoryDescription = new CategoryDescription();
-        $languageId = $this->store->getDefaultLanguageId();
+        $languageId = $this->storeFront->getDefaultLanguageId();
         CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
         $this->categoryDescriptionFrontRepository->saveAndFlush($categoryDescription);
 
         $categoryLayout = new CategoryLayout();
-        $storeId = $this->store->getDefaultStoreId();
-        $layoutId = $this->store->getDefaultLayoutId();
+        $storeId = $this->storeFront->getDefaultStoreId();
+        $layoutId = $this->storeFront->getDefaultLayoutId();
         CategoryLayoutFiller::backToFront($categoryLayout, $categoryFrontId, $storeId, $layoutId);
         $this->categoryLayoutFrontRepository->saveAndFlush($categoryLayout);
 
@@ -182,20 +188,20 @@ class CategorySynchronize
         $category = $this->categoryRepository->findOneByBackId($backId);
         if (null === $category) {
             //@TODO Notify
-            return $this->store->getDefaultCategoryFrontId();
+            return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $frontId = $category->getFrontId();
         if (null === $frontId) {
             //@TODO Notify
-            return $this->store->getDefaultCategoryFrontId();
+            return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $front = $this->categoryFrontRepository->find($frontId);
 
         if (null === $front) {
             //@TODO Notify
-            return $this->store->getDefaultCategoryFrontId();
+            return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         return $front->getCategoryId();
@@ -212,8 +218,8 @@ class CategorySynchronize
     protected function updateCategoryFrontFromBackCategory(CategoryBack $categoryBack, CategoryFront $categoryFront): int
     {
         $parentBackId = $categoryBack->getParent();
-        $parentId = $this->store->getDefaultCategoryFrontId();
-        if (!in_array($parentBackId, $this->store->getRootCategories())) {
+        $parentId = $this->storeFront->getDefaultCategoryFrontId();
+        if (!in_array($parentBackId, $this->storeBack->getRootCategories())) {
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
         CategoryFiller::backToFront($categoryBack, $categoryFront, $parentId);
@@ -221,7 +227,7 @@ class CategorySynchronize
 
         $categoryFrontId = $categoryFront->getCategoryId();
 
-        if ($this->store->getDefaultCategoryFrontId() !== $parentId) {
+        if ($this->storeFront->getDefaultCategoryFrontId() !== $parentId) {
             $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId($categoryFrontId, $parentId);
             if (null === $categoryPath) {
                 $categoryPath = new CategoryPathFront();
@@ -242,7 +248,7 @@ class CategorySynchronize
         if (null === $categoryDescription) {
             $categoryDescription = new CategoryDescription();
         }
-        $languageId = $this->store->getDefaultLanguageId();
+        $languageId = $this->storeFront->getDefaultLanguageId();
         CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
         $this->categoryDescriptionFrontRepository->saveAndFlush($categoryDescription);
 
@@ -250,8 +256,8 @@ class CategorySynchronize
         if (null === $categoryLayout) {
             $categoryLayout = new CategoryLayout();
         }
-        $storeId = $this->store->getDefaultStoreId();
-        $layoutId = $this->store->getDefaultLayoutId();
+        $storeId = $this->storeFront->getDefaultStoreId();
+        $layoutId = $this->storeFront->getDefaultLayoutId();
         CategoryLayoutFiller::backToFront($categoryLayout, $categoryFrontId, $storeId, $layoutId);
         $this->categoryLayoutFrontRepository->saveAndFlush($categoryLayout);
 

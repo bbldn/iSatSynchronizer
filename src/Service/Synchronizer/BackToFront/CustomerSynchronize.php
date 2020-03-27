@@ -9,7 +9,8 @@ use App\Entity\Front\Customer as CustomerFront;
 use App\Exception\CustomerBackNotFoundException;
 use App\Other\Fillers\AddressFiller;
 use App\Other\Fillers\CustomerFiller;
-use App\Other\Store;
+use App\Other\Front\Store as StoreFront;
+use App\Other\Back\Store as StoreBack;
 use App\Repository\AddressRepository;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
@@ -19,7 +20,8 @@ use Illuminate\Support\Str;
 
 class CustomerSynchronize
 {
-    protected $store;
+    protected $storeFront;
+    protected $storeBack;
     protected $addressRepository;
     protected $customerRepository;
     protected $addressFrontRepository;
@@ -27,19 +29,34 @@ class CustomerSynchronize
     protected $customerBackRepository;
     protected $saulLength = 9;
 
-    public function __construct(Store $store,
-                                AddressRepository $addressRepository,
-                                CustomerRepository $customerRepository,
-                                AddressFrontRepository $addressFrontRepository,
-                                CustomerFrontRepository $customerFrontRepository,
-                                CustomerBackRepository $customerBackRepository)
+    public function __construct(
+        StoreFront $storeFront,
+        StoreBack $storeBack,
+        AddressRepository $addressRepository,
+        CustomerRepository $customerRepository,
+        AddressFrontRepository $addressFrontRepository,
+        CustomerFrontRepository $customerFrontRepository,
+        CustomerBackRepository $customerBackRepository
+    )
     {
-        $this->store = $store;
+        $this->storeFront = $storeFront;
+        $this->storeBack = $storeBack;
         $this->addressRepository = $addressRepository;
         $this->customerRepository = $customerRepository;
         $this->addressFrontRepository = $addressFrontRepository;
         $this->customerFrontRepository = $customerFrontRepository;
         $this->customerBackRepository = $customerBackRepository;
+    }
+
+    public function clear(): void
+    {
+        $this->customerFrontRepository->removeAll();
+        $this->addressFrontRepository->removeAll();
+        $this->addressRepository->removeAll();
+
+        $this->customerFrontRepository->resetAutoIncrements();
+        $this->addressFrontRepository->resetAutoIncrements();
+        $this->addressRepository->resetAutoIncrements();
     }
 
     /**
@@ -102,10 +119,10 @@ class CustomerSynchronize
         CustomerFiller::backToFront(
             $customerFront,
             $customerBack,
-            $this->store->getDefaultShop(),
-            $this->store->getDefaultLanguageId(),
+            $this->storeFront->getDefaultShop(),
+            $this->storeFront->getDefaultLanguageId(),
             $addressFront->getAddressId(),
-            $this->store->hashPassword($customerBack->getPassword(), $saul),
+            StoreFront::hashPassword($customerBack->getPassword(), $saul),
             $saul
         );
 
@@ -151,10 +168,10 @@ class CustomerSynchronize
         CustomerFiller::backToFront(
             $customerFront,
             $customerBack,
-            $this->store->getDefaultShop(),
-            $this->store->getDefaultLanguageId(),
+            $this->storeFront->getDefaultShop(),
+            $this->storeFront->getDefaultLanguageId(),
             $addressFront->getAddressId(),
-            $this->store->hashPassword($customerBack->getPassword(), $saul),
+            StoreFront::hashPassword($customerBack->getPassword(), $saul),
             $saul
         );
 

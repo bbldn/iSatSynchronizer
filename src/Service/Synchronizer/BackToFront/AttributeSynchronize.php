@@ -8,7 +8,7 @@ use App\Entity\Front\Attribute as AttributeFront;
 use App\Entity\Front\AttributeDescription as AttributeDescriptionFront;
 use App\Other\Fillers\AttributeDescriptionFiller;
 use App\Other\Fillers\AttributeFiller;
-use App\Other\Store;
+use App\Other\Front\Store as StoreFront;
 use App\Repository\AttributeRepository;
 use App\Repository\Back\ProductOptionsRepository as AttributeBackRepository;
 use App\Repository\Front\AttributeDescriptionRepository as AttributeDescriptionFrontRepository;
@@ -16,20 +16,21 @@ use App\Repository\Front\AttributeRepository as AttributeFrontRepository;
 
 class AttributeSynchronize
 {
-    private $store;
+    private $storeFront;
     private $attributeRepository;
     private $attributeFrontRepository;
     private $attributeDescriptionFrontRepository;
     private $attributeBackRepository;
 
     public function __construct(
-        Store $store,
+        StoreFront $storeFront,
         AttributeRepository $attributeRepository,
         AttributeFrontRepository $attributeFrontRepository,
         AttributeDescriptionFrontRepository $attributeDescriptionFrontRepository,
-        AttributeBackRepository $attributeBackRepository)
+        AttributeBackRepository $attributeBackRepository
+    )
     {
-        $this->store = $store;
+        $this->storeFront = $storeFront;
         $this->attributeRepository = $attributeRepository;
         $this->attributeFrontRepository = $attributeFrontRepository;
         $this->attributeDescriptionFrontRepository = $attributeDescriptionFrontRepository;
@@ -76,11 +77,11 @@ class AttributeSynchronize
     protected function createAttributeFrontFromBackProduct(AttributeBack $attributeBack): int
     {
         $attributeFront = new AttributeFront();
-        AttributeFiller::backToFront($attributeFront, $this->store->getDefaultSortOrder(), $this->store->getDefaultAttributeGroupId());
+        AttributeFiller::backToFront($attributeFront, $this->storeFront->getDefaultSortOrder(), $this->storeFront->getDefaultAttributeGroupId());
         $this->attributeFrontRepository->saveAndFlush($attributeFront);
 
         $frontId = $attributeFront->getAttributeId();
-        $languageId = $this->store->getDefaultLanguageId();
+        $languageId = $this->storeFront->getDefaultLanguageId();
         $name = $attributeBack->getName();
 
         $attributeDescriptionFront = new AttributeDescriptionFront();
@@ -104,7 +105,7 @@ class AttributeSynchronize
 
     protected function updateAttributeFrontFromBackProduct(AttributeBack $attributeBack, AttributeFront $attributeFront): int
     {
-        AttributeFiller::backToFront($attributeFront, $this->store->getDefaultSortOrder(), $this->store->getDefaultAttributeGroupId());
+        AttributeFiller::backToFront($attributeFront, $this->storeFront->getDefaultSortOrder(), $this->storeFront->getDefaultAttributeGroupId());
         $this->attributeFrontRepository->saveAndFlush($attributeFront);
         $frontId = $attributeFront->getAttributeId();
         $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($frontId);
@@ -113,7 +114,7 @@ class AttributeSynchronize
             $attributeDescriptionFront = new AttributeDescriptionFront();
         }
         $name = trim(mb_convert_encoding($attributeBack->getName(), 'utf-8', 'windows-1251'));
-        AttributeDescriptionFiller::backToFront($attributeDescriptionFront, $frontId, $this->store->getDefaultLanguageId(), $name);
+        AttributeDescriptionFiller::backToFront($attributeDescriptionFront, $frontId, $this->storeFront->getDefaultLanguageId(), $name);
         $this->attributeDescriptionFrontRepository->saveAndFlush($attributeDescriptionFront);
 
         return $frontId;
