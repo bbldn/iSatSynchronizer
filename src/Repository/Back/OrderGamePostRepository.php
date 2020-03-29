@@ -4,7 +4,6 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\OrderGamePost;
 use App\Repository\BaseRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -31,6 +30,19 @@ class OrderGamePostRepository extends BaseRepository
             ->setParameter('productId', $productId)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $value
+     * @return OrderGamePost[] Returns an array of OrderGamePost objects
+     */
+    public function findByOrderNum(int $value)
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.orderNum = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

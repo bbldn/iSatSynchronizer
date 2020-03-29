@@ -18,7 +18,7 @@ use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use Illuminate\Support\Str;
 
-class CustomerSynchronize
+class CustomerSynchronizer
 {
     protected $storeFront;
     protected $storeBack;
@@ -157,7 +157,7 @@ class CustomerSynchronize
      * @param int $frontId
      * @return Customer
      */
-    protected function createOrUpdateCustomer(Customer $customer, int $backId, int $frontId): Customer
+    protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId): Customer
     {
         if (null === $customer) {
             $customer = new Customer();
@@ -167,6 +167,10 @@ class CustomerSynchronize
         $this->customerRepository->saveAndFlush($customer);
     }
 
+    /**
+     * @param Customer|null $customer
+     * @return CustomerFront
+     */
     protected function getCustomerFrontFromCustomer(?Customer $customer): CustomerFront
     {
         if (null === $customer) {
@@ -182,6 +186,10 @@ class CustomerSynchronize
         return $customerFront;
     }
 
+    /**
+     * @param string $fio
+     * @return array
+     */
     protected function parseFirstLastName(string $fio): array
     {
         $result = [

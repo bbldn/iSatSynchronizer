@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\ProductSynchronize;
+use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +13,7 @@ class ProductSynchronizeCommand extends Command
     protected static $defaultName = 'product:synchronize';
     private $productSynchronize;
 
-    public function __construct(ProductSynchronize $productSynchronize)
+    public function __construct(ProductSynchronizer $productSynchronize)
     {
         $this->productSynchronize = $productSynchronize;
         parent::__construct();

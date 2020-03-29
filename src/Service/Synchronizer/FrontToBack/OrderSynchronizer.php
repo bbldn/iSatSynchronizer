@@ -41,7 +41,7 @@ use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontReposi
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 
-class OrderSynchronize
+class OrderSynchronizer
 {
     private $storeFront;
     private $storeBack;
@@ -230,7 +230,7 @@ class OrderSynchronize
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
         $orderBack = $this->getOrderBackFromOrder($order);
-        $this->updateOrderFrontFromBackOrder($orderFront, $orderBack);
+        $this->updateOrderBackFromOrderFront($orderFront, $orderBack);
         $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
     }
 
@@ -239,7 +239,7 @@ class OrderSynchronize
      * @param int $backId
      * @param int $frontId
      */
-    protected function createOrUpdateOrder(Order $order, int $backId, int $frontId): void
+    protected function createOrUpdateOrder(?Order $order, int $backId, int $frontId): void
     {
         if (null === $order) {
             $order = new Order();
@@ -254,7 +254,7 @@ class OrderSynchronize
      * @param OrderBack $orderBack
      * @return OrderBack
      */
-    protected function updateOrderFrontFromBackOrder(OrderFront $orderFront, OrderBack $orderBack): OrderBack
+    protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
         $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
         $currentOrderBack = $orderBack;
@@ -341,7 +341,6 @@ class OrderSynchronize
         }
 
         $categoryProduct = $productCategories[0];
-
         $categoryDescription = $this->categoryDescriptionFrontRepository->find($categoryProduct->getCategoryId());
 
         if (null === $categoryDescription) {

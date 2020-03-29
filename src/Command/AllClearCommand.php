@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\AttributeSynchronize;
-use App\Service\Synchronizer\BackToFront\CategorySynchronize;
-use App\Service\Synchronizer\BackToFront\ProductSynchronize;
+use App\Service\Synchronizer\BackToFront\AttributeSynchronizer;
+use App\Service\Synchronizer\BackToFront\CategorySynchronizer;
+use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,9 +17,11 @@ class AllClearCommand extends Command
     private $categorySynchronize;
     private $productSynchronize;
 
-    public function __construct(AttributeSynchronize $attributeSynchronize,
-                                CategorySynchronize $categorySynchronize,
-                                ProductSynchronize $productSynchronize)
+    public function __construct(
+        AttributeSynchronizer $attributeSynchronize,
+        CategorySynchronizer $categorySynchronize,
+        ProductSynchronizer $productSynchronize
+    )
     {
         $this->attributeSynchronize = $attributeSynchronize;
         $this->categorySynchronize = $categorySynchronize;

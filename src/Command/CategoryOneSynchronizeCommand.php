@@ -3,17 +3,21 @@
 namespace App\Command;
 
 use App\Exception\CategoryBackNotFoundException;
-use App\Service\Synchronizer\BackToFront\CategorySynchronize;
+use App\Other\OneSynchronizeCommandTrait;
+use App\Service\Synchronizer\BackToFront\CategorySynchronizer;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CategoryOneSynchronizeCommand extends OneSynchronizeCommand
+class CategoryOneSynchronizeCommand extends Command
 {
+    use OneSynchronizeCommandTrait;
+
     protected static $defaultName = 'category:one:synchronize';
     private $categorySynchronize;
 
-    public function __construct(CategorySynchronize $categorySynchronize)
+    public function __construct(CategorySynchronizer $categorySynchronize)
     {
         $this->categorySynchronize = $categorySynchronize;
         parent::__construct();

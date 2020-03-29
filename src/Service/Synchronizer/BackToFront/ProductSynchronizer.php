@@ -44,7 +44,7 @@ use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontReposito
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\ProductRepository;
 
-class ProductSynchronize
+class ProductSynchronizer
 {
     private $storeFront;
     private $storeBack;
@@ -214,7 +214,7 @@ class ProductSynchronize
     {
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         $productFront = $this->getProductFrontFromProduct($product);
-        $this->updateProductFrontFromBackProduct($productBack, $productFront);
+        $this->updateProductFrontFromProductBack($productBack, $productFront);
         $this->createOrUpdateProduct(
             $product,
             $productBack->getProductId(),
@@ -263,7 +263,7 @@ class ProductSynchronize
      * @param int $backId
      * @param int $frontId
      */
-    protected function createOrUpdateProduct(Product $product, int $backId, int $frontId): void
+    protected function createOrUpdateProduct(?Product $product, int $backId, int $frontId): void
     {
         if (null === $product) {
             $product = new Product();
@@ -278,7 +278,7 @@ class ProductSynchronize
      * @param ProductFront $productFront
      * @return int
      */
-    protected function updateProductFrontFromBackProduct(ProductBack $productBack, ProductFront $productFront): int
+    protected function updateProductFrontFromProductBack(ProductBack $productBack, ProductFront $productFront): int
     {
         ProductFiller::backToFront(
             $productBack,
@@ -406,7 +406,7 @@ class ProductSynchronize
             return new ProductFront();
         }
 
-        $productFront = $this->productFrontRepository->find($product->getBackId());
+        $productFront = $this->productFrontRepository->find($product->getFrontId());
 
         if (null === $productFront) {
             return new ProductFront();

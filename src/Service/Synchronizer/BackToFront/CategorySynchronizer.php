@@ -26,7 +26,7 @@ use App\Repository\Front\CategoryPathRepository as CategoryPathFrontRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository;
 
-class CategorySynchronize
+class CategorySynchronizer
 {
     private $storeFront;
     private $storeBack;
@@ -133,7 +133,7 @@ class CategorySynchronize
     {
         $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
         $categoryFront = $this->getCategoryFrontFromCategory($category);
-        $this->updateCategoryFrontFromBackCategory($categoryBack, $categoryFront);
+        $this->updateCategoryFrontFromCategoryBack($categoryBack, $categoryFront);
         $this->createOrUpdateCategory($category, $categoryBack->getCategoryId(), $categoryFront->getCategoryId());
 
         if (true === $synchronizeImage && null !== $categoryFront) {
@@ -161,7 +161,7 @@ class CategorySynchronize
      * @param CategoryFront $categoryFront
      * @return CategoryFront
      */
-    protected function updateCategoryFrontFromBackCategory(
+    protected function updateCategoryFrontFromCategoryBack(
         CategoryBack $categoryBack,
         CategoryFront $categoryFront
     ): CategoryFront
@@ -177,18 +177,28 @@ class CategorySynchronize
         $categoryFrontId = $categoryFront->getCategoryId();
 
         if ($this->storeFront->getDefaultCategoryFrontId() !== $parentId) {
-            $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId($categoryFrontId, $parentId);
-            if (null === $categoryPath) {
-                $categoryPath = new CategoryPathFront();
+            $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId(
+                $categoryFrontId,
+                $parentId
+            );
+
+            if (null !== $categoryPath) {
+                $this->categoryPathFrontRepository->removeAndFlush($categoryPath);
             }
+            $categoryPath = new CategoryPathFront();
             CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $parentId, 0);
             $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
         }
 
-        $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId($categoryFrontId, $categoryFrontId);
-        if (null === $categoryPath) {
-            $categoryPath = new CategoryPathFront();
+        $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId(
+            $categoryFrontId,
+            $categoryFrontId
+        );
+
+        if (null !== $categoryPath) {
+            $this->categoryPathFrontRepository->removeAndFlush($categoryPath);
         }
+        $categoryPath = new CategoryPathFront();
         CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $categoryFrontId, 1);
         $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
 
@@ -268,7 +278,7 @@ class CategorySynchronize
             return new CategoryFront();
         }
 
-        $categoryFront = $this->categoryFrontRepository->find($category->getBackId());
+        $categoryFront = $this->categoryFrontRepository->find($category->getFrontId());
 
         if (null === $categoryFront) {
             return new CategoryFront();

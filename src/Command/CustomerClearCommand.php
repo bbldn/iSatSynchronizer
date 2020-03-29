@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\CustomerSynchronize as CustomerBackToFrontSynchronize;
-use App\Service\Synchronizer\FrontToBack\CustomerSynchronize as CustomerFrontToBackSynchronize;
+use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronize;
+use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,8 +15,10 @@ class CustomerClearCommand extends Command
     private $customerBackToFrontSynchronize;
     private $customerFrontToBackSynchronize;
 
-    public function __construct(CustomerBackToFrontSynchronize $customerBackToFrontSynchronize,
-                                CustomerFrontToBackSynchronize $customerFrontToBackSynchronize)
+    public function __construct(
+        CustomerBackToFrontSynchronize $customerBackToFrontSynchronize,
+        CustomerFrontToBackSynchronize $customerFrontToBackSynchronize
+    )
     {
         $this->customerBackToFrontSynchronize = $customerBackToFrontSynchronize;
         $this->customerFrontToBackSynchronize = $customerFrontToBackSynchronize;

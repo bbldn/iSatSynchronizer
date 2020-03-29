@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class TestController extends AbstractController
+class MainController extends AbstractController
 {
     public function indexAction()
     {
-
     }
 }

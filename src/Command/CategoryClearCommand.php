@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\CategorySynchronize;
+use App\Service\Synchronizer\BackToFront\CategorySynchronizer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +13,7 @@ class CategoryClearCommand extends Command
     protected static $defaultName = 'category:clear';
     private $categorySynchronize;
 
-    public function __construct(CategorySynchronize $categorySynchronize)
+    public function __construct(CategorySynchronizer $categorySynchronize)
     {
         $this->categorySynchronize = $categorySynchronize;
         parent::__construct();

@@ -3,17 +3,21 @@
 namespace App\Command;
 
 use App\Exception\ProductBackNotFoundException;
-use App\Service\Synchronizer\BackToFront\ProductSynchronize;
+use App\Other\OneSynchronizeCommandTrait;
+use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProductOneSynchronizeCommand extends OneSynchronizeCommand
+class ProductOneSynchronizeCommand extends Command
 {
+    use OneSynchronizeCommandTrait;
+
     protected static $defaultName = 'product:one:synchronize';
     private $productSynchronize;
 
-    public function __construct(ProductSynchronize $productSynchronize)
+    public function __construct(ProductSynchronizer $productSynchronize)
     {
         $this->productSynchronize = $productSynchronize;
         parent::__construct();

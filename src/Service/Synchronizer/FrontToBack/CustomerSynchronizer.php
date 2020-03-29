@@ -13,7 +13,7 @@ use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 
-class CustomerSynchronize
+class CustomerSynchronizer
 {
     protected $storeBack;
     protected $addressRepositoryFront;
@@ -51,6 +51,9 @@ class CustomerSynchronize
         $this->synchronizeCustomer($customerFront);
     }
 
+    /**
+     *
+     */
     public function synchronizeAll(): void
     {
         $customersFront = $this->customerFrontRepository->findAll();
@@ -59,14 +62,21 @@ class CustomerSynchronize
         }
     }
 
-    protected function synchronizeCustomer(CustomerFront $customerFront)
+    /**
+     * @param CustomerFront $customerFront
+     */
+    protected function synchronizeCustomer(CustomerFront $customerFront): void
     {
         $customer = $this->customerRepository->findOneByFrontId($customerFront->getCustomerId());
         $customerBack = $this->getCustomerBackFromCustomer($customer);
-        $this->updateCustomerBackFromFront($customerFront, $customerBack);
+        $this->updateCustomerBackFromCustomerFront($customerFront, $customerBack);
         $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
     }
 
+    /**
+     * @param Customer|null $customer
+     * @return CustomerBack
+     */
     protected function getCustomerBackFromCustomer(?Customer $customer): CustomerBack
     {
         if (null === $customer) {
@@ -82,7 +92,12 @@ class CustomerSynchronize
         return $customerBack;
     }
 
-    protected function updateCustomerBackFromFront(
+    /**
+     * @param CustomerFront $customerFront
+     * @param CustomerBack $customerBack
+     * @return CustomerBack
+     */
+    protected function updateCustomerBackFromCustomerFront(
         CustomerFront $customerFront,
         CustomerBack $customerBack
     ): CustomerBack
@@ -93,6 +108,11 @@ class CustomerSynchronize
         return $customerBack;
     }
 
+    /**
+     * @param Customer|null $customer
+     * @param int $backId
+     * @param int $frontId
+     */
     protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId)
     {
         if (null === $customer) {

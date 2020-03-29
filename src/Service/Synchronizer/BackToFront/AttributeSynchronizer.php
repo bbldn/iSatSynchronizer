@@ -15,7 +15,7 @@ use App\Repository\Back\ProductOptionsRepository as AttributeBackRepository;
 use App\Repository\Front\AttributeDescriptionRepository as AttributeDescriptionFrontRepository;
 use App\Repository\Front\AttributeRepository as AttributeFrontRepository;
 
-class AttributeSynchronize
+class AttributeSynchronizer
 {
     private $storeFront;
     private $attributeRepository;
@@ -87,7 +87,7 @@ class AttributeSynchronize
      * @param int $backId
      * @param int $frontId
      */
-    protected function createOrUpdateAttribute(?Attribute $attribute, int $backId, int $frontId)
+    protected function createOrUpdateAttribute(?Attribute $attribute, int $backId, int $frontId): void
     {
         if (null === $attribute) {
             $attribute = new Attribute();
@@ -133,7 +133,7 @@ class AttributeSynchronize
             return new AttributeFront();
         }
 
-        $attributeFront = $this->attributeFrontRepository->find($attribute->getBackId());
+        $attributeFront = $this->attributeFrontRepository->find($attribute->getFrontId());
 
         if (null === $attributeFront) {
             return new AttributeFront();
