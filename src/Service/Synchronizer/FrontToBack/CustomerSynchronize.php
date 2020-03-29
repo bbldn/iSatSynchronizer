@@ -3,15 +3,15 @@
 namespace App\Service\Synchronizer\FrontToBack;
 
 use App\Entity\Back\BuyersGamePost as CustomerBack;
-use App\Exception\CustomerFrontNotFoundException;
-use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use App\Entity\Customer;
 use App\Entity\Front\Customer as CustomerFront;
+use App\Exception\CustomerFrontNotFoundException;
 use App\Other\Back\Store as StoreBack;
 use App\Other\Fillers\CustomerFiller;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressRepositoryFront;
+use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 
 class CustomerSynchronize
 {
@@ -64,8 +64,7 @@ class CustomerSynchronize
         $customer = $this->customerRepository->findOneByFrontId($customerFront->getCustomerId());
         $customerBack = $this->getCustomerBackFromCustomer($customer);
         $this->updateCustomerBackFromFront($customerFront, $customerBack);
-        $customer = $this->updateOrCreateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
-        $this->customerRepository->saveAndFlush($customer);
+        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
     }
 
     protected function getCustomerBackFromCustomer(?Customer $customer): CustomerBack
@@ -94,15 +93,13 @@ class CustomerSynchronize
         return $customerBack;
     }
 
-    protected function updateOrCreateCustomer(?Customer $customer, int $backId, int $frontId): Customer
+    protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId)
     {
         if (null === $customer) {
             $customer = new Customer();
         }
-
         $customer->setBackId($backId);
         $customer->setFrontId($frontId);
-
-        return $customer;
+        $this->customerRepository->saveAndFlush($customer);
     }
 }

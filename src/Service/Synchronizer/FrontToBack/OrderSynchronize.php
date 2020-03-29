@@ -146,6 +146,9 @@ class OrderSynchronize
         $this->productCategoryFrontRepository = $productCategoryFrontRepository;
     }
 
+    /**
+     *
+     */
     public function clear(): void
     {
         $this->orderRepository->removeAll();
@@ -194,6 +197,9 @@ class OrderSynchronize
         $this->customerWishListFrontRepository->resetAutoIncrements();
     }
 
+    /**
+     *
+     */
     public function synchronizeAll(): void
     {
         $ordersFront = $this->orderFrontRepository->findAll();
@@ -217,87 +223,37 @@ class OrderSynchronize
         $this->synchronizeOrder($orderFront);
     }
 
+    /**
+     * @param OrderFront $orderFront
+     */
     protected function synchronizeOrder(OrderFront $orderFront): void
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
-        if (null === $order) {
-            $orderBack = $this->createOrderFrontFromBackOrder($orderFront);
-            $this->createOrder($orderBack, $orderFront);
-        } else {
-            $orderBack = $this->orderBackRepository->find($order->getBackId());
-            if (null === $orderBack) {
-                $orderBack = $this->createOrderFrontFromBackOrder($orderFront);
-                $order->setBackId($orderBack->getId());
-            } else {
-                $this->updateOrderFrontFromBackOrder($orderFront, $orderBack);
-            }
-            $this->orderRepository->saveAndFlush($order);
-        }
+        $orderBack = $this->getOrderBackFromOrder($order);
+        $this->updateOrderFrontFromBackOrder($orderFront, $orderBack);
+        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
     }
 
-    protected function createOrder(OrderBack $orderBack, OrderFront $orderFront): void
+    /**
+     * @param Order $order
+     * @param int $backId
+     * @param int $frontId
+     */
+    protected function createOrUpdateOrder(Order $order, int $backId, int $frontId): void
     {
-        $order = new Order();
-        $order->setFrontId($orderFront->getOrderId());
-        $order->setBackId($orderBack->getId());
+        if (null === $order) {
+            $order = new Order();
+        }
+        $order->setBackId($backId);
+        $order->setFrontId($frontId);
         $this->orderRepository->saveAndFlush($order);
     }
 
-    protected function createOrderFrontFromBackOrder(OrderFront $orderFront): OrderBack
-    {
-        $orderBackMain = new OrderBack();
-        $currentOrderBack = $orderBackMain;
-        $orderNum = 0;
-
-        $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
-
-        if (0 === count($orderProductsFront)) {
-            //@TODO Notify
-            return $orderBackMain;
-        }
-
-        foreach ($orderProductsFront as $orderProductFront) {
-            if (null !== $orderBackMain->getId()) {
-                $currentOrderBack = new OrderBack();
-                $orderNum = $orderBackMain->getId();
-            }
-
-            $product = $this->productRepository->findOneByFrontId($orderProductFront->getProductId());
-
-            if (null === $product) {
-                //@TODO Notify
-                return $orderBackMain;
-            }
-
-            $currencyCode = $orderFront->getCurrencyCode();
-            $courses = $this->getCurrentCourse();
-            $currentCourse = $courses[StoreFront::convertCurrency($currencyCode)];
-            OrderFiller::frontToBack(
-                $orderFront,
-                $orderProductFront,
-                $product->getBackId(),
-                StoreFront::convertCurrency($currencyCode),
-                $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
-                $this->storeFront->getDefaultOrderStatus(),
-                $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
-                $this->storeFront->getDefaultShop(),
-                json_encode($courses),
-                $orderNum,
-                $currentCourse,
-                Store::convertToCurrency($orderProductFront->getPrice(), (float)$currentCourse),
-                $currentOrderBack
-            );
-
-            $this->orderBackRepository->saveAndFlush($currentOrderBack);
-            if (0 === $orderNum) {
-                $currentOrderBack->setOrderNum($orderBackMain->getId());
-                $this->orderBackRepository->saveAndFlush($currentOrderBack);
-            }
-        }
-
-        return $orderBackMain;
-    }
-
+    /**
+     * @param OrderFront $orderFront
+     * @param OrderBack $orderBack
+     * @return OrderBack
+     */
     protected function updateOrderFrontFromBackOrder(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
         $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
@@ -352,6 +308,29 @@ class OrderSynchronize
         return $orderBack;
     }
 
+    /**
+     * @param Order|null $order
+     * @return OrderBack
+     */
+    protected function getOrderBackFromOrder(?Order $order): OrderBack
+    {
+        if (null === $order) {
+            return new OrderBack();
+        }
+
+        $orderBack = $this->orderBackRepository->find($order->getBackId());
+
+        if (null === $orderBack) {
+            return new OrderBack();
+        }
+
+        return $orderBack;
+    }
+
+    /**
+     * @param int $frontId
+     * @return string
+     */
     protected function getMainCategoryNameByProductFrontId(int $frontId): string
     {
         $productCategories = $this->productCategoryFrontRepository->findByProductFrontId($frontId);
@@ -373,11 +352,18 @@ class OrderSynchronize
         return $categoryDescription->getName();
     }
 
+    /**
+     * @return array
+     */
     protected function getCurrentCourse(): array
     {
         return $this->currencyBackRepository->getCurrentCourse();
     }
 
+    /**
+     * @param string $phone
+     * @return int
+     */
     protected function getClientIdByFrontCustomerPhone(string $phone): int
     {
         $customer = $this->customerBack->findOneByTelephone($phone);

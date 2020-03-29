@@ -25,7 +25,7 @@ class AttributeSynchronizeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->attributeSynchronize->synchronize();
+        $this->attributeSynchronize->synchronizeAll();
 
         return 0;
     }

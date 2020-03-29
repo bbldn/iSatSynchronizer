@@ -37,7 +37,7 @@ class AllSynchronizeCommand extends Command
     {
         $resetImage = $input->getArgument('resetImage') !== null;
         $this->categorySynchronize->synchronizeAll($resetImage);
-        $this->attributeSynchronize->synchronize();
+        $this->attributeSynchronize->synchronizeAll();
         $this->productSynchronize->synchronize($resetImage);
 
         return 0;

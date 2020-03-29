@@ -9,6 +9,7 @@ use App\Entity\Front\AttributeDescription as AttributeDescriptionFront;
 use App\Other\Fillers\AttributeDescriptionFiller;
 use App\Other\Fillers\AttributeFiller;
 use App\Other\Front\Store as StoreFront;
+use App\Other\Store;
 use App\Repository\AttributeRepository;
 use App\Repository\Back\ProductOptionsRepository as AttributeBackRepository;
 use App\Repository\Front\AttributeDescriptionRepository as AttributeDescriptionFrontRepository;
@@ -37,12 +38,18 @@ class AttributeSynchronize
         $this->attributeBackRepository = $attributeBackRepository;
     }
 
+    /**
+     *
+     */
     public function reload(): void
     {
         $this->clear();
-        $this->synchronize();
+        $this->synchronizeAll();
     }
 
+    /**
+     *
+     */
     public function clear(): void
     {
         $this->attributeRepository->removeAll();
@@ -53,59 +60,53 @@ class AttributeSynchronize
         $this->attributeFrontRepository->resetAutoIncrements();
     }
 
-    public function synchronize(): void
+    /**
+     *
+     */
+    public function synchronizeAll(): void
     {
         $attributes = $this->attributeBackRepository->findAll();
         foreach ($attributes as $attributeBack) {
-            $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getOptionId());
-            if (null === $attribute) {
-                $frontId = $this->createAttributeFrontFromBackProduct($attributeBack);
-                $this->createAttributeFromBackAndFrontAttributeId($attributeBack->getOptionId(), $frontId);
-            } else {
-                $attributeFront = $this->attributeFrontRepository->find($attribute->getFrontId());
-                if (null === $attribute) {
-                    $frontId = $this->createAttributeFrontFromBackProduct($attributeBack);
-                    $this->createAttributeFromBackAndFrontAttributeId($attributeBack->getOptionId(), $frontId);
-                } else {
-                    $this->updateAttributeFrontFromBackProduct($attributeBack, $attributeFront);
-                    $this->attributeRepository->saveAndFlush($attribute);
-                }
-            }
+            $this->synchronizeAttribute($attributeBack);
         }
     }
 
-    protected function createAttributeFrontFromBackProduct(AttributeBack $attributeBack): int
+    /**
+     * @param AttributeBack $attributeBack
+     */
+    protected function synchronizeAttribute(AttributeBack $attributeBack)
     {
-        $attributeFront = new AttributeFront();
-        AttributeFiller::backToFront($attributeFront, $this->storeFront->getDefaultSortOrder(), $this->storeFront->getDefaultAttributeGroupId());
-        $this->attributeFrontRepository->saveAndFlush($attributeFront);
-
-        $frontId = $attributeFront->getAttributeId();
-        $languageId = $this->storeFront->getDefaultLanguageId();
-        $name = $attributeBack->getName();
-
-        $attributeDescriptionFront = new AttributeDescriptionFront();
-        AttributeDescriptionFiller::backToFront($attributeDescriptionFront, $frontId, $languageId, $name);
-        $this->attributeDescriptionFrontRepository->saveAndFlush($attributeDescriptionFront);
-
-        return $frontId;
+        $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getOptionId());
+        $attributeFront = $this->getAttributeFrontFromAttribute($attribute);
+        $this->updateAttributeFrontFromBackProduct($attributeBack, $attributeFront);
+        $this->createOrUpdateAttribute($attribute, $attributeBack->getOptionId(), $attributeFront->getAttributeId());
     }
 
     /**
+     * @param Attribute|null $attribute
      * @param int $backId
      * @param int $frontId
      */
-    protected function createAttributeFromBackAndFrontAttributeId(int $backId, int $frontId): void
+    protected function createOrUpdateAttribute(?Attribute $attribute, int $backId, int $frontId)
     {
-        $attribute = new Attribute();
+        if (null === $attribute) {
+            $attribute = new Attribute();
+        }
         $attribute->setBackId($backId);
         $attribute->setFrontId($frontId);
         $this->attributeRepository->saveAndFlush($attribute);
     }
 
-    protected function updateAttributeFrontFromBackProduct(AttributeBack $attributeBack, AttributeFront $attributeFront): int
+    protected function updateAttributeFrontFromBackProduct(
+        AttributeBack $attributeBack,
+        AttributeFront $attributeFront
+    ): AttributeFront
     {
-        AttributeFiller::backToFront($attributeFront, $this->storeFront->getDefaultSortOrder(), $this->storeFront->getDefaultAttributeGroupId());
+        AttributeFiller::backToFront(
+            $attributeFront,
+            $this->storeFront->getDefaultSortOrder(),
+            $this->storeFront->getDefaultAttributeGroupId()
+        );
         $this->attributeFrontRepository->saveAndFlush($attributeFront);
         $frontId = $attributeFront->getAttributeId();
         $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($frontId);
@@ -113,10 +114,31 @@ class AttributeSynchronize
         if (null === $attributeDescriptionFront) {
             $attributeDescriptionFront = new AttributeDescriptionFront();
         }
-        $name = trim(mb_convert_encoding($attributeBack->getName(), 'utf-8', 'windows-1251'));
-        AttributeDescriptionFiller::backToFront($attributeDescriptionFront, $frontId, $this->storeFront->getDefaultLanguageId(), $name);
+
+        $name = trim(Store::encodingConvert($attributeBack->getName()));
+        AttributeDescriptionFiller::backToFront(
+            $attributeDescriptionFront,
+            $frontId,
+            $this->storeFront->getDefaultLanguageId(),
+            $name
+        );
         $this->attributeDescriptionFrontRepository->saveAndFlush($attributeDescriptionFront);
 
-        return $frontId;
+        return $attributeFront;
+    }
+
+    protected function getAttributeFrontFromAttribute(?Attribute $attribute): AttributeFront
+    {
+        if (null === $attribute) {
+            return new AttributeFront();
+        }
+
+        $attributeFront = $this->attributeFrontRepository->find($attribute->getBackId());
+
+        if (null === $attributeFront) {
+            return new AttributeFront();
+        }
+
+        return $attributeFront;
     }
 }
