@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Exception\CustomerBackNotFoundException;
+use App\Exception\CustomerFrontNotFoundException;
 use App\Service\Synchronizer\BackToFront\CustomerSynchronize as CustomerBackToFrontSynchronize;
 use App\Service\Synchronizer\FrontToBack\CustomerSynchronize as CustomerFrontToBackSynchronize;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,7 +36,12 @@ class CustomerOneSynchronizeCommand extends OneSynchronizeCommand
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $this->customerFrontToBackSynchronize;
+            $id = $this->parseId($input);
+            try {
+                $this->customerFrontToBackSynchronize->synchronizeOne($id);
+            } catch (CustomerFrontNotFoundException $e) {
+                throw new \InvalidArgumentException("Customer Front with `id`: {$id} not found");
+            }
         } elseif ('backToFront' === $direction) {
             $id = $this->parseId($input);
             try {

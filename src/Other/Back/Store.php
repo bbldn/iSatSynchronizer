@@ -10,6 +10,7 @@ class Store extends StoreBase
     protected $rootCategories = [0, 1];
     protected $siteUrl = 'http://172.17.0.2';
     protected $sitePath = '/home/user/PhpstormProjects/isat.com.ua';
+    protected $defaultChatNameColor = '006084';
 
     public function __construct(ContainerBagInterface $params)
     {
@@ -21,7 +22,7 @@ class Store extends StoreBase
     /**
      * @return array|mixed
      */
-    public function getRootCategories()
+    public function getRootCategories(): array
     {
         return $this->rootCategories;
     }
@@ -37,7 +38,7 @@ class Store extends StoreBase
     /**
      * @return mixed|string
      */
-    public function getSiteUrl()
+    public function getSiteUrl(): string
     {
         return $this->siteUrl;
     }
@@ -53,7 +54,7 @@ class Store extends StoreBase
     /**
      * @return mixed|string
      */
-    public function getSitePath()
+    public function getSitePath(): string
     {
         return $this->sitePath;
     }
@@ -64,5 +65,21 @@ class Store extends StoreBase
     public function setSitePath($sitePath): void
     {
         $this->sitePath = $sitePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultChatNameColor(): string
+    {
+        return $this->defaultChatNameColor;
+    }
+
+    /**
+     * @param string $defaultChatNameColor
+     */
+    public function setDefaultChatNameColor(string $defaultChatNameColor): void
+    {
+        $this->defaultChatNameColor = $defaultChatNameColor;
     }
 }

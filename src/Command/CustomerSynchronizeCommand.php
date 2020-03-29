@@ -33,7 +33,7 @@ class CustomerSynchronizeCommand extends OneSynchronizeCommand
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $this->customerFrontToBackSynchronize;
+            $this->customerFrontToBackSynchronize->synchronizeAll();
         } elseif ('backToFront' === $direction) {
             $this->customerBackToFrontSynchronize->synchronizeAll();
         } else {

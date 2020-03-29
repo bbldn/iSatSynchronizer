@@ -127,6 +127,11 @@ class Customer
      */
     private $dateAdded;
 
+    /**
+     * @ORM\Column(type="string", name="`pass`")
+     */
+    private $pass = null;
+
     public function getCustomerId(): ?int
     {
         return $this->customerId;
@@ -401,5 +406,15 @@ class Customer
         $this->dateAdded = $dateAdded;
 
         return $this;
+    }
+
+    public function getPass(): string
+    {
+        return $this->pass;
+    }
+
+    public function setPass($pass): void
+    {
+        $this->pass = $pass;
     }
 }
