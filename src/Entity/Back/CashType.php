@@ -18,7 +18,7 @@ class CashType
     private $id;
 
     /**
-     * @ORM\Column(type="string", name="`name`" length=255)
+     * @ORM\Column(type="string", name="`name`", length=255)
      */
     private $name;
 

@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 class Store extends StoreBase
 {
     protected $rootCategories = [0, 1];
-    protected $siteUrl = 'http://172.17.0.2';
+    protected $siteUrl = 'http://172.17.0.3';
     protected $sitePath = '/home/user/PhpstormProjects/isat.com.ua';
     protected $defaultChatNameColor = '006084';
 
@@ -81,5 +81,27 @@ class Store extends StoreBase
     public function setDefaultChatNameColor(string $defaultChatNameColor): void
     {
         $this->defaultChatNameColor = $defaultChatNameColor;
+    }
+
+    /**
+     * @param string $fio
+     * @return array
+     */
+    public static function parseFirstLastName(string $fio): array
+    {
+        $result = [
+            'firstName' => ' ',
+            'lastName' => ' ',
+        ];
+
+        $fullName = explode(' ', $fio);
+        if (count($fullName) > 1) {
+            $result['lastName'] = trim($fullName[0]);
+            $result['firstName'] = trim($fullName[1]);
+        } elseif (count($fullName) == 1) {
+            $result['lastName'] = trim($fullName[0]);
+        }
+
+        return $result;
     }
 }

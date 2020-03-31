@@ -24,25 +24,25 @@ class OrderFiller
      * @param OrderBack $orderBack
      * @return OrderBack
      */
-    public static function frontToBack(OrderFront $orderFront,
-                                       OrderProductFront $orderProductFront,
-                                       int $backId,
-                                       string $backCurrency,
-                                       string $parentName,
-                                       int $status,
-                                       int $clientId,
-                                       int $defaultShop,
-                                       string $currencyValueWhenPurchasing,
-                                       int $orderNum,
-                                       float $currencyValue,
-                                       float $price,
-                                       OrderBack $orderBack)
+    public static function frontToBack(
+        OrderFront $orderFront,
+        OrderProductFront $orderProductFront,
+        int $backId,
+        string $backCurrency,
+        string $parentName,
+        int $status,
+        int $clientId,
+        int $defaultShop,
+        string $currencyValueWhenPurchasing,
+        int $orderNum,
+        float $currencyValue,
+        float $price,
+        OrderBack $orderBack
+    ): OrderBack
     {
         $orderBack->setType('Покупка');
         $orderBack->setProductName($orderProductFront->getName());
         $orderBack->setProductId($backId);
-
-//        $orderBack->setPrice($orderProductFront->getPrice());
         $orderBack->setPrice($price);
         $orderBack->setAmount($orderProductFront->getQuantity());
         $orderBack->setCurrencyName($backCurrency);

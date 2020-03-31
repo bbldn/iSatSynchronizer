@@ -33,6 +33,20 @@ class OrderGamePostRepository extends BaseRepository
     }
 
     /**
+     * @param array $ids
+     * @return OrderGamePost[] Returns an array of OrderGamePost objects
+     */
+    public function findWithoutIds(array $ids = [])
+    {
+        $qb = $this->createQueryBuilder('o');
+        return $qb
+            ->where($qb->expr()->notIn('o.clientId', $ids))
+            ->andWhere('o.documentType = 2')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param int $value
      * @return OrderGamePost[] Returns an array of OrderGamePost objects
      */
@@ -43,6 +57,16 @@ class OrderGamePostRepository extends BaseRepository
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult();
+    }
+
+    public function getTotalPrice(int $orderNum): ?int
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.orderNum = :val')
+            ->setParameter('val', $orderNum)
+            ->select('SUM(o.price * o.amount) as total')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     // /**

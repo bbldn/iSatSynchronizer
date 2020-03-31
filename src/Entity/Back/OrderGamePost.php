@@ -248,6 +248,152 @@ class OrderGamePost
      */
     private $shippingCurrencyValue;
 
+    /**
+     * @param string $type
+     * @param string $productName
+     * @param int $productId
+     * @param float $price
+     * @param int $amount
+     * @param string $currencyName
+     * @param string $parentName
+     * @param string $phone
+     * @param string $fio
+     * @param string $region
+     * @param string $city
+     * @param string $street
+     * @param string $house
+     * @param string $warehouse
+     * @param string $mail
+     * @param string $whant
+     * @param string $vipNum
+     * @param int $time
+     * @param int $status
+     * @param string $comments
+     * @param int $archive
+     * @param int $read
+     * @param bool $synchronize
+     * @param int $clientId
+     * @param int $payment
+     * @param int $delivery
+     * @param int $orderNum
+     * @param string $trackNumber
+     * @param \DateTimeInterface $trackNumberDate
+     * @param bool $moneyGiven
+     * @param bool $trackSent
+     * @param string $serialNum
+     * @param int $shopId
+     * @param int $shopIdCounterparty
+     * @param int $paymentWaitDays
+     * @param int $paymentWaitFirstSum
+     * @param \DateTimeInterface $paymentDate
+     * @param int $documentId
+     * @param int $documentType
+     * @param \DateTimeInterface $invoiceSent
+     * @param float $currencyValue
+     * @param string $currencyValueWhenPurchasing
+     * @param float $shippingPrice
+     * @param float $shippingPriceOld
+     * @param string $shippingCurrencyName
+     * @param float $shippingCurrencyValue
+     */
+    public function fill(
+        string $type,
+        string $productName,
+        int $productId,
+        float $price,
+        int $amount,
+        string $currencyName,
+        string $parentName,
+        string $phone,
+        string $fio,
+        string $region,
+        string $city,
+        string $street,
+        string $house,
+        string $warehouse,
+        string $mail,
+        string $whant,
+        string $vipNum,
+        int $time,
+        int $status,
+        string $comments,
+        int $archive,
+        int $read,
+        bool $synchronize,
+        int $clientId,
+        int $payment,
+        int $delivery,
+        int $orderNum,
+        string $trackNumber,
+        \DateTimeInterface $trackNumberDate,
+        bool $moneyGiven,
+        bool $trackSent,
+        string $serialNum,
+        int $shopId,
+        int $shopIdCounterparty,
+        int $paymentWaitDays,
+        int $paymentWaitFirstSum,
+        \DateTimeInterface $paymentDate,
+        int $documentId,
+        int $documentType,
+        \DateTimeInterface $invoiceSent,
+        float $currencyValue,
+        string $currencyValueWhenPurchasing,
+        float $shippingPrice,
+        float $shippingPriceOld,
+        string $shippingCurrencyName,
+        float $shippingCurrencyValue
+    )
+    {
+        $this->type = $type;
+        $this->productName = $productName;
+        $this->productId = $productId;
+        $this->price = $price;
+        $this->amount = $amount;
+        $this->currencyName = $currencyName;
+        $this->parentName = $parentName;
+        $this->phone = $phone;
+        $this->fio = $fio;
+        $this->region = $region;
+        $this->city = $city;
+        $this->street = $street;
+        $this->house = $house;
+        $this->warehouse = $warehouse;
+        $this->mail = $mail;
+        $this->whant = $whant;
+        $this->vipNum = $vipNum;
+        $this->time = $time;
+        $this->status = $status;
+        $this->comments = $comments;
+        $this->archive = $archive;
+        $this->read = $read;
+        $this->synchronize = $synchronize;
+        $this->clientId = $clientId;
+        $this->payment = $payment;
+        $this->delivery = $delivery;
+        $this->orderNum = $orderNum;
+        $this->trackNumber = $trackNumber;
+        $this->trackNumberDate = $trackNumberDate;
+        $this->moneyGiven = $moneyGiven;
+        $this->trackSent = $trackSent;
+        $this->serialNum = $serialNum;
+        $this->shopId = $shopId;
+        $this->shopIdCounterparty = $shopIdCounterparty;
+        $this->paymentWaitDays = $paymentWaitDays;
+        $this->paymentWaitFirstSum = $paymentWaitFirstSum;
+        $this->paymentDate = $paymentDate;
+        $this->documentId = $documentId;
+        $this->documentType = $documentType;
+        $this->invoiceSent = $invoiceSent;
+        $this->currencyValue = $currencyValue;
+        $this->currencyValueWhenPurchasing = $currencyValueWhenPurchasing;
+        $this->shippingPrice = $shippingPrice;
+        $this->shippingPriceOld = $shippingPriceOld;
+        $this->shippingCurrencyName = $shippingCurrencyName;
+        $this->shippingCurrencyValue = $shippingCurrencyValue;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -804,6 +950,8 @@ class OrderGamePost
 
         return $this;
     }
+
+
 
     /**
      * @ORM\PrePersist

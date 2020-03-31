@@ -285,16 +285,16 @@ class OrderSynchronizer
 
             $currencyCode = $orderFront->getCurrencyCode();
             $courses = $this->getCurrentCourse();
-            $currentCourse = $courses[StoreFront::convertCurrency($currencyCode)];
+            $currentCourse = $courses[Store::convertBackToFrontCurrency($currencyCode)];
             OrderFiller::frontToBack(
                 $orderFront,
                 $orderProductFront,
                 $product->getBackId(),
-                StoreFront::convertCurrency($currencyCode),
+                Store::convertBackToFrontCurrency($currencyCode),
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
                 $this->storeFront->getDefaultOrderStatus(),
                 $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
-                $this->storeFront->getDefaultShop(),
+                $this->storeFront->getDefaultShopId(),
                 json_encode($courses),
                 $orderBack->getId(),
                 $currentCourse,

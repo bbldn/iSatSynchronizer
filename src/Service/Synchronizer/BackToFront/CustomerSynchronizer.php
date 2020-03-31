@@ -137,7 +137,7 @@ class CustomerSynchronizer
         CustomerFiller::backToFront(
             $customerFront,
             $customerBack,
-            $this->storeFront->getDefaultShop(),
+            $this->storeFront->getDefaultShopId(),
             $this->storeFront->getDefaultLanguageId(),
             $addressFront->getAddressId(),
             StoreFront::hashPassword($customerBack->getPassword(), $saul),

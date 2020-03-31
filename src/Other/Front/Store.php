@@ -16,8 +16,24 @@ class Store extends StoreBase
     protected $defaultSortOrder = 0;
     protected $defaultAttributeGroupId = 1;
     protected $defaultOrderStatus = 1;
-    protected $defaultShop = 0;
-    protected $siteUrl = 'http://172.17.0.3';
+    protected $defaultShopId = 0;
+    protected $defaultCountry = 'Украина';
+    protected $defaultCountryId = 220;
+    protected $defaultPaymentMethod = 'Оплата при доставке';
+    protected $defaultShippingMethod = 'Доставка с фиксированной стоимостью';
+    protected $defaultShippingCode = 'flat.flat';
+    protected $defaultCustomField = '[]';
+    protected $invoicePrefix = 'INV-2020-00';
+    protected $defaultCustomerGroupId = 1;
+    protected $storeName = 'uclan.com.ua';
+    protected $defaultPaymentCode = 'cod';
+    protected $defaultAffiliateId = 0;
+    protected $defaultCommission = 0;
+    protected $defaultMarketingId = 0;
+    protected $defaultTax = 0;
+    protected $defaultReward = 0;
+    protected $defaultInvoiceNo = 0;
+    protected $siteUrl = 'http://172.17.0.2';
     protected $sitePath = '/home/user/PhpstormProjects/uclan.com.ua';
 
     public function __construct(ContainerBagInterface $params)
@@ -182,17 +198,49 @@ class Store extends StoreBase
     /**
      * @return int
      */
-    public function getDefaultShop(): int
+    public function getDefaultShopId(): int
     {
-        return $this->defaultShop;
+        return $this->defaultShopId;
     }
 
     /**
-     * @param int $defaultShop
+     * @param int $defaultShopId
      */
-    public function setDefaultShop(int $defaultShop): void
+    public function setDefaultShopId(int $defaultShopId): void
     {
-        $this->defaultShop = $defaultShop;
+        $this->defaultShopId = $defaultShopId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultCountry(): string
+    {
+        return $this->defaultCountry;
+    }
+
+    /**
+     * @param string $defaultCountry
+     */
+    public function setDefaultCountry(string $defaultCountry): void
+    {
+        $this->defaultCountry = $defaultCountry;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultCountryId(): int
+    {
+        return $this->defaultCountryId;
+    }
+
+    /**
+     * @param int $defaultCountryId
+     */
+    public function setDefaultCountryId(int $defaultCountryId): void
+    {
+        $this->defaultCountryId = $defaultCountryId;
     }
 
     /**
@@ -201,6 +249,239 @@ class Store extends StoreBase
     public function getSiteUrl()
     {
         return $this->siteUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultPaymentMethod(): string
+    {
+        return $this->defaultPaymentMethod;
+    }
+
+    /**
+     * @param string $defaultPaymentMethod
+     */
+    public function setDefaultPaymentMethod(string $defaultPaymentMethod): void
+    {
+        $this->defaultPaymentMethod = $defaultPaymentMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultShippingMethod(): string
+    {
+        return $this->defaultShippingMethod;
+    }
+
+    /**
+     * @param string $defaultShippingMethod
+     */
+    public function setDefaultShippingMethod(string $defaultShippingMethod): void
+    {
+        $this->defaultShippingMethod = $defaultShippingMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultShippingCode(): string
+    {
+        return $this->defaultShippingCode;
+    }
+
+    /**
+     * @param string $defaultShippingCode
+     * @return Store
+     */
+    public function setDefaultShippingCode(string $defaultShippingCode): self
+    {
+        $this->defaultShippingCode = $defaultShippingCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultCustomField(): string
+    {
+        return $this->defaultCustomField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoicePrefix(): string
+    {
+        return $this->invoicePrefix;
+    }
+
+    /**
+     * @param string $invoicePrefix
+     * @return Store
+     */
+    public function setInvoicePrefix(string $invoicePrefix): self
+    {
+        $this->invoicePrefix = $invoicePrefix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStoreName(): string
+    {
+        return $this->storeName;
+    }
+
+    /**
+     * @param string $storeName
+     * @return Store
+     */
+    public function setStoreName(string $storeName): self
+    {
+        $this->storeName = $storeName;
+
+        return $this;
+    }
+
+    /**
+     * @param string $defaultCustomField
+     */
+    public function setDefaultCustomField(string $defaultCustomField): void
+    {
+        $this->defaultCustomField = $defaultCustomField;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultCustomerGroupId(): int
+    {
+        return $this->defaultCustomerGroupId;
+    }
+
+    /**
+     * @param int $defaultCustomerGroupId
+     */
+    public function setDefaultCustomerGroupId(int $defaultCustomerGroupId): void
+    {
+        $this->defaultCustomerGroupId = $defaultCustomerGroupId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultPaymentCode(): string
+    {
+        return $this->defaultPaymentCode;
+    }
+
+    /**
+     * @param string $defaultPaymentCode
+     */
+    public function setDefaultPaymentCode(string $defaultPaymentCode): void
+    {
+        $this->defaultPaymentCode = $defaultPaymentCode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultAffiliateId(): int
+    {
+        return $this->defaultAffiliateId;
+    }
+
+    /**
+     * @param int $defaultAffiliateId
+     */
+    public function setDefaultAffiliateId(int $defaultAffiliateId): void
+    {
+        $this->defaultAffiliateId = $defaultAffiliateId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultCommission(): int
+    {
+        return $this->defaultCommission;
+    }
+
+    /**
+     * @param int $defaultCommission
+     */
+    public function setDefaultCommission(int $defaultCommission): void
+    {
+        $this->defaultCommission = $defaultCommission;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultMarketingId(): int
+    {
+        return $this->defaultMarketingId;
+    }
+
+    /**
+     * @param int $defaultMarketingId
+     */
+    public function setDefaultMarketingId(int $defaultMarketingId): void
+    {
+        $this->defaultMarketingId = $defaultMarketingId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultReward(): int
+    {
+        return $this->defaultReward;
+    }
+
+    /**
+     * @param int $defaultReward
+     */
+    public function setDefaultReward(int $defaultReward): void
+    {
+        $this->defaultReward = $defaultReward;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultTax(): int
+    {
+        return $this->defaultTax;
+    }
+
+    /**
+     * @param int $defaultTax
+     */
+    public function setDefaultTax(int $defaultTax): void
+    {
+        $this->defaultTax = $defaultTax;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultInvoiceNo(): int
+    {
+        return $this->defaultInvoiceNo;
+    }
+
+    /**
+     * @param int $defaultInvoiceNo
+     */
+    public function setDefaultInvoiceNo(int $defaultInvoiceNo): void
+    {
+        $this->defaultInvoiceNo = $defaultInvoiceNo;
     }
 
     /**
@@ -235,23 +516,5 @@ class Store extends StoreBase
     public static function hashPasswordOld(string $value)
     {
         return md5($value);
-    }
-
-    public static function convertCurrency(string $currency)
-    {
-        switch (mb_strtolower(trim($currency))) {
-            case 'uah':
-            case 'ua':
-                return 'грн';
-            case 'rub':
-            case 'ru':
-                return 'р';
-            case 'usd':
-                return '$';
-            case 'eur':
-                return '€';
-            default:
-                return '';
-        }
     }
 }

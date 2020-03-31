@@ -62,6 +62,30 @@ class OrderProduct
      */
     private $reward;
 
+    public function fill(
+        int $orderId,
+        int $productId,
+        string $name,
+        string $model,
+        int $quantity,
+        float $price,
+        float $total,
+        float $tax,
+        int $reward
+    )
+    {
+        $this->orderId = $orderId;
+        $this->productId = $productId;
+        $this->name = $name;
+        $this->model = $model;
+        $this->quantity = $quantity;
+        $this->price = $price;
+        $this->total = $total;
+        $this->tax = $tax;
+        $this->reward = $reward;
+    }
+
+
     public function getOrderProductId(): ?int
     {
         return $this->orderProductId;

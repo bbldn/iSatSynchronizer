@@ -27,4 +27,41 @@ class Store
 
         return mb_convert_encoding($value, 'utf-8', $encoding);
     }
+
+    public static function convertBackToFrontCurrency(string $currency): string
+    {
+        switch (mb_strtolower(trim($currency))) {
+            case 'uah':
+            case 'ua':
+                return 'грн';
+            case 'rub':
+            case 'ru':
+                return 'р';
+            case 'usd':
+                return '$';
+            case 'eur':
+                return '€';
+            default:
+                return '';
+        }
+    }
+
+    public static function convertFrontToBackCurrency(string $currency): array
+    {
+        switch (mb_strtolower(trim($currency))) {
+            case 'грн':
+                return ['code' => 'UAH', 'id' => 4];
+            case 'р':
+                return ['code' => 'RUB', 'id' => 1];
+            case '$':
+                return ['code' => 'USD', 'id' => 2];
+            default:
+                return ['code' => 'UAH', 'id' => 4];
+        }
+    }
+
+    public static function convertBackToFrontStatusOrder(int $value): int
+    {
+        return $value;
+    }
 }
