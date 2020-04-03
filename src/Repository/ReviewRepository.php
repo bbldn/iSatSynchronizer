@@ -2,37 +2,37 @@
 
 namespace App\Repository;
 
-use App\Entity\Address;
+use App\Entity\Review;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method Address|null find($id, $lockMode = null, $lockVersion = null)
- * @method Address|null findOneBy(array $criteria, array $orderBy = null)
- * @method Address[]    findAll()
- * @method Address[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Review|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Review|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Review[]    findAll()
+ * @method Review[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AddressRepository extends BaseRepository
+class ReviewRepository extends BaseRepository
 {
     protected $entityManagerName = 'default';
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Address::class);
+        parent::__construct($registry, Review::class);
     }
 
-    public function findOneByOrderBackId(int $value): ?Address
+    public function findOneByBackId(int $value): ?Review
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.orderBackId = :val')
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.orderBackId = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findOneByFrontId(int $value): ?Address
+    public function findOneByFrontId(int $value): ?Review
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.frontId = :val')
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.frontId = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();

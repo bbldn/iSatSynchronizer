@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 class Store extends StoreBase
 {
     protected $rootCategories = [0, 1];
+    protected $defaultSiteId = 0;
     protected $siteUrl = 'http://172.17.0.3';
     protected $sitePath = '/home/user/PhpstormProjects/isat.com.ua';
     protected $defaultChatNameColor = '006084';
@@ -33,6 +34,22 @@ class Store extends StoreBase
     public function setRootCategories($rootCategories): void
     {
         $this->rootCategories = $rootCategories;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultSiteId(): int
+    {
+        return $this->defaultSiteId;
+    }
+
+    /**
+     * @param int $defaultSiteId
+     */
+    public function setDefaultSiteId(int $defaultSiteId): void
+    {
+        $this->defaultSiteId = $defaultSiteId;
     }
 
     /**

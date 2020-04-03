@@ -33,6 +33,7 @@ class Store extends StoreBase
     protected $defaultTax = 0;
     protected $defaultReward = 0;
     protected $defaultInvoiceNo = 0;
+    protected $defaultCustomerId = 0;
     protected $siteUrl = 'http://172.17.0.2';
     protected $sitePath = '/home/user/PhpstormProjects/uclan.com.ua';
 
@@ -482,6 +483,25 @@ class Store extends StoreBase
     public function setDefaultInvoiceNo(int $defaultInvoiceNo): void
     {
         $this->defaultInvoiceNo = $defaultInvoiceNo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultCustomerId(): int
+    {
+        return $this->defaultCustomerId;
+    }
+
+    /**
+     * @param int $defaultCustomerId
+     * @return Store
+     */
+    public function setDefaultCustomerId(int $defaultCustomerId): self
+    {
+        $this->defaultCustomerId = $defaultCustomerId;
+
+        return $this;
     }
 
     /**

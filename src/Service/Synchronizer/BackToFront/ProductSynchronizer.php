@@ -43,6 +43,7 @@ use App\Repository\Front\ProductRewardRepository as ProductRewardFrontRepository
 use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontRepository;
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\ProductRepository;
+use Illuminate\Support\Str;
 
 class ProductSynchronizer
 {
@@ -334,6 +335,13 @@ class ProductSynchronizer
         );
         $this->productCategoryFrontRepository->saveAndFlush($productCategoryFront);
 
+        $this->synchronizeAttributes($productBack, $productFrontId);
+
+        return $productFrontId;
+    }
+
+    protected function synchronizeAttributes(ProductBack $productBack, int $productFrontId)
+    {
         $productAttributes = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
         foreach ($productAttributes as $productAttribute) {
             $attribute = $this->attributeRepository->findOneByBackId($productAttribute->getOptionId());
@@ -342,7 +350,7 @@ class ProductSynchronizer
                 continue;
             }
             $text = trim($productAttribute->getOptionValue());
-            if (mb_strlen($text) > 0) {
+            if (Str::length($text) > 0) {
                 $productAttributeFront = $this
                     ->productAttributeFrontRepository
                     ->findOneByAttributeFrontIdAndProductFrontId($attribute->getFrontId(), $productFrontId);
@@ -359,8 +367,6 @@ class ProductSynchronizer
             }
         }
         $this->productAttributeFrontRepository->flush();
-
-        return $productFrontId;
     }
 
     /**

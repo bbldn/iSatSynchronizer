@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="`oc_customer`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Customer
 {
@@ -68,12 +69,12 @@ class Customer
     private $salt;
 
     /**
-     * @ORM\Column(type="string", name="`cart`")
+     * @ORM\Column(type="string", name="`cart`", nullable=true)
      */
     private $cart;
 
     /**
-     * @ORM\Column(type="string", name="`wishlist`")
+     * @ORM\Column(type="string", name="`wishlist`", nullable=true)
      */
     private $wishList;
 
@@ -103,11 +104,6 @@ class Customer
     private $status;
 
     /**
-     * @ORM\Column(type="boolean", name="`approved`")
-     */
-    private $approved;
-
-    /**
      * @ORM\Column(type="boolean", name="`safe`")
      */
     private $safe;
@@ -128,9 +124,80 @@ class Customer
     private $dateAdded;
 
     /**
-     * @ORM\Column(type="string", name="`pass`")
+     * @ORM\Column(type="string", name="`pass`", nullable=true)
      */
     private $pass = null;
+
+    /**
+     * @param int $customerGroupId
+     * @param int $storeId
+     * @param int $languageId
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     * @param string $telephone
+     * @param string $fax
+     * @param string $password
+     * @param string $salt
+     * @param null|string $cart
+     * @param null|string $wishList
+     * @param bool $newsletter
+     * @param int $addressId
+     * @param string $customField
+     * @param string $ip
+     * @param bool $status
+     * @param bool $safe
+     * @param string $token
+     * @param string $code
+     * @param null|string $pass
+     */
+    public function fill(
+        int $customerGroupId,
+        int $storeId,
+        int $languageId,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $telephone,
+        string $fax,
+        string $password,
+        string $salt,
+        ?string $cart,
+        ?string $wishList,
+        bool $newsletter,
+        int $addressId,
+        string $customField,
+        string $ip,
+        bool $status,
+        bool $safe,
+        string $token,
+        string $code,
+        ?string $pass
+    )
+    {
+        $this->customerGroupId = $customerGroupId;
+        $this->storeId = $storeId;
+        $this->languageId = $languageId;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->email = $email;
+        $this->telephone = $telephone;
+        $this->fax = $fax;
+        $this->password = $password;
+        $this->salt = $salt;
+        $this->cart = $cart;
+        $this->wishList = $wishList;
+        $this->newsletter = $newsletter;
+        $this->addressId = $addressId;
+        $this->customField = $customField;
+        $this->ip = $ip;
+        $this->status = $status;
+        $this->safe = $safe;
+        $this->token = $token;
+        $this->code = $code;
+        $this->pass = $pass;
+    }
+
 
     public function getCustomerId(): ?int
     {
@@ -269,7 +336,7 @@ class Customer
         return $this->cart;
     }
 
-    public function setCart(string $cart): self
+    public function setCart(?string $cart): self
     {
         $this->cart = $cart;
 
@@ -281,7 +348,7 @@ class Customer
         return $this->wishList;
     }
 
-    public function setWishList(string $wishList): self
+    public function setWishList(?string $wishList): self
     {
         $this->wishList = $wishList;
 
@@ -348,18 +415,6 @@ class Customer
         return $this;
     }
 
-    public function getApproved(): ?bool
-    {
-        return $this->approved;
-    }
-
-    public function setApproved(bool $approved): self
-    {
-        $this->approved = $approved;
-
-        return $this;
-    }
-
     public function getSafe(): ?bool
     {
         return $this->safe;
@@ -413,8 +468,19 @@ class Customer
         return $this->pass;
     }
 
-    public function setPass($pass): void
+    public function setPass(?string $pass): void
     {
         $this->pass = $pass;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
     }
 }
