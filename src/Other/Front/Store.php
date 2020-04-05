@@ -3,6 +3,7 @@
 namespace App\Other\Front;
 
 use App\Other\Store as StoreBase;
+use Illuminate\Support\Str;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store extends StoreBase
@@ -536,5 +537,16 @@ class Store extends StoreBase
     public static function hashPasswordOld(string $value)
     {
         return md5($value);
+    }
+
+    public static function generateURL(int $id, string $name): string
+    {
+        $full = $id . '-' . Str::lower(static::encodingConvert($name));
+
+        $full = preg_replace('/[+,() ]/i', '-', $full);
+        $full = preg_replace('/-{1,}/i', '-', $full);
+        $full = trim($full, '-');
+
+        return $full;
     }
 }

@@ -9,6 +9,7 @@ use App\Entity\Front\CategoryDescription;
 use App\Entity\Front\CategoryLayout;
 use App\Entity\Front\CategoryPath as CategoryPathFront;
 use App\Entity\Front\CategoryStore;
+use App\Entity\Front\SeoUrl as SeoUrlFront;
 use App\Exception\CategoryBackNotFoundException;
 use App\Other\Back\Store as StoreBack;
 use App\Other\Fillers\Filler;
@@ -22,6 +23,7 @@ use App\Repository\Front\CategoryLayoutRepository as CategoryLayoutFrontReposito
 use App\Repository\Front\CategoryPathRepository as CategoryPathFrontRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository;
+use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 
 class CategorySynchronizer
 {
@@ -36,6 +38,8 @@ class CategorySynchronizer
     private $categoryRepository;
     private $categoryBackRepository;
     private $categoryImageSynchronizer;
+    private $seoUrlFrontRepository;
+    private $seoProEnabled;
 
     public function __construct(
         StoreFront $storeFront,
@@ -48,7 +52,9 @@ class CategorySynchronizer
         CategoryStoreFrontRepository $categoryStoreFrontRepository,
         CategoryRepository $categoryRepository,
         CategoryBackRepository $categoryBackRepository,
-        CategoryImageSynchronizer $categoryImageSynchronizer
+        CategoryImageSynchronizer $categoryImageSynchronizer,
+        SeoUrlFrontRepository $seoUrlFrontRepository,
+        bool $seoProEnabled
     )
     {
         $this->storeFront = $storeFront;
@@ -62,6 +68,8 @@ class CategorySynchronizer
         $this->categoryRepository = $categoryRepository;
         $this->categoryBackRepository = $categoryBackRepository;
         $this->categoryImageSynchronizer = $categoryImageSynchronizer;
+        $this->seoUrlFrontRepository = $seoUrlFrontRepository;
+        $this->seoProEnabled = $seoProEnabled;
     }
 
     /**
@@ -89,6 +97,11 @@ class CategorySynchronizer
 
         $this->categoryRepository->resetAutoIncrements();
         $this->categoryFrontRepository->resetAutoIncrements();
+
+        if (true === $this->seoProEnabled) {
+            $this->seoUrlFrontRepository->clear();
+            $this->seoUrlFrontRepository->resetAutoIncrements();
+        }
 
         if (true === $synchronizeImage) {
             $this->categoryImageSynchronizer->clearFolder();
@@ -175,7 +188,7 @@ class CategorySynchronizer
             0,
             1,
             0,
-            $categoryBack->getEnabled(),
+            $categoryBack->getEnabled()
         );
 
         $this->categoryFrontRepository->saveAndFlush($categoryFront);
@@ -216,13 +229,13 @@ class CategorySynchronizer
         );
         $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
 
-
         $categoryDescription = $this->categoryDescriptionFrontRepository->find($categoryFrontId);
         if (null === $categoryDescription) {
             $categoryDescription = new CategoryDescription();
         }
 
         $categoryDescription->fill(
+            $categoryFrontId,
             $this->storeFront->getDefaultLanguageId(),
             Filler::securityString(Store::encodingConvert($categoryBack->getName())),
             Filler::securityString(Store::encodingConvert($categoryBack->getDescription())),
@@ -257,6 +270,16 @@ class CategorySynchronizer
 
         $this->categoryStoreFrontRepository->saveAndFlush($categoryStore);
 
+        if (false === $this->seoProEnabled) {
+            return $categoryFront;
+        }
+
+        $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
+            'category_id=' . $categoryBack->getCategoryId(),
+            $this->storeFront->getDefaultLanguageId()
+        );
+        $this->synchronizeSeoUrl($seoUrl, $categoryBack);
+
         return $categoryFront;
     }
 
@@ -268,6 +291,21 @@ class CategorySynchronizer
     {
         $this->categoryImageSynchronizer->synchronizeImage($categoryBack, $categoryFront);
         $this->categoryFrontRepository->saveAndFlush($categoryFront);
+    }
+
+    protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, CategoryBack $categoryBack): void
+    {
+        if (null === $seoUrl) {
+            $seoUrl = new SeoUrlFront();
+        }
+        $seoUrl->fill(
+            $this->storeFront->getDefaultStoreId(),
+            $this->storeFront->getDefaultLanguageId(),
+            'category_id=' . $categoryBack->getCategoryId(),
+            StoreFront::generateURL($categoryBack->getCategoryId(), Store::encodingConvert($categoryBack->getName()))
+        );
+
+        $this->seoUrlFrontRepository->saveAndFlush($seoUrl);
     }
 
     /**

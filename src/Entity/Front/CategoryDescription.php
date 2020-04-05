@@ -47,6 +47,7 @@ class CategoryDescription
     private $metaKeyword;
 
     /**
+     * @param int $categoryId
      * @param int $languageId
      * @param string $name
      * @param string $description
@@ -55,6 +56,7 @@ class CategoryDescription
      * @param string $metaKeyword
      */
     public function fill(
+        int $categoryId,
         int $languageId,
         string $name,
         string $description,
@@ -63,6 +65,7 @@ class CategoryDescription
         string $metaKeyword
     )
     {
+        $this->categoryId = $categoryId;
         $this->languageId = $languageId;
         $this->name = $name;
         $this->description = $description;

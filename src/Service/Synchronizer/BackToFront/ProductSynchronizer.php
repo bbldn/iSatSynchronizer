@@ -9,6 +9,7 @@ use App\Entity\Front\ProductCategory as ProductCategoryFront;
 use App\Entity\Front\ProductDescription as ProductDescriptionFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
+use App\Entity\Front\SeoUrl as SeoUrlFront;
 use App\Entity\Product;
 use App\Exception\ProductBackNotFoundException;
 use App\Other\Back\Store as StoreBack;
@@ -38,6 +39,7 @@ use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\Front\ProductRewardRepository as ProductRewardFrontRepository;
 use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontRepository;
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
+use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
 use Illuminate\Support\Str;
 
@@ -69,6 +71,8 @@ class ProductSynchronizer
     private $attributeBackRepository;
     private $productBackRepository;
     private $productPicturesBackRepository;
+    private $seoUrlFrontRepository;
+    private $seoProEnabled;
     private $productImageSynchronizer;
 
     public function __construct(
@@ -98,7 +102,10 @@ class ProductSynchronizer
         AttributeBackRepository $attributeBackRepository,
         ProductBackRepository $productBackRepository,
         ProductPicturesBackRepository $productPicturesBackRepository,
-        ProductImageSynchronizer $productImageSynchronizer)
+        ProductImageSynchronizer $productImageSynchronizer,
+        SeoUrlFrontRepository $seoUrlFrontRepository,
+        bool $seoProEnabled
+    )
     {
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
@@ -126,7 +133,9 @@ class ProductSynchronizer
         $this->attributeBackRepository = $attributeBackRepository;
         $this->productBackRepository = $productBackRepository;
         $this->productPicturesBackRepository = $productPicturesBackRepository;
+        $this->seoUrlFrontRepository = $seoUrlFrontRepository;
         $this->productImageSynchronizer = $productImageSynchronizer;
+        $this->seoProEnabled = $seoProEnabled;
     }
 
     /**
@@ -170,6 +179,11 @@ class ProductSynchronizer
         $this->productOptionValueFrontRepository->resetAutoIncrements();
         $this->productRewardFrontRepository->resetAutoIncrements();
         $this->productSpecialFrontRepository->resetAutoIncrements();
+
+        if (true === $this->seoProEnabled) {
+            $this->seoUrlFrontRepository->clear();
+            $this->seoUrlFrontRepository->resetAutoIncrements();
+        }
 
         if (true === $clearImage) {
             $this->productImageSynchronizer->clearFolder();
@@ -370,11 +384,17 @@ class ProductSynchronizer
         $productCategoryFront->fill(
             $productFront->getProductId(),
             $categoryFrontId,
-            false
+            true
         );
         $this->productCategoryFrontRepository->saveAndFlush($productCategoryFront);
 
         $this->synchronizeAttributes($productBack, $productFront->getProductId());
+
+        $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
+            'product_id=' . $productBack->getProductId(),
+            $this->storeFront->getDefaultLanguageId()
+        );
+        $this->synchronizeSeoUrl($seoUrl, $productBack);
 
         return $productFront;
     }
@@ -406,6 +426,21 @@ class ProductSynchronizer
             }
         }
         $this->productAttributeFrontRepository->flush();
+    }
+
+    protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, ProductBack $productBack): void
+    {
+        if (null === $seoUrl) {
+            $seoUrl = new SeoUrlFront();
+        }
+        $seoUrl->fill(
+            $this->storeFront->getDefaultStoreId(),
+            $this->storeFront->getDefaultLanguageId(),
+            'product_id=' . $productBack->getProductId(),
+            StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
+        );
+
+        $this->seoUrlFrontRepository->saveAndFlush($seoUrl);
     }
 
     /**
