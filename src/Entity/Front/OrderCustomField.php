@@ -52,6 +52,35 @@ class OrderCustomField
      */
     private $location;
 
+    /**
+     * @param int $orderId
+     * @param int $customFieldId
+     * @param int $customFieldValueId
+     * @param string $name
+     * @param string $value
+     * @param string $type
+     * @param string $location
+     */
+    public function fill(
+        int $orderId,
+        int $customFieldId,
+        int $customFieldValueId,
+        string $name,
+        string $value,
+        string $type,
+        string $location
+    )
+    {
+        $this->orderId = $orderId;
+        $this->customFieldId = $customFieldId;
+        $this->customFieldValueId = $customFieldValueId;
+        $this->name = $name;
+        $this->value = $value;
+        $this->type = $type;
+        $this->location = $location;
+    }
+
+
     public function getOrderCustomFieldId(): ?int
     {
         return $this->orderCustomFieldId;

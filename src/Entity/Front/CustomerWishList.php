@@ -26,6 +26,20 @@ class CustomerWishList
      */
     private $dateAdded;
 
+    /**
+     * @param int $customerId
+     * @param int $productId
+     */
+    public function fill(
+        int $customerId,
+        int $productId
+    )
+    {
+        $this->customerId = $customerId;
+        $this->productId = $productId;
+    }
+
+
     public function getCustomerId(): ?int
     {
         return $this->customerId;

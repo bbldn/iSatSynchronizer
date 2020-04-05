@@ -26,6 +26,22 @@ class CategoryPath
      */
     private $level;
 
+    /**
+     * @param int $categoryId
+     * @param int $pathId
+     * @param int $level
+     */
+    public function fill(
+        int $categoryId,
+        int $pathId,
+        int $level
+    )
+    {
+        $this->categoryId = $categoryId;
+        $this->pathId = $pathId;
+        $this->level = $level;
+    }
+
     public function getCategoryId(): ?int
     {
         return $this->categoryId;

@@ -35,12 +35,27 @@ class OrderTotal
     /**
      * @ORM\Column(type="float", name="`value`")
      */
-    private $value;
+    private $value = 0.0;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
     private $sortOrder;
+
+    public function fill(
+        int $orderId,
+        string $code,
+        string $title,
+        float $value,
+        int $sortOrder
+    )
+    {
+        $this->orderId = $orderId;
+        $this->code = $code;
+        $this->title = $title;
+        $this->value = $value;
+        $this->sortOrder = $sortOrder;
+    }
 
     public function getOrderTotalId(): ?int
     {

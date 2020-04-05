@@ -21,6 +21,19 @@ class ProductStore
      */
     private $storeId = 0;
 
+    /**
+     * @param int $productId
+     * @param int $storeId
+     */
+    public function fill(
+        int $productId,
+        int $storeId
+    )
+    {
+        $this->productId = $productId;
+        $this->storeId = $storeId;
+    }
+
     public function getProductId(): ?int
     {
         return $this->productId;

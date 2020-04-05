@@ -45,12 +45,42 @@ class Language
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder;
+    private $sortOrder = 0;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
     private $status;
+
+    /**
+     * Language constructor.
+     * @param $name
+     * @param $code
+     * @param $locale
+     * @param $image
+     * @param $directory
+     * @param $sortOrder
+     * @param $status
+     */
+    public function fill(
+        string $name,
+        string $code,
+        string $locale,
+        string $image,
+        string $directory,
+        int $sortOrder,
+        bool $status
+    )
+    {
+        $this->name = $name;
+        $this->code = $code;
+        $this->locale = $locale;
+        $this->image = $image;
+        $this->directory = $directory;
+        $this->sortOrder = $sortOrder;
+        $this->status = $status;
+    }
+
 
     public function getLanguageId(): ?int
     {

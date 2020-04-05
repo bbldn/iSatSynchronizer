@@ -27,6 +27,19 @@ class CustomerGroup
      */
     private $sortOrder;
 
+    /**
+     * @param bool $approval
+     * @param int $sortOrder
+     */
+    public function fill(
+        bool $approval,
+        int $sortOrder)
+    {
+        $this->approval = $approval;
+        $this->sortOrder = $sortOrder;
+    }
+
+
     public function getCustomerGroupId(): ?int
     {
         return $this->customerGroupId;

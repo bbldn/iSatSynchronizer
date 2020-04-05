@@ -21,6 +21,20 @@ class CustomerSimpleFields
      */
     private $metadata;
 
+    /**
+     * @param int $customerId
+     * @param string $metadata
+     */
+    public function fill(
+        int $customerId,
+        string $metadata
+    )
+    {
+        $this->customerId = $customerId;
+        $this->metadata = $metadata;
+    }
+
+
     public function getCustomerId(): ?int
     {
         return $this->customerId;

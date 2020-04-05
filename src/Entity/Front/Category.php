@@ -21,7 +21,7 @@ class Category
     /**
      * @ORM\Column(type="string", name="`image`", nullable=true)
      */
-    private $image;
+    private $image = null;
 
     /**
      * @ORM\Column(type="integer", name="`parent_id`")
@@ -57,6 +57,32 @@ class Category
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
     private $dateModified;
+
+    /**
+     * @param string $image
+     * @param int $parentId
+     * @param bool $top
+     * @param int $column
+     * @param int $sortOrder
+     * @param bool $status
+     */
+    public function fill(
+        string $image,
+        int $parentId,
+        bool $top,
+        int $column,
+        int $sortOrder,
+        bool $status
+    )
+    {
+        $this->image = $image;
+        $this->parentId = $parentId;
+        $this->top = $top;
+        $this->column = $column;
+        $this->sortOrder = $sortOrder;
+        $this->status = $status;
+    }
+
 
     public function getCategoryId(): ?int
     {

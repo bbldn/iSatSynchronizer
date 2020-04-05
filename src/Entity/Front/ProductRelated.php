@@ -21,6 +21,20 @@ class ProductRelated
      */
     private $relatedId;
 
+    /**
+     * @param int $productId
+     * @param int $relatedId
+     */
+    public function fill(
+        int $productId,
+        int $relatedId
+    )
+    {
+        $this->productId = $productId;
+        $this->relatedId = $relatedId;
+    }
+
+
     public function getProductId(): ?int
     {
         return $this->productId;

@@ -33,6 +33,19 @@ class CustomerIp
      */
     private $dateAdded;
 
+    /**
+     * @param int $customerId
+     * @param string $ip
+     */
+    public function fill(
+        int $customerId,
+        string $ip
+    )
+    {
+        $this->customerId = $customerId;
+        $this->ip = $ip;
+    }
+
     public function getCustomerIpId(): ?int
     {
         return $this->customerIpId;

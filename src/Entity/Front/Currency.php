@@ -57,6 +57,35 @@ class Currency
      */
     private $dateModified;
 
+    /**
+     * @param string $title
+     * @param string $code
+     * @param string $symbolLeft
+     * @param string $symbolRight
+     * @param int $decimalPlace
+     * @param float $value
+     * @param bool $status
+     */
+    public function fill(
+        string $title,
+        string $code,
+        string $symbolLeft,
+        string $symbolRight,
+        int $decimalPlace,
+        float $value,
+        bool $status
+    )
+    {
+        $this->title = $title;
+        $this->code = $code;
+        $this->symbolLeft = $symbolLeft;
+        $this->symbolRight = $symbolRight;
+        $this->decimalPlace = $decimalPlace;
+        $this->value = $value;
+        $this->status = $status;
+    }
+
+
     public function getCurrencyId(): ?int
     {
         return $this->currencyId;

@@ -71,12 +71,12 @@ class Customer
     /**
      * @ORM\Column(type="string", name="`cart`", nullable=true)
      */
-    private $cart;
+    private $cart = null;
 
     /**
      * @ORM\Column(type="string", name="`wishlist`", nullable=true)
      */
-    private $wishList;
+    private $wishList = null;
 
     /**
      * @ORM\Column(type="boolean", name="`newsletter`")

@@ -20,12 +20,12 @@ class CustomerReward
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    private $customerId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    private $orderId = 0;
 
     /**
      * @ORM\Column(type="string", name="`description`")
@@ -35,12 +35,31 @@ class CustomerReward
     /**
      * @ORM\Column(type="integer", name="`points`")
      */
-    private $points;
+    private $points = 0;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     private $dateAdded;
+
+    /**
+     * @param int $customerId
+     * @param int $orderId
+     * @param string $description
+     * @param int $points
+     */
+    public function fill(
+        int $customerId,
+        int $orderId,
+        string $description,
+        int $points
+    )
+    {
+        $this->customerId = $customerId;
+        $this->orderId = $orderId;
+        $this->description = $description;
+        $this->points = $points;
+    }
 
     public function getCustomerRewardId(): ?int
     {

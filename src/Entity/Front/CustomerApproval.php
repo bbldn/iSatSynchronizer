@@ -33,6 +33,20 @@ class CustomerApproval
      */
     private $dateAdded;
 
+    /**
+     * @param int $customerId
+     * @param string $type
+     */
+    public function fill(
+        int $customerId,
+        string $type
+    )
+    {
+        $this->customerId = $customerId;
+        $this->type = $type;
+    }
+
+
     public function getCustomerApprovalId(): ?int
     {
         return $this->customerApprovalId;

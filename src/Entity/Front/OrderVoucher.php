@@ -72,6 +72,33 @@ class OrderVoucher
      */
     private $amount;
 
+    public function fill(
+        int $orderId,
+        int $voucherId,
+        string $description,
+        string $code,
+        string $fromName,
+        string $fromEmail,
+        string $toName,
+        string $toEmail,
+        int $voucherThemeId,
+        string $message,
+        float $amount)
+    {
+        $this->orderId = $orderId;
+        $this->voucherId = $voucherId;
+        $this->description = $description;
+        $this->code = $code;
+        $this->fromName = $fromName;
+        $this->fromEmail = $fromEmail;
+        $this->toName = $toName;
+        $this->toEmail = $toEmail;
+        $this->voucherThemeId = $voucherThemeId;
+        $this->message = $message;
+        $this->amount = $amount;
+    }
+
+
     public function getOrderVoucherId(): ?int
     {
         return $this->orderVoucherId;

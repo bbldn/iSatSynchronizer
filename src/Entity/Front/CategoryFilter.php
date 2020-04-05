@@ -21,6 +21,19 @@ class CategoryFilter
      */
     private $filterId;
 
+    /**
+     * @param int $categoryId
+     * @param int $filterId
+     */
+    public function fill(
+        int $categoryId,
+        int $filterId
+    )
+    {
+        $this->categoryId = $categoryId;
+        $this->filterId = $filterId;
+    }
+
     public function getCategoryId(): ?int
     {
         return $this->categoryId;

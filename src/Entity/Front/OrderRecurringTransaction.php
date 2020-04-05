@@ -43,6 +43,25 @@ class OrderRecurringTransaction
      */
     private $dateAdded;
 
+    /**
+     * @param int $orderRecurringId
+     * @param string $reference
+     * @param string $type
+     * @param int $amount
+     */
+    public function fill(
+        int $orderRecurringId,
+        string $reference,
+        string $type,
+        int $amount
+    )
+    {
+        $this->orderRecurringId = $orderRecurringId;
+        $this->reference = $reference;
+        $this->type = $type;
+        $this->amount = $amount;
+    }
+
     public function getOrderRecurringTransactionId(): ?int
     {
         return $this->orderRecurringTransactionId;

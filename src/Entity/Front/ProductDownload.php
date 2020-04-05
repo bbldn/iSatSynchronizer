@@ -21,6 +21,20 @@ class ProductDownload
      */
     private $downloadId;
 
+    /**
+     * @param int $productId
+     * @param int $downloadId
+     */
+    public function fill(
+        int $productId,
+        int $downloadId
+    )
+    {
+        $this->productId = $productId;
+        $this->downloadId = $downloadId;
+    }
+
+
     public function getProductId(): ?int
     {
         return $this->productId;

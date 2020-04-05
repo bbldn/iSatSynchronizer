@@ -27,6 +27,20 @@ class Attribute
      */
     private $sortOrder;
 
+    /**
+     * @param int $attributeGroupId
+     * @param int $sortOrder
+     */
+    public function fill(
+        int $attributeGroupId,
+        int $sortOrder
+    )
+    {
+        $this->attributeGroupId = $attributeGroupId;
+        $this->sortOrder = $sortOrder;
+    }
+
+
     public function getAttributeId(): ?int
     {
         return $this->attributeId;

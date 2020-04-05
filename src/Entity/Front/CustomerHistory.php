@@ -33,6 +33,19 @@ class CustomerHistory
      */
     private $dateAdded;
 
+    /**
+     * @param int $customerId
+     * @param string $comment
+     */
+    public function fill(
+        int $customerId,
+        string $comment
+    )
+    {
+        $this->customerId = $customerId;
+        $this->comment = $comment;
+    }
+
     public function getCustomerHistoryId(): ?int
     {
         return $this->customerHistoryId;

@@ -26,6 +26,17 @@ class AttributeDescription
      */
     private $name;
 
+    public function fill(
+        int $attributeId,
+        int $languageId,
+        string $name
+    )
+    {
+        $this->attributeId = $attributeId;
+        $this->languageId = $languageId;
+        $this->name = $name;
+    }
+
     public function getAttributeId(): ?int
     {
         return $this->attributeId;

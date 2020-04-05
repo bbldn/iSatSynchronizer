@@ -31,6 +31,26 @@ class ProductAttribute
      */
     private $text;
 
+    /**
+     * @param int $productId
+     * @param int $attributeId
+     * @param int $languageId
+     * @param string $text
+     */
+    public function fill(
+        int $productId,
+        int $attributeId,
+        int $languageId,
+        string $text
+    )
+    {
+        $this->productId = $productId;
+        $this->attributeId = $attributeId;
+        $this->languageId = $languageId;
+        $this->text = $text;
+    }
+
+
     public function getProductId(): ?int
     {
         return $this->productId;

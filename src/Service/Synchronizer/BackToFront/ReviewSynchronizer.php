@@ -36,6 +36,15 @@ class ReviewSynchronizer
         $this->productRepository = $productRepository;
     }
 
+    public function clear()
+    {
+        $this->reviewRepository->clear();
+        $this->reviewFrontRepository->clear();
+
+        $this->reviewRepository->resetAutoIncrements();
+        $this->reviewFrontRepository->resetAutoIncrements();
+    }
+
     /**
      *
      */

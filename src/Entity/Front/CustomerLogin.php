@@ -43,6 +43,22 @@ class CustomerLogin
      */
     private $dateModified;
 
+    /**
+     * @param string $email
+     * @param string $ip
+     * @param int $total
+     */
+    public function fill(
+        string $email,
+        string $ip,
+        int $total
+    )
+    {
+        $this->email = $email;
+        $this->ip = $ip;
+        $this->total = $total;
+    }
+
 
     public function getCustomerLoginId(): ?int
     {

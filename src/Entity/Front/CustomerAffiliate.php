@@ -35,7 +35,7 @@ class CustomerAffiliate
     /**
      * @ORM\Column(type="float", name="`commission`")
      */
-    private $commission;
+    private $commission = 0.0;
 
     /**
      * @ORM\Column(type="string", name="`tax`", length=64)
@@ -96,6 +96,59 @@ class CustomerAffiliate
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     private $dateAdded;
+
+    /**
+     * @param string $company
+     * @param string $website
+     * @param string $tracking
+     * @param float $commission
+     * @param string $tax
+     * @param string $payment
+     * @param string $cheque
+     * @param string $payPal
+     * @param string $bankName
+     * @param string $bankBranchNumber
+     * @param string $bankSwiftCode
+     * @param string $bankAccountName
+     * @param string $bankAccountNumber
+     * @param string $customField
+     * @param bool $status
+     */
+    public function fill(
+        string $company,
+        string $website,
+        string $tracking,
+        float $commission,
+        string $tax,
+        string $payment,
+        string $cheque,
+        string $payPal,
+        string $bankName,
+        string $bankBranchNumber,
+        string $bankSwiftCode,
+        string $bankAccountName,
+        string $bankAccountNumber,
+        string $customField,
+        bool $status
+    )
+    {
+        $this->company = $company;
+        $this->website = $website;
+        $this->tracking = $tracking;
+        $this->commission = $commission;
+        $this->tax = $tax;
+        $this->payment = $payment;
+        $this->cheque = $cheque;
+        $this->payPal = $payPal;
+        $this->bankName = $bankName;
+        $this->bankBranchNumber = $bankBranchNumber;
+        $this->bankSwiftCode = $bankSwiftCode;
+        $this->bankAccountName = $bankAccountName;
+        $this->bankAccountNumber = $bankAccountNumber;
+        $this->customField = $customField;
+        $this->status = $status;
+    }
+
 
     public function getCustomerId(): ?int
     {

@@ -38,6 +38,26 @@ class OrderShipment
      */
     private $trackingNumber;
 
+    /**
+     * @param int $orderId
+     * @param \DateTimeInterface $dateAdded
+     * @param int $shippingCourierId
+     * @param string $trackingNumber
+     */
+    public function fill(
+        int $orderId,
+        \DateTimeInterface $dateAdded,
+        int $shippingCourierId,
+        string $trackingNumber
+    )
+    {
+        $this->orderId = $orderId;
+        $this->dateAdded = $dateAdded;
+        $this->shippingCourierId = $shippingCourierId;
+        $this->trackingNumber = $trackingNumber;
+    }
+
+
     public function getOrderShipmentId(): ?int
     {
         return $this->orderShipmentId;

@@ -32,6 +32,23 @@ class Store
      */
     private $ssl;
 
+    /**
+     * @param $name
+     * @param $url
+     * @param $ssl
+     */
+    public function fill(
+        string $name,
+        string $url,
+        string $ssl
+    )
+    {
+        $this->name = $name;
+        $this->url = $url;
+        $this->ssl = $ssl;
+    }
+
+
     public function getStoreId(): ?int
     {
         return $this->storeId;

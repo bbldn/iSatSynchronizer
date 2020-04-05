@@ -21,6 +21,29 @@ class ProductCategory
      */
     private $categoryId;
 
+    /**
+     * @ORM\Column(type="boolean", name="main_category")
+     */
+    private $mainCategory = false;
+
+    /**
+     * ProductCategory constructor.
+     * @param $productId
+     * @param $categoryId
+     * @param bool $mainCategory
+     */
+    public function fill(
+        int $productId,
+        int $categoryId,
+        bool $mainCategory
+    )
+    {
+        $this->productId = $productId;
+        $this->categoryId = $categoryId;
+        $this->mainCategory = $mainCategory;
+    }
+
+
     public function getProductId(): ?int
     {
         return $this->productId;
@@ -41,6 +64,18 @@ class ProductCategory
     public function setCategoryId(int $categoryId): self
     {
         $this->categoryId = $categoryId;
+
+        return $this;
+    }
+
+    public function getMainCategory(): ?bool
+    {
+        return $this->mainCategory;
+    }
+
+    public function setMainCategory(bool $mainCategory): self
+    {
+        $this->mainCategory = $mainCategory;
 
         return $this;
     }

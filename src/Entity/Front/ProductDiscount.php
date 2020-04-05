@@ -29,17 +29,17 @@ class ProductDiscount
     /**
      * @ORM\Column(type="integer", name="`quantity`")
      */
-    private $quantity;
+    private $quantity = 0;
 
     /**
      * @ORM\Column(type="integer", name="`priority`")
      */
-    private $priority;
+    private $priority = 1;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price;
+    private $price = 0.0;
 
     /**
      * @ORM\Column(type="date", name="`date_start`")
@@ -50,6 +50,35 @@ class ProductDiscount
      * @ORM\Column(type="date", name="`date_end`")
      */
     private $dateEnd;
+
+    /**
+     * @param int $productId
+     * @param int $customerGroupId
+     * @param int $quantity
+     * @param int $priority
+     * @param float $price
+     * @param \DateTimeInterface $dateStart
+     * @param \DateTimeInterface $dateEnd
+     */
+    public function fill(
+        int $productId,
+        int $customerGroupId,
+        int $quantity,
+        int $priority,
+        float $price,
+        \DateTimeInterface $dateStart,
+        \DateTimeInterface $dateEnd
+    )
+    {
+        $this->productId = $productId;
+        $this->customerGroupId = $customerGroupId;
+        $this->quantity = $quantity;
+        $this->priority = $priority;
+        $this->price = $price;
+        $this->dateStart = $dateStart;
+        $this->dateEnd = $dateEnd;
+    }
+
 
     public function getProductDiscountId(): ?int
     {

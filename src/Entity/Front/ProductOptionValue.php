@@ -77,19 +77,47 @@ class ProductOptionValue
     private $weightPrefix;
 
     /**
-     * @ORM\Column(type="string", name="`sku`")
+     * @param int $productOptionId
+     * @param int $productId
+     * @param int $optionId
+     * @param int $optionValueId
+     * @param int $quantity
+     * @param bool $subtract
+     * @param float $price
+     * @param string $pricePrefix
+     * @param int $points
+     * @param string $pointsPrefix
+     * @param float $weight
+     * @param string $weightPrefix
      */
-    private $sku;
-
-    /**
-     * @ORM\Column(type="string", name="`model`")
-     */
-    private $model;
-
-    /**
-     * @ORM\Column(type="string", name="`o_v_image`", length=255)
-     */
-    private $OVImage;
+    public function fill(
+        int $productOptionId,
+        int $productId,
+        int $optionId,
+        int $optionValueId,
+        int $quantity,
+        bool $subtract,
+        float $price,
+        string $pricePrefix,
+        int $points,
+        string $pointsPrefix,
+        float $weight,
+        string $weightPrefix
+    )
+    {
+        $this->productOptionId = $productOptionId;
+        $this->productId = $productId;
+        $this->optionId = $optionId;
+        $this->optionValueId = $optionValueId;
+        $this->quantity = $quantity;
+        $this->subtract = $subtract;
+        $this->price = $price;
+        $this->pricePrefix = $pricePrefix;
+        $this->points = $points;
+        $this->pointsPrefix = $pointsPrefix;
+        $this->weight = $weight;
+        $this->weightPrefix = $weightPrefix;
+    }
 
     public function getProductOptionValueId(): ?int
     {
@@ -243,42 +271,6 @@ class ProductOptionValue
     public function setWeightPrefix(string $weightPrefix): self
     {
         $this->weightPrefix = $weightPrefix;
-
-        return $this;
-    }
-
-    public function getSku(): ?string
-    {
-        return $this->sku;
-    }
-
-    public function setSku(string $sku): self
-    {
-        $this->sku = $sku;
-
-        return $this;
-    }
-
-    public function getModel(): ?string
-    {
-        return $this->model;
-    }
-
-    public function setModel(string $model): self
-    {
-        $this->model = $model;
-
-        return $this;
-    }
-
-    public function getOVImage(): ?string
-    {
-        return $this->OVImage;
-    }
-
-    public function setOVImage(string $OVImage): self
-    {
-        $this->OVImage = $OVImage;
 
         return $this;
     }

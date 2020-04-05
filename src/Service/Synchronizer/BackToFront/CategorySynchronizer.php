@@ -11,12 +11,9 @@ use App\Entity\Front\CategoryPath as CategoryPathFront;
 use App\Entity\Front\CategoryStore;
 use App\Exception\CategoryBackNotFoundException;
 use App\Other\Back\Store as StoreBack;
-use App\Other\Fillers\CategoryDescriptionFiller;
-use App\Other\Fillers\CategoryFiller;
-use App\Other\Fillers\CategoryLayoutFiller;
-use App\Other\Fillers\CategoryPathFiller;
-use App\Other\Fillers\CategoryStoreFiller;
+use App\Other\Fillers\Filler;
 use App\Other\Front\Store as StoreFront;
+use App\Other\Store;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
@@ -171,7 +168,16 @@ class CategorySynchronizer
         if (!in_array($parentBackId, $this->storeBack->getRootCategories())) {
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
-        CategoryFiller::backToFront($categoryBack, $categoryFront, $parentId);
+
+        $categoryFront->fill(
+            Filler::securityString(null),
+            $parentId,
+            0,
+            1,
+            0,
+            $categoryBack->getEnabled(),
+        );
+
         $this->categoryFrontRepository->saveAndFlush($categoryFront);
 
         $categoryFrontId = $categoryFront->getCategoryId();
@@ -186,7 +192,11 @@ class CategorySynchronizer
                 $this->categoryPathFrontRepository->removeAndFlush($categoryPath);
             }
             $categoryPath = new CategoryPathFront();
-            CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $parentId, 0);
+            $categoryPath->fill(
+                $categoryFrontId,
+                $parentId,
+                0
+            );
             $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
         }
 
@@ -199,7 +209,11 @@ class CategorySynchronizer
             $this->categoryPathFrontRepository->removeAndFlush($categoryPath);
         }
         $categoryPath = new CategoryPathFront();
-        CategoryPathFiller::backToFront($categoryPath, $categoryFrontId, $categoryFrontId, 1);
+        $categoryPath->fill(
+            $categoryFrontId,
+            $categoryFrontId,
+            1
+        );
         $this->categoryPathFrontRepository->saveAndFlush($categoryPath);
 
 
@@ -207,24 +221,40 @@ class CategorySynchronizer
         if (null === $categoryDescription) {
             $categoryDescription = new CategoryDescription();
         }
-        $languageId = $this->storeFront->getDefaultLanguageId();
-        CategoryDescriptionFiller::backToFront($categoryBack, $categoryDescription, $categoryFrontId, $languageId);
+
+        $categoryDescription->fill(
+            $this->storeFront->getDefaultLanguageId(),
+            Filler::securityString(Store::encodingConvert($categoryBack->getName())),
+            Filler::securityString(Store::encodingConvert($categoryBack->getDescription())),
+            Filler::securityString(Store::encodingConvert($categoryBack->getName())),
+            Filler::securityString(null),
+            Filler::securityString(null)
+        );
         $this->categoryDescriptionFrontRepository->saveAndFlush($categoryDescription);
 
         $categoryLayout = $this->categoryLayoutFrontRepository->find($categoryFrontId);
         if (null === $categoryLayout) {
             $categoryLayout = new CategoryLayout();
         }
-        $storeId = $this->storeFront->getDefaultStoreId();
-        $layoutId = $this->storeFront->getDefaultLayoutId();
-        CategoryLayoutFiller::backToFront($categoryLayout, $categoryFrontId, $storeId, $layoutId);
+
+        $categoryLayout->fill(
+            $categoryFrontId,
+            $this->storeFront->getDefaultStoreId(),
+            $this->storeFront->getDefaultLayoutId()
+        );
+
         $this->categoryLayoutFrontRepository->saveAndFlush($categoryLayout);
 
         $categoryStore = $this->categoryStoreFrontRepository->find($categoryFrontId);
         if (null === $categoryStore) {
             $categoryStore = new CategoryStore();
         }
-        CategoryStoreFiller::backToFront($categoryStore, $categoryFrontId, $storeId);
+
+        $categoryStore->fill(
+            $categoryFrontId,
+            $this->storeFront->getDefaultStoreId()
+        );
+
         $this->categoryStoreFrontRepository->saveAndFlush($categoryStore);
 
         return $categoryFront;

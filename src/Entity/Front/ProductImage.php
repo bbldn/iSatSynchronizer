@@ -23,14 +23,31 @@ class ProductImage
     private $productId;
 
     /**
-     * @ORM\Column(type="string", name="`image`", length=255)
+     * @ORM\Column(type="string", name="`image`", nullable=true, length=255)
      */
-    private $image;
+    private $image = null;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder;
+    private $sortOrder = 0;
+
+    /**
+     * @param int $productId
+     * @param string $image
+     * @param int $sortOrder
+     */
+    public function fill(
+        int $productId,
+        string $image,
+        int $sortOrder
+    )
+    {
+        $this->productId = $productId;
+        $this->image = $image;
+        $this->sortOrder = $sortOrder;
+    }
+
 
     public function getProductImageId(): ?int
     {

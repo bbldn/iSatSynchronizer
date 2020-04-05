@@ -31,7 +31,7 @@ class OrderHistory
     /**
      * @ORM\Column(type="boolean", name="`notify`")
      */
-    private $notify;
+    private $notify = 0;
 
     /**
      * @ORM\Column(type="string", name="`comment`")
@@ -42,6 +42,26 @@ class OrderHistory
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     private $dateAdded;
+
+    /**
+     * @param int $orderId
+     * @param int $orderStatusId
+     * @param bool $notify
+     * @param string $comment
+     */
+    public function fill(
+        int $orderId,
+        int $orderStatusId,
+        bool $notify,
+        string $comment
+    )
+    {
+        $this->orderId = $orderId;
+        $this->orderStatusId = $orderStatusId;
+        $this->notify = $notify;
+        $this->comment = $comment;
+    }
+
 
     public function getOrderHistoryId(): ?int
     {

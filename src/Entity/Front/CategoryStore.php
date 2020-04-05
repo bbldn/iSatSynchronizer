@@ -21,6 +21,19 @@ class CategoryStore
      */
     private $storeId;
 
+    /**
+     * @param int $categoryId
+     * @param int $storeId
+     */
+    public function fill(
+        int $categoryId,
+        int $storeId
+    )
+    {
+        $this->categoryId = $categoryId;
+        $this->storeId = $storeId;
+    }
+
     public function getCategoryId(): ?int
     {
         return $this->categoryId;

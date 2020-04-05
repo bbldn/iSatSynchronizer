@@ -113,6 +113,68 @@ class OrderRecurring
      */
     private $dateAdded;
 
+    /**
+     * @param int $orderId
+     * @param string $reference
+     * @param int $productId
+     * @param string $productName
+     * @param int $productQuantity
+     * @param int $recurringId
+     * @param string $recurringName
+     * @param string $recurringDescription
+     * @param string $recurringFrequency
+     * @param int $recurringCycle
+     * @param int $recurringDuration
+     * @param float $recurringPrice
+     * @param bool $trial
+     * @param string $trialFrequency
+     * @param int $trialCycle
+     * @param int $trialDuration
+     * @param float $trialPrice
+     * @param bool $status
+     */
+    public function fill(
+        int $orderId,
+        string $reference,
+        int $productId,
+        string $productName,
+        int $productQuantity,
+        int $recurringId,
+        string $recurringName,
+        string $recurringDescription,
+        string $recurringFrequency,
+        int $recurringCycle,
+        int $recurringDuration,
+        float $recurringPrice,
+        bool $trial,
+        string $trialFrequency,
+        int $trialCycle,
+        int $trialDuration,
+        float $trialPrice,
+        bool $status
+    )
+    {
+        $this->orderId = $orderId;
+        $this->reference = $reference;
+        $this->productId = $productId;
+        $this->productName = $productName;
+        $this->productQuantity = $productQuantity;
+        $this->recurringId = $recurringId;
+        $this->recurringName = $recurringName;
+        $this->recurringDescription = $recurringDescription;
+        $this->recurringFrequency = $recurringFrequency;
+        $this->recurringCycle = $recurringCycle;
+        $this->recurringDuration = $recurringDuration;
+        $this->recurringPrice = $recurringPrice;
+        $this->trial = $trial;
+        $this->trialFrequency = $trialFrequency;
+        $this->trialCycle = $trialCycle;
+        $this->trialDuration = $trialDuration;
+        $this->trialPrice = $trialPrice;
+        $this->status = $status;
+    }
+
+
     public function getOrderRecurringId(): ?int
     {
         return $this->orderRecurringId;

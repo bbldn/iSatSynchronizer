@@ -58,14 +58,32 @@ class OrderOption
     private $sku;
 
     /**
-     * @ORM\Column(type="string", name="`oct_quantity_value`")
-     */
-    private $octQuantityValue;
-
-    /**
      * @ORM\Column(type="string", name="`model`")
      */
     private $model;
+
+    public function fill(
+        int $orderId,
+        int $orderProductId,
+        int $productOptionId,
+        int $productOptionValueId,
+        string $name,
+        string $value,
+        string $type,
+        string $sku,
+        string $model)
+    {
+        $this->orderId = $orderId;
+        $this->orderProductId = $orderProductId;
+        $this->productOptionId = $productOptionId;
+        $this->productOptionValueId = $productOptionValueId;
+        $this->name = $name;
+        $this->value = $value;
+        $this->type = $type;
+        $this->sku = $sku;
+        $this->model = $model;
+    }
+
 
     public function getOrderOptionId(): ?int
     {
@@ -171,18 +189,6 @@ class OrderOption
     public function setSku(string $sku): self
     {
         $this->sku = $sku;
-
-        return $this;
-    }
-
-    public function getOctQuantityValue(): ?string
-    {
-        return $this->octQuantityValue;
-    }
-
-    public function setOctQuantityValue(string $octQuantityValue): self
-    {
-        $this->octQuantityValue = $octQuantityValue;
 
         return $this;
     }

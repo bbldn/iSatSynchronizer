@@ -12,6 +12,7 @@ class AttributeGroup
 {
     /**
      * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`attribute_group_id`")
      */
     private $attributeGroupId;
@@ -20,6 +21,15 @@ class AttributeGroup
      * @ORM\Column(type="integer", name="`sort_order`")
      */
     private $sortOrder;
+
+    /**
+     * @param int $sortOrder
+     */
+    public function fill(int $sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+    }
+
 
     public function getAttributeGroupId(): ?int
     {

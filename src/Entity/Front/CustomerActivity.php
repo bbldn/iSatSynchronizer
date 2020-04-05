@@ -42,6 +42,26 @@ class CustomerActivity
      */
     private $dateAdded;
 
+    /**
+     * @param int $customerId
+     * @param string $key
+     * @param string $data
+     * @param string $ip
+     */
+    public function fill(
+        int $customerId,
+        string $key,
+        string $data,
+        string $ip
+    )
+    {
+        $this->customerId = $customerId;
+        $this->key = $key;
+        $this->data = $data;
+        $this->ip = $ip;
+    }
+
+
     public function getCustomerActivityId(): ?int
     {
         return $this->customerActivityId;

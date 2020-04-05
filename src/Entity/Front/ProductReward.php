@@ -20,17 +20,33 @@ class ProductReward
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    private $productId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId;
+    private $customerGroupId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`points`")
      */
-    private $points;
+    private $points = 0;
+
+    /**
+     * @param int $productId
+     * @param int $customerGroupId
+     * @param int $points
+     */
+    public function fill(
+        int $productId,
+        int $customerGroupId,
+        int $points
+    )
+    {
+        $this->productId = $productId;
+        $this->customerGroupId = $customerGroupId;
+        $this->points = $points;
+    }
 
     public function getProductRewardId(): ?int
     {

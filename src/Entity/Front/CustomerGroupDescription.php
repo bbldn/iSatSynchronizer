@@ -31,6 +31,23 @@ class CustomerGroupDescription
      */
     private $description;
 
+    /**
+     * @param int $languageId
+     * @param string $name
+     * @param string $description
+     */
+    public function fill(
+        int $languageId,
+        string $name,
+        string $description
+    )
+    {
+        $this->languageId = $languageId;
+        $this->name = $name;
+        $this->description = $description;
+    }
+
+
     public function getCustomerGroupId(): ?int
     {
         return $this->customerGroupId;

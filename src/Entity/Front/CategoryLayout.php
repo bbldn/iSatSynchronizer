@@ -26,6 +26,22 @@ class CategoryLayout
      */
     private $layoutId;
 
+    /**
+     * @param int $categoryId
+     * @param int $storeId
+     * @param int $layoutId
+     */
+    public function fill(
+        int $categoryId,
+        int $storeId,
+        int $layoutId
+    )
+    {
+        $this->categoryId = $categoryId;
+        $this->storeId = $storeId;
+        $this->layoutId = $layoutId;
+    }
+
     public function getCategoryId(): ?int
     {
         return $this->categoryId;

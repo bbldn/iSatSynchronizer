@@ -37,6 +37,25 @@ class CustomerOnline
      */
     private $dateAdded;
 
+    /**
+     * @param string $ip
+     * @param int $customerId
+     * @param string $url
+     * @param string $referer
+     */
+    public function fill(
+        string $ip,
+        int $customerId,
+        string $url,
+        string $referer)
+    {
+        $this->ip = $ip;
+        $this->customerId = $customerId;
+        $this->url = $url;
+        $this->referer = $referer;
+    }
+
+
     public function getIp(): ?string
     {
         return $this->ip;
