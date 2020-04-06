@@ -14,6 +14,14 @@ use React\EventLoop\Factory;
 class QueueHandlerCommand extends Command
 {
     protected static $defaultName = 'queue:handle';
+    protected $handlerPort;
+    protected $consolePath;
+    public function __construct($handlerPort, $consolePath, $name = null)
+    {
+        $this->handlerPort = $handlerPort;
+        $this->consolePath = $consolePath;
+        parent::__construct($name);
+    }
 
     protected function configure()
     {
@@ -38,8 +46,7 @@ class QueueHandlerCommand extends Command
 
     protected function startServer()
     {
-        $port = 8081;
-        $path = '/home/user/PhpstormProjects/iSatSynchronizer/bin/console';
+        $path = $this->consolePath;
         $server = new HttpServer(function (ServerRequestInterface $request) use ($path) {
             $parameters = $request->getParsedBody();
             exec("nohup {$path} {$parameters['command']} > /dev/null 2>&1 &");
@@ -47,7 +54,7 @@ class QueueHandlerCommand extends Command
         });
 
         $loop = Factory::create();
-        $socket = new SocketServer($port, $loop);
+        $socket = new SocketServer($this->handlerPort, $loop);
         $server->listen($socket);
         $loop->run();
     }

@@ -30,6 +30,8 @@ services:
             $categoryImageBackPath: '%env(json:CATEGORY_IMAGE_BACK_PATH)%'
             $categoryImageFrontPath: '%env(CATEGORY_IMAGE_FRONT_PATH)%'
             $seoProEnabled: '%env(bool:SEO_PRO_ENABLED)%'
+            $handlerPort: '%env(int:HANDLER_PORT)%'
+            $consolePath: '%env(string:CONSOLE_PORT)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
