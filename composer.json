@@ -7,6 +7,8 @@
         "ext-http": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-pcntl": "*",
+        "ext-posix": "*",
         "illuminate/support": "^7.3",
         "react/http": "^0.8.6",
         "sensio/framework-extra-bundle": "^5.5",
@@ -18,9 +20,8 @@
         "symfony/framework-bundle": "5.0.*",
         "symfony/http-client": "5.0.*",
         "symfony/orm-pack": "^1.0",
-        "symfony/yaml": "5.0.*",
-      "ext-pcntl": "*",
-        "ext-posix": "*"
+        "symfony/process": "5.0.*",
+        "symfony/yaml": "5.0.*"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.14"

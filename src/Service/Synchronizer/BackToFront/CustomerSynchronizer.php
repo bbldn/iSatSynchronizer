@@ -52,10 +52,12 @@ class CustomerSynchronizer
      */
     public function clear(): void
     {
+        $this->customerRepository->removeAll();
         $this->customerFrontRepository->removeAll();
         $this->addressFrontRepository->removeAll();
         $this->addressRepository->removeAll();
 
+        $this->customerRepository->resetAutoIncrements();
         $this->customerFrontRepository->resetAutoIncrements();
         $this->addressFrontRepository->resetAutoIncrements();
         $this->addressRepository->resetAutoIncrements();
