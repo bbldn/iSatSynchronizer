@@ -22,13 +22,27 @@ class QueueHandlerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $childPid = pcntl_fork();
+        if ($childPid) {
+            exit();
+        }
+        posix_setsid();
+        fclose(STDIN);
+        fclose(STDOUT);
+        fclose(STDERR);
+
+        $this->startServer();
+
+        return 0;
+    }
+
+    protected function startServer()
+    {
         $port = 8081;
         $path = '/home/user/PhpstormProjects/iSatSynchronizer/bin/console';
         $server = new HttpServer(function (ServerRequestInterface $request) use ($path) {
             $parameters = $request->getParsedBody();
-
-//            exec("nohup {$path} {$parameters['command']} > /dev/null 2>&1 &");
-
+            exec("nohup {$path} {$parameters['command']} > /dev/null 2>&1 &");
             return new Response(200, ['Content-Type' => 'application/json'], json_encode(['ok' => true]));
         });
 
@@ -36,7 +50,5 @@ class QueueHandlerCommand extends Command
         $socket = new SocketServer($port, $loop);
         $server->listen($socket);
         $loop->run();
-
-        return 0;
     }
 }

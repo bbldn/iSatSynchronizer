@@ -18,7 +18,9 @@
         "symfony/framework-bundle": "5.0.*",
         "symfony/http-client": "5.0.*",
         "symfony/orm-pack": "^1.0",
-        "symfony/yaml": "5.0.*"
+        "symfony/yaml": "5.0.*",
+      "ext-pcntl": "*",
+        "ext-posix": "*"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.14"
