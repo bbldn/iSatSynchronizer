@@ -7,6 +7,7 @@ use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Exception\OrderFrontNotFoundException;
 use App\Other\Back\Store as StoreBack;
+use App\Other\Fillers\Filler;
 use App\Other\Fillers\OrderFiller;
 use App\Other\Front\Store as StoreFront;
 use App\Other\Store;
@@ -272,11 +273,13 @@ class OrderSynchronizer
                 return $orderBack;
             }
 
-            if ($currentOrderBack->getProductId() !== $product->getFrontId()) {
-                $currentOrderBack = $this->orderBackRepository->findOneByOrderNumAndProductBackId(
-                    $orderBack->getOrderNum(),
-                    $product->getBackId()
-                );
+            if ($currentOrderBack->getProductId() !== $product->getBackId()) {
+                if (null !== $orderBack->getOrderNum() && null !== $product->getBackId()) {
+                    $currentOrderBack = $this->orderBackRepository->findOneByOrderNumAndProductBackId(
+                        $orderBack->getOrderNum(),
+                        $product->getBackId()
+                    );
+                }
             }
 
             if (null === $currentOrderBack) {
@@ -286,23 +289,67 @@ class OrderSynchronizer
             $currencyCode = $orderFront->getCurrencyCode();
             $courses = $this->getCurrentCourse();
             $currentCourse = $courses[Store::convertBackToFrontCurrency($currencyCode)];
-            OrderFiller::frontToBack(
-                $orderFront,
-                $orderProductFront,
+
+            $orderNum = 0;
+            if (null !== $orderBack->getId()) {
+                $orderNum = $orderBack->getId();
+            }
+
+            $currentOrderBack->fill(
+                'Покупка',
+                $orderProductFront->getName(),
                 $product->getBackId(),
+                Store::convertToCurrency($orderProductFront->getPrice(), (float)$currentCourse),
+                $orderProductFront->getQuantity(),
                 Store::convertBackToFrontCurrency($currencyCode),
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
+                $orderFront->getTelephone(),
+                $orderFront->getLastName() . ' ' . $orderFront->getFirstName(),
+                $orderFront->getShippingZone(),
+                $orderFront->getShippingCity(),
+                $orderFront->getShippingAddress1(),
+                Filler::securityString(null),
+                Filler::securityString(null),
+                $orderFront->getEmail(),
+                '',
+                Filler::securityString(null),
+                time(),
                 $this->storeFront->getDefaultOrderStatus(),
+                $orderFront->getComment(),
+                0,
+                0,
+                0,
                 $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
-                $this->storeFront->getDefaultShopId(),
-                json_encode($courses),
-                $orderBack->getId(),
+                13,
+                21,
+                $orderNum,
+                Filler::securityString(null),
+                new \DateTime(),
+                0,
+                0,
+                '',
+                $this->storeBack->getDefaultSiteId(),
+                0,
+                0,
+                0,
+                new \DateTime(),
+                0,
+                2,
+                new \DateTime(),
                 $currentCourse,
-                Store::convertToCurrency($orderProductFront->getPrice(), (float)$currentCourse),
-                $currentOrderBack
+                json_encode($courses),
+                0,
+                0,
+                Filler::securityString(null),
+                0
             );
 
             $this->orderBackRepository->saveAndFlush($currentOrderBack);
+
+            if (0 === $orderNum) {
+                $currentOrderBack->setOrderNum($orderBack->getId());
+                $this->orderBackRepository->saveAndFlush($currentOrderBack);
+            }
         }
 
         return $orderBack;

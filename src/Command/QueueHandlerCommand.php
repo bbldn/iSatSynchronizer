@@ -60,7 +60,7 @@ class QueueHandlerCommand extends Command
         });
 
         $loop = Factory::create();
-        $socket = new SocketServer($this->handlerPort, $loop);
+        $socket = new SocketServer('0.0.0.0:' . $this->handlerPort, $loop);
         $server->listen($socket);
         $loop->run();
     }
@@ -78,19 +78,19 @@ class QueueHandlerCommand extends Command
 
     protected function handle(array $parameters)
     {
-        $command = $parameters['command'];
+        $command = trim($parameters['command']);
         if ('stat' === $command) {
             $this->sortProcess();
 
             return ['ok' => true, 'list' => array_column($this->processes, 'command')];
         }
 
-        $process = new Process([$this->consolePath, $parameters['command']]);
+        $process = new Process(array_merge([$this->consolePath], explode(' ', $command)));
         $process->start();
 
-        $command = "{$process->getPid()} {$parameters['command']}";
+        $command = "{$process->getPid()} {$command}";
         $this->processes[] = ['command' => $command, 'process' => $process];
 
-        return ['ok' => true];
+        return ['ok' => true, 'command' => $command];
     }
 }

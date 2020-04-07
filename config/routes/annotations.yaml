@@ -1,7 +1,17 @@
-controllers:
-    resource: ../../src/Controller/
-    type: annotation
+#controllers:
+#    resource: ../../src/Controller/
+#    type: annotation
+#
+#kernel:
+#    resource: ../../src/Kernel.php
+#    type: annotation
 
-kernel:
-    resource: ../../src/Kernel.php
-    type: annotation
+category:
+    path:       /category/{id}
+    controller: App\Controller\MainController::categoryAction
+    methods:    GET
+
+product:
+    path:       /product/{id}
+    controller: App\Controller\MainController::productAction
+    methods:    GET
