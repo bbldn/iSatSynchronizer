@@ -32,6 +32,15 @@ class CurrencyRepository extends BaseRepository
             ->getSingleScalarResult();
     }
 
+    public function findOneByCode(string $code): ?Currency
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.code = :val')
+            ->setParameter('val', $code)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return Currency[] Returns an array of Currency objects
     //  */

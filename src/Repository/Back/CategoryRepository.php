@@ -21,6 +21,16 @@ class CategoryRepository extends BaseRepository
         parent::__construct($registry, Category::class);
     }
 
+    /**
+     * @return Category[] Returns an array of Category objects
+     */
+    public function findAllSortByParent()
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.parent', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     // /**
     //  * @return Category[] Returns an array of Category objects

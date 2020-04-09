@@ -21,6 +21,15 @@ class CurrencyRepository extends BaseRepository
         parent::__construct($registry, Currency::class);
     }
 
+    public function findOneByName(string $name): ?Currency
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.name = :val')
+            ->setParameter('val', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function getCurrentCourse()
     {
         $connection = $this->getEntityManager()->getConnection();

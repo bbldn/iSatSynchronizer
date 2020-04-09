@@ -1,0 +1,4 @@
+category:
+    path:       /category/tree
+    controller: App\Controller\API\ProductController::getCategoriesAction
+    methods:    GET

@@ -217,6 +217,14 @@ class ProductSynchronizer
         $this->synchronizeProduct($productBack, $synchronizeImage);
     }
 
+    public function synchronizeByCategoryId(int $id, $synchronizeImage = false): void
+    {
+        $productsBack = $this->productBackRepository->findByCategoryId($id);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+    }
+
     /**
      * @param ProductBack $productBack
      * @param bool $synchronizeImage
