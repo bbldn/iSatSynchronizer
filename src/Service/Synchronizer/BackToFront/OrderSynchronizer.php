@@ -8,7 +8,7 @@ use App\Entity\Front\OrderProduct as OrderProductFront;
 use App\Entity\Order;
 use App\Exception\OrderBackNotFoundException;
 use App\Other\Back\Store as StoreBack;
-use App\Other\Fillers\Filler;
+use App\Other\Filler;
 use App\Other\Front\Store as StoreFront;
 use App\Other\Store;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;

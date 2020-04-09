@@ -12,7 +12,7 @@ use App\Entity\Front\CategoryStore;
 use App\Entity\Front\SeoUrl as SeoUrlFront;
 use App\Exception\CategoryBackNotFoundException;
 use App\Other\Back\Store as StoreBack;
-use App\Other\Fillers\Filler;
+use App\Other\Filler;
 use App\Other\Front\Store as StoreFront;
 use App\Other\Store;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Other\Fillers;
+namespace App\Other;
 
 class Filler
 {

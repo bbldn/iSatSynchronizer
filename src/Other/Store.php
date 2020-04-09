@@ -64,4 +64,20 @@ class Store
     {
         return $value;
     }
+
+    public static function parseLogin(?string $value): ?string
+    {
+        if (null === $value) {
+            return null;
+        }
+
+        $arr = [];
+        preg_match('/^[^@]+/', $value, $arr);
+
+        if (0 === count($arr)) {
+            return $value;
+        }
+
+        return $arr[1];
+    }
 }

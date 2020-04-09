@@ -7,7 +7,7 @@ use App\Entity\Back\ProductPictures as ProductPicturesBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductImage as ProductImageFront;
 use App\Other\Back\Store as StoreBack;
-use App\Other\Fillers\Filler;
+use App\Other\Filler;
 use App\Other\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;

@@ -5,7 +5,7 @@ namespace App\Service\Synchronizer\FrontToBack;
 use App\Entity\Back\Discussions as ReviewBack;
 use App\Entity\Review;
 use App\Exception\ReviewFrontNotFoundException;
-use App\Other\Fillers\Filler;
+use App\Other\Filler;
 use App\Other\Back\Store as StoreBack;
 use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\Back\DiscussionsRepository as ReviewBackRepository;

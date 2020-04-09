@@ -8,7 +8,7 @@ use App\Entity\Front\Address as AddressFront;
 use App\Entity\Front\Customer as CustomerFront;
 use App\Exception\CustomerBackNotFoundException;
 use App\Other\Back\Store as StoreBack;
-use App\Other\Fillers\Filler;
+use App\Other\Filler;
 use App\Other\Front\Store as StoreFront;
 use App\Repository\AddressRepository;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;

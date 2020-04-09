@@ -7,11 +7,13 @@ use App\Entity\Customer;
 use App\Entity\Front\Customer as CustomerFront;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Other\Back\Store as StoreBack;
-use App\Other\Fillers\CustomerFiller;
+use App\Other\Filler;
+use App\Other\Store;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use Illuminate\Support\Str;
 
 class CustomerSynchronizer
 {
@@ -103,7 +105,54 @@ class CustomerSynchronizer
     ): CustomerBack
     {
         $addressFront = $this->addressRepositoryFront->find($customerFront->getAddressId());
-        CustomerFiller::frontToBack($customerBack, $customerFront, $addressFront);
+
+        if (null === $addressFront) {
+            $city = $addressFront->getCity();
+            $street = $addressFront->getAddress1();
+        } else {
+            $city = Filler::securityString(null);
+            $street = Filler::securityString(null);
+        }
+
+        $time = time();
+
+        $customerBack->fill(
+            Filler::securityString(Store::parseLogin($customerFront->getEmail())),
+            base64_decode($customerFront->getPass()),
+            $customerFront->getLastName() . ' ' . $customerFront->getFirstName(),
+            $customerFront->getTelephone(),
+            Filler::securityString(null),
+            $city,
+            $street,
+            Filler::securityString(null),
+            $customerFront->getEmail(),
+            Str::lower(Str::random(32)),
+            true,
+            false,
+            $time,
+            $time,
+            $time,
+            '0',
+            Filler::securityString(null),
+            Filler::securityString(null),
+            Filler::securityString(null),
+            Filler::securityString(null),
+            Filler::securityString(null),
+            Filler::securityString(null),
+            '006084',
+            $this->storeBack->getDefaultMoneyReal(),
+            $this->storeBack->getDefaultMoneyVirtual(),
+            $this->storeBack->getDefaultMoneyBox(),
+            new \DateTime(),
+            $this->storeBack->getDefaultReferer(),
+            $this->storeBack->getDefaultGroupId(),
+            $this->storeBack->getDefaultGroupExtraId(),
+            $this->storeBack->getDefaultShopId(),
+            Filler::securityString(null),
+            $this->storeBack->getDefaultDelivery(),
+            $this->storeBack->getDefaultPayment(),
+            Filler::securityString(null)
+        );
 
         return $customerBack;
     }

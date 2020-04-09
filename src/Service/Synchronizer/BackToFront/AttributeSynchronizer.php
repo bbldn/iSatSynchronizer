@@ -6,8 +6,6 @@ use App\Entity\Attribute;
 use App\Entity\Back\ProductOptions as AttributeBack;
 use App\Entity\Front\Attribute as AttributeFront;
 use App\Entity\Front\AttributeDescription as AttributeDescriptionFront;
-use App\Other\Fillers\AttributeDescriptionFiller;
-use App\Other\Fillers\AttributeFiller;
 use App\Other\Front\Store as StoreFront;
 use App\Other\Store;
 use App\Repository\AttributeRepository;
@@ -102,23 +100,20 @@ class AttributeSynchronizer
         AttributeFront $attributeFront
     ): AttributeFront
     {
-        AttributeFiller::backToFront(
-            $attributeFront,
-            $this->storeFront->getDefaultSortOrder(),
-            $this->storeFront->getDefaultAttributeGroupId()
+        $attributeFront->fill(
+            $this->storeFront->getDefaultAttributeGroupId(),
+            $this->storeFront->getDefaultSortOrder()
         );
         $this->attributeFrontRepository->saveAndFlush($attributeFront);
-        $frontId = $attributeFront->getAttributeId();
-        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($frontId);
 
+        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($attributeFront->getAttributeId());
         if (null === $attributeDescriptionFront) {
             $attributeDescriptionFront = new AttributeDescriptionFront();
         }
 
         $name = trim(Store::encodingConvert($attributeBack->getName()));
-        AttributeDescriptionFiller::backToFront(
-            $attributeDescriptionFront,
-            $frontId,
+        $attributeDescriptionFront->fill(
+            $attributeFront->getAttributeId(),
             $this->storeFront->getDefaultLanguageId(),
             $name
         );
