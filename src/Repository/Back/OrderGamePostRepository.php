@@ -42,6 +42,7 @@ class OrderGamePostRepository extends BaseRepository
         return $qb
             ->where($qb->expr()->notIn('o.clientId', $ids))
             ->andWhere('o.documentType = 2')
+            ->andWhere('o.id = o.orderNum')
             ->getQuery()
             ->getResult();
     }
