@@ -412,7 +412,8 @@ class OrderSynchronizer
 
     protected function getClientIdByFrontCustomerPhone(OrderFront $orderFront): int
     {
-        $customerBack = $this->customerBackRepository->findOneByTelephone($orderFront->getTelephone());
+        $phone = Store::normalizePhone($orderFront->getTelephone());
+        $customerBack = $this->customerBackRepository->findOneByTelephone($phone);
         if (null !== $customerBack) {
             return $customerBack->getId();
         }

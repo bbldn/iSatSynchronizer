@@ -80,4 +80,15 @@ class Store
 
         return $arr[0];
     }
+
+    public static function normalizePhone(string $phone): string
+    {
+        $phone = preg_replace('/[-() ]/i', '', $phone);
+        $matches = [];
+        if (null === preg_match('/\+?3?8?0?([0-9]{9})/i', $phone, $matches)) {
+            return $phone;
+        }
+
+        return '+380' . $matches[1];
+    }
 }
