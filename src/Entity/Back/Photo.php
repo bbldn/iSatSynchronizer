@@ -2,13 +2,14 @@
 
 namespace App\Entity\Back;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`photo`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\PhotoRepository")
  */
-class Photo
+class Photo extends BaseEntity
 {
     /**
      * @ORM\Id()

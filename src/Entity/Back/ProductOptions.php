@@ -2,13 +2,14 @@
 
 namespace App\Entity\Back;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_product_options`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductOptionsRepository")
  */
-class ProductOptions
+class ProductOptions extends BaseEntity
 {
     /**
      * @ORM\Id()

@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_search`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerSearchRepository")
  */
-class CustomerSearch
+class CustomerSearch extends BaseEntity
 {
     /**
      * @ORM\Id()

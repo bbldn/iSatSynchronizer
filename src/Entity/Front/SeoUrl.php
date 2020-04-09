@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_seo_url`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\SeoUrlRepository")
  */
-class SeoUrl
+class SeoUrl extends BaseEntity
 {
     /**
      * @ORM\Id()

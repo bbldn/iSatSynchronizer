@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_group`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerGroupRepository")
  */
-class CustomerGroup
+class CustomerGroup extends BaseEntity
 {
     /**
      * @ORM\Id()
@@ -33,7 +34,8 @@ class CustomerGroup
      */
     public function fill(
         bool $approval,
-        int $sortOrder)
+        int $sortOrder
+    )
     {
         $this->approval = $approval;
         $this->sortOrder = $sortOrder;

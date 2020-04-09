@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_reward`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerRewardRepository")
  */
-class CustomerReward
+class CustomerReward extends BaseEntity
 {
     /**
      * @ORM\Id()

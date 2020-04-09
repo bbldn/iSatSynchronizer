@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_recurring`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductRecurringRepository")
  */
-class ProductRecurring
+class ProductRecurring extends BaseEntity
 {
     /**
      * @ORM\Id()

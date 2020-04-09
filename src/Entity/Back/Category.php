@@ -2,13 +2,14 @@
 
 namespace App\Entity\Back;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_categories`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\CategoryRepository")
  */
-class Category
+class Category extends BaseEntity
 {
     /**
      * @ORM\Id()

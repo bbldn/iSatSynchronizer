@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_custom_field`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderCustomFieldRepository")
  */
-class OrderCustomField
+class OrderCustomField extends BaseEntity
 {
     /**
      * @ORM\Id()

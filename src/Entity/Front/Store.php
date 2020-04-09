@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_store`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\StoreRepository")
  */
-class Store
+class Store extends BaseEntity
 {
     /**
      * @ORM\Id()

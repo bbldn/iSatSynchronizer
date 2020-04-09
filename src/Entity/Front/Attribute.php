@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_attribute`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\AttributeRepository")
  */
-class Attribute
+class Attribute extends BaseEntity
 {
     /**
      * @ORM\Id()

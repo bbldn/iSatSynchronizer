@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_address`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\AddressRepository")
  */
-class Address
+class Address extends BaseEntity
 {
     /**
      * @ORM\Id()

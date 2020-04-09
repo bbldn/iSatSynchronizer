@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_language`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\LanguageRepository")
  */
-class Language
+class Language extends BaseEntity
 {
     /**
      * @ORM\Id()

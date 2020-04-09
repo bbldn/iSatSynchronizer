@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_simple_fields`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderSimpleFieldsRepository")
  */
-class OrderSimpleFields
+class OrderSimpleFields extends BaseEntity
 {
     /**
      * @ORM\Id()

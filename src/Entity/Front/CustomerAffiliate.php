@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerAffiliateRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class CustomerAffiliate
+class CustomerAffiliate extends BaseEntity
 {
     /**
      * @ORM\Id()

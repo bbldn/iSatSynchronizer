@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_currency`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CurrencyRepository")
  */
-class Currency
+class Currency extends BaseEntity
 {
     /**
      * @ORM\Id()

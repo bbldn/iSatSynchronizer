@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_filter`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryFilterRepository")
  */
-class CategoryFilter
+class CategoryFilter extends BaseEntity
 {
     /**
      * @ORM\Id()

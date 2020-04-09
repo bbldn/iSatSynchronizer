@@ -2,13 +2,14 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_wishlist`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerWishListRepository")
  */
-class CustomerWishList
+class CustomerWishList extends BaseEntity
 {
     /**
      * @ORM\Id()

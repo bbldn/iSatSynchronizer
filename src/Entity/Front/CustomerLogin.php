@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerLoginRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class CustomerLogin
+class CustomerLogin extends BaseEntity
 {
     /**
      * @ORM\Id()
