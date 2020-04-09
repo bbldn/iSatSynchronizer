@@ -78,6 +78,6 @@ class Store
             return $value;
         }
 
-        return $arr[1];
+        return $arr[0];
     }
 }

@@ -2,15 +2,17 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
+use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
+use App\Exception\CustomerFrontNotFoundException;
 use App\Exception\OrderFrontNotFoundException;
 use App\Other\Back\Store as StoreBack;
 use App\Other\Filler;
 use App\Other\Front\Store as StoreFront;
 use App\Other\Store;
-use App\Repository\Back\BuyersGamePostRepository as CustomerBack;
+use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
@@ -40,12 +42,13 @@ use App\Repository\Front\OrderVoucherRepository as OrderVoucherFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use Illuminate\Support\Str;
 
 class OrderSynchronizer
 {
     private $storeFront;
     private $storeBack;
-    private $customerBack;
+    private $customerBackRepository;
     private $orderBackRepository;
     private $orderFrontRepository;
     private $orderHistoryRepository;
@@ -75,12 +78,12 @@ class OrderSynchronizer
     private $customerWishListFrontRepository;
     private $productRepository;
     private $productCategoryFrontRepository;
-
+    private $customerSynchronizer;
 
     public function __construct(
         StoreFront $storeFront,
         StoreBack $storeBack,
-        CustomerBack $customerBack,
+        CustomerBackRepository $customerBackRepository,
         OrderBackRepository $orderBackRepository,
         OrderFrontRepository $orderFrontRepository,
         OrderHistoryFrontRepository $orderHistoryRepository,
@@ -109,12 +112,13 @@ class OrderSynchronizer
         CustomerTransactionFrontRepository $customerTransactionFrontRepository,
         CustomerWishListFrontRepository $customerWishListFrontRepository,
         ProductRepository $productRepository,
-        ProductCategoryFrontRepository $productCategoryFrontRepository
+        ProductCategoryFrontRepository $productCategoryFrontRepository,
+        CustomerSynchronizer $customerSynchronizer
     )
     {
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
-        $this->customerBack = $customerBack;
+        $this->customerBackRepository = $customerBackRepository;
         $this->orderBackRepository = $orderBackRepository;
         $this->orderFrontRepository = $orderFrontRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
@@ -144,6 +148,7 @@ class OrderSynchronizer
         $this->customerWishListFrontRepository = $customerWishListFrontRepository;
         $this->productRepository = $productRepository;
         $this->productCategoryFrontRepository = $productCategoryFrontRepository;
+        $this->customerSynchronizer = $customerSynchronizer;
     }
 
     /**
@@ -298,7 +303,7 @@ class OrderSynchronizer
                 'Покупка',
                 $orderProductFront->getName(),
                 $product->getBackId(),
-                Store::convertToCurrency($orderProductFront->getPrice(), (float)$currentCourse),
+                $orderProductFront->getPrice(),
                 $orderProductFront->getQuantity(),
                 Store::convertBackToFrontCurrency($currencyCode),
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
@@ -307,18 +312,18 @@ class OrderSynchronizer
                 $orderFront->getShippingZone(),
                 $orderFront->getShippingCity(),
                 $orderFront->getShippingAddress1(),
-                Filler::securityString(null),
+                $orderFront->getShippingAddress2(),
                 Filler::securityString(null),
                 $orderFront->getEmail(),
-                '',
+                $orderFront->getComment(),
                 Filler::securityString(null),
                 time(),
                 $this->storeFront->getDefaultOrderStatus(),
-                $orderFront->getComment(),
+                Filler::securityString(null),
                 0,
                 0,
                 0,
-                $this->getClientIdByFrontCustomerPhone($orderFront->getTelephone()),
+                $this->getClientIdByFrontCustomerPhone($orderFront),
                 13,
                 21,
                 $orderNum,
@@ -405,17 +410,28 @@ class OrderSynchronizer
         return $this->currencyBackRepository->getCurrentCourse();
     }
 
-    /**
-     * @param string $phone
-     * @return int
-     */
-    protected function getClientIdByFrontCustomerPhone(string $phone): int
+    protected function getClientIdByFrontCustomerPhone(OrderFront $orderFront): int
     {
-        $customer = $this->customerBack->findOneByTelephone($phone);
-        if (null === $customer) {
-            return 0;
+        $customerBack = $this->customerBackRepository->findOneByTelephone($orderFront->getTelephone());
+        if (null !== $customerBack) {
+            return $customerBack->getId();
         }
 
-        return $customer->getId();
+        if ($orderFront->getCustomerId() > 0) {
+            try {
+                $customerBack = $this->customerSynchronizer->synchronizeOne($orderFront->getCustomerId());
+            } catch (CustomerFrontNotFoundException $e) {
+                $customerBack = null;
+            }
+
+            if (null !== $customerBack) {
+                return $customerBack->getId();
+            }
+        }
+
+        $customerBack = new CustomerBack();
+        $this->customerSynchronizer->updateCustomerBackFromOrderFront($orderFront, $customerBack);
+
+        return $customerBack->getId();
     }
 }
