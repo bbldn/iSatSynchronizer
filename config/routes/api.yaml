@@ -2,3 +2,8 @@ category:
     path:       /category/tree
     controller: App\Controller\API\ProductController::getCategoriesAction
     methods:    GET
+
+products_by_categories:
+    path:       /category/tree/synchronize
+    controller: App\Controller\API\ProductController::synchronizeProductsByCategoriesAction
+    methods:    POST

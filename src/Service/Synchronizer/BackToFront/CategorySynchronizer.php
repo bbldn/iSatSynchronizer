@@ -99,8 +99,7 @@ class CategorySynchronizer
         $this->categoryFrontRepository->resetAutoIncrements();
 
         if (true === $this->seoProEnabled) {
-            $this->seoUrlFrontRepository->clear();
-            $this->seoUrlFrontRepository->resetAutoIncrements();
+            $this->seoUrlFrontRepository->removeAllByQuery('category_id');
         }
 
         if (true === $synchronizeImage) {
@@ -274,11 +273,12 @@ class CategorySynchronizer
             return $categoryFront;
         }
 
+        $categoryFrontId = $categoryFront->getCategoryId();
         $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
-            'category_id=' . $categoryBack->getCategoryId(),
+            'category_id=' . $categoryFrontId,
             $this->storeFront->getDefaultLanguageId()
         );
-        $this->synchronizeSeoUrl($seoUrl, $categoryBack);
+        $this->synchronizeSeoUrl($seoUrl, $categoryFrontId, $categoryBack);
 
         return $categoryFront;
     }
@@ -293,7 +293,7 @@ class CategorySynchronizer
         $this->categoryFrontRepository->saveAndFlush($categoryFront);
     }
 
-    protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, CategoryBack $categoryBack): void
+    protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, int $categoryFrontId, CategoryBack $categoryBack): void
     {
         if (null === $seoUrl) {
             $seoUrl = new SeoUrlFront();
@@ -301,7 +301,7 @@ class CategorySynchronizer
         $seoUrl->fill(
             $this->storeFront->getDefaultStoreId(),
             $this->storeFront->getDefaultLanguageId(),
-            'category_id=' . $categoryBack->getCategoryId(),
+            'category_id=' . $categoryFrontId,
             StoreFront::generateURL($categoryBack->getCategoryId(), Store::encodingConvert($categoryBack->getName()))
         );
 

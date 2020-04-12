@@ -26,19 +26,21 @@ class ProductOneSynchronizeCommand extends Command
     protected function configure()
     {
         $this->setDescription('Product one Synchronize');
-        $this->addArgument('id', InputArgument::REQUIRED, 'Product `id`');
+        $this->addArgument('ids', InputArgument::REQUIRED, 'Product `id`');
         $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Synchronize image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $id = $this->parseId($input);
+        $ids = $this->parseIdArray($input);
         $loadImage = $input->getArgument('loadImage') !== null;
 
-        try {
-            $this->productSynchronize->synchronizeOne($id, $loadImage);
-        } catch (ProductBackNotFoundException $notFoundException) {
-            throw new \InvalidArgumentException("Product Back with `id`: {$id} not found");
+        foreach ($ids as $id) {
+            try {
+                $this->productSynchronize->synchronizeOne($id, $loadImage);
+            } catch (ProductBackNotFoundException $notFoundException) {
+                throw new \InvalidArgumentException("Product Back with `id`: {$id} not found");
+            }
         }
 
         return 0;

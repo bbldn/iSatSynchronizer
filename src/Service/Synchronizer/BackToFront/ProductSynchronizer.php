@@ -181,8 +181,7 @@ class ProductSynchronizer
         $this->productSpecialFrontRepository->resetAutoIncrements();
 
         if (true === $this->seoProEnabled) {
-            $this->seoUrlFrontRepository->clear();
-            $this->seoUrlFrontRepository->resetAutoIncrements();
+            $this->seoUrlFrontRepository->removeAllByQuery('product_id');
         }
 
         if (true === $clearImage) {
@@ -396,13 +395,14 @@ class ProductSynchronizer
         );
         $this->productCategoryFrontRepository->saveAndFlush($productCategoryFront);
 
-        $this->synchronizeAttributes($productBack, $productFront->getProductId());
+        $productFrontId = $productFront->getProductId();
+        $this->synchronizeAttributes($productBack, $productFrontId);
 
         $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
-            'product_id=' . $productBack->getProductId(),
+            'product_id=' . $productFrontId,
             $this->storeFront->getDefaultLanguageId()
         );
-        $this->synchronizeSeoUrl($seoUrl, $productBack);
+        $this->synchronizeSeoUrl($seoUrl, $productFrontId, $productBack);
 
         return $productFront;
     }
@@ -436,7 +436,7 @@ class ProductSynchronizer
         $this->productAttributeFrontRepository->flush();
     }
 
-    protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, ProductBack $productBack): void
+    protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, int $productFrontId, ProductBack $productBack): void
     {
         if (null === $seoUrl) {
             $seoUrl = new SeoUrlFront();
@@ -444,7 +444,7 @@ class ProductSynchronizer
         $seoUrl->fill(
             $this->storeFront->getDefaultStoreId(),
             $this->storeFront->getDefaultLanguageId(),
-            'product_id=' . $productBack->getProductId(),
+            'product_id=' . $productFrontId,
             StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
         );
 

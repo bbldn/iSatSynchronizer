@@ -14,7 +14,11 @@ class FrontBackFileSystemFactory
      * @param string $type
      * @return GetBackFileFromFileSystem|GetBackFileFromNetwork
      */
-    public static function createGetBackFileInstance(Filesystem $fileSystem, HttpClientInterface $httpClient, string $type = 'filesystem')
+    public static function createGetBackFileInstance(
+        Filesystem $fileSystem,
+        HttpClientInterface $httpClient,
+        string $type = 'filesystem'
+    )
     {
         switch ($type) {
             case 'filesystem':
@@ -32,7 +36,11 @@ class FrontBackFileSystemFactory
      * @param string $type
      * @return SaveFrontFileToFileSystem|SaveFrontFileToNetwork
      */
-    public static function createSaveFrontFileInstance(Filesystem $fileSystem, HttpClientInterface $httpClient, string $type = 'filesystem')
+    public static function createSaveFrontFileInstance(
+        Filesystem $fileSystem,
+        HttpClientInterface $httpClient,
+        string $type = 'filesystem'
+    )
     {
         switch ($type) {
             case 'filesystem':

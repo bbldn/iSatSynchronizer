@@ -32,6 +32,15 @@ class SeoUrlRepository extends BaseRepository
             ->getOneOrNullResult();
     }
 
+    public function removeAllByQuery(string $query)
+    {
+        return $this->createQueryBuilder('c')
+            ->where("c.query LIKE {$query}%")
+            ->delete()
+            ->getQuery()
+            ->execute();
+    }
+
     // /**
     //  * @return SeoUrl[] Returns an array of SeoUrl objects
     //  */
