@@ -21,6 +21,20 @@ class ProductAttributeRepository extends BaseRepository
         parent::__construct($registry, ProductAttribute::class);
     }
 
+    public function removeByProductIdAttributeIdLanguageId(int $productId, int $attributeId, int $languageId)
+    {
+        return $this->createQueryBuilder('par')
+            ->andWhere('par.attributeId = :attributeId')
+            ->andWhere('par.productId = :productId')
+            ->andWhere('par.languageId = :languageId')
+            ->setParameter('attributeId', $attributeId)
+            ->setParameter('productId', $productId)
+            ->setParameter('languageId', $languageId)
+            ->delete()
+            ->getQuery()
+            ->execute();
+    }
+
     public function findOneByAttributeFrontIdAndProductFrontId($attributeId, $productId): ?ProductAttribute
     {
         return $this->createQueryBuilder('par')

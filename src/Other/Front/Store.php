@@ -545,6 +545,7 @@ class Store extends StoreBase
 
         $full = preg_replace('/[+,() ]/i', '-', $full);
         $full = preg_replace('/-{1,}/i', '-', $full);
+        $full = preg_replace('/\//i', '', $full);
         $full = trim($full, '-');
 
         return $full;

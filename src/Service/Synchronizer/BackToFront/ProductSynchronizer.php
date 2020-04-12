@@ -409,31 +409,31 @@ class ProductSynchronizer
 
     protected function synchronizeAttributes(ProductBack $productBack, int $productFrontId)
     {
-        $productAttributes = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
-        foreach ($productAttributes as $productAttribute) {
-            $attribute = $this->attributeRepository->findOneByBackId($productAttribute->getOptionId());
+        $productAttributesBack = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
+        foreach ($productAttributesBack as $productAttributeBack) {
+            $attribute = $this->attributeRepository->findOneByBackId($productAttributeBack->getOptionId());
             if (null === $attribute) {
                 // @TODO Notify
                 continue;
             }
-            $text = trim($productAttribute->getOptionValue());
+            $text = trim($productAttributeBack->getOptionValue());
             if (Str::length($text) > 0) {
-                $productAttributeFront = $this
-                    ->productAttributeFrontRepository
-                    ->findOneByAttributeFrontIdAndProductFrontId($attribute->getFrontId(), $productFrontId);
-                if (null === $productAttributeFront) {
-                    $productAttributeFront = new ProductAttributeFront();
-                }
+                $this->productAttributeFrontRepository->removeByProductIdAttributeIdLanguageId(
+                    $productFrontId,
+                    $attribute->getFrontId(),
+                    $this->storeFront->getDefaultLanguageId()
+                );
+
+                $productAttributeFront = new ProductAttributeFront();
                 $productAttributeFront->fill(
                     $productFrontId,
                     $attribute->getFrontId(),
                     $this->storeFront->getDefaultLanguageId(),
                     $text
                 );
-                $this->productAttributeFrontRepository->save($productAttributeFront);
+                $this->productAttributeFrontRepository->saveAndFlush($productAttributeFront);
             }
         }
-        $this->productAttributeFrontRepository->flush();
     }
 
     protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, int $productFrontId, ProductBack $productBack): void
