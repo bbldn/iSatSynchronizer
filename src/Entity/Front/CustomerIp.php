@@ -17,7 +17,7 @@ class CustomerIp extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_ip_id`")
      */
-    private $customerIpId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
@@ -47,14 +47,14 @@ class CustomerIp extends BaseEntity
         $this->ip = $ip;
     }
 
-    public function getCustomerIpId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerIpId;
+        return $this->id;
     }
 
-    public function setCustomerIpId(int $customerIpId): self
+    public function setId(int $id): self
     {
-        $this->customerIpId = $customerIpId;
+        $this->id = $id;
 
         return $this;
     }

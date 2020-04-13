@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductOptionValue;
-use App\Repository\BaseRepository;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

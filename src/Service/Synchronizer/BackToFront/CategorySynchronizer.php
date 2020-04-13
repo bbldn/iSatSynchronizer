@@ -140,10 +140,10 @@ class CategorySynchronizer
      */
     protected function synchronizeCategory(CategoryBack $categoryBack, bool $synchronizeImage = false): void
     {
-        $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
+        $category = $this->categoryRepository->findOneByBackId($categoryBack->getId());
         $categoryFront = $this->getCategoryFrontFromCategory($category);
         $this->updateCategoryFrontFromCategoryBack($categoryBack, $categoryFront);
-        $this->createOrUpdateCategory($category, $categoryBack->getCategoryId(), $categoryFront->getCategoryId());
+        $this->createOrUpdateCategory($category, $categoryBack->getId(), $categoryFront->getId());
 
         if (true === $synchronizeImage && null !== $categoryFront) {
             $this->synchronizeImage($categoryBack, $categoryFront);
@@ -192,7 +192,7 @@ class CategorySynchronizer
 
         $this->categoryFrontRepository->saveAndFlush($categoryFront);
 
-        $categoryFrontId = $categoryFront->getCategoryId();
+        $categoryFrontId = $categoryFront->getId();
 
         if ($this->storeFront->getDefaultCategoryFrontId() !== $parentId) {
             $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId(
@@ -273,7 +273,7 @@ class CategorySynchronizer
             return $categoryFront;
         }
 
-        $categoryFrontId = $categoryFront->getCategoryId();
+        $categoryFrontId = $categoryFront->getId();
         $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
             'category_id=' . $categoryFrontId,
             $this->storeFront->getDefaultLanguageId()
@@ -302,7 +302,7 @@ class CategorySynchronizer
             $this->storeFront->getDefaultStoreId(),
             $this->storeFront->getDefaultLanguageId(),
             'category_id=' . $categoryFrontId,
-            StoreFront::generateURL($categoryBack->getCategoryId(), Store::encodingConvert($categoryBack->getName()))
+            StoreFront::generateURL($categoryBack->getId(), Store::encodingConvert($categoryBack->getName()))
         );
 
         $this->seoUrlFrontRepository->saveAndFlush($seoUrl);
@@ -333,7 +333,7 @@ class CategorySynchronizer
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
-        return $front->getCategoryId();
+        return $front->getId();
     }
 
     /**

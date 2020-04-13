@@ -16,7 +16,7 @@ class OrderPriceDiscount extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`discount_id`")
      */
-    private $discountId;
+    private $id;
 
     /**
      * @ORM\Column(type="float", name="`price_range`", nullable=true)
@@ -29,14 +29,14 @@ class OrderPriceDiscount extends BaseEntity
     private $percentDiscount;
 
 
-    public function getDiscountId(): ?int
+    public function getId(): ?int
     {
-        return $this->discountId;
+        return $this->id;
     }
 
-    public function setDiscountId(int $discountId): self
+    public function setId(int $id): self
     {
-        $this->discountId = $discountId;
+        $this->id = $id;
 
         return $this;
     }

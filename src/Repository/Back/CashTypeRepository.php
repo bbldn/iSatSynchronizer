@@ -3,8 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\CashType;
-use App\Repository\BaseRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

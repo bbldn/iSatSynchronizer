@@ -17,7 +17,7 @@ class OrderShipment extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_shipment_id`")
      */
-    private $orderShipmentId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
@@ -59,14 +59,14 @@ class OrderShipment extends BaseEntity
     }
 
 
-    public function getOrderShipmentId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderShipmentId;
+        return $this->id;
     }
 
-    public function setOrderShipmentId(int $orderShipmentId): self
+    public function setId(int $id): self
     {
-        $this->orderShipmentId = $orderShipmentId;
+        $this->id = $id;
 
         return $this;
     }

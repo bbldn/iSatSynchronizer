@@ -15,7 +15,7 @@ class ProductCategory extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="product_id")
      */
-    private $productId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="category_id")
@@ -39,20 +39,20 @@ class ProductCategory extends BaseEntity
         bool $mainCategory
     )
     {
-        $this->productId = $productId;
+        $this->id = $productId;
         $this->categoryId = $categoryId;
         $this->mainCategory = $mainCategory;
     }
 
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->productId;
+        return $this->id;
     }
 
-    public function setProductId(int $productId): self
+    public function setId(int $id): self
     {
-        $this->productId = $productId;
+        $this->id = $id;
 
         return $this;
     }

@@ -15,7 +15,7 @@ class ProductDownload extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`download_id`")
@@ -31,19 +31,19 @@ class ProductDownload extends BaseEntity
         int $downloadId
     )
     {
-        $this->productId = $productId;
+        $this->id = $productId;
         $this->downloadId = $downloadId;
     }
 
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->productId;
+        return $this->id;
     }
 
-    public function setProductId(int $productId): self
+    public function setId(int $id): self
     {
-        $this->productId = $productId;
+        $this->id = $id;
 
         return $this;
     }

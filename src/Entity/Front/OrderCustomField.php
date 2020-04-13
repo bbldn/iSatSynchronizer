@@ -16,7 +16,7 @@ class OrderCustomField extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_custom_field_id`")
      */
-    private $orderCustomFieldId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
@@ -82,14 +82,14 @@ class OrderCustomField extends BaseEntity
     }
 
 
-    public function getOrderCustomFieldId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderCustomFieldId;
+        return $this->id;
     }
 
-    public function setOrderCustomFieldId(int $orderCustomFieldId): self
+    public function setId(int $id): self
     {
-        $this->orderCustomFieldId = $orderCustomFieldId;
+        $this->id = $id;
 
         return $this;
     }

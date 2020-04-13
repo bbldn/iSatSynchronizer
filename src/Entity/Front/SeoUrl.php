@@ -16,7 +16,7 @@ class SeoUrl extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`seo_url_id`")
      */
-    private $seoUrlId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
@@ -51,9 +51,9 @@ class SeoUrl extends BaseEntity
         $this->keyword = $keyword;
     }
 
-    public function getSeoUrlId(): ?int
+    public function getId(): ?int
     {
-        return $this->seoUrlId;
+        return $this->id;
     }
 
     public function getStoreId(): ?int

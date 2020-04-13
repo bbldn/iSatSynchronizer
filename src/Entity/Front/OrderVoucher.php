@@ -16,7 +16,7 @@ class OrderVoucher extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_voucher_id`")
      */
-    private $orderVoucherId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
@@ -100,14 +100,14 @@ class OrderVoucher extends BaseEntity
     }
 
 
-    public function getOrderVoucherId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderVoucherId;
+        return $this->id;
     }
 
-    public function setOrderVoucherId(int $orderVoucherId): self
+    public function setId(int $id): self
     {
-        $this->orderVoucherId = $orderVoucherId;
+        $this->id = $id;
 
         return $this;
     }

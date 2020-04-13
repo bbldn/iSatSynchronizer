@@ -16,7 +16,7 @@ class CustomerAffiliate extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`company`", length=40)
@@ -151,14 +151,14 @@ class CustomerAffiliate extends BaseEntity
     }
 
 
-    public function getCustomerId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerId;
+        return $this->id;
     }
 
-    public function setCustomerId(int $customerId): self
+    public function setId(int $id): self
     {
-        $this->customerId = $customerId;
+        $this->id = $id;
 
         return $this;
     }

@@ -15,21 +15,21 @@ class BuyersGroupsShowPrices extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`group_id`")
      */
-    private $groupId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`group_id_show_price`")
      */
     private $groupIdShowPrice;
 
-    public function getGroupId(): ?int
+    public function getId(): ?int
     {
-        return $this->groupId;
+        return $this->id;
     }
 
-    public function setGroupId(int $groupId): self
+    public function setId(int $id): self
     {
-        $this->groupId = $groupId;
+        $this->id = $id;
 
         return $this;
     }

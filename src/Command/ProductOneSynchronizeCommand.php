@@ -14,7 +14,7 @@ class ProductOneSynchronizeCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'product:one:synchronize';
+    protected static $defaultName = 'product:synchronize:one';
     private $productSynchronize;
 
     public function __construct(ProductSynchronizer $productSynchronize)

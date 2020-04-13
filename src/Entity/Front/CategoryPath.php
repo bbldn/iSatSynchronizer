@@ -15,7 +15,7 @@ class CategoryPath extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $categoryId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`path_id`")
@@ -38,19 +38,19 @@ class CategoryPath extends BaseEntity
         int $level
     )
     {
-        $this->categoryId = $categoryId;
+        $this->id = $categoryId;
         $this->pathId = $pathId;
         $this->level = $level;
     }
 
-    public function getCategoryId(): ?int
+    public function getId(): ?int
     {
-        return $this->categoryId;
+        return $this->id;
     }
 
-    public function setCategoryId(int $categoryId): self
+    public function setId(int $id): self
     {
-        $this->categoryId = $categoryId;
+        $this->id = $id;
 
         return $this;
     }

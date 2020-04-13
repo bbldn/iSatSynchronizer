@@ -13,11 +13,14 @@ parameters:
     front.default_sort_order: '%env(FRONT_DEFAULT_SORT_ORDER)%'
     front.default_attribute_group_id: '%env(FRONT_DEFAULT_ATTRIBUTE_GROUP_ID)%'
     front.root_categories: '%env(json:FRONT_ROOT_CATEGORIES)%'
+    front.database_name: '%env(DATABASE_FRONT_NAME)%'
     front.site_path: '%env(FRONT_SITE_PATH)%'
     front.site_url: '%env(FRONT_SITE_URL)%'
     back.site_path: '%env(BACK_SITE_PATH)%'
     back.site_url: '%env(BACK_SITE_URL)%'
     back.default_order_status: '%env(BACK_DEFAULT_ORDER_STATUS)%'
+    back.database_name: '%env(DATABASE_BACK_NAME)%'
+    database_name: '%env(DATABASE_NAME)%'
 
 services:
     # default configuration for services in *this* file

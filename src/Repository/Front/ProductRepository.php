@@ -3,8 +3,9 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Product;
-use App\Repository\BaseRepository;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,10 +16,40 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class ProductRepository extends BaseRepository
 {
     protected $entityManagerName = 'front';
+    protected $containerBag;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ContainerBagInterface $containerBag)
     {
+        $this->containerBag = $containerBag;
         parent::__construct($registry, Product::class);
+    }
+
+    public function updateProductsPrice(): bool
+    {
+        $frontDatabaseName = $this->containerBag->get('front.database_name');
+        $databaseName = $this->containerBag->get('database_name');
+        $backDatabaseName = $this->containerBag->get('back.database_name');
+
+        $sql = "UPDATE `{$frontDatabaseName}`.`oc_product` oc 
+                INNER JOIN `{$databaseName}`.`products` as isp ON isp.`front_id` =  oc.`product_id`
+                INNER JOIN `{$backDatabaseName}`.`SS_products` as inp ON isp.`back_id` =  inp.`productID`
+                SET oc.`price` = inp.price;";
+
+        return $this->getEntityManager()->getConnection()->prepare($sql)->execute();
+    }
+
+    public function updateProductsPriceByIds(string $ids): bool
+    {
+        $frontDatabaseName = $this->containerBag->get('front.database_name');
+        $databaseName = $this->containerBag->get('database_name');
+        $backDatabaseName = $this->containerBag->get('back.database_name');
+
+        $sql = "UPDATE `{$frontDatabaseName}`.`oc_product` oc 
+                INNER JOIN `{$databaseName}`.`products` as isp ON isp.`front_id` =  oc.`product_id`
+                INNER JOIN `{$backDatabaseName}`.`SS_products` as inp ON isp.`back_id` =  inp.`productID`
+                SET oc.`price` = inp.price WHERE inp.`productID` IN ({$ids});";
+
+        return $this->getEntityManager()->getConnection()->prepare($sql)->execute();
     }
 
     // /**

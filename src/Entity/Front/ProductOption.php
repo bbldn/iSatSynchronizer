@@ -15,7 +15,7 @@ class ProductOption extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_option_id`")
      */
-    private $productOptionId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
@@ -57,14 +57,14 @@ class ProductOption extends BaseEntity
     }
 
 
-    public function getProductOptionId(): ?int
+    public function getId(): ?int
     {
-        return $this->productOptionId;
+        return $this->id;
     }
 
-    public function setProductOptionId(int $productOptionId): self
+    public function setId(int $id): self
     {
-        $this->productOptionId = $productOptionId;
+        $this->id = $id;
 
         return $this;
     }

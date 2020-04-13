@@ -16,7 +16,7 @@ class AttributeGroup extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`attribute_group_id`")
      */
-    private $attributeGroupId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
@@ -32,14 +32,14 @@ class AttributeGroup extends BaseEntity
     }
 
 
-    public function getAttributeGroupId(): ?int
+    public function getId(): ?int
     {
-        return $this->attributeGroupId;
+        return $this->id;
     }
 
-    public function setAttributeGroupId(int $attributeGroupId): self
+    public function setId(int $id): self
     {
-        $this->attributeGroupId = $attributeGroupId;
+        $this->id = $id;
 
         return $this;
     }

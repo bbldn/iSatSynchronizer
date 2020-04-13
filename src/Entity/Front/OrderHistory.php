@@ -17,7 +17,7 @@ class OrderHistory extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_history_id`")
      */
-    private $orderHistoryId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
@@ -64,14 +64,14 @@ class OrderHistory extends BaseEntity
     }
 
 
-    public function getOrderHistoryId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderHistoryId;
+        return $this->id;
     }
 
-    public function setOrderHistoryId(int $orderHistoryId): self
+    public function setId(int $id): self
     {
-        $this->orderHistoryId = $orderHistoryId;
+        $this->id = $id;
 
         return $this;
     }

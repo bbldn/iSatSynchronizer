@@ -3,17 +3,17 @@ doctrine:
         default_connection: default
         connections:
             default:
-                url: '%env(DATABASE_URL)%'
+                url: 'mysql://%env(DATABASE_LOGIN)%:%env(DATABASE_PASSWORD)%@%env(DATABASE_ADDRESS)%:%env(DATABASE_PORT)%/%env(DATABASE_NAME)%?serverVersion=5.7'
                 driver: 'pdo_mysql'
                 server_version: '5.7'
                 charset: utf8mb4
             back:
-                url: '%env(DATABASE_URL_BACK)%'
+                url: 'mysql://%env(DATABASE_BACK_LOGIN)%:%env(DATABASE_BACK_PASSWORD)%@%env(DATABASE_BACK_ADDRESS)%:%env(DATABASE_BACK_PORT)%/%env(DATABASE_BACK_NAME)%?serverVersion=5.7'
                 driver: 'pdo_mysql'
                 server_version: '5.7'
                 charset: cp1251
             front:
-                url: '%env(DATABASE_URL_FRONT)%'
+                url: 'mysql://%env(DATABASE_FRONT_LOGIN)%:%env(DATABASE_FRONT_PASSWORD)%@%env(DATABASE_FRONT_ADDRESS)%:%env(DATABASE_FRONT_PORT)%/%env(DATABASE_FRONT_NAME)%?serverVersion=5.7'
                 driver: 'pdo_mysql'
                 server_version: '5.7'
                 charset: utf8mb4

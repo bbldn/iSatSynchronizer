@@ -17,7 +17,7 @@ class CustomerLogin extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_login_id`")
      */
-    private $customerLoginId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`email`", length=96)
@@ -61,14 +61,14 @@ class CustomerLogin extends BaseEntity
     }
 
 
-    public function getCustomerLoginId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerLoginId;
+        return $this->id;
     }
 
-    public function setCustomerLoginId(int $customerLoginId): self
+    public function setId(int $id): self
     {
-        $this->customerLoginId = $customerLoginId;
+        $this->id = $id;
 
         return $this;
     }

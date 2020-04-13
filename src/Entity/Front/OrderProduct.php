@@ -16,7 +16,7 @@ class OrderProduct extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_product_id`")
      */
-    private $orderProductId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
@@ -87,14 +87,14 @@ class OrderProduct extends BaseEntity
     }
 
 
-    public function getOrderProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderProductId;
+        return $this->id;
     }
 
-    public function setOrderProductId(int $orderProductId): self
+    public function setId(int $id): self
     {
-        $this->orderProductId = $orderProductId;
+        $this->id = $id;
 
         return $this;
     }

@@ -16,7 +16,7 @@ class Category extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`categoryID`")
      */
-    private $categoryId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255, nullable=true)
@@ -168,14 +168,14 @@ class Category extends BaseEntity
      */
     private $slug;
 
-    public function getCategoryId(): ?int
+    public function getId(): ?int
     {
-        return $this->categoryId;
+        return $this->id;
     }
 
-    public function setCategoryId(int $categoryId): self
+    public function setId(int $id): self
     {
-        $this->categoryId = $categoryId;
+        $this->id = $id;
 
         return $this;
     }

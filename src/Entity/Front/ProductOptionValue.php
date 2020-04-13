@@ -15,7 +15,7 @@ class ProductOptionValue extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_option_value_id`")
      */
-    private $productOptionValueId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`product_option_id`")
@@ -120,14 +120,14 @@ class ProductOptionValue extends BaseEntity
         $this->weightPrefix = $weightPrefix;
     }
 
-    public function getProductOptionValueId(): ?int
+    public function getId(): ?int
     {
-        return $this->productOptionValueId;
+        return $this->id;
     }
 
-    public function setProductOptionValueId(int $productOptionValueId): self
+    public function setId(int $id): self
     {
-        $this->productOptionValueId = $productOptionValueId;
+        $this->id = $id;
 
         return $this;
     }

@@ -17,7 +17,7 @@ class Category extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $categoryId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`image`", nullable=true)
@@ -85,9 +85,9 @@ class Category extends BaseEntity
     }
 
 
-    public function getCategoryId(): ?int
+    public function getId(): ?int
     {
-        return $this->categoryId;
+        return $this->id;
     }
 
     public function getImage(): ?string

@@ -16,7 +16,7 @@ class Discussions extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`DID`")
      */
-    private $did;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`productID`", nullable=true)
@@ -87,9 +87,9 @@ class Discussions extends BaseEntity
     }
 
 
-    public function getDid(): ?int
+    public function getId(): ?int
     {
-        return $this->did;
+        return $this->id;
     }
 
     public function getProductId(): ?int

@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductDownload;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -12,7 +12,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductDownload[]    findAll()
  * @method ProductDownload[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductDownloadRepository extends ServiceEntityRepository
+class ProductDownloadRepository extends BaseRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

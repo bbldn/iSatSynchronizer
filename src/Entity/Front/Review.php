@@ -17,7 +17,7 @@ class Review extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`review_id`")
      */
-    private $reviewId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
@@ -76,9 +76,9 @@ class Review extends BaseEntity
     }
 
 
-    public function getReviewId(): ?int
+    public function getId(): ?int
     {
-        return $this->reviewId;
+        return $this->id;
     }
 
     public function getProductId(): ?int

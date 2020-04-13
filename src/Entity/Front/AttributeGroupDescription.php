@@ -15,7 +15,7 @@ class AttributeGroupDescription extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`attribute_group_id`")
      */
-    private $attributeGroupId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
@@ -38,19 +38,19 @@ class AttributeGroupDescription extends BaseEntity
         string $name
     )
     {
-        $this->attributeGroupId = $attributeGroupId;
+        $this->id = $attributeGroupId;
         $this->languageId = $languageId;
         $this->name = $name;
     }
 
-    public function getAttributeGroupId(): ?int
+    public function getId(): ?int
     {
-        return $this->attributeGroupId;
+        return $this->id;
     }
 
-    public function setAttributeGroupId(int $attributeGroupId): self
+    public function setId(int $id): self
     {
-        $this->attributeGroupId = $attributeGroupId;
+        $this->id = $id;
 
         return $this;
     }

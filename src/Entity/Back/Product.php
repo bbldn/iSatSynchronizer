@@ -16,7 +16,7 @@ class Product extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`productID`")
      */
-    private $productId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`categoryID`", nullable=true)
@@ -343,9 +343,9 @@ class Product extends BaseEntity
      */
     private $agsatPriceUpdatedAt;
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->productId;
+        return $this->id;
     }
 
     public function getCategoryId(): ?int

@@ -16,7 +16,7 @@ class ProductReward extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_reward_id`")
      */
-    private $productRewardId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
@@ -49,14 +49,14 @@ class ProductReward extends BaseEntity
         $this->points = $points;
     }
 
-    public function getProductRewardId(): ?int
+    public function getId(): ?int
     {
-        return $this->productRewardId;
+        return $this->id;
     }
 
-    public function setProductRewardId(int $productRewardId): self
+    public function setId(int $id): self
     {
-        $this->productRewardId = $productRewardId;
+        $this->id = $id;
 
         return $this;
     }

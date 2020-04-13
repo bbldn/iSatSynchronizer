@@ -17,7 +17,7 @@ class OrderRecurring extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_recurring_id`")
      */
-    private $orderRecurringId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
@@ -176,14 +176,14 @@ class OrderRecurring extends BaseEntity
     }
 
 
-    public function getOrderRecurringId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderRecurringId;
+        return $this->id;
     }
 
-    public function setOrderRecurringId(int $orderRecurringId): self
+    public function setId(int $id): self
     {
-        $this->orderRecurringId = $orderRecurringId;
+        $this->id = $id;
 
         return $this;
     }

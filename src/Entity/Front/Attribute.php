@@ -16,7 +16,7 @@ class Attribute extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`attribute_id`")
      */
-    private $attributeId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`attribute_group_id`")
@@ -42,14 +42,14 @@ class Attribute extends BaseEntity
     }
 
 
-    public function getAttributeId(): ?int
+    public function getId(): ?int
     {
-        return $this->attributeId;
+        return $this->id;
     }
 
-    public function setAttributeId(int $attributeId): self
+    public function setId(int $id): self
     {
-        $this->attributeId = $attributeId;
+        $this->id = $id;
 
         return $this;
     }

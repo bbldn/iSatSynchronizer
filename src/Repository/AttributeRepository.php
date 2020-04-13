@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Attribute;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

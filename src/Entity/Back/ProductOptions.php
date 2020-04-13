@@ -16,7 +16,7 @@ class ProductOptions extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`optionID`")
      */
-    private $optionId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", nullable=true, length=50)
@@ -43,14 +43,14 @@ class ProductOptions extends BaseEntity
      */
     private $measure;
 
-    public function getOptionId(): ?int
+    public function getId(): ?int
     {
-        return $this->optionId;
+        return $this->id;
     }
 
-    public function setOptionId(int $optionId): self
+    public function setId(int $id): self
     {
-        $this->optionId = $optionId;
+        $this->id = $id;
 
         return $this;
     }

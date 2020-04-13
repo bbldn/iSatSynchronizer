@@ -15,7 +15,7 @@ class ProductRelated extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`related_id`")
@@ -31,19 +31,19 @@ class ProductRelated extends BaseEntity
         int $relatedId
     )
     {
-        $this->productId = $productId;
+        $this->id = $productId;
         $this->relatedId = $relatedId;
     }
 
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->productId;
+        return $this->id;
     }
 
-    public function setProductId(int $productId): self
+    public function setId(int $id): self
     {
-        $this->productId = $productId;
+        $this->id = $id;
 
         return $this;
     }

@@ -15,7 +15,7 @@ class AttributeDescription extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`attribute_id`")
      */
-    private $attributeId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
@@ -33,19 +33,19 @@ class AttributeDescription extends BaseEntity
         string $name
     )
     {
-        $this->attributeId = $attributeId;
+        $this->id = $attributeId;
         $this->languageId = $languageId;
         $this->name = $name;
     }
 
-    public function getAttributeId(): ?int
+    public function getId(): ?int
     {
-        return $this->attributeId;
+        return $this->id;
     }
 
-    public function setAttributeId(int $attributeId): self
+    public function setId(int $id): self
     {
-        $this->attributeId = $attributeId;
+        $this->id = $id;
 
         return $this;
     }

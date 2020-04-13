@@ -16,7 +16,7 @@ class Photo extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id_photo`")
      */
-    private $idPhoto;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
@@ -53,14 +53,14 @@ class Photo extends BaseEntity
      */
     private $idCatalog = 0;
 
-    public function getIdPhoto(): ?int
+    public function getId(): ?int
     {
-        return $this->idPhoto;
+        return $this->id;
     }
 
-    public function setIdPhoto(int $idPhoto): self
+    public function setId(int $id): self
     {
-        $this->idPhoto = $idPhoto;
+        $this->id = $id;
 
         return $this;
     }

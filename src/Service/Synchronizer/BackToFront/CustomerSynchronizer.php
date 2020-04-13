@@ -96,7 +96,7 @@ class CustomerSynchronizer
         $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
         $customerFront = $this->getCustomerFrontFromCustomer($customer);
         $this->updateCustomerFrontFromCustomerBack($customerBack, $customerFront);
-        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
+        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getId());
     }
 
     /**
@@ -156,7 +156,7 @@ class CustomerSynchronizer
             null,
             null,
             false,
-            $addressFront->getAddressId(),
+            $addressFront->getId(),
             $this->storeFront->getDefaultCustomField(),
             Filler::securityString(null),
             $customerBack->getActive(),
@@ -167,7 +167,7 @@ class CustomerSynchronizer
         );
 
         $this->customerFrontRepository->saveAndFlush($customerFront);
-        $addressFront->setCustomerId($customerFront->getCustomerId());
+        $addressFront->setCustomerId($customerFront->getId());
         $this->addressFrontRepository->saveAndFlush($addressFront);
 
         return $customerFront;

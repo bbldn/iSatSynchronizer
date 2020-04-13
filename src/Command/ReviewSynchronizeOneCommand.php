@@ -12,11 +12,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReviewOneSynchronizeCommand extends Command
+class ReviewSynchronizeOneCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'review:one:synchronize';
+    protected static $defaultName = 'review:synchronize:one';
 
     private $reviewFrontToBackSynchronizer;
     private $reviewBackToFrontSynchronizer;

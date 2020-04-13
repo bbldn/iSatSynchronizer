@@ -16,7 +16,7 @@ class OrderTotal extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_total_id`")
      */
-    private $orderTotalId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
@@ -58,14 +58,14 @@ class OrderTotal extends BaseEntity
         $this->sortOrder = $sortOrder;
     }
 
-    public function getOrderTotalId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderTotalId;
+        return $this->id;
     }
 
-    public function setOrderTotalId(int $orderTotalId): self
+    public function setId(int $id): self
     {
-        $this->orderTotalId = $orderTotalId;
+        $this->id = $id;
 
         return $this;
     }

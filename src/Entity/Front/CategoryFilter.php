@@ -15,7 +15,7 @@ class CategoryFilter extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $categoryId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`filter_id`")
@@ -31,18 +31,18 @@ class CategoryFilter extends BaseEntity
         int $filterId
     )
     {
-        $this->categoryId = $categoryId;
+        $this->id = $categoryId;
         $this->filterId = $filterId;
     }
 
-    public function getCategoryId(): ?int
+    public function getId(): ?int
     {
-        return $this->categoryId;
+        return $this->id;
     }
 
-    public function setCategoryId(int $categoryId): self
+    public function setId(int $id): self
     {
-        $this->categoryId = $categoryId;
+        $this->id = $id;
 
         return $this;
     }

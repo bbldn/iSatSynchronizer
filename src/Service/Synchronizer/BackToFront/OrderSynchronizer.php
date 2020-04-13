@@ -104,7 +104,7 @@ class OrderSynchronizer
         $order = $this->orderRepository->findOneByBackId($orderBack->getId());
         $orderFront = $this->getOrderFrontFromOrder($order);
         $this->updateOrderFrontFromOrderBack($orderFront, $orderBack);
-        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
+        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getId());
     }
 
     /**
@@ -120,7 +120,7 @@ class OrderSynchronizer
         if (null !== $customer) {
             $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
             if (null !== $customerFront) {
-                $customerFrontId = $customerFront->getCustomerId();
+                $customerFrontId = $customerFront->getId();
             }
         }
 
@@ -224,7 +224,7 @@ class OrderSynchronizer
             $total = $orderBack->getAmount() * $orderBack->getPrice();
             $orderProductFront = new OrderProductFront();
             $orderProductFront->fill(
-                $orderFront->getOrderId(),
+                $orderFront->getId(),
                 $product->getFrontId(),
                 Store::encodingConvert($productDescriptionFront->getName()),
                 Store::encodingConvert($productFront->getModel()),

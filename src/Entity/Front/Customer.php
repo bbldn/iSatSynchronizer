@@ -17,7 +17,7 @@ class Customer extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`customer_group_id`")
@@ -200,14 +200,14 @@ class Customer extends BaseEntity
     }
 
 
-    public function getCustomerId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerId;
+        return $this->id;
     }
 
-    public function setCustomerId(int $customerId): self
+    public function setId(int $id): self
     {
-        $this->customerId = $customerId;
+        $this->id = $id;
 
         return $this;
     }

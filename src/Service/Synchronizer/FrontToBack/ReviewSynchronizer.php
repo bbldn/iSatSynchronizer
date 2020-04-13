@@ -66,10 +66,10 @@ class ReviewSynchronizer
      */
     protected function synchronizeReviewFront(ReviewFront $reviewFront): void
     {
-        $review = $this->reviewRepository->findOneByFrontId($reviewFront->getReviewId());
+        $review = $this->reviewRepository->findOneByFrontId($reviewFront->getId());
         $reviewBack = $this->getReviewBackFromReview($review);
         $this->updateReviewBackFromReviewFront($reviewBack, $reviewFront);
-        $this->createOrUpdateReview($review, $reviewBack->getDid(), $reviewFront->getReviewId());
+        $this->createOrUpdateReview($review, $reviewBack->getId(), $reviewFront->getId());
     }
 
     /**

@@ -16,7 +16,7 @@ class CustomerApproval
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_approval_id`")
      */
-    private $customerApprovalId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
@@ -47,14 +47,14 @@ class CustomerApproval
     }
 
 
-    public function getCustomerApprovalId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerApprovalId;
+        return $this->id;
     }
 
-    public function setCustomerApprovalId(int $customerApprovalId): self
+    public function setId(int $id): self
     {
-        $this->customerApprovalId = $customerApprovalId;
+        $this->id = $id;
 
         return $this;
     }

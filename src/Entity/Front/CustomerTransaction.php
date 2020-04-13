@@ -16,7 +16,7 @@ class CustomerTransaction extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_transaction_id`")
      */
-    private $customerTransactionId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
@@ -63,14 +63,14 @@ class CustomerTransaction extends BaseEntity
     }
 
 
-    public function getCustomerTransactionId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerTransactionId;
+        return $this->id;
     }
 
-    public function setCustomerTransactionId(int $customerTransactionId): self
+    public function setId(int $id): self
     {
-        $this->customerTransactionId = $customerTransactionId;
+        $this->id = $id;
 
         return $this;
     }

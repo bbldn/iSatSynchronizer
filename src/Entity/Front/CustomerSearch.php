@@ -16,7 +16,7 @@ class CustomerSearch extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_search_id`")
      */
-    private $customerSearchId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
@@ -103,14 +103,14 @@ class CustomerSearch extends BaseEntity
     }
 
 
-    public function getCustomerSearchId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerSearchId;
+        return $this->id;
     }
 
-    public function setCustomerSearchId(int $customerSearchId): self
+    public function setId(int $id): self
     {
-        $this->customerSearchId = $customerSearchId;
+        $this->id = $id;
 
         return $this;
     }

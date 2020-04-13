@@ -15,7 +15,7 @@ class CustomerGroupDescription extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
@@ -49,14 +49,14 @@ class CustomerGroupDescription extends BaseEntity
     }
 
 
-    public function getCustomerGroupId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerGroupId;
+        return $this->id;
     }
 
-    public function setCustomerGroupId(int $customerGroupId): self
+    public function setId(int $id): self
     {
-        $this->customerGroupId = $customerGroupId;
+        $this->id = $id;
 
         return $this;
     }

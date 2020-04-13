@@ -17,7 +17,7 @@ class CustomerHistory extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_history_id`")
      */
-    private $customerHistoryId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
@@ -47,14 +47,14 @@ class CustomerHistory extends BaseEntity
         $this->comment = $comment;
     }
 
-    public function getCustomerHistoryId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerHistoryId;
+        return $this->id;
     }
 
-    public function setCustomerHistoryId(int $customerHistoryId): self
+    public function setId(int $id): self
     {
-        $this->customerHistoryId = $customerHistoryId;
+        $this->id = $id;
 
         return $this;
     }

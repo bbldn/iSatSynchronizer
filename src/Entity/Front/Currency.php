@@ -16,7 +16,7 @@ class Currency extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`currency_id`")
      */
-    private $currencyId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`title`", length=32)
@@ -87,9 +87,9 @@ class Currency extends BaseEntity
     }
 
 
-    public function getCurrencyId(): ?int
+    public function getId(): ?int
     {
-        return $this->currencyId;
+        return $this->id;
     }
 
     public function getTitle(): ?string

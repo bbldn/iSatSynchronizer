@@ -233,10 +233,10 @@ class OrderSynchronizer
      */
     protected function synchronizeOrder(OrderFront $orderFront): void
     {
-        $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
+        $order = $this->orderRepository->findOneByFrontId($orderFront->getId());
         $orderBack = $this->getOrderBackFromOrder($order);
         $this->updateOrderBackFromOrderFront($orderFront, $orderBack);
-        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
+        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getId());
     }
 
     /**
@@ -261,7 +261,7 @@ class OrderSynchronizer
      */
     protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
-        $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
+        $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getId());
         $currentOrderBack = $orderBack;
 
         if (0 === count($orderProductsFront)) {

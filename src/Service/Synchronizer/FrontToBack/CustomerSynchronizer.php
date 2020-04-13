@@ -72,10 +72,10 @@ class CustomerSynchronizer
      */
     protected function synchronizeCustomer(CustomerFront $customerFront): CustomerBack
     {
-        $customer = $this->customerRepository->findOneByFrontId($customerFront->getCustomerId());
+        $customer = $this->customerRepository->findOneByFrontId($customerFront->getId());
         $customerBack = $this->getCustomerBackFromCustomer($customer);
         $this->updateCustomerBackFromCustomerFront($customerFront, $customerBack);
-        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
+        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getId());
 
         return $customerBack;
     }

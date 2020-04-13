@@ -16,7 +16,7 @@ class ProductSpecial extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_special_id`")
      */
-    private $productSpecialId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
@@ -73,14 +73,14 @@ class ProductSpecial extends BaseEntity
         $this->dateEnd = $dateEnd;
     }
 
-    public function getProductSpecialId(): ?int
+    public function getId(): ?int
     {
-        return $this->productSpecialId;
+        return $this->id;
     }
 
-    public function setProductSpecialId(int $productSpecialId): self
+    public function setId(int $id): self
     {
-        $this->productSpecialId = $productSpecialId;
+        $this->id = $id;
 
         return $this;
     }

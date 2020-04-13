@@ -7,9 +7,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CurrencySynchronizeCommand extends Command
+class CurrencySynchronizeAllCommand extends Command
 {
-    protected static $defaultName = 'currency:synchronize';
+    protected static $defaultName = 'currency:synchronize:all';
     private $currencySynchronizer;
 
     public function __construct(CurrencySynchronizer $currencySynchronizer)

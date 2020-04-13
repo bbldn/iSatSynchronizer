@@ -3,8 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\ProductPictures;
-use App\Repository\BaseRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -32,8 +31,7 @@ class ProductPicturesRepository extends BaseRepository
             ->andWhere('pp.productId = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
 

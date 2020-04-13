@@ -16,7 +16,7 @@ class CustomerGroup extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId;
+    private $id;
 
     /**
      * @ORM\Column(type="boolean", name="`approval`")
@@ -42,14 +42,14 @@ class CustomerGroup extends BaseEntity
     }
 
 
-    public function getCustomerGroupId(): ?int
+    public function getId(): ?int
     {
-        return $this->customerGroupId;
+        return $this->id;
     }
 
-    public function setCustomerGroupId(int $customerGroupId): self
+    public function setId(int $id): self
     {
-        $this->customerGroupId = $customerGroupId;
+        $this->id = $id;
 
         return $this;
     }

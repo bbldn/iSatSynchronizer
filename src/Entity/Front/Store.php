@@ -16,7 +16,7 @@ class Store extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=64)
@@ -50,14 +50,14 @@ class Store extends BaseEntity
     }
 
 
-    public function getStoreId(): ?int
+    public function getId(): ?int
     {
-        return $this->storeId;
+        return $this->id;
     }
 
-    public function setStoreId(int $storeId): self
+    public function setId(int $id): self
     {
-        $this->storeId = $storeId;
+        $this->id = $id;
 
         return $this;
     }

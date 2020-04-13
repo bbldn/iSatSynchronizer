@@ -15,7 +15,7 @@ class CategoryDescription extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $categoryId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
@@ -66,7 +66,7 @@ class CategoryDescription extends BaseEntity
         string $metaKeyword
     )
     {
-        $this->categoryId = $categoryId;
+        $this->id = $categoryId;
         $this->languageId = $languageId;
         $this->name = $name;
         $this->description = $description;
@@ -76,14 +76,14 @@ class CategoryDescription extends BaseEntity
     }
 
 
-    public function getCategoryId(): ?int
+    public function getId(): ?int
     {
-        return $this->categoryId;
+        return $this->id;
     }
 
-    public function setCategoryId(int $categoryId)
+    public function setId(int $id)
     {
-        $this->categoryId = $categoryId;
+        $this->id = $id;
 
         return $this;
     }

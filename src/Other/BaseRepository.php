@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Other;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -49,10 +49,19 @@ class BaseRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')->delete()->getQuery()->execute();
     }
 
+    public function findByIds(string $ids): ?object
+    {
+        return $this->createQueryBuilder('c')
+            ->where("c.id IN(:ids)")
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function resetAutoIncrements()
     {
-        $connection = $this->getEntityManager()->getConnection();
+        $sql = "ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = 1";
 
-        return $connection->prepare("ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = 1")->execute();
+        return $this->getEntityManager()->getConnection()->prepare($sql)->execute();
     }
 }

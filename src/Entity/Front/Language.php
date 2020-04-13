@@ -16,7 +16,7 @@ class Language extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=32)
@@ -83,14 +83,14 @@ class Language extends BaseEntity
     }
 
 
-    public function getLanguageId(): ?int
+    public function getId(): ?int
     {
-        return $this->languageId;
+        return $this->id;
     }
 
-    public function setLanguageId(int $languageId): self
+    public function setId(int $id): self
     {
-        $this->languageId = $languageId;
+        $this->id = $id;
 
         return $this;
     }

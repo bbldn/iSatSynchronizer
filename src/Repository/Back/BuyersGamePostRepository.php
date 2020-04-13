@@ -3,7 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGamePost;
-use App\Repository\BaseRepository;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

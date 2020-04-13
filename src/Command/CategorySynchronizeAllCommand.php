@@ -8,9 +8,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CategorySynchronizeCommand extends Command
+class CategorySynchronizeAllCommand extends Command
 {
-    protected static $defaultName = 'category:synchronize';
+    protected static $defaultName = 'category:synchronize:all';
     private $categorySynchronize;
 
     public function __construct(CategorySynchronizer $categorySynchronize)

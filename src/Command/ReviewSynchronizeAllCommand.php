@@ -9,9 +9,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReviewSynchronizeCommand extends Command
+class ReviewSynchronizeAllCommand extends Command
 {
-    protected static $defaultName = 'review:synchronize';
+    protected static $defaultName = 'review:synchronize:all';
 
     private $reviewFrontToBackSynchronizer;
     private $reviewBackToFrontSynchronizer;

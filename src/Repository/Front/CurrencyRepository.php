@@ -3,8 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Currency;
-use App\Repository\BaseRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

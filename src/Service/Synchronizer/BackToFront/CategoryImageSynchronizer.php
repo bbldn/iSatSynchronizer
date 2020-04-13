@@ -69,7 +69,7 @@ class CategoryImageSynchronizer
 
         $pathInfo = pathinfo($picture);
 
-        $name = $categoryFront->getCategoryId() . '.' . mb_strtolower($pathInfo['extension']);
+        $name = $categoryFront->getId() . '.' . mb_strtolower($pathInfo['extension']);
         $path = $this->frontPath . $name;
 
         try {

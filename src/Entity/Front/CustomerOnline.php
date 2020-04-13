@@ -15,7 +15,7 @@ class CustomerOnline
      * @ORM\Id()
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
-    private $ip;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
@@ -49,21 +49,21 @@ class CustomerOnline
         string $url,
         string $referer)
     {
-        $this->ip = $ip;
+        $this->id = $ip;
         $this->customerId = $customerId;
         $this->url = $url;
         $this->referer = $referer;
     }
 
 
-    public function getIp(): ?string
+    public function getId(): ?string
     {
-        return $this->ip;
+        return $this->id;
     }
 
-    public function setIp(string $ip): self
+    public function setId(string $id): self
     {
-        $this->ip = $ip;
+        $this->id = $id;
 
         return $this;
     }

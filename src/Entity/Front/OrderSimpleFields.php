@@ -16,7 +16,7 @@ class OrderSimpleFields extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    private $id;
 
     /**
      * @ORM\Column(type="string", name="`metadata`", length=255)
@@ -32,19 +32,19 @@ class OrderSimpleFields extends BaseEntity
         string $metadata
     )
     {
-        $this->orderId = $orderId;
+        $this->id = $orderId;
         $this->metadata = $metadata;
     }
 
 
-    public function getOrderId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderId;
+        return $this->id;
     }
 
-    public function setOrderId(int $orderId): self
+    public function setId(int $id): self
     {
-        $this->orderId = $orderId;
+        $this->id = $id;
 
         return $this;
     }

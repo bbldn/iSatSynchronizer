@@ -2,15 +2,18 @@
 
 namespace App\Command;
 
+use App\Other\OneSynchronizeCommandTrait;
 use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProductSynchronizeCommand extends Command
+class ProductPriceUpdateByIdsCommand extends Command
 {
-    protected static $defaultName = 'product:synchronize';
+    use OneSynchronizeCommandTrait;
+
+    protected static $defaultName = 'product:price:update:ids';
     private $productSynchronize;
 
     public function __construct(ProductSynchronizer $productSynchronize)
@@ -21,14 +24,14 @@ class ProductSynchronizeCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Synchronize products');
-        $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Load image');
+        $this->setDescription('Products price synchronize');
+        $this->addArgument('ids', InputArgument::REQUIRED, 'Ids');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $loadImage = $input->getArgument('loadImage') !== null;
-        $this->productSynchronize->synchronize($loadImage);
+        $ids = $this->testIds($input);
+        $this->productSynchronize->updatePriceByIds($ids);
 
         return 0;
     }

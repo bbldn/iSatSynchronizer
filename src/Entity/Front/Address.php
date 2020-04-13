@@ -16,7 +16,7 @@ class Address extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`address_id`")
      */
-    private $addressId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
@@ -101,14 +101,14 @@ class Address extends BaseEntity
     }
 
 
-    public function getAddressId(): ?int
+    public function getId(): ?int
     {
-        return $this->addressId;
+        return $this->id;
     }
 
-    public function setAddressId(int $addressId): self
+    public function setId(int $id): self
     {
-        $this->addressId = $addressId;
+        $this->id = $id;
 
         return $this;
     }

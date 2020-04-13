@@ -15,7 +15,7 @@ class ProductAttribute extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`attribute_id`")
@@ -45,21 +45,21 @@ class ProductAttribute extends BaseEntity
         string $text
     )
     {
-        $this->productId = $productId;
+        $this->id = $productId;
         $this->attributeId = $attributeId;
         $this->languageId = $languageId;
         $this->text = $text;
     }
 
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->productId;
+        return $this->id;
     }
 
-    public function setProductId(int $productId): self
+    public function setId(int $id): self
     {
-        $this->productId = $productId;
+        $this->id = $id;
 
         return $this;
     }

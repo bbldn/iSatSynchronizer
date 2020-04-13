@@ -10,11 +10,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CategoryOneSynchronizeCommand extends Command
+class CategorySynchronizeOneCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'category:one:synchronize';
+    protected static $defaultName = 'category:synchronize:one';
     private $categorySynchronize;
 
     public function __construct(CategorySynchronizer $categorySynchronize)

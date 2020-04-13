@@ -15,7 +15,7 @@ class ProductDescription extends BaseEntity
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
@@ -73,7 +73,7 @@ class ProductDescription extends BaseEntity
         string $metaKeyword
     )
     {
-        $this->productId = $productId;
+        $this->id = $productId;
         $this->languageId = $languageId;
         $this->name = $name;
         $this->description = $description;
@@ -84,14 +84,14 @@ class ProductDescription extends BaseEntity
     }
 
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->productId;
+        return $this->id;
     }
 
-    public function setProductId(int $productId): self
+    public function setId(int $id): self
     {
-        $this->productId = $productId;
+        $this->id = $id;
 
         return $this;
     }

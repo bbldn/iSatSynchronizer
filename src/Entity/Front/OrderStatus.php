@@ -16,7 +16,7 @@ class OrderStatus extends BaseEntity
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_status_id`")
      */
-    private $orderStatusId;
+    private $id;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
@@ -41,14 +41,14 @@ class OrderStatus extends BaseEntity
         $this->name = $name;
     }
 
-    public function getOrderStatusId(): ?int
+    public function getId(): ?int
     {
-        return $this->orderStatusId;
+        return $this->id;
     }
 
-    public function setOrderStatusId(int $orderStatusId): self
+    public function setId(int $id): self
     {
-        $this->orderStatusId = $orderStatusId;
+        $this->id = $id;
 
         return $this;
     }

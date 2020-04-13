@@ -74,10 +74,10 @@ class AttributeSynchronizer
      */
     protected function synchronizeAttribute(AttributeBack $attributeBack)
     {
-        $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getOptionId());
+        $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getId());
         $attributeFront = $this->getAttributeFrontFromAttribute($attribute);
         $this->updateAttributeFrontFromBackProduct($attributeBack, $attributeFront);
-        $this->createOrUpdateAttribute($attribute, $attributeBack->getOptionId(), $attributeFront->getAttributeId());
+        $this->createOrUpdateAttribute($attribute, $attributeBack->getId(), $attributeFront->getId());
     }
 
     /**
@@ -106,14 +106,14 @@ class AttributeSynchronizer
         );
         $this->attributeFrontRepository->saveAndFlush($attributeFront);
 
-        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($attributeFront->getAttributeId());
+        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($attributeFront->getId());
         if (null === $attributeDescriptionFront) {
             $attributeDescriptionFront = new AttributeDescriptionFront();
         }
 
         $name = trim(Store::encodingConvert($attributeBack->getName()));
         $attributeDescriptionFront->fill(
-            $attributeFront->getAttributeId(),
+            $attributeFront->getId(),
             $this->storeFront->getDefaultLanguageId(),
             $name
         );
