@@ -2,7 +2,7 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Back\OrderHistoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class OrderHistory extends BaseEntity
+class OrderHistory extends Entity
 {
     /**
      * @ORM\Id()

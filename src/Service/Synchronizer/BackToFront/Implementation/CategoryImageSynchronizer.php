@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Service\Synchronizer\BackToFront;
+namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
-use App\Other\Front\Store as StoreFront;
 use App\Other\Back\Store as StoreBack;
+use App\Other\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class CategoryImageSynchronizer
 {
-    private $storeFront;
-    private $storeBack;
-    private $fileReader;
-    private $fileWriter;
-    private $backPath = ['/images_big/', '/products_pictures/',];
-    private $frontPath = '/date/categories/';
+    protected $storeFront;
+    protected $storeBack;
+    protected $fileReader;
+    protected $fileWriter;
+    protected $backPath = ['/images_big/', '/products_pictures/',];
+    protected $frontPath = '/date/categories/';
 
     public function __construct(
         StoreFront $storeFront,

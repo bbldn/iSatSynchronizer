@@ -2,7 +2,7 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Customer extends BaseEntity
+class Customer extends Entity
 {
     /**
      * @ORM\Id()
@@ -469,9 +469,11 @@ class Customer extends BaseEntity
         return $this->pass;
     }
 
-    public function setPass(?string $pass): void
+    public function setPass(?string $pass): self
     {
         $this->pass = $pass;
+
+        return $this;
     }
 
     /**

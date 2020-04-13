@@ -2,14 +2,14 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_voucher`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderVoucherRepository")
  */
-class OrderVoucher extends BaseEntity
+class OrderVoucher extends Entity
 {
     /**
      * @ORM\Id()

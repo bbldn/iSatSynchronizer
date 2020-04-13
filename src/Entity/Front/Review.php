@@ -2,7 +2,7 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\ReviewRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Review extends BaseEntity
+class Review extends Entity
 {
     /**
      * @ORM\Id()

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer\BackToFront;
+namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
@@ -42,7 +42,7 @@ use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
 use Illuminate\Support\Str;
 
-class ProductBaseSynchronizer
+class ProductSynchronizer
 {
     protected $storeFront;
     protected $storeBack;
@@ -200,50 +200,22 @@ class ProductBaseSynchronizer
     }
 
     /**
-     * @param int|null $categoryBackId
-     * @return int
+     * @param Product|null $product
+     * @return ProductFront
      */
-    protected function getCategoryFrontIdByBack(?int $categoryBackId): int
-    {
-        if (null === $categoryBackId) {
-            //@TODO Notify
-            return $this->storeFront->getDefaultCategoryFrontId();
-        }
-
-        $category = $this->categoryRepository->findOneByBackId($categoryBackId);
-        if (null === $category) {
-            //@TODO Notify
-            return $this->storeFront->getDefaultCategoryFrontId();
-        }
-
-        $frontId = $category->getFrontId();
-        if (null === $frontId) {
-            //@TODO Notify
-            return $this->storeFront->getDefaultCategoryFrontId();
-        }
-
-        $categoryFront = $this->categoryFrontRepository->find($frontId);
-        if (null === $categoryFront) {
-            //@TODO Notify
-            return $this->storeFront->getDefaultCategoryFrontId();
-        }
-
-        return $categoryFront->getId();
-    }
-
-    /**
-     * @param Product $product
-     * @param int $backId
-     * @param int $frontId
-     */
-    protected function createOrUpdateProduct(?Product $product, int $backId, int $frontId): void
+    protected function getProductFrontFromProduct(?Product $product): ProductFront
     {
         if (null === $product) {
-            $product = new Product();
+            return new ProductFront();
         }
-        $product->setBackId($backId);
-        $product->setFrontId($frontId);
-        $this->productRepository->saveAndFlush($product);
+
+        $productFront = $this->productFrontRepository->find($product->getFrontId());
+
+        if (null === $productFront) {
+            return new ProductFront();
+        }
+
+        return $productFront;
     }
 
     /**
@@ -363,6 +335,38 @@ class ProductBaseSynchronizer
     }
 
     /**
+     * @param int|null $categoryBackId
+     * @return int
+     */
+    protected function getCategoryFrontIdByBack(?int $categoryBackId): int
+    {
+        if (null === $categoryBackId) {
+            //@TODO Notify
+            return $this->storeFront->getDefaultCategoryFrontId();
+        }
+
+        $category = $this->categoryRepository->findOneByBackId($categoryBackId);
+        if (null === $category) {
+            //@TODO Notify
+            return $this->storeFront->getDefaultCategoryFrontId();
+        }
+
+        $frontId = $category->getFrontId();
+        if (null === $frontId) {
+            //@TODO Notify
+            return $this->storeFront->getDefaultCategoryFrontId();
+        }
+
+        $categoryFront = $this->categoryFrontRepository->find($frontId);
+        if (null === $categoryFront) {
+            //@TODO Notify
+            return $this->storeFront->getDefaultCategoryFrontId();
+        }
+
+        return $categoryFront->getId();
+    }
+
+    /**
      * @param ProductBack $productBack
      * @param int $productFrontId
      */
@@ -416,6 +420,21 @@ class ProductBaseSynchronizer
     }
 
     /**
+     * @param Product $product
+     * @param int $backId
+     * @param int $frontId
+     */
+    protected function createOrUpdateProduct(?Product $product, int $backId, int $frontId): void
+    {
+        if (null === $product) {
+            $product = new Product();
+        }
+        $product->setBackId($backId);
+        $product->setFrontId($frontId);
+        $this->productRepository->saveAndFlush($product);
+    }
+
+    /**
      * @param ProductBack $productBack
      * @param ProductFront $productFront
      */
@@ -446,24 +465,5 @@ class ProductBaseSynchronizer
             );
             $this->productImageFrontRepository->saveAndFlush($productFrontImage);
         }
-    }
-
-    /**
-     * @param Product|null $product
-     * @return ProductFront
-     */
-    protected function getProductFrontFromProduct(?Product $product): ProductFront
-    {
-        if (null === $product) {
-            return new ProductFront();
-        }
-
-        $productFront = $this->productFrontRepository->find($product->getFrontId());
-
-        if (null === $productFront) {
-            return new ProductFront();
-        }
-
-        return $productFront;
     }
 }

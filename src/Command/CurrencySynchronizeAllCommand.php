@@ -25,7 +25,7 @@ class CurrencySynchronizeAllCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->currencySynchronizer->synchronize();
+        $this->currencySynchronizer->synchronizeAll();
 
         return 0;
     }

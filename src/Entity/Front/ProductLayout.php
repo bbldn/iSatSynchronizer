@@ -2,14 +2,14 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_to_layout`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductLayoutRepository")
  */
-class ProductLayout extends BaseEntity
+class ProductLayout extends Entity
 {
     /**
      * @ORM\Id()

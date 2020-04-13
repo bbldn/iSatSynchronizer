@@ -12,11 +12,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CustomerSynchronizeOneCommand extends Command
+class CustomerSynchronizeByIdsCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'customer:synchronize:one';
+    protected static $defaultName = 'customer:synchronize:by-ids';
     private $customerBackToFrontSynchronize;
     private $customerFrontToBackSynchronize;
 
@@ -34,7 +34,7 @@ class CustomerSynchronizeOneCommand extends Command
     {
         $this->setDescription('Synchronize customers');
         $this->addArgument('direction', InputArgument::REQUIRED, 'Direction');
-        $this->addArgument('id', InputArgument::REQUIRED, 'idCustomer');
+        $this->addArgument('ids', InputArgument::REQUIRED, 'idCustomer');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,19 +42,11 @@ class CustomerSynchronizeOneCommand extends Command
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $id = $this->parseId($input);
-            try {
-                $this->customerFrontToBackSynchronize->synchronizeOne($id);
-            } catch (CustomerFrontNotFoundException $e) {
-                throw new \InvalidArgumentException("Customer Front with `id`: {$id} not found");
-            }
+            $ids = $this->testIds($input);
+            $this->customerFrontToBackSynchronize->synchronizeByIds($ids);
         } elseif ('backToFront' === $direction) {
-            $id = $this->parseId($input);
-            try {
-                $this->customerBackToFrontSynchronize->synchronizeOne($id);
-            } catch (CustomerBackNotFoundException $e) {
-                throw new \InvalidArgumentException("Customer Front with `id`: {$id} not found");
-            }
+            $ids = $this->testIds($input);
+            $this->customerBackToFrontSynchronize->synchronizeByIds($ids);
         } else {
             throw new \InvalidArgumentException("Invalidate direction: {$direction}");
         }

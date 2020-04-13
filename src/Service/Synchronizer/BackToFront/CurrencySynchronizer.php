@@ -20,7 +20,7 @@ class CurrencySynchronizer
         $this->currencyFrontRepository = $currencyFrontRepository;
     }
 
-    public function synchronize()
+    public function synchronizeAll()
     {
         $currenciesFront = $this->currencyFrontRepository->findAll();
 

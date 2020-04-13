@@ -12,11 +12,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReviewSynchronizeOneCommand extends Command
+class ReviewSynchronizeByIdsCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'review:synchronize:one';
+    protected static $defaultName = 'review:synchronize:by-ids';
 
     private $reviewFrontToBackSynchronizer;
     private $reviewBackToFrontSynchronizer;
@@ -35,7 +35,7 @@ class ReviewSynchronizeOneCommand extends Command
     {
         $this->setDescription('Synchronize reviews');
         $this->addArgument('direction', InputArgument::REQUIRED, 'Direction');
-        $this->addArgument('id', InputArgument::REQUIRED, 'idReview');
+        $this->addArgument('ids', InputArgument::REQUIRED, 'idReview');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -43,19 +43,11 @@ class ReviewSynchronizeOneCommand extends Command
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $id = $this->parseId($input);
-            try {
-                $this->reviewFrontToBackSynchronizer->synchronizeOne($id);
-            } catch (ReviewFrontNotFoundException $e) {
-                throw new \InvalidArgumentException("Review Front with `id`: {$id} not found");
-            }
+            $ids = $this->testIds($input);
+            $this->reviewFrontToBackSynchronizer->synchronizeByIds($ids);
         } elseif ('backToFront' === $direction) {
-            $id = $this->parseId($input);
-            try {
-                $this->reviewBackToFrontSynchronizer->synchronizeOne($id);
-            } catch (ReviewBackNotFoundException $e) {
-                throw new \InvalidArgumentException("Review Back with `id`: {$id} not found");
-            }
+            $ids = $this->testIds($input);
+            $this->reviewBackToFrontSynchronizer->synchronizeByIds($ids);
         } else {
             throw new \InvalidArgumentException("Invalidate direction: {$direction}");
         }

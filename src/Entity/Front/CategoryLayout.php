@@ -2,14 +2,14 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_to_layout`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryLayoutRepository")
  */
-class CategoryLayout extends BaseEntity
+class CategoryLayout extends Entity
 {
     /**
      * @ORM\Id()

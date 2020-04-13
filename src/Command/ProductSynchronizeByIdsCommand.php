@@ -10,11 +10,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProductOneSynchronizeCommand extends Command
+class ProductSynchronizeByIdsCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'product:synchronize:one';
+    protected static $defaultName = 'product:synchronize:by-ids';
     private $productSynchronize;
 
     public function __construct(ProductSynchronizer $productSynchronize)
@@ -32,16 +32,9 @@ class ProductOneSynchronizeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->parseIdArray($input);
+        $ids = $this->testIds($input);
         $loadImage = $input->getArgument('loadImage') !== null;
-
-        foreach ($ids as $id) {
-            try {
-                $this->productSynchronize->synchronizeOne($id, $loadImage);
-            } catch (ProductBackNotFoundException $notFoundException) {
-                throw new \InvalidArgumentException("Product Back with `id`: {$id} not found");
-            }
-        }
+        $this->productSynchronize->synchronizeByIds($ids, $loadImage);
 
         return 0;
     }

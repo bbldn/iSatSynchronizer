@@ -2,14 +2,14 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_related`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductRelatedRepository")
  */
-class ProductRelated extends BaseEntity
+class ProductRelated extends Entity
 {
     /**
      * @ORM\Id()

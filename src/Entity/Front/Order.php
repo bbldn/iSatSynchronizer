@@ -2,7 +2,7 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Order extends BaseEntity
+class Order extends Entity
 {
     /**
      * @ORM\Id()
@@ -342,7 +342,7 @@ class Order extends BaseEntity
      * @param string $paymentPostCode
      * @param string $paymentCountry
      * @param int $paymentCountryId
-     * @param int $paymentZone
+     * @param string $paymentZone
      * @param int $paymentZoneId
      * @param string $paymentAddressFormat
      * @param string $paymentCustomField
@@ -357,7 +357,7 @@ class Order extends BaseEntity
      * @param string $shippingPostCode
      * @param string $shippingCountry
      * @param int $shippingCountryId
-     * @param int $shippingZone
+     * @param string $shippingZone
      * @param int $shippingZoneId
      * @param string $shippingAddressFormat
      * @param string $shippingCustomField

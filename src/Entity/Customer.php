@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Customer extends BaseEntity
+class Customer extends Entity
 {
     /**
      * @ORM\Id()

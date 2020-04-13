@@ -80,10 +80,6 @@ class EntityRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @return bool
-     * @throws \Doctrine\DBAL\DBALException
-     */
     public function resetAutoIncrements()
     {
         $sql = "ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = 1";

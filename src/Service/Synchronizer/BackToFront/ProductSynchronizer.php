@@ -2,35 +2,21 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Exception\ProductBackNotFoundException;
+use App\Service\Synchronizer\BackToFront\Implementation\ProductSynchronizer as ProductBaseSynchronizer;
 
 class ProductSynchronizer extends ProductBaseSynchronizer
 {
     /**
+     * @param string $ids
      * @param bool $synchronizeImage
      */
-    public function synchronize($synchronizeImage = false): void
+    public function synchronizeByIds(string $ids, $synchronizeImage = false): void
     {
-        $productsBack = $this->productBackRepository->findAll();
+        $productsBack = $this->productBackRepository->findByIds($ids);
+
         foreach ($productsBack as $productBack) {
             $this->synchronizeProduct($productBack, $synchronizeImage);
         }
-    }
-
-    /**
-     * @param int $id
-     * @param bool $synchronizeImage
-     * @throws ProductBackNotFoundException
-     */
-    public function synchronizeOne(int $id, $synchronizeImage = false): void
-    {
-        $productBack = $this->productBackRepository->find($id);
-
-        if ($productBack === null) {
-            throw new ProductBackNotFoundException();
-        }
-
-        $this->synchronizeProduct($productBack, $synchronizeImage);
     }
 
     /**
@@ -67,6 +53,17 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     public function reload($reloadImage = false)
     {
         $this->clear($reloadImage);
-        $this->synchronize($reloadImage);
+        $this->synchronizeAll($reloadImage);
+    }
+
+    /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeAll($synchronizeImage = false): void
+    {
+        $productsBack = $this->productBackRepository->findAll();
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
     }
 }

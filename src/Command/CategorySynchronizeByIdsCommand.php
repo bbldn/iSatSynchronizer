@@ -10,11 +10,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CategorySynchronizeOneCommand extends Command
+class CategorySynchronizeByIdsCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'category:synchronize:one';
+    protected static $defaultName = 'category:synchronize:by-ids';
     private $categorySynchronize;
 
     public function __construct(CategorySynchronizer $categorySynchronize)
@@ -26,20 +26,15 @@ class CategorySynchronizeOneCommand extends Command
     protected function configure()
     {
         $this->setDescription('Category one synchronize');
-        $this->addArgument('id', InputArgument::REQUIRED, 'Category id');
+        $this->addArgument('ids', InputArgument::REQUIRED, 'Category ids');
         $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Synchronize image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $id = $this->parseId($input);
+        $ids = $this->testIds($input);
         $loadImage = $input->getArgument('loadImage') !== null;
-
-        try {
-            $this->categorySynchronize->synchronizeOne($id, $loadImage);
-        } catch (CategoryBackNotFoundException $notFoundException) {
-            throw new \InvalidArgumentException("Category Front with `id`: {$id} not found");
-        }
+        $this->categorySynchronize->synchronizeByIds($ids, $loadImage);
 
         return 0;
     }

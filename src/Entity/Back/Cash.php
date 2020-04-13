@@ -2,14 +2,14 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_cash`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\CashRepository")
  */
-class Cash extends BaseEntity
+class Cash extends Entity
 {
     /**
      * @ORM\Id()

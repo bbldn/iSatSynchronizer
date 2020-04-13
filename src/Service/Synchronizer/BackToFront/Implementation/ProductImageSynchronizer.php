@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer\BackToFront;
+namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Photo as PhotoBack;
 use App\Entity\Back\ProductPictures as ProductPicturesBack;
@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class ProductImageSynchronizer
 {
-    private $storeFront;
-    private $storeBack;
-    private $fileReader;
-    private $fileWriter;
-    private $backPath = ['/products_pictures/', '/gal/files/'];
-    private $frontPath = '/date/products/';
+    protected $storeFront;
+    protected $storeBack;
+    protected $fileReader;
+    protected $fileWriter;
+    protected $backPath = ['/products_pictures/', '/gal/files/'];
+    protected $frontPath = '/date/products/';
 
     public function __construct(
         StoreFront $storeFront,
@@ -52,11 +52,6 @@ class ProductImageSynchronizer
     ): ProductImageFront
     {
         return $this->synchronize($productPicturesBack->getFileName(), $productFront, $number);
-    }
-
-    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ProductImageFront
-    {
-        return $this->synchronize($photoBack->getBig(), $productFront, $number);
     }
 
     protected function synchronize(string $picture, ProductFront $productFront, $number = 1): ProductImageFront
@@ -96,5 +91,10 @@ class ProductImageSynchronizer
         $productPicturesFront->setImage(str_replace('/image', '', $path));
 
         return $productPicturesFront;
+    }
+
+    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ProductImageFront
+    {
+        return $this->synchronize($photoBack->getBig(), $productFront, $number);
     }
 }

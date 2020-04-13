@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-class BaseEntity
+class Entity
 {
     public function setField(string $key, $value)
     {

@@ -2,14 +2,14 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_to_store`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryStoreRepository")
  */
-class CategoryStore extends BaseEntity
+class CategoryStore extends Entity
 {
     /**
      * @ORM\Id()

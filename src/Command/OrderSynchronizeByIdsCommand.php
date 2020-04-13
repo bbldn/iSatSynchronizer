@@ -12,11 +12,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class OrderSynchronizeOneCommand extends Command
+class OrderSynchronizeByIdsCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'order:synchronize:one';
+    protected static $defaultName = 'order:synchronize:by-ids';
     private $orderFrontToBackSynchronizer;
     private $orderBackToFrontSynchronizer;
 
@@ -34,7 +34,7 @@ class OrderSynchronizeOneCommand extends Command
     {
         $this->setDescription('Order one synchronize');
         $this->addArgument('direction', InputArgument::REQUIRED, 'Direction');
-        $this->addArgument('id', InputArgument::REQUIRED, 'Reset image');
+        $this->addArgument('ids', InputArgument::REQUIRED, 'Reset image');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,19 +42,11 @@ class OrderSynchronizeOneCommand extends Command
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $id = $this->parseId($input);
-            try {
-                $this->orderFrontToBackSynchronizer->synchronizeOne($id);
-            } catch (OrderFrontNotFoundException $e) {
-                throw new \InvalidArgumentException("Order Front with `id`: {$id} not found");
-            }
+            $ids = $this->testIds($input);
+            $this->orderFrontToBackSynchronizer->synchronizeByIds($ids);
         } elseif ('backToFront' === $direction) {
-            $id = $this->parseId($input);
-            try {
-                $this->orderBackToFrontSynchronizer->synchronizeOne($id);
-            } catch (OrderBackNotFoundException $e) {
-                throw new \InvalidArgumentException("Order Back with `id`: {$id} not found");
-            }
+            $ids = $this->testIds($input);
+            $this->orderBackToFrontSynchronizer->synchronizeByIds($ids);
         } else {
             throw new \InvalidArgumentException("Invalidate direction: {$direction}");
         }

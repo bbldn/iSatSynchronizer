@@ -2,14 +2,14 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_path`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryPathRepository")
  */
-class CategoryPath extends BaseEntity
+class CategoryPath extends Entity
 {
     /**
      * @ORM\Id()

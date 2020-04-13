@@ -13,7 +13,7 @@ class ProductPriceUpdateByIdsCommand extends Command
 {
     use OneSynchronizeCommandTrait;
 
-    protected static $defaultName = 'product:price:update:ids';
+    protected static $defaultName = 'product:price:update:by-ids';
     private $productSynchronize;
 
     public function __construct(ProductSynchronizer $productSynchronize)

@@ -2,14 +2,14 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\BaseEntity;
+use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_buyers_groups_extra`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\BuyersGroupsExtraRepository")
  */
-class BuyersGroupsExtra extends BaseEntity
+class BuyersGroupsExtra extends Entity
 {
     /**
      * @ORM\Id()
