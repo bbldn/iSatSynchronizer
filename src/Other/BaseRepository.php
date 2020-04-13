@@ -17,38 +17,60 @@ class BaseRepository extends ServiceEntityRepository
         $this->tableName = $this->getEntityManager()->getClassMetadata($this->getEntityName())->getTableName();
     }
 
+    /**
+     *
+     */
     public function flush()
     {
         $this->_em->flush();
     }
 
+    /**
+     * @param object $object
+     */
     public function save(object $object)
     {
         $this->_em->persist($object);
     }
 
-    public function saveAndFlush(object $object)
+    /**
+     * @param object $instance
+     */
+    public function saveAndFlush(object $instance)
     {
-        $this->_em->persist($object);
+        $this->_em->persist($instance);
         $this->_em->flush();
     }
 
+    /**
+     * @param object $object
+     */
     public function remove(object $object)
     {
         $this->_em->remove($object);
     }
 
+    /**
+     * @param object $object
+     */
     public function removeAndFlush(object $object)
     {
         $this->_em->remove($object);
         $this->_em->flush();
     }
 
+    /**
+     * @return mixed
+     */
     public function removeAll()
     {
         return $this->createQueryBuilder('c')->delete()->getQuery()->execute();
     }
 
+    /**
+     * @param string $ids
+     * @return null|object
+     */
     public function findByIds(string $ids): ?object
     {
         return $this->createQueryBuilder('c')
@@ -58,6 +80,10 @@ class BaseRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return bool
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function resetAutoIncrements()
     {
         $sql = "ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = 1";

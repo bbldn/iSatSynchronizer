@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method SeoUrl|null findOneBy(array $criteria, array $orderBy = null)
  * @method SeoUrl[]    findAll()
  * @method SeoUrl[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SeoUrl[]    findByIds(string $ids)
+ * @method void    save(SeoUrl $instance)
+ * @method void    saveAndFlush(SeoUrl $instance)
+ * @method void    remove(SeoUrl $instance)
+ * @method void    removeAndFlush(SeoUrl $instance)
  */
 class SeoUrlRepository extends BaseRepository
 {

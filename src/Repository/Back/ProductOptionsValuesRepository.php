@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductOptionsValues|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductOptionsValues[]    findAll()
  * @method ProductOptionsValues[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductOptionsValues[]    findByIds(string $ids)
+ * @method void    save(ProductOptionsValues $instance)
+ * @method void    saveAndFlush(ProductOptionsValues $instance)
+ * @method void    remove(ProductOptionsValues $instance)
+ * @method void    removeAndFlush(ProductOptionsValues $instance)
  */
 class ProductOptionsValuesRepository extends BaseRepository
 {

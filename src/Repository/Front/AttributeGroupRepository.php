@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method AttributeGroup|null findOneBy(array $criteria, array $orderBy = null)
  * @method AttributeGroup[]    findAll()
  * @method AttributeGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AttributeGroup[]    findByIds(string $ids)
+ * @method void    save(AttributeGroup $instance)
+ * @method void    saveAndFlush(AttributeGroup $instance)
+ * @method void    remove(AttributeGroup $instance)
+ * @method void    removeAndFlush(AttributeGroup $instance)
  */
 class AttributeGroupRepository extends BaseRepository
 {

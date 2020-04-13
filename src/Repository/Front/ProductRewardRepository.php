@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductReward|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductReward[]    findAll()
  * @method ProductReward[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductReward[]    findByIds(string $ids)
+ * @method void    save(ProductReward $instance)
+ * @method void    saveAndFlush(ProductReward $instance)
+ * @method void    remove(ProductReward $instance)
+ * @method void    removeAndFlush(ProductReward $instance)
  */
 class ProductRewardRepository extends BaseRepository
 {

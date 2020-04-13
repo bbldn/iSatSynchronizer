@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Currency|null findOneBy(array $criteria, array $orderBy = null)
  * @method Currency[]    findAll()
  * @method Currency[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Currency[]    findByIds(string $ids)
+ * @method void    save(Currency $instance)
+ * @method void    saveAndFlush(Currency $instance)
+ * @method void    remove(Currency $instance)
+ * @method void    removeAndFlush(Currency $instance)
  */
 class CurrencyRepository extends BaseRepository
 {

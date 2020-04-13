@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CategoryDescription|null findOneBy(array $criteria, array $orderBy = null)
  * @method CategoryDescription[]    findAll()
  * @method CategoryDescription[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CategoryDescription[]    findByIds(string $ids)
+ * @method void    save(CategoryDescription $instance)
+ * @method void    saveAndFlush(CategoryDescription $instance)
+ * @method void    remove(CategoryDescription $instance)
+ * @method void    removeAndFlush(CategoryDescription $instance)
  */
 class CategoryDescriptionRepository extends BaseRepository
 {

@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CategoryPath|null findOneBy(array $criteria, array $orderBy = null)
  * @method CategoryPath[]    findAll()
  * @method CategoryPath[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CategoryPath[]    findByIds(string $ids)
+ * @method void    save(CategoryPath $instance)
+ * @method void    saveAndFlush(CategoryPath $instance)
+ * @method void    remove(CategoryPath $instance)
+ * @method void    removeAndFlush(CategoryPath $instance)
  */
 class CategoryPathRepository extends BaseRepository
 {

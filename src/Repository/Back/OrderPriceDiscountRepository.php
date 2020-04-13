@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderPriceDiscount|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderPriceDiscount[]    findAll()
  * @method OrderPriceDiscount[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderPriceDiscount[]    findByIds(string $ids)
+ * @method void    save(OrderPriceDiscount $instance)
+ * @method void    saveAndFlush(OrderPriceDiscount $instance)
+ * @method void    remove(OrderPriceDiscount $instance)
+ * @method void    removeAndFlush(OrderPriceDiscount $instance)
  */
 class OrderPriceDiscountRepository extends BaseRepository
 {

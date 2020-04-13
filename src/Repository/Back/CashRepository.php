@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Cash|null findOneBy(array $criteria, array $orderBy = null)
  * @method Cash[]    findAll()
  * @method Cash[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Cash[]    findByIds(string $ids)
+ * @method void    save(Cash $instance)
+ * @method void    saveAndFlush(Cash $instance)
+ * @method void    remove(Cash $instance)
+ * @method void    removeAndFlush(Cash $instance)
  */
 class CashRepository extends BaseRepository
 {

@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductAttribute|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductAttribute[]    findAll()
  * @method ProductAttribute[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductAttribute[]    findByIds(string $ids)
+ * @method void    save(ProductAttribute $instance)
+ * @method void    saveAndFlush(ProductAttribute $instance)
+ * @method void    remove(ProductAttribute $instance)
+ * @method void    removeAndFlush(ProductAttribute $instance)
  */
 class ProductAttributeRepository extends BaseRepository
 {

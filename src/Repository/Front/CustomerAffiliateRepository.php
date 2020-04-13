@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerAffiliate|null findOneBy(array $criteria, array $orderBy = null)
  * @method CustomerAffiliate[]    findAll()
  * @method CustomerAffiliate[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CustomerAffiliate[]    findByIds(string $ids)
+ * @method void    save(CustomerAffiliate $instance)
+ * @method void    saveAndFlush(CustomerAffiliate $instance)
+ * @method void    remove(CustomerAffiliate $instance)
+ * @method void    removeAndFlush(CustomerAffiliate $instance)
  */
 class CustomerAffiliateRepository extends BaseRepository
 {

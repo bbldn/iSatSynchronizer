@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Review|null findOneBy(array $criteria, array $orderBy = null)
  * @method Review[]    findAll()
  * @method Review[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Review[]    findByIds(string $ids)
+ * @method void    save(Review $instance)
+ * @method void    saveAndFlush(Review $instance)
+ * @method void    remove(Review $instance)
+ * @method void    removeAndFlush(Review $instance)
  */
 class ReviewRepository extends BaseRepository
 {

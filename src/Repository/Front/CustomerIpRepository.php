@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerIp|null findOneBy(array $criteria, array $orderBy = null)
  * @method CustomerIp[]    findAll()
  * @method CustomerIp[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CustomerIp[]    findByIds(string $ids)
+ * @method void    save(CustomerIp $instance)
+ * @method void    saveAndFlush(CustomerIp $instance)
+ * @method void    remove(CustomerIp $instance)
+ * @method void    removeAndFlush(CustomerIp $instance)
  */
 class CustomerIpRepository extends BaseRepository
 {

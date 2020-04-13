@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method AttributeDescription|null findOneBy(array $criteria, array $orderBy = null)
  * @method AttributeDescription[]    findAll()
  * @method AttributeDescription[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AttributeDescription[]    findByIds(string $ids)
+ * @method void    save(AttributeDescription $instance)
+ * @method void    saveAndFlush(AttributeDescription $instance)
+ * @method void    remove(AttributeDescription $instance)
+ * @method void    removeAndFlush(AttributeDescription $instance)
  */
 class AttributeDescriptionRepository extends BaseRepository
 {

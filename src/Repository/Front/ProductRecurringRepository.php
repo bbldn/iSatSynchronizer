@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductRecurring|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductRecurring[]    findAll()
  * @method ProductRecurring[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductRecurring[]    findByIds(string $ids)
+ * @method void    save(ProductRecurring $instance)
+ * @method void    saveAndFlush(ProductRecurring $instance)
+ * @method void    remove(ProductRecurring $instance)
+ * @method void    removeAndFlush(ProductRecurring $instance)
  */
 class ProductRecurringRepository extends BaseRepository
 {

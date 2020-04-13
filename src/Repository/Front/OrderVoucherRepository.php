@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderVoucher|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderVoucher[]    findAll()
  * @method OrderVoucher[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderVoucher[]    findByIds(string $ids)
+ * @method void    save(OrderVoucher $instance)
+ * @method void    saveAndFlush(OrderVoucher $instance)
+ * @method void    remove(OrderVoucher $instance)
+ * @method void    removeAndFlush(OrderVoucher $instance)
  */
 class OrderVoucherRepository extends BaseRepository
 {

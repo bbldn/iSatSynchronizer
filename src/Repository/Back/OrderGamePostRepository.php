@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderGamePost|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderGamePost[]    findAll()
  * @method OrderGamePost[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderGamePost[]    findByIds(string $ids)
+ * @method void    save(OrderGamePost $instance)
+ * @method void    saveAndFlush(OrderGamePost $instance)
+ * @method void    remove(OrderGamePost $instance)
+ * @method void    removeAndFlush(OrderGamePost $instance)
  */
 class OrderGamePostRepository extends BaseRepository
 {

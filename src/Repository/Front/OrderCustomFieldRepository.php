@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderCustomField|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderCustomField[]    findAll()
  * @method OrderCustomField[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderCustomField[]    findByIds(string $ids)
+ * @method void    save(OrderCustomField $instance)
+ * @method void    saveAndFlush(OrderCustomField $instance)
+ * @method void    remove(OrderCustomField $instance)
+ * @method void    removeAndFlush(OrderCustomField $instance)
  */
 class OrderCustomFieldRepository extends BaseRepository
 {

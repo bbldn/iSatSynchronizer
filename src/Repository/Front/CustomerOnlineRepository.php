@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerOnline|null findOneBy(array $criteria, array $orderBy = null)
  * @method CustomerOnline[]    findAll()
  * @method CustomerOnline[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CustomerOnline[]    findByIds(string $ids)
+ * @method void    save(CustomerOnline $instance)
+ * @method void    saveAndFlush(CustomerOnline $instance)
+ * @method void    remove(CustomerOnline $instance)
+ * @method void    removeAndFlush(CustomerOnline $instance)
  */
 class CustomerOnlineRepository extends BaseRepository
 {

@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductDownload|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductDownload[]    findAll()
  * @method ProductDownload[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductDownload[]    findByIds(string $ids)
+ * @method void    save(ProductDownload $instance)
+ * @method void    saveAndFlush(ProductDownload $instance)
+ * @method void    remove(ProductDownload $instance)
+ * @method void    removeAndFlush(ProductDownload $instance)
  */
 class ProductDownloadRepository extends BaseRepository
 {

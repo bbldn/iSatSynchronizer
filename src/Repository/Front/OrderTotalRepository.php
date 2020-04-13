@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderTotal|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderTotal[]    findAll()
  * @method OrderTotal[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderTotal[]    findByIds(string $ids)
+ * @method void    save(OrderTotal $instance)
+ * @method void    saveAndFlush(OrderTotal $instance)
+ * @method void    remove(OrderTotal $instance)
+ * @method void    removeAndFlush(OrderTotal $instance)
  */
 class OrderTotalRepository extends BaseRepository
 {

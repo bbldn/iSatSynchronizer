@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method BuyersGamePostAccounts|null findOneBy(array $criteria, array $orderBy = null)
  * @method BuyersGamePostAccounts[]    findAll()
  * @method BuyersGamePostAccounts[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BuyersGamePostAccounts[]    findByIds(string $ids)
+ * @method void    save(BuyersGamePostAccounts $instance)
+ * @method void    saveAndFlush(BuyersGamePostAccounts $instance)
+ * @method void    remove(BuyersGamePostAccounts $instance)
+ * @method void    removeAndFlush(BuyersGamePostAccounts $instance)
  */
 class BuyersGamePostAccountsRepository extends BaseRepository
 {

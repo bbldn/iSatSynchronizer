@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductPictures|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductPictures[]    findAll()
  * @method ProductPictures[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductPictures[]    findByIds(string $ids)
+ * @method void    save(ProductPictures $instance)
+ * @method void    saveAndFlush(ProductPictures $instance)
+ * @method void    remove(ProductPictures $instance)
+ * @method void    removeAndFlush(ProductPictures $instance)
  */
 class ProductPicturesRepository extends BaseRepository
 {

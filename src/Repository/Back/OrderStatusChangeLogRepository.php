@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderStatusChangeLog|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderStatusChangeLog[]    findAll()
  * @method OrderStatusChangeLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderStatusChangeLog[]    findByIds(string $ids)
+ * @method void    save(OrderStatusChangeLog $instance)
+ * @method void    saveAndFlush(OrderStatusChangeLog $instance)
+ * @method void    remove(OrderStatusChangeLog $instance)
+ * @method void    removeAndFlush(OrderStatusChangeLog $instance)
  */
 class OrderStatusChangeLogRepository extends BaseRepository
 {

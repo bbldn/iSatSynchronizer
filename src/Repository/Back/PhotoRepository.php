@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Photo|null findOneBy(array $criteria, array $orderBy = null)
  * @method Photo[]    findAll()
  * @method Photo[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Photo[]    findByIds(string $ids)
+ * @method void    save(Photo $instance)
+ * @method void    saveAndFlush(Photo $instance)
+ * @method void    remove(Photo $instance)
+ * @method void    removeAndFlush(Photo $instance)
  */
 class PhotoRepository extends BaseRepository
 {

@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderSimpleFields|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderSimpleFields[]    findAll()
  * @method OrderSimpleFields[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderSimpleFields[]    findByIds(string $ids)
+ * @method void    save(OrderSimpleFields $instance)
+ * @method void    saveAndFlush(OrderSimpleFields $instance)
+ * @method void    remove(OrderSimpleFields $instance)
+ * @method void    removeAndFlush(OrderSimpleFields $instance)
  */
 class OrderSimpleFieldsRepository extends BaseRepository
 {

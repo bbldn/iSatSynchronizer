@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerTransaction|null findOneBy(array $criteria, array $orderBy = null)
  * @method CustomerTransaction[]    findAll()
  * @method CustomerTransaction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CustomerTransaction[]    findByIds(string $ids)
+ * @method void    save(CustomerTransaction $instance)
+ * @method void    saveAndFlush(CustomerTransaction $instance)
+ * @method void    remove(CustomerTransaction $instance)
+ * @method void    removeAndFlush(CustomerTransaction $instance)
  */
 class CustomerTransactionRepository extends BaseRepository
 {

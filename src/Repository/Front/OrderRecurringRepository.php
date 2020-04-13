@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderRecurring|null findOneBy(array $criteria, array $orderBy = null)
  * @method OrderRecurring[]    findAll()
  * @method OrderRecurring[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrderRecurring[]    findByIds(string $ids)
+ * @method void    save(OrderRecurring $instance)
+ * @method void    saveAndFlush(OrderRecurring $instance)
+ * @method void    remove(OrderRecurring $instance)
+ * @method void    removeAndFlush(OrderRecurring $instance)
  */
 class OrderRecurringRepository extends BaseRepository
 {

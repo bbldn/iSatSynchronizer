@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CategoryLayout|null findOneBy(array $criteria, array $orderBy = null)
  * @method CategoryLayout[]    findAll()
  * @method CategoryLayout[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CategoryLayout[]    findByIds(string $ids)
+ * @method void    save(CategoryLayout $instance)
+ * @method void    saveAndFlush(CategoryLayout $instance)
+ * @method void    remove(CategoryLayout $instance)
+ * @method void    removeAndFlush(CategoryLayout $instance)
  */
 class CategoryLayoutRepository extends BaseRepository
 {

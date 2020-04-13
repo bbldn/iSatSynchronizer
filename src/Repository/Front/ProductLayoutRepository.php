@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductLayout|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductLayout[]    findAll()
  * @method ProductLayout[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductLayout[]    findByIds(string $ids)
+ * @method void    save(ProductLayout $instance)
+ * @method void    saveAndFlush(ProductLayout $instance)
+ * @method void    remove(ProductLayout $instance)
+ * @method void    removeAndFlush(ProductLayout $instance)
  */
 class ProductLayoutRepository extends BaseRepository
 {

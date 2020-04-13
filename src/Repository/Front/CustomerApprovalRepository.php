@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerApproval|null findOneBy(array $criteria, array $orderBy = null)
  * @method CustomerApproval[]    findAll()
  * @method CustomerApproval[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CustomerApproval[]    findByIds(string $ids)
+ * @method void    save(CustomerApproval $instance)
+ * @method void    saveAndFlush(CustomerApproval $instance)
+ * @method void    remove(CustomerApproval $instance)
+ * @method void    removeAndFlush(CustomerApproval $instance)
  */
 class CustomerApprovalRepository extends BaseRepository
 {

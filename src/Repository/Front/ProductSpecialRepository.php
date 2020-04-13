@@ -11,6 +11,11 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductSpecial|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProductSpecial[]    findAll()
  * @method ProductSpecial[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductSpecial[]    findByIds(string $ids)
+ * @method void    save(ProductSpecial $instance)
+ * @method void    saveAndFlush(ProductSpecial $instance)
+ * @method void    remove(ProductSpecial $instance)
+ * @method void    removeAndFlush(ProductSpecial $instance)
  */
 class ProductSpecialRepository extends BaseRepository
 {
