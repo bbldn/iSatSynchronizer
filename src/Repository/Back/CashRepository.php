@@ -3,7 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\Cash;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Cash $instance)
  * @method void    removeAndFlush(Cash $instance)
  */
-class CashRepository extends BaseRepository
+class CashRepository extends EntityRepository
 {
     protected $entityManagerName = 'back';
 

@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Category;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Category $instance)
  * @method void    removeAndFlush(Category $instance)
  */
-class CategoryRepository extends BaseRepository
+class CategoryRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

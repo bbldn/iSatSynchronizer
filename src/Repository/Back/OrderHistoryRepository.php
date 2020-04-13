@@ -3,7 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\OrderHistory;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderHistory $instance)
  * @method void    removeAndFlush(OrderHistory $instance)
  */
-class OrderHistoryRepository extends BaseRepository
+class OrderHistoryRepository extends EntityRepository
 {
     protected $entityManagerName = 'back';
 

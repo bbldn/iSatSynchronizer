@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Attribute;
-use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -16,59 +15,13 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    saveAndFlush(Attribute $instance)
  * @method void    remove(Attribute $instance)
  * @method void    removeAndFlush(Attribute $instance)
+ * @method ?Attribute    findOneByBackId(int $value)
+ * @method ?Attribute    findOneByFrontId(int $value)
  */
-class AttributeRepository extends BaseRepository
+class AttributeRepository extends EntityRepository
 {
-    protected $entityManagerName = 'default';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Attribute::class);
     }
-
-    public function findOneByBackId(int $value): ?Attribute
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.backId = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    public function findOneByFrontId(int $value): ?Attribute
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.frontId = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-    // /**
-    //  * @return Attribute[] Returns an array of Attribute objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Attribute
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

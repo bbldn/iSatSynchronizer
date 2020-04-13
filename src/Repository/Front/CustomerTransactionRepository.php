@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerTransaction;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerTransaction $instance)
  * @method void    removeAndFlush(CustomerTransaction $instance)
  */
-class CustomerTransactionRepository extends BaseRepository
+class CustomerTransactionRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

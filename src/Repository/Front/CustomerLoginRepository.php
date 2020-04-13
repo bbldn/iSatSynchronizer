@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerLogin;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerLogin $instance)
  * @method void    removeAndFlush(CustomerLogin $instance)
  */
-class CustomerLoginRepository extends BaseRepository
+class CustomerLoginRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

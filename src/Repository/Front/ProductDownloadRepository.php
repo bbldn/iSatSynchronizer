@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductDownload;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductDownload $instance)
  * @method void    removeAndFlush(ProductDownload $instance)
  */
-class ProductDownloadRepository extends BaseRepository
+class ProductDownloadRepository extends EntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

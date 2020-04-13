@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerApproval;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerApproval $instance)
  * @method void    removeAndFlush(CustomerApproval $instance)
  */
-class CustomerApprovalRepository extends BaseRepository
+class CustomerApprovalRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

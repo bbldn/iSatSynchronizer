@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\OrderVoucher;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderVoucher $instance)
  * @method void    removeAndFlush(OrderVoucher $instance)
  */
-class OrderVoucherRepository extends BaseRepository
+class OrderVoucherRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

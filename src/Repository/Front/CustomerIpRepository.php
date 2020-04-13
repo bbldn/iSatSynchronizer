@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerIp;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerIp $instance)
  * @method void    removeAndFlush(CustomerIp $instance)
  */
-class CustomerIpRepository extends BaseRepository
+class CustomerIpRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

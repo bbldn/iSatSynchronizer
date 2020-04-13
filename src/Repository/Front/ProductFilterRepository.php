@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductFilter;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductFilter $instance)
  * @method void    removeAndFlush(ProductFilter $instance)
  */
-class ProductFilterRepository extends BaseRepository
+class ProductFilterRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

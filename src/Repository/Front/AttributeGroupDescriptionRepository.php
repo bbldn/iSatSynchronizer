@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\AttributeGroupDescription;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(AttributeGroupDescription $instance)
  * @method void    removeAndFlush(AttributeGroupDescription $instance)
  */
-class AttributeGroupDescriptionRepository extends BaseRepository
+class AttributeGroupDescriptionRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Product;
-use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -16,31 +15,13 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    saveAndFlush(Product $instance)
  * @method void    remove(Product $instance)
  * @method void    removeAndFlush(Product $instance)
+ * @method ?Product    findOneByBackId(int $value)
+ * @method ?Product    findOneByFrontId(int $value)
  */
-class ProductRepository extends BaseRepository
+class ProductRepository extends EntityRepository
 {
-    protected $entityManagerName = 'default';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
-    }
-
-    public function findOneByBackId(int $value): ?Product
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.backId = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    public function findOneByFrontId(int $value): ?Product
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.frontId = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductRecurring;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductRecurring $instance)
  * @method void    removeAndFlush(ProductRecurring $instance)
  */
-class ProductRecurringRepository extends BaseRepository
+class ProductRecurringRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

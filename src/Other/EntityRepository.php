@@ -5,7 +5,7 @@ namespace App\Other;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class BaseRepository extends ServiceEntityRepository
+class EntityRepository extends ServiceEntityRepository
 {
     protected $entityManagerName = 'default';
     protected $tableName = 'default';

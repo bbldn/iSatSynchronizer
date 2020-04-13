@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Address;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Address $instance)
  * @method void    removeAndFlush(Address $instance)
  */
-class AddressRepository extends BaseRepository
+class AddressRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

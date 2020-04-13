@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\SeoUrl;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(SeoUrl $instance)
  * @method void    removeAndFlush(SeoUrl $instance)
  */
-class SeoUrlRepository extends BaseRepository
+class SeoUrlRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

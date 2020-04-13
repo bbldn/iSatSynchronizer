@@ -3,7 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGamePostAccounts;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(BuyersGamePostAccounts $instance)
  * @method void    removeAndFlush(BuyersGamePostAccounts $instance)
  */
-class BuyersGamePostAccountsRepository extends BaseRepository
+class BuyersGamePostAccountsRepository extends EntityRepository
 {
     protected $entityManagerName = 'back';
 

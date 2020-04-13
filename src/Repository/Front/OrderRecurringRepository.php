@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\OrderRecurring;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderRecurring $instance)
  * @method void    removeAndFlush(OrderRecurring $instance)
  */
-class OrderRecurringRepository extends BaseRepository
+class OrderRecurringRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

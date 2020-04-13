@@ -3,7 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\Product;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Product $instance)
  * @method void    removeAndFlush(Product $instance)
  */
-class ProductRepository extends BaseRepository
+class ProductRepository extends EntityRepository
 {
     protected $entityManagerName = 'back';
 

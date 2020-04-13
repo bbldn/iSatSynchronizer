@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Product;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
  * @method void    remove(Product $instance)
  * @method void    removeAndFlush(Product $instance)
  */
-class ProductRepository extends BaseRepository
+class ProductRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
     protected $containerBag;

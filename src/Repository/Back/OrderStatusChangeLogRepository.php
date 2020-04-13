@@ -3,7 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\OrderStatusChangeLog;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderStatusChangeLog $instance)
  * @method void    removeAndFlush(OrderStatusChangeLog $instance)
  */
-class OrderStatusChangeLogRepository extends BaseRepository
+class OrderStatusChangeLogRepository extends EntityRepository
 {
     protected $entityManagerName = 'back';
 

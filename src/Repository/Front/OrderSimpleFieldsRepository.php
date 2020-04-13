@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\OrderSimpleFields;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderSimpleFields $instance)
  * @method void    removeAndFlush(OrderSimpleFields $instance)
  */
-class OrderSimpleFieldsRepository extends BaseRepository
+class OrderSimpleFieldsRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

@@ -3,7 +3,7 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGroups;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(BuyersGroups $instance)
  * @method void    removeAndFlush(BuyersGroups $instance)
  */
-class BuyersGroupsRepository extends BaseRepository
+class BuyersGroupsRepository extends EntityRepository
 {
     protected $entityManagerName = 'back';
 

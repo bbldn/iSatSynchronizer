@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\OrderShipment;
-use App\Other\BaseRepository;
+use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderShipment $instance)
  * @method void    removeAndFlush(OrderShipment $instance)
  */
-class OrderShipmentRepository extends BaseRepository
+class OrderShipmentRepository extends EntityRepository
 {
     protected $entityManagerName = 'front';
 

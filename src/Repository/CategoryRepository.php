@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use App\Other\BaseRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -16,60 +15,13 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    saveAndFlush(Category $instance)
  * @method void    remove(Category $instance)
  * @method void    removeAndFlush(Category $instance)
+ * @method ?Category    findOneByBackId(int $value)
+ * @method ?Category    findOneByFrontId(int $value)
  */
-class CategoryRepository extends BaseRepository
+class CategoryRepository extends EntityRepository
 {
-    protected $entityManagerName = 'default';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
     }
-
-    public function findOneByBackId(int $value): ?Category
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.backId = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    public function findOneByFrontId(int $value): ?Category
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.frontId = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    // /**
-    //  * @return Category[] Returns an array of Category objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Category
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
