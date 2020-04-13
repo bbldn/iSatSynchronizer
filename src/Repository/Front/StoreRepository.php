@@ -17,41 +17,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Store $instance)
  * @method void    removeAndFlush(Store $instance)
  */
-class StoreRepository extends EntityRepository
+class StoreRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Store::class);
     }
-
-    // /**
-    //  * @return Store[] Returns an array of Store objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Store
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

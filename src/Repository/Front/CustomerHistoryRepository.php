@@ -17,41 +17,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerHistory $instance)
  * @method void    removeAndFlush(CustomerHistory $instance)
  */
-class CustomerHistoryRepository extends EntityRepository
+class CustomerHistoryRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerHistory::class);
     }
-
-    // /**
-    //  * @return CustomerHistory[] Returns an array of CustomerHistory objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?CustomerHistory
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -17,41 +17,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerWishList $instance)
  * @method void    removeAndFlush(CustomerWishList $instance)
  */
-class CustomerWishListRepository extends EntityRepository
+class CustomerWishListRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerWishList::class);
     }
-
-    // /**
-    //  * @return CustomerWishList[] Returns an array of CustomerWishList objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?CustomerWishList
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

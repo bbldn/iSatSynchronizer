@@ -17,41 +17,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderOption $instance)
  * @method void    removeAndFlush(OrderOption $instance)
  */
-class OrderOptionRepository extends EntityRepository
+class OrderOptionRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderOption::class);
     }
-
-    // /**
-    //  * @return OrderOption[] Returns an array of OrderOption objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?OrderOption
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

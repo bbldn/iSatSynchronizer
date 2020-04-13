@@ -17,41 +17,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerIp $instance)
  * @method void    removeAndFlush(CustomerIp $instance)
  */
-class CustomerIpRepository extends EntityRepository
+class CustomerIpRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerIp::class);
     }
-
-    // /**
-    //  * @return CustomerIp[] Returns an array of CustomerIp objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?CustomerIp
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

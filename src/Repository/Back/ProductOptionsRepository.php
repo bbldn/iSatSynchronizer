@@ -3,7 +3,6 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\ProductOptions;
-use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,41 +16,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductOptions $instance)
  * @method void    removeAndFlush(ProductOptions $instance)
  */
-class ProductOptionsRepository extends EntityRepository
+class ProductOptionsRepository extends EntityBackRepository
 {
-    protected $entityManagerName = 'back';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductOptions::class);
     }
-
-    // /**
-    //  * @return ProductOptions[] Returns an array of ProductOptions objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ProductOptions
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

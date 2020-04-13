@@ -3,7 +3,6 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\OrderGamePost;
-use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,10 +16,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderGamePost $instance)
  * @method void    removeAndFlush(OrderGamePost $instance)
  */
-class OrderGamePostRepository extends EntityRepository
+class OrderGamePostRepository extends EntityBackRepository
 {
-    protected $entityManagerName = 'back';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderGamePost::class);
@@ -74,33 +71,4 @@ class OrderGamePostRepository extends EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-
-    // /**
-    //  * @return OrderGamePost[] Returns an array of OrderGamePost objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?OrderGamePost
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

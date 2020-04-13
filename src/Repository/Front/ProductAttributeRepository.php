@@ -17,10 +17,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductAttribute $instance)
  * @method void    removeAndFlush(ProductAttribute $instance)
  */
-class ProductAttributeRepository extends EntityRepository
+class ProductAttributeRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductAttribute::class);
@@ -50,33 +48,4 @@ class ProductAttributeRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
-    // /**
-    //  * @return ProductAttribute[] Returns an array of ProductAttribute objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ProductAttribute
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

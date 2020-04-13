@@ -3,7 +3,6 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\Discussions;
-use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,41 +16,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Discussions $instance)
  * @method void    removeAndFlush(Discussions $instance)
  */
-class DiscussionsRepository extends EntityRepository
+class DiscussionsRepository extends EntityBackRepository
 {
-    protected $entityManagerName = 'back';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Discussions::class);
     }
-
-    // /**
-    //  * @return Discussions[] Returns an array of Discussions objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Discussions
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

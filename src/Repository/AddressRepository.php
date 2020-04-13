@@ -24,6 +24,11 @@ class AddressRepository extends EntityRepository
         parent::__construct($registry, Address::class);
     }
 
+    public function findOneByBackId(int $value): ?Address
+    {
+        return $this->findOneByOrderBackId($value);
+    }
+
     public function findOneByOrderBackId(int $value): ?Address
     {
         return $this->createQueryBuilder('c')

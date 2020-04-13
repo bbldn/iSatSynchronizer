@@ -3,7 +3,6 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\Product;
-use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,10 +16,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Product $instance)
  * @method void    removeAndFlush(Product $instance)
  */
-class ProductRepository extends EntityRepository
+class ProductRepository extends EntityBackRepository
 {
-    protected $entityManagerName = 'back';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);

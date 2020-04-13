@@ -17,10 +17,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(SeoUrl $instance)
  * @method void    removeAndFlush(SeoUrl $instance)
  */
-class SeoUrlRepository extends EntityRepository
+class SeoUrlRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, SeoUrl::class);
@@ -45,33 +43,4 @@ class SeoUrlRepository extends EntityRepository
             ->getQuery()
             ->execute();
     }
-
-    // /**
-    //  * @return SeoUrl[] Returns an array of SeoUrl objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?SeoUrl
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

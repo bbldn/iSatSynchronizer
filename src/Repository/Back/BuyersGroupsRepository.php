@@ -3,7 +3,6 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGroups;
-use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,41 +16,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(BuyersGroups $instance)
  * @method void    removeAndFlush(BuyersGroups $instance)
  */
-class BuyersGroupsRepository extends EntityRepository
+class BuyersGroupsRepository extends EntityBackRepository
 {
-    protected $entityManagerName = 'back';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BuyersGroups::class);
     }
-
-    // /**
-    //  * @return BuyersGroups[] Returns an array of BuyersGroups objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?BuyersGroups
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

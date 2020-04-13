@@ -17,10 +17,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CategoryPath $instance)
  * @method void    removeAndFlush(CategoryPath $instance)
  */
-class CategoryPathRepository extends EntityRepository
+class CategoryPathRepository extends EntityFrontRepository
 {
-    protected $entityManagerName = 'front';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CategoryPath::class);
@@ -36,33 +34,4 @@ class CategoryPathRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
-    // /**
-    //  * @return CategoryPath[] Returns an array of CategoryPath objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?CategoryPath
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

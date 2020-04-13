@@ -3,7 +3,6 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\ProductPictures;
-use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,10 +16,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductPictures $instance)
  * @method void    removeAndFlush(ProductPictures $instance)
  */
-class ProductPicturesRepository extends EntityRepository
+class ProductPicturesRepository extends EntityBackRepository
 {
-    protected $entityManagerName = 'back';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductPictures::class);
@@ -38,34 +35,4 @@ class ProductPicturesRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
-
-
-    // /**
-    //  * @return ProductPictures[] Returns an array of ProductPictures objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ProductPictures
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
