@@ -55,4 +55,18 @@ class ProductRepository extends EntityFrontRepository
 
         return $this->getEntityManager()->getConnection()->prepare($sql)->execute();
     }
+
+    public function updateProductsPriceByCategoryIds(string $ids): bool
+    {
+        $frontDatabaseName = $this->containerBag->get('front.database_name');
+        $databaseName = $this->containerBag->get('database_name');
+        $backDatabaseName = $this->containerBag->get('back.database_name');
+
+        $sql = "UPDATE `{$frontDatabaseName}`.`oc_product` oc 
+                INNER JOIN `{$databaseName}`.`products` as isp ON isp.`front_id` =  oc.`product_id`
+                INNER JOIN `{$backDatabaseName}`.`SS_products` as inp ON isp.`back_id` =  inp.`productID`
+                SET oc.`price` = inp.price WHERE inp.`categoryID` IN ({$ids});";
+
+        return $this->getEntityManager()->getConnection()->prepare($sql)->execute();
+    }
 }

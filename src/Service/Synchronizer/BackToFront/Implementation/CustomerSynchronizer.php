@@ -49,7 +49,7 @@ class CustomerSynchronizer
     /**
      *
      */
-    public function clear(): void
+    protected function clear(): void
     {
         $this->customerRepository->removeAll();
         $this->customerFrontRepository->removeAll();

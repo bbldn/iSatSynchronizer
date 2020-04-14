@@ -21,20 +21,25 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
     /**
      * @param bool $synchronizeImage
      */
-    public function reload(bool $synchronizeImage = false): void
-    {
-        $this->clear($synchronizeImage);
-        $this->synchronizeAll($synchronizeImage);
-    }
-
-    /**
-     * @param bool $synchronizeImage
-     */
     public function synchronizeAll(bool $synchronizeImage = false): void
     {
         $categoriesBack = $this->categoryBackRepository->findAll();
         foreach ($categoriesBack as $categoryBack) {
             $this->synchronizeCategory($categoryBack, $synchronizeImage);
         }
+    }
+
+    public function clear(bool $synchronizeImage = false): void
+    {
+        parent::clear($synchronizeImage);
+    }
+
+    /**
+     * @param bool $synchronizeImage
+     */
+    public function reload(bool $synchronizeImage = false): void
+    {
+        $this->clear($synchronizeImage);
+        $this->synchronizeAll($synchronizeImage);
     }
 }

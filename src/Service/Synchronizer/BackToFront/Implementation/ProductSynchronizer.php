@@ -140,7 +140,7 @@ class ProductSynchronizer
     /**
      * @param bool $clearImage
      */
-    public function clear($clearImage = false): void
+    protected function clear($clearImage = false): void
     {
         $this->productRepository->removeAll();
 

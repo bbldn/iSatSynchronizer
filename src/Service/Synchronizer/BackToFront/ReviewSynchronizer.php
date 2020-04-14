@@ -31,6 +31,14 @@ class ReviewSynchronizer extends ReviewBackSynchronizer
     /**
      *
      */
+    public function clear()
+    {
+        parent::clear();
+    }
+
+    /**
+     *
+     */
     public function reload(): void
     {
         $this->clear();

@@ -7,6 +7,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductSynchronizer as P
 class ProductSynchronizer extends ProductBaseSynchronizer
 {
     /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeAll($synchronizeImage = false): void
+    {
+        $productsBack = $this->productBackRepository->findAll();
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+    }
+
+    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */
@@ -48,22 +59,24 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     }
 
     /**
+     * @param string $ids
+     */
+    public function updatePriceByCategoryIds(string $ids)
+    {
+        $this->productFrontRepository->updateProductsPriceByCategoryIds($ids);
+    }
+
+    public function clear($clearImage = false): void
+    {
+        parent::clear($clearImage);
+    }
+
+    /**
      * @param bool $reloadImage
      */
     public function reload($reloadImage = false)
     {
         $this->clear($reloadImage);
         $this->synchronizeAll($reloadImage);
-    }
-
-    /**
-     * @param bool $synchronizeImage
-     */
-    public function synchronizeAll($synchronizeImage = false): void
-    {
-        $productsBack = $this->productBackRepository->findAll();
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
     }
 }

@@ -74,7 +74,7 @@ class CategorySynchronizer
     /**
      * @param bool $synchronizeImage
      */
-    public function clear(bool $synchronizeImage = false): void
+    protected function clear(bool $synchronizeImage = false): void
     {
         $this->categoryRepository->removeAll();
 

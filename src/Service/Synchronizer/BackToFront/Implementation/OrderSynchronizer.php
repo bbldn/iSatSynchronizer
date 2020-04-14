@@ -70,7 +70,7 @@ class OrderSynchronizer
         $this->productDescriptionFrontRepository = $productDescriptionFrontRepository;
     }
 
-    public function clear(): void
+    protected function clear(): void
     {
         $this->orderProductFrontRepository->clear();
         $this->orderFrontRepository->clear();

@@ -35,7 +35,7 @@ class ReviewSynchronizer
         $this->productRepository = $productRepository;
     }
 
-    public function clear()
+    protected function clear()
     {
         $this->reviewRepository->clear();
         $this->reviewFrontRepository->clear();

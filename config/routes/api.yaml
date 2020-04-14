@@ -3,7 +3,12 @@ category:
     controller: App\Controller\API\ProductController::getCategoriesAction
     methods:    GET
 
-products_by_categories:
-    path:       /category/tree/synchronize
-    controller: App\Controller\API\ProductController::synchronizeProductsByCategoriesAction
+products_by_ids:
+    path:       /products/update/by-ids
+    controller: App\Controller\API\ProductController::updateProductsByIdsAction
+    methods:    POST
+
+products_by_categories_ids:
+    path:       /products/update/by-categories-ids
+    controller: App\Controller\API\ProductController::updateProductsByCategoriesIdsAction
     methods:    POST

@@ -39,7 +39,7 @@ class AttributeSynchronizer
     /**
      *
      */
-    public function clear(): void
+    protected function clear(): void
     {
         $this->attributeRepository->removeAll();
         $this->attributeFrontRepository->removeAll();

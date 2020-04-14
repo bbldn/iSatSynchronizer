@@ -12,7 +12,7 @@ class CategoryTreeGenerator
         $result = [];
 
         foreach ($categoriesBack as $categoryBack) {
-            $categoryId = $categoryBack->getCategoryId();
+            $categoryId = $categoryBack->getId();
 
             $node = new \stdClass();
             $node->value = $categoryId;

@@ -31,6 +31,14 @@ class OrderSynchronizer extends OrderBackSynchronizer
     /**
      *
      */
+    public function clear(): void
+    {
+        parent::clear();
+    }
+
+    /**
+     *
+     */
     public function reload(): void
     {
         $this->clear();
