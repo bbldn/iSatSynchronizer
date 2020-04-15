@@ -35,4 +35,18 @@ class ProductRepository extends EntityBackRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByName(string $name, int $max)
+    {
+        $name = mb_strtolower($name);
+        $query = $this->createQueryBuilder('c')
+            ->andWhere('LOWER(c.name) LIKE :name')
+            ->setParameter('name', "{$name}%");
+
+        if ($max > 0) {
+            $query->setMaxResults($max);
+        }
+
+        return $query->select('c.id, c.name')->getQuery()->getResult();
+    }
 }

@@ -87,6 +87,9 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "monolog/monolog": {
+        "version": "2.0.2"
+    },
     "nesbot/carbon": {
         "version": "2.32.1"
     },
@@ -264,6 +267,23 @@
     "symfony/mime": {
         "version": "v5.0.5"
     },
+    "symfony/monolog-bridge": {
+        "version": "v5.0.7"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "a89f4cd8a232563707418eea6c2da36acd36a917"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
+    },
     "symfony/orm-pack": {
         "version": "v1.0.8"
     },
@@ -314,6 +334,19 @@
     },
     "symfony/translation-contracts": {
         "version": "v2.0.1"
+    },
+    "symfony/validator": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "d902da3e4952f18d3bf05aab29512eb61cabd869"
+        },
+        "files": [
+            "config/packages/test/validator.yaml",
+            "config/packages/validator.yaml"
+        ]
     },
     "symfony/var-dumper": {
         "version": "v5.0.5"

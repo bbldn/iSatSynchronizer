@@ -1,14 +1,20 @@
-category:
-    path:       /category/tree
-    controller: App\Controller\API\ProductController::getCategoriesAction
-    methods:    GET
-
-products_by_ids:
+synchronize_products_by_ids:
     path:       /products/update/by-ids
     controller: App\Controller\API\ProductController::updateProductsByIdsAction
     methods:    POST
 
-products_by_categories_ids:
+synchronize_products_by_categories_ids:
     path:       /products/update/by-categories-ids
     controller: App\Controller\API\ProductController::updateProductsByCategoriesIdsAction
     methods:    POST
+
+get_categories_tree:
+    path:       /category/tree
+    controller: App\Controller\API\ProductController::getCategoriesAction
+    methods:    GET
+
+get_products:
+    path:       /product/search
+    controller: App\Controller\API\ProductController::getProductsByNameAction
+    methods:    POST
+

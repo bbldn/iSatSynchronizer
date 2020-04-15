@@ -51,11 +51,8 @@ class QueueHandlerCommand extends Command
     {
         $path = $this->consolePath;
         $server = new HttpServer(function (ServerRequestInterface $request) use ($path) {
-            $parameters = $request->getParsedBody();
-//            $process = new Process([$path, $parameters['command']]);
-//            $process->start();
-//            exec("nohup {$path} {$parameters['command']} > /dev/null 2>&1 &");
             $response = json_encode($this->handle($request->getParsedBody()));
+
             return new Response(200, ['Content-Type' => 'application/json'], $response);
         });
 
