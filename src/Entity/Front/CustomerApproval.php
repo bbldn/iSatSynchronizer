@@ -16,22 +16,22 @@ class CustomerApproval
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_approval_id`")
      */
-    private $id;
+    protected $customerApprovalId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`type`", length=9)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $customerId
@@ -46,17 +46,9 @@ class CustomerApproval
         $this->type = $type;
     }
 
-
-    public function getId(): ?int
+    public function getCustomerApprovalId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerApprovalId;
     }
 
     public function getCustomerId(): ?int
@@ -83,6 +75,16 @@ class CustomerApproval
         return $this;
     }
 
+    /**
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
+    }
+
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
@@ -93,15 +95,5 @@ class CustomerApproval
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

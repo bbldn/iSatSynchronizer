@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderProduct[]    findAll()
  * @method OrderProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method OrderProduct[]    findByIds(string $ids)
- * @method void    save(OrderProduct $instance)
- * @method void    saveAndFlush(OrderProduct $instance)
+ * @method void    persist(OrderProduct $instance)
+ * @method void    persistAndFlush(OrderProduct $instance)
  * @method void    remove(OrderProduct $instance)
  * @method void    removeAndFlush(OrderProduct $instance)
  */
 class OrderProductRepository extends EntityFrontRepository
 {
+    /**
+     * OrderProductRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderProduct::class);
@@ -26,9 +30,9 @@ class OrderProductRepository extends EntityFrontRepository
 
     /**
      * @param int $value
-     * @return OrderProduct[] Returns an array of OrderProduct objects
+     * @return OrderProduct[]
      */
-    public function findByOrderFrontId(int $value)
+    public function findByOrderFrontId(int $value): array
     {
         return $this->createQueryBuilder('op')
             ->andWhere('op.orderId = :val')

@@ -2,61 +2,60 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_currency`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CurrencyRepository")
  */
-class Currency extends Entity
+class Currency
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`currency_id`")
      */
-    private $id;
+    protected $currencyId;
 
     /**
      * @ORM\Column(type="string", name="`title`", length=32)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", name="`code`", length=3)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\Column(type="string", name="`symbol_left`", length=12)
      */
-    private $symbolLeft;
+    protected $symbolLeft;
 
     /**
      * @ORM\Column(type="string", name="`symbol_right`", length=12)
      */
-    private $symbolRight;
+    protected $symbolRight;
 
     /**
      * @ORM\Column(type="integer", name="`decimal_place`")
      */
-    private $decimalPlace;
+    protected $decimalPlace;
 
     /**
      * @ORM\Column(type="float", name="`value`")
      */
-    private $value;
+    protected $value;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
-    private $dateModified;
+    protected $dateModified;
 
     /**
      * @param string $title
@@ -86,10 +85,9 @@ class Currency extends Entity
         $this->status = $status;
     }
 
-
-    public function getId(): ?int
+    public function getCurrencyId(): ?int
     {
-        return $this->id;
+        return $this->currencyId;
     }
 
     public function getTitle(): ?string

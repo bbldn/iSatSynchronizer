@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,29 +9,29 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerHistoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class CustomerHistory extends Entity
+class CustomerHistory
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_history_id`")
      */
-    private $id;
+    protected $customerHistoryId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`comment`", length=255)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $customerId
@@ -47,16 +46,9 @@ class CustomerHistory extends Entity
         $this->comment = $comment;
     }
 
-    public function getId(): ?int
+    public function getCustomerHistoryId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerHistoryId;
     }
 
     public function getCustomerId(): ?int
@@ -83,6 +75,16 @@ class CustomerHistory extends Entity
         return $this;
     }
 
+    /**
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
+    }
+
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
@@ -93,15 +95,5 @@ class CustomerHistory extends Entity
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

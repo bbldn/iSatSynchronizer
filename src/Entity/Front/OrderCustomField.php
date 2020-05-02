@@ -2,56 +2,55 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_custom_field`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderCustomFieldRepository")
  */
-class OrderCustomField extends Entity
+class OrderCustomField
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_custom_field_id`")
      */
-    private $id;
+    protected $orderCustomFieldId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="integer", name="`custom_field_id`")
      */
-    private $customFieldId;
+    protected $customFieldId;
 
     /**
      * @ORM\Column(type="integer", name="`custom_field_value_id`")
      */
-    private $customFieldValueId;
+    protected $customFieldValueId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`value`")
      */
-    private $value;
+    protected $value;
 
     /**
      * @ORM\Column(type="string", name="`type`", length=32)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", name="`location`", length=16)
      */
-    private $location;
+    protected $location;
 
     /**
      * @param int $orderId
@@ -81,17 +80,9 @@ class OrderCustomField extends Entity
         $this->location = $location;
     }
 
-
-    public function getId(): ?int
+    public function getOrderCustomFieldId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderCustomFieldId;
     }
 
     public function getOrderId(): ?int

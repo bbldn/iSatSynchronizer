@@ -207,10 +207,10 @@ class OrderSynchronizer
      */
     protected function synchronizeOrder(OrderFront $orderFront): void
     {
-        $order = $this->orderRepository->findOneByFrontId($orderFront->getId());
+        $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
         $orderBack = $this->getOrderBackFromOrder($order);
         $this->updateOrderBackFromOrderFront($orderFront, $orderBack);
-        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getId());
+        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
     }
 
     /**
@@ -225,7 +225,7 @@ class OrderSynchronizer
         }
         $order->setBackId($backId);
         $order->setFrontId($frontId);
-        $this->orderRepository->saveAndFlush($order);
+        $this->orderRepository->persistAndFlush($order);
     }
 
     /**
@@ -235,7 +235,7 @@ class OrderSynchronizer
      */
     protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
-        $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getId());
+        $orderProductsFront = $this->orderProductRepository->findByOrderFrontId($orderFront->getOrderId());
         $currentOrderBack = $orderBack;
 
         if (0 === count($orderProductsFront)) {
@@ -322,11 +322,11 @@ class OrderSynchronizer
                 0
             );
 
-            $this->orderBackRepository->saveAndFlush($currentOrderBack);
+            $this->orderBackRepository->persistAndFlush($currentOrderBack);
 
             if (0 === $orderNum) {
                 $currentOrderBack->setOrderNum($orderBack->getId());
-                $this->orderBackRepository->saveAndFlush($currentOrderBack);
+                $this->orderBackRepository->persistAndFlush($currentOrderBack);
             }
         }
 

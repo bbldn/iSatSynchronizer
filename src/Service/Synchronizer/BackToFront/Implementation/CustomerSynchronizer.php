@@ -70,7 +70,7 @@ class CustomerSynchronizer
         $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
         $customerFront = $this->getCustomerFrontFromCustomer($customer);
         $this->updateCustomerFrontFromCustomerBack($customerBack, $customerFront);
-        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getId());
+        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
     }
 
     /**
@@ -128,7 +128,7 @@ class CustomerSynchronizer
             3490,
             Filler::securityString(null)
         );
-        $this->addressFrontRepository->saveAndFlush($addressFront);
+        $this->addressFrontRepository->persistAndFlush($addressFront);
 
         $saul = $customerFront->getSalt();
         if (null === $saul) {
@@ -149,7 +149,7 @@ class CustomerSynchronizer
             null,
             null,
             false,
-            $addressFront->getId(),
+            $addressFront->getAddressId(),
             $this->storeFront->getDefaultCustomField(),
             Filler::securityString(null),
             $customerBack->getActive(),
@@ -159,9 +159,9 @@ class CustomerSynchronizer
             base64_encode($customerBack->getPassword())
         );
 
-        $this->customerFrontRepository->saveAndFlush($customerFront);
-        $addressFront->setCustomerId($customerFront->getId());
-        $this->addressFrontRepository->saveAndFlush($addressFront);
+        $this->customerFrontRepository->persistAndFlush($customerFront);
+        $addressFront->setCustomerId($customerFront->getCustomerId());
+        $this->addressFrontRepository->persistAndFlush($addressFront);
 
         return $customerFront;
     }
@@ -200,6 +200,6 @@ class CustomerSynchronizer
         }
         $customer->setBackId($backId);
         $customer->setFrontId($frontId);
-        $this->customerRepository->saveAndFlush($customer);
+        $this->customerRepository->persistAndFlush($customer);
     }
 }

@@ -9,50 +9,43 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_product_options`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductOptionsRepository")
  */
-class ProductOptions extends Entity
+class ProductOptions
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`optionID`")
      */
-    private $id;
+    protected $optionId;
 
     /**
      * @ORM\Column(type="string", name="`name`", nullable=true, length=50)
      */
-    private $name = null;
+    protected $name = null;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`", nullable=true)
      */
-    private $sortOrder = 0;
+    protected $sortOrder = 0;
 
     /**
      * @ORM\Column(type="boolean", name="`show_in_catalog`")
      */
-    private $showInCatalog = true;
+    protected $showInCatalog = true;
 
     /**
      * @ORM\Column(type="boolean", name="`show_to_buyer`")
      */
-    private $showToBuyer = true;
+    protected $showToBuyer = true;
 
     /**
      * @ORM\Column(type="string", name="`measure`", length=255)
      */
-    private $measure;
+    protected $measure;
 
-    public function getId(): ?int
+    public function getOptionId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->optionId;
     }
 
     public function getName(): ?string

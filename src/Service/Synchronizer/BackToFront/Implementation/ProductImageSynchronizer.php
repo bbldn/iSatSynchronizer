@@ -57,7 +57,7 @@ class ProductImageSynchronizer
     protected function synchronize(string $picture, ProductFront $productFront, $number = 1): ProductImageFront
     {
         $productPicturesFront = new ProductImageFront();
-        $productPicturesFront->setProductId($productFront->getId());
+        $productPicturesFront->setProductId($productFront->getProductId());
         $productPicturesFront->setSortOrder($this->storeFront->getDefaultSortOrder());
         $productPicturesFront->setImage(Filler::securityString(null));
 
@@ -78,7 +78,7 @@ class ProductImageSynchronizer
 
         $pathInfo = pathinfo($picture);
 
-        $name = $productFront->getId() . '_' . $number . '.' . mb_strtolower($pathInfo['extension']);
+        $name = $productFront->getProductId() . '_' . $number . '.' . mb_strtolower($pathInfo['extension']);
         $path = $this->frontPath . $name;
 
         try {

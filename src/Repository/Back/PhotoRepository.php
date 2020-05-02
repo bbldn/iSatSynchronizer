@@ -11,13 +11,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Photo[]    findAll()
  * @method Photo[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Photo[]    findByIds(string $ids)
- * @method void    save(Photo $instance)
- * @method void    saveAndFlush(Photo $instance)
+ * @method void    persist(Photo $instance)
+ * @method void    persistAndFlush(Photo $instance)
  * @method void    remove(Photo $instance)
  * @method void    removeAndFlush(Photo $instance)
  */
 class PhotoRepository extends EntityBackRepository
 {
+    /**
+     * PhotoRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Photo::class);
@@ -27,7 +31,7 @@ class PhotoRepository extends EntityBackRepository
      * @param int $value
      * @return Photo[] Returns an array of Photo objects
      */
-    public function findByProductBackId(int $value)
+    public function findByProductBackId(int $value): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.productId = :val')

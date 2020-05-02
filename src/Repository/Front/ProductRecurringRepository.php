@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductRecurring[]    findAll()
  * @method ProductRecurring[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method ProductRecurring[]    findByIds(string $ids)
- * @method void    save(ProductRecurring $instance)
- * @method void    saveAndFlush(ProductRecurring $instance)
+ * @method void    persist(ProductRecurring $instance)
+ * @method void    persistAndFlush(ProductRecurring $instance)
  * @method void    remove(ProductRecurring $instance)
  * @method void    removeAndFlush(ProductRecurring $instance)
  */
 class ProductRecurringRepository extends EntityFrontRepository
 {
+    /**
+     * ProductRecurringRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductRecurring::class);

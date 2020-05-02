@@ -2,26 +2,25 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_simple_fields`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderSimpleFieldsRepository")
  */
-class OrderSimpleFields extends Entity
+class OrderSimpleFields
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $id;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="string", name="`metadata`", length=255)
      */
-    private $metadata;
+    protected $metadata;
 
     /**
      * @param int $orderId
@@ -32,19 +31,19 @@ class OrderSimpleFields extends Entity
         string $metadata
     )
     {
-        $this->id = $orderId;
+        $this->orderId = $orderId;
         $this->metadata = $metadata;
     }
 
 
-    public function getId(): ?int
+    public function getOrderId(): ?int
     {
-        return $this->id;
+        return $this->orderId;
     }
 
-    public function setId(int $id): self
+    public function setOrderId(int $orderId): self
     {
-        $this->id = $id;
+        $this->orderId = $orderId;
 
         return $this;
     }

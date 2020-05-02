@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerWishList[]    findAll()
  * @method CustomerWishList[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method CustomerWishList[]    findByIds(string $ids)
- * @method void    save(CustomerWishList $instance)
- * @method void    saveAndFlush(CustomerWishList $instance)
+ * @method void    persist(CustomerWishList $instance)
+ * @method void    persistAndFlush(CustomerWishList $instance)
  * @method void    remove(CustomerWishList $instance)
  * @method void    removeAndFlush(CustomerWishList $instance)
  */
 class CustomerWishListRepository extends EntityFrontRepository
 {
+    /**
+     * CustomerWishListRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerWishList::class);

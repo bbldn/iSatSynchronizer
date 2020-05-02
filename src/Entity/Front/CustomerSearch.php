@@ -2,71 +2,70 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_search`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerSearchRepository")
  */
-class CustomerSearch extends Entity
+class CustomerSearch
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_search_id`")
      */
-    private $id;
+    protected $customerSearchId;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId;
+    protected $storeId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`keyword`", length=255)
      */
-    private $keyword;
+    protected $keyword;
 
     /**
      * @ORM\Column(type="integer", name="`category_id`", nullable=true)
      */
-    private $categoryId = null;
+    protected $categoryId = null;
 
     /**
      * @ORM\Column(type="boolean", name="`sub_category`")
      */
-    private $subCategory;
+    protected $subCategory;
 
     /**
      * @ORM\Column(type="boolean", name="`description`")
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="integer", name="`products`")
      */
-    private $products;
+    protected $products;
 
     /**
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $storeId
@@ -102,17 +101,9 @@ class CustomerSearch extends Entity
         $this->ip = $ip;
     }
 
-
-    public function getId(): ?int
+    public function getCustomerSearchId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerSearchId;
     }
 
     public function getStoreId(): ?int

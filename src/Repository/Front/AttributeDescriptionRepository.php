@@ -3,8 +3,8 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\AttributeDescription;
-use App\Other\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method AttributeDescription|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,24 +12,38 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method AttributeDescription[]    findAll()
  * @method AttributeDescription[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method AttributeDescription[]    findByIds(string $ids)
- * @method void    save(AttributeDescription $instance)
- * @method void    saveAndFlush(AttributeDescription $instance)
+ * @method void    persist(AttributeDescription $instance)
+ * @method void    persistAndFlush(AttributeDescription $instance)
  * @method void    remove(AttributeDescription $instance)
  * @method void    removeAndFlush(AttributeDescription $instance)
  */
 class AttributeDescriptionRepository extends EntityFrontRepository
 {
+    /**
+     * AttributeDescriptionRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, AttributeDescription::class);
     }
 
-    public function findByName($value)
+    /**
+     * @param string $value
+     * @return mixed|null
+     */
+    public function findByName(string $value): ?AttributeDescription
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.name = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
+        try {
+            $result = $this->createQueryBuilder('a')
+                ->andWhere('a.name = :val')
+                ->setParameter('val', $value)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

@@ -2,25 +2,24 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_filter`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductFilterRepository")
  */
-class ProductFilter extends Entity
+class ProductFilter
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $id;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`filter_id`")
      */
-    private $filterId;
+    protected $filterId;
 
     /**
      * @param int $productId
@@ -31,18 +30,18 @@ class ProductFilter extends Entity
         int $filterId
     )
     {
-        $this->id = $productId;
+        $this->productId = $productId;
         $this->filterId = $filterId;
     }
 
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->id;
+        return $this->productId;
     }
 
-    public function setId(int $id): self
+    public function setProductId(int $productId): self
     {
-        $this->id = $id;
+        $this->productId = $productId;
 
         return $this;
     }

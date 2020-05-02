@@ -2,30 +2,29 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_to_category`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductCategoryRepository")
  */
-class ProductCategory extends Entity
+class ProductCategory
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="product_id")
      */
-    private $id;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="category_id")
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="boolean", name="main_category")
      */
-    private $mainCategory = false;
+    protected $mainCategory = false;
 
     /**
      * ProductCategory constructor.
@@ -39,20 +38,19 @@ class ProductCategory extends Entity
         bool $mainCategory
     )
     {
-        $this->id = $productId;
+        $this->productId = $productId;
         $this->categoryId = $categoryId;
         $this->mainCategory = $mainCategory;
     }
 
-
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->id;
+        return $this->productId;
     }
 
-    public function setId(int $id): self
+    public function setProductId(int $productId): self
     {
-        $this->id = $id;
+        $this->productId = $productId;
 
         return $this;
     }

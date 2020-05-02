@@ -9,343 +9,343 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_products`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductRepository")
  */
-class Product extends Entity
+class Product
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`productID`")
      */
-    private $id;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`categoryID`", nullable=true)
      */
-    private $categoryId = null;
+    protected $categoryId = null;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255, nullable=true)
      */
-    private $name = null;
+    protected $name = null;
 
     /**
      * @ORM\Column(type="string", name="`description`", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="string", name="`description1`")
      */
-    private $description1;
+    protected $description1;
 
     /**
      * @ORM\Column(type="float", name="`customers_rating`")
      */
-    private $customers_rating = 0;
+    protected $customers_rating = 0;
 
     /**
      * @ORM\Column(type="float", name="`Price`")
      */
-    private $price = null;
+    protected $price = null;
 
     /**
      * @ORM\Column(type="float", name="`price_hrn`")
      */
-    private $priceHrn;
+    protected $priceHrn;
 
     /**
      * @ORM\Column(type="integer", name="`in_stock`", nullable=true)
      */
-    private $in_stock = null;
+    protected $in_stock = null;
 
     /**
      * @ORM\Column(type="integer", name="`in_stock1`")
      */
-    private $in_stock1;
+    protected $in_stock1;
 
     /**
      * @ORM\Column(type="integer", name="`customer_votes`", nullable=true)
      */
-    private $customerVotes = 0;
+    protected $customerVotes = 0;
 
     /**
      * @ORM\Column(type="integer", name="`items_sold`")
      */
-    private $itemsSold = 0;
+    protected $itemsSold = 0;
 
     /**
      * @ORM\Column(type="integer", name="`enabled`", nullable=true)
      */
-    private $enabled = null;
+    protected $enabled = null;
 
     /**
      * @ORM\Column(type="boolean", name="`enabled1`")
      */
-    private $enabled1 = true;
+    protected $enabled1 = true;
 
     /**
      * @ORM\Column(type="string", name="`brief_description`", nullable=true)
      */
-    private $briefDescription = null;
+    protected $briefDescription = null;
 
     /**
      * @ORM\Column(type="string", name="`brief_description1`")
      */
-    private $briefDescription1;
+    protected $briefDescription1;
 
     /**
      * @ORM\Column(type="float", name="`list_price`", nullable=true)
      */
-    private $listPrice = null;
+    protected $listPrice = null;
 
     /**
      * @ORM\Column(type="string", name="`product_code`", length=25, nullable=true)
      */
-    private $productCode = null;
+    protected $productCode = null;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`", nullable=true)
      */
-    private $sortOrder = 0;
+    protected $sortOrder = 0;
 
     /**
      * @ORM\Column(type="integer", name="`default_picture`", nullable=true)
      */
-    private $defaultPicture = null;
+    protected $defaultPicture = null;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`", nullable=true)
      */
-    private $dateAdded = null;
+    protected $dateAdded = null;
 
     /**
      * @ORM\Column(type="datetime", name="`date_modified`", nullable=true)
      */
-    private $dateModified = null;
+    protected $dateModified = null;
 
     /**
      * @ORM\Column(type="integer", name="`viewed_times`", nullable=true)
      */
-    private $viewedTimes = 0;
+    protected $viewedTimes = 0;
 
     /**
      * @ORM\Column(type="string", name="`eproduct_filename`", length=255, nullable=true)
      */
-    private $eproductFilename = null;
+    protected $eproductFilename = null;
 
     /**
      * @ORM\Column(type="integer", name="`eproduct_available_days`", nullable=true)
      */
-    private $eproductAvailableDays = 5;
+    protected $eproductAvailableDays = 5;
 
     /**
      * @ORM\Column(type="integer", name="`eproduct_download_times`", nullable=true)
      */
-    private $eproductDownloadTimes = 5;
+    protected $eproductDownloadTimes = 5;
 
     /**
      * @ORM\Column(type="float", name="`weight`", nullable=true)
      */
-    private $weight = 0;
+    protected $weight = 0;
 
     /**
      * @ORM\Column(type="string", name="`meta_description`", length=255, nullable=true)
      */
-    private $metaDescription = null;
+    protected $metaDescription = null;
 
     /**
      * @ORM\Column(type="string", name="`meta_keywords`", length=255, nullable=true)
      */
-    private $metaKeywords = null;
+    protected $metaKeywords = null;
 
     /**
      * @ORM\Column(type="integer", name="`free_shipping`", nullable=true)
      */
-    private $freeShipping = 0;
+    protected $freeShipping = 0;
 
     /**
      * @ORM\Column(type="integer", name="`min_order_amount`", nullable=true)
      */
-    private $minOrderAmount = 1;
+    protected $minOrderAmount = 1;
 
     /**
      * @ORM\Column(type="float", name="`shipping_freight`", nullable=true)
      */
-    private $shippingFreight = 0;
+    protected $shippingFreight = 0;
 
     /**
      * @ORM\Column(type="integer", name="`classID`", nullable=true)
      */
-    private $classId = null;
+    protected $classId = null;
 
     /**
      * @ORM\Column(type="float", name="`Price_purchase`")
      */
-    private $pricePurchase = 0;
+    protected $pricePurchase = 0;
 
     /**
      * @ORM\Column(type="integer", name="`comments_enabled`")
      */
-    private $commentsEnabled = 1;
+    protected $commentsEnabled = 1;
 
     /**
      * @ORM\Column(type="integer", name="`client_id`")
      */
-    private $clientId;
+    protected $clientId;
 
     /**
      * @ORM\Column(type="boolean", name="`no_bonus`")
      */
-    private $noBonus;
+    protected $noBonus;
 
     /**
      * @ORM\Column(type="boolean", name="`show_in_pricelist`")
      */
-    private $showInPricelist = true;
+    protected $showInPricelist = true;
 
     /**
      * @ORM\Column(type="boolean", name="`show_in_pricelist1`")
      */
-    private $showInPricelist1;
+    protected $showInPricelist1;
 
     /**
      * @ORM\Column(type="string", name="`recommended_text`", length=255)
      */
-    private $recommendedText;
+    protected $recommendedText;
 
     /**
      * @ORM\Column(type="string", name="`recommended_text1`", length=255)
      */
-    private $recommendedText1;
+    protected $recommendedText1;
 
     /**
      * @ORM\Column(type="string", name="`special_stripe_text`", length=255)
      */
-    private $specialStripeText;
+    protected $specialStripeText;
 
     /**
      * @ORM\Column(type="string", name="`special_stripe_text1`", length=255)
      */
-    private $specialStripeText1;
+    protected $specialStripeText1;
 
     /**
      * @ORM\Column(type="string", name="`special_stripe_color`", length=7)
      */
-    private $specialStripeColor = '5BA71B';
+    protected $specialStripeColor = '5BA71B';
 
     /**
      * @ORM\Column(type="string", name="`special_stripe_color1`", length=7)
      */
-    private $specialStripeColor1 = '5BA71B';
+    protected $specialStripeColor1 = '5BA71B';
 
     /**
      * @ORM\Column(type="string", name="`special_stripe_text_color`", length=7)
      */
-    private $specialStripeTextColor = 'FFFFFF';
+    protected $specialStripeTextColor = 'FFFFFF';
 
     /**
      * @ORM\Column(type="string", name="`special_stripe_text_color1`", length=7)
      */
-    private $specialStripeTextColor1 = 'FFFFFF';
+    protected $specialStripeTextColor1 = 'FFFFFF';
 
     /**
      * @ORM\Column(type="string", name="`product_absent_text`", length=255)
      */
-    private $productAbsentText;
+    protected $productAbsentText;
 
     /**
      * @ORM\Column(type="string", name="`product_absent_text1`", length=255)
      */
-    private $productAbsentText1;
+    protected $productAbsentText1;
 
     /**
      * @ORM\Column(type="string", name="`product_absent_color`", length=7)
      */
-    private $productAbsentColor = '777777';
+    protected $productAbsentColor = '777777';
 
     /**
      * @ORM\Column(type="string", name="`product_absent_color1`", length=7)
      */
-    private $productAbsentColor1 = '777777';
+    protected $productAbsentColor1 = '777777';
 
     /**
      * @ORM\Column(type="string", name="`measure`", length=255)
      */
-    private $measure;
+    protected $measure;
 
     /**
      * @ORM\Column(type="boolean", name="`discontinued`")
      */
-    private $discontinued;
+    protected $discontinued;
 
     /**
      * @ORM\Column(type="string", name="`preorder_text`", length=255)
      */
-    private $preorderText;
+    protected $preorderText;
 
     /**
      * @ORM\Column(type="string", name="`barcode`", length=50)
      */
-    private $barcode;
+    protected $barcode;
 
     /**
      * @ORM\Column(type="string", name="`serial_num`")
      */
-    private $serialNum;
+    protected $serialNum;
 
     /**
      * @ORM\Column(type="boolean", name="`document_type_default`", nullable=true)
      */
-    private $documentTypeDefault = null;
+    protected $documentTypeDefault = null;
 
     /**
      * @ORM\Column(type="text", name="`warranty`", length=255)
      */
-    private $warranty;
+    protected $warranty;
 
     /**
      * @ORM\Column(type="text", name="`email_after_checkout`", length=255)
      */
-    private $emailAfterCheckout;
+    protected $emailAfterCheckout;
 
     /**
      * @ORM\Column(type="integer", name="`min_count`")
      */
-    private $minCount = 5;
+    protected $minCount = 5;
 
     /**
      * @ORM\Column(type="string", name="`tags`")
      */
-    private $tags;
+    protected $tags;
 
     /**
      * @ORM\Column(type="string", name="`brand`", length=255)
      */
-    private $brand;
+    protected $brand;
 
     /**
      * @ORM\Column(type="boolean", name="`fix_price_in_hrn`")
      */
-    private $fixPriceInHrn;
+    protected $fixPriceInHrn;
 
     /**
      * @ORM\Column(type="string", name="`slug`", length=255)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @ORM\Column(type="boolean", name="`agsat_price_inherit`")
      */
-    private $agsatPriceInherit;
+    protected $agsatPriceInherit;
 
     /**
      * @ORM\Column(type="datetime", name="`agsat_price_updated_at`")
      */
-    private $agsatPriceUpdatedAt;
+    protected $agsatPriceUpdatedAt;
 
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->id;
+        return $this->productId;
     }
 
     public function getCategoryId(): ?int

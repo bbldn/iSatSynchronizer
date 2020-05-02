@@ -2,41 +2,40 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_order_status_changelog`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\OrderStatusChangeLogRepository")
  */
-class OrderStatusChangeLog extends Entity
+class OrderStatusChangeLog
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", name="`orderID`", nullable=true)
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="string", name="`status_name`", length=255, nullable=true)
      */
-    private $statusName;
+    protected $statusName;
 
     /**
      * @ORM\Column(type="datetime", name="`status_change_time`", nullable=true)
      */
-    private $statusChangeTime;
+    protected $statusChangeTime;
 
     /**
      * @ORM\Column(type="string", name="`status_comment`", length=255, nullable=true)
      */
-    private $statusComment;
+    protected $statusComment;
 
     public function getId(): ?int
     {

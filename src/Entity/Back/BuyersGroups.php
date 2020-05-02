@@ -2,31 +2,30 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_buyers_groups`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\BuyersGroupsRepository")
  */
-class BuyersGroups extends Entity
+class BuyersGroups
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="float", name="`percent`")
      */
-    private $percent;
+    protected $percent;
 
     public function getId(): ?int
     {

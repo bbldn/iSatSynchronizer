@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderCustomField[]    findAll()
  * @method OrderCustomField[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method OrderCustomField[]    findByIds(string $ids)
- * @method void    save(OrderCustomField $instance)
- * @method void    saveAndFlush(OrderCustomField $instance)
+ * @method void    persist(OrderCustomField $instance)
+ * @method void    persistAndFlush(OrderCustomField $instance)
  * @method void    remove(OrderCustomField $instance)
  * @method void    removeAndFlush(OrderCustomField $instance)
  */
 class OrderCustomFieldRepository extends EntityFrontRepository
 {
+    /**
+     * OrderCustomFieldRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderCustomField::class);

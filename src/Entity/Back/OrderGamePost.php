@@ -10,244 +10,244 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Back\OrderGamePostRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class OrderGamePost extends Entity
+class OrderGamePost
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", name="`type`", length=255)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", name="`product_name`")
      */
-    private $productName;
+    protected $productName;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price;
+    protected $price;
 
     /**
      * @ORM\Column(type="integer", name="`amount`")
      */
-    private $amount = 1;
+    protected $amount = 1;
 
     /**
      * @ORM\Column(type="string", name="`currency_name`", length=5)
      */
-    private $currencyName;
+    protected $currencyName;
 
     /**
      * @ORM\Column(type="string", name="`parent_name`", length=255)
      */
-    private $parentName;
+    protected $parentName;
 
     /**
      * @ORM\Column(type="string", name="`phone`", length=255)
      */
-    private $phone;
+    protected $phone;
 
     /**
      * @ORM\Column(type="string", name="`fio`", length=255)
      */
-    private $fio;
+    protected $fio;
 
     /**
      * @ORM\Column(type="string", name="`region`", length=255)
      */
-    private $region;
+    protected $region;
 
     /**
      * @ORM\Column(type="string", name="`city`", length=255)
      */
-    private $city;
+    protected $city;
 
     /**
      * @ORM\Column(type="string", name="`street`", length=255)
      */
-    private $street;
+    protected $street;
 
     /**
      * @ORM\Column(type="string", name="`house`", length=255)
      */
-    private $house;
+    protected $house;
 
     /**
      * @ORM\Column(type="string", name="`warehouse`", length=255)
      */
-    private $warehouse;
+    protected $warehouse;
 
     /**
      * @ORM\Column(type="string", name="`mail`", length=255)
      */
-    private $mail;
+    protected $mail;
 
     /**
      * @ORM\Column(type="string", name="`whant`")
      */
-    private $whant;
+    protected $whant;
 
     /**
      * @ORM\Column(type="string", name="`vip_num`", length=255)
      */
-    private $vipNum;
+    protected $vipNum;
 
     /**
      * @ORM\Column(type="integer", name="`time`")
      */
-    private $time;
+    protected $time;
 
     /**
      * @ORM\Column(type="integer", name="`status`")
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="string", name="`comments`")
      */
-    private $comments;
+    protected $comments;
 
     /**
      * @ORM\Column(type="integer", name="`archive`")
      */
-    private $archive;
+    protected $archive;
 
     /**
      * @ORM\Column(type="integer", name="`read`")
      */
-    private $read;
+    protected $read;
 
     /**
      * @ORM\Column(type="boolean", name="`synchronize`")
      */
-    private $synchronize;
+    protected $synchronize;
 
     /**
      * @ORM\Column(type="integer", name="`client_id`")
      */
-    private $clientId;
+    protected $clientId;
 
     /**
      * @ORM\Column(type="integer", name="`payment`")
      */
-    private $payment;
+    protected $payment;
 
     /**
      * @ORM\Column(type="integer", name="`delivery`")
      */
-    private $delivery;
+    protected $delivery;
 
     /**
      * @ORM\Column(type="integer", name="`order_num`")
      */
-    private $orderNum;
+    protected $orderNum;
 
     /**
      * @ORM\Column(type="string", name="`track_number`", length=255)
      */
-    private $trackNumber;
+    protected $trackNumber;
 
     /**
      * @ORM\Column(type="datetime", name="`track_number_date`")
      */
-    private $trackNumberDate;
+    protected $trackNumberDate;
 
     /**
      * @ORM\Column(type="boolean", name="`money_given`")
      */
-    private $moneyGiven;
+    protected $moneyGiven;
 
     /**
      * @ORM\Column(type="boolean", name="`track_sent`")
      */
-    private $trackSent;
+    protected $trackSent;
 
     /**
      * @ORM\Column(type="string", name="`serial_num`", length=255)
      */
-    private $serialNum;
+    protected $serialNum;
 
     /**
      * @ORM\Column(type="integer", name="`shop_id`")
      */
-    private $shopId;
+    protected $shopId;
 
     /**
      * @ORM\Column(type="integer", name="`shop_id_counterparty`")
      */
-    private $shopIdCounterparty;
+    protected $shopIdCounterparty;
 
     /**
      * @ORM\Column(type="integer", name="`payment_wait_days`")
      */
-    private $paymentWaitDays;
+    protected $paymentWaitDays;
 
     /**
      * @ORM\Column(type="integer", name="`payment_wait_first_sum`")
      */
-    private $paymentWaitFirstSum;
+    protected $paymentWaitFirstSum;
 
     /**
      * @ORM\Column(type="datetime", name="`payment_date`")
      */
-    private $paymentDate;
+    protected $paymentDate;
 
     /**
      * @ORM\Column(type="integer", name="`document_id`")
      */
-    private $documentId;
+    protected $documentId;
 
     /**
      * @ORM\Column(type="integer", name="`document_type`")
      */
-    private $documentType = 2;
+    protected $documentType = 2;
 
     /**
      * @ORM\Column(type="datetime", name="`invoice_sent`")
      */
-    private $invoiceSent;
+    protected $invoiceSent;
 
     /**
      * @ORM\Column(type="float", name="`currency_value`")
      */
-    private $currencyValue;
+    protected $currencyValue;
 
     /**
      * @ORM\Column(type="string", name="`currency_value_when_purchasing`", length=255)
      */
-    private $currencyValueWhenPurchasing;
+    protected $currencyValueWhenPurchasing;
 
     /**
      * @ORM\Column(type="float", name="`shipping_price`")
      */
-    private $shippingPrice;
+    protected $shippingPrice;
 
     /**
      * @ORM\Column(type="float", name="`shipping_price_old`")
      */
-    private $shippingPriceOld;
+    protected $shippingPriceOld;
 
     /**
      * @ORM\Column(type="string", name="`shipping_currency_name`", length=10)
      */
-    private $shippingCurrencyName;
+    protected $shippingCurrencyName;
 
     /**
      * @ORM\Column(type="float", name="`shipping_currency_value`")
      */
-    private $shippingCurrencyValue;
+    protected $shippingCurrencyValue;
 
     /**
      * @param string $type
@@ -393,7 +393,6 @@ class OrderGamePost extends Entity
         $this->shippingCurrencyName = $shippingCurrencyName;
         $this->shippingCurrencyValue = $shippingCurrencyValue;
     }
-
 
     public function getId(): ?int
     {

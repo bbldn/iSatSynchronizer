@@ -9,50 +9,43 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_product_options_values`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductOptionsValuesRepository")
  */
-class ProductOptionsValues extends Entity
+class ProductOptionsValues
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`optionID`")
      */
-    private $id;
+    protected $optionId;
 
     /**
      * @ORM\Column(type="integer", name="`productID`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`option_value`", length=255, nullable=true)
      */
-    private $optionValue = null;
+    protected $optionValue = null;
 
     /**
      * @ORM\Column(type="boolean", name="`option_type`", nullable=true)
      */
-    private $optionType = false;
+    protected $optionType = false;
 
     /**
      * @ORM\Column(type="integer", name="`option_show_times`", nullable=true)
      */
-    private $optionShowTimes = 1;
+    protected $optionShowTimes = 1;
 
     /**
      * @ORM\Column(type="integer", name="`variantID`", nullable=true)
      */
-    private $variantId = null;
+    protected $variantId = null;
 
-    public function getId(): ?int
+    public function getOptionId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->optionId;
     }
 
     public function getProductId(): ?int

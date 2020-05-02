@@ -45,10 +45,10 @@ class CustomerSynchronizer
      */
     protected function synchronizeCustomer(CustomerFront $customerFront): CustomerBack
     {
-        $customer = $this->customerRepository->findOneByFrontId($customerFront->getId());
+        $customer = $this->customerRepository->findOneByFrontId($customerFront->getCustomerId());
         $customerBack = $this->getCustomerBackFromCustomer($customer);
         $this->updateCustomerBackFromCustomerFront($customerFront, $customerBack);
-        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getId());
+        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
 
         return $customerBack;
     }
@@ -148,7 +148,7 @@ class CustomerSynchronizer
             Filler::securityString(null)
         );
 
-        $this->customerBackRepository->saveAndFlush($customerBack);
+        $this->customerBackRepository->persistAndFlush($customerBack);
 
         return $customerBack;
     }
@@ -203,7 +203,7 @@ class CustomerSynchronizer
             Filler::securityString(null)
         );
 
-        $this->customerBackRepository->saveAndFlush($customerBack);
+        $this->customerBackRepository->persistAndFlush($customerBack);
 
         return $customerBack;
     }
@@ -220,6 +220,6 @@ class CustomerSynchronizer
         }
         $customer->setBackId($backId);
         $customer->setFrontId($frontId);
-        $this->customerRepository->saveAndFlush($customer);
+        $this->customerRepository->persistAndFlush($customer);
     }
 }

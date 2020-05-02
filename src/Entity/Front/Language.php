@@ -2,56 +2,55 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_language`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\LanguageRepository")
  */
-class Language extends Entity
+class Language
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $id;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=32)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`code`", length=5)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\Column(type="string", name="`locale`", length=255)
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @ORM\Column(type="string", name="`image`", length=64)
      */
-    private $image;
+    protected $image;
 
     /**
      * @ORM\Column(type="string", name="`directory`", length=32)
      */
-    private $directory;
+    protected $directory;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder = 0;
+    protected $sortOrder = 0;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status;
+    protected $status;
 
     /**
      * Language constructor.
@@ -82,17 +81,9 @@ class Language extends Entity
         $this->status = $status;
     }
 
-
-    public function getId(): ?int
+    public function getLanguageId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->languageId;
     }
 
     public function getName(): ?string

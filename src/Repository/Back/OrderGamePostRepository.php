@@ -4,6 +4,8 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\OrderGamePost;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @method OrderGamePost|null find($id, $lockMode = null, $lockVersion = null)
@@ -11,38 +13,53 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderGamePost[]    findAll()
  * @method OrderGamePost[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method OrderGamePost[]    findByIds(string $ids)
- * @method void    save(OrderGamePost $instance)
- * @method void    saveAndFlush(OrderGamePost $instance)
+ * @method void    persist(OrderGamePost $instance)
+ * @method void    persistAndFlush(OrderGamePost $instance)
  * @method void    remove(OrderGamePost $instance)
  * @method void    removeAndFlush(OrderGamePost $instance)
  */
 class OrderGamePostRepository extends EntityBackRepository
 {
+    /**
+     * OrderGamePostRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderGamePost::class);
     }
 
+    /**
+     * @param int $orderNum
+     * @param int $productId
+     * @return OrderGamePost|null
+     */
     public function findOneByOrderNumAndProductBackId(int $orderNum, int $productId): ?OrderGamePost
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.orderNum = :orderNum')
-            ->andWhere('o.productId = :productId')
-            ->setParameter('orderNum', $orderNum)
-            ->setParameter('productId', $productId)
-            ->getQuery()
-            ->getOneOrNullResult();
+        try {
+            $result = $this->createQueryBuilder('o')
+                ->andWhere('o.orderNum = :orderNum')
+                ->andWhere('o.productId = :productId')
+                ->setParameter('orderNum', $orderNum)
+                ->setParameter('productId', $productId)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 
     /**
      * @param array $ids
-     * @return OrderGamePost[] Returns an array of OrderGamePost objects
+     * @return OrderGamePost[]
      */
     public function findWithoutIds(array $ids = [])
     {
-        $qb = $this->createQueryBuilder('o');
-        return $qb
-            ->where($qb->expr()->notIn('o.clientId', $ids))
+        $queryBuilder = $this->createQueryBuilder('o');
+
+        return $queryBuilder->where($queryBuilder->expr()->notIn('o.clientId', $ids))
             ->andWhere('o.documentType = 2')
             ->andWhere('o.id = o.orderNum')
             ->getQuery()
@@ -51,9 +68,9 @@ class OrderGamePostRepository extends EntityBackRepository
 
     /**
      * @param int $value
-     * @return OrderGamePost[] Returns an array of OrderGamePost objects
+     * @return OrderGamePost[]
      */
-    public function findByOrderNum(int $value)
+    public function findByOrderNum(int $value): array
     {
         return $this->createQueryBuilder('o')
             ->andWhere('o.orderNum = :val')
@@ -62,13 +79,25 @@ class OrderGamePostRepository extends EntityBackRepository
             ->getResult();
     }
 
+    /**
+     * @param int $orderNum
+     * @return int|null
+     */
     public function getTotalPrice(int $orderNum): ?int
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.orderNum = :val')
-            ->setParameter('val', $orderNum)
-            ->select('SUM(o.price * o.amount) as total')
-            ->getQuery()
-            ->getSingleScalarResult();
+        try {
+            $result = $this->createQueryBuilder('o')
+                ->andWhere('o.orderNum = :val')
+                ->setParameter('val', $orderNum)
+                ->select('SUM(o.price * o.amount) as total')
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (NoResultException $e) {
+            $result = null;
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

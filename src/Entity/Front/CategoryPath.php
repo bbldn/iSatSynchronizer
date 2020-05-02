@@ -2,30 +2,29 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_path`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryPathRepository")
  */
-class CategoryPath extends Entity
+class CategoryPath
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $id;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="integer", name="`path_id`")
      */
-    private $pathId;
+    protected $pathId;
 
     /**
      * @ORM\Column(type="integer", name="`level`")
      */
-    private $level;
+    protected $level;
 
     /**
      * @param int $categoryId
@@ -38,19 +37,19 @@ class CategoryPath extends Entity
         int $level
     )
     {
-        $this->id = $categoryId;
+        $this->categoryId = $categoryId;
         $this->pathId = $pathId;
         $this->level = $level;
     }
 
-    public function getId(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->id;
+        return $this->categoryId;
     }
 
-    public function setId(int $id): self
+    public function setCategoryId(int $categoryId): self
     {
-        $this->id = $id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }

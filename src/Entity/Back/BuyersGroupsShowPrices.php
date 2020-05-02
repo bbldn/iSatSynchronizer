@@ -9,27 +9,27 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_buyers_groups_show_prices`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\BuyersGroupsShowPricesRepository")
  */
-class BuyersGroupsShowPrices extends Entity
+class BuyersGroupsShowPrices
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`group_id`")
      */
-    private $id;
+    protected $groupId;
 
     /**
      * @ORM\Column(type="integer", name="`group_id_show_price`")
      */
-    private $groupIdShowPrice;
+    protected $groupIdShowPrice;
 
-    public function getId(): ?int
+    public function getGroupId(): ?int
     {
-        return $this->id;
+        return $this->groupId;
     }
 
-    public function setId(int $id): self
+    public function setGroupId(int $groupId): self
     {
-        $this->id = $id;
+        $this->groupId = $groupId;
 
         return $this;
     }

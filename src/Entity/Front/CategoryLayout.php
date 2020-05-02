@@ -2,30 +2,29 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_to_layout`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryLayoutRepository")
  */
-class CategoryLayout extends Entity
+class CategoryLayout
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $id;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId;
+    protected $storeId;
 
     /**
      * @ORM\Column(type="integer", name="`layout_id`")
      */
-    private $layoutId;
+    protected $layoutId;
 
     /**
      * @param int $categoryId
@@ -38,19 +37,19 @@ class CategoryLayout extends Entity
         int $layoutId
     )
     {
-        $this->id = $categoryId;
+        $this->categoryId = $categoryId;
         $this->storeId = $storeId;
         $this->layoutId = $layoutId;
     }
 
-    public function getId(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->id;
+        return $this->categoryId;
     }
 
-    public function setId(int $id): self
+    public function setCategoryId(int $categoryId): self
     {
-        $this->id = $id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }

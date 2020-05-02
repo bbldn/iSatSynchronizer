@@ -2,36 +2,35 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_image`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductImageRepository")
  */
-class ProductImage extends Entity
+class ProductImage
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_image_id`")
      */
-    private $id;
+    protected $productImageId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`image`", nullable=true, length=255)
      */
-    private $image = null;
+    protected $image = null;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder = 0;
+    protected $sortOrder = 0;
 
     /**
      * @param int $productId
@@ -49,17 +48,9 @@ class ProductImage extends Entity
         $this->sortOrder = $sortOrder;
     }
 
-
-    public function getId(): ?int
+    public function getProductImageId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->productImageId;
     }
 
     public function getProductId(): ?int

@@ -2,50 +2,49 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_description`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryDescriptionRepository")
  */
-class CategoryDescription extends Entity
+class CategoryDescription
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $id;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`description`")
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="string", name="`meta_title`", length=255)
      */
-    private $metaTitle;
+    protected $metaTitle;
 
     /**
      * @ORM\Column(type="string", name="`meta_description`", length=255)
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * @ORM\Column(type="string", name="`meta_keyword`", length=255)
      */
-    private $metaKeyword;
+    protected $metaKeyword;
 
     /**
      * @param int $categoryId
@@ -66,7 +65,7 @@ class CategoryDescription extends Entity
         string $metaKeyword
     )
     {
-        $this->id = $categoryId;
+        $this->categoryId = $categoryId;
         $this->languageId = $languageId;
         $this->name = $name;
         $this->description = $description;
@@ -76,14 +75,14 @@ class CategoryDescription extends Entity
     }
 
 
-    public function getId(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->id;
+        return $this->categoryId;
     }
 
-    public function setId(int $id)
+    public function setCategoryId(int $categoryId)
     {
-        $this->id = $id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }

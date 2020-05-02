@@ -2,30 +2,29 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_attribute_group_description`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\AttributeGroupDescriptionRepository")
  */
-class AttributeGroupDescription extends Entity
+class AttributeGroupDescription
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`attribute_group_id`")
      */
-    private $id;
+    protected $attributeGroupId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=64)
      */
-    private $name;
+    protected $name;
 
     /**
      * @param int $attributeGroupId
@@ -38,19 +37,19 @@ class AttributeGroupDescription extends Entity
         string $name
     )
     {
-        $this->id = $attributeGroupId;
+        $this->attributeGroupId = $attributeGroupId;
         $this->languageId = $languageId;
         $this->name = $name;
     }
 
-    public function getId(): ?int
+    public function getAttributeGroupId(): ?int
     {
-        return $this->id;
+        return $this->attributeGroupId;
     }
 
-    public function setId(int $id): self
+    public function setAttributeGroupId(int $attributeGroupId): self
     {
-        $this->id = $id;
+        $this->attributeGroupId = $attributeGroupId;
 
         return $this;
     }

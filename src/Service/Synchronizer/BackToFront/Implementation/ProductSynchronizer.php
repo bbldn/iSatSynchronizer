@@ -185,13 +185,13 @@ class ProductSynchronizer
      */
     protected function synchronizeProduct(ProductBack $productBack, $synchronizeImage = false): void
     {
-        $product = $this->productRepository->findOneByBackId($productBack->getId());
+        $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         $productFront = $this->getProductFrontFromProduct($product);
         $this->updateProductFrontFromProductBack($productBack, $productFront);
         $this->createOrUpdateProduct(
             $product,
-            $productBack->getId(),
-            $productFront->getId()
+            $productBack->getProductId(),
+            $productFront->getProductId()
         );
 
         if (true === $synchronizeImage && null !== $productFront) {
@@ -237,8 +237,8 @@ class ProductSynchronizer
         }
 
         $productFront->fill(
-            'art' . $productBack->getId(),
-            $productBack->getId(),
+            'art' . $productBack->getProductId(),
+            $productBack->getProductId(),
             Filler::securityString(null),
             Filler::securityString(null),
             Filler::securityString(null),
@@ -267,15 +267,15 @@ class ProductSynchronizer
             0
         );
 
-        $this->productFrontRepository->saveAndFlush($productFront);
+        $this->productFrontRepository->persistAndFlush($productFront);
 
-        $productDescriptionFront = $this->productDescriptionFrontRepository->find($productFront->getId());
+        $productDescriptionFront = $this->productDescriptionFrontRepository->find($productFront->getProductId());
         if (null === $productDescriptionFront) {
             $productDescriptionFront = new ProductDescriptionFront();
         }
 
         $productDescriptionFront->fill(
-            $productFront->getId(),
+            $productFront->getProductId(),
             $this->storeFront->getDefaultLanguageId(),
             Filler::securityString(Store::encodingConvert($productBack->getName())),
             Filler::securityString(Store::encodingConvert($productBack->getDescription())),
@@ -285,44 +285,44 @@ class ProductSynchronizer
             Filler::securityString(null)
         );
 
-        $this->productDescriptionFrontRepository->saveAndFlush($productDescriptionFront);
+        $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 
-        $productLayoutFront = $this->productLayoutFrontRepository->find($productFront->getId());
+        $productLayoutFront = $this->productLayoutFrontRepository->find($productFront->getProductId());
         if (null === $productLayoutFront) {
             $productLayoutFront = new ProductLayoutFront();
         }
 
         $productLayoutFront->fill(
-            $productFront->getId(),
+            $productFront->getProductId(),
             $this->storeFront->getDefaultStoreId(),
             $this->storeFront->getDefaultLayoutId()
         );
 
-        $this->productLayoutFrontRepository->saveAndFlush($productLayoutFront);
+        $this->productLayoutFrontRepository->persistAndFlush($productLayoutFront);
 
-        $productStoreFront = $this->productStoreFrontRepository->find($productFront->getId());
+        $productStoreFront = $this->productStoreFrontRepository->find($productFront->getProductId());
         if (null === $productStoreFront) {
             $productStoreFront = new ProductStoreFront();
         }
         $productStoreFront->fill(
-            $productFront->getId(),
+            $productFront->getProductId(),
             $this->storeFront->getDefaultStoreId()
         );
-        $this->productStoreFrontRepository->saveAndFlush($productStoreFront);
+        $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
         $categoryFrontId = $this->getCategoryFrontIdByBack($productBack->getCategoryId());
-        $productCategoryFront = $this->productCategoryFrontRepository->find($productFront->getId());
+        $productCategoryFront = $this->productCategoryFrontRepository->find($productFront->getProductId());
         if (null === $productCategoryFront) {
             $productCategoryFront = new ProductCategoryFront();
         }
         $productCategoryFront->fill(
-            $productFront->getId(),
+            $productFront->getProductId(),
             $categoryFrontId,
             true
         );
-        $this->productCategoryFrontRepository->saveAndFlush($productCategoryFront);
+        $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
-        $productFrontId = $productFront->getId();
+        $productFrontId = $productFront->getProductId();
         $this->synchronizeAttributes($productBack, $productFrontId);
 
         $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
@@ -363,7 +363,7 @@ class ProductSynchronizer
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
-        return $categoryFront->getId();
+        return $categoryFront->getCategoryId();
     }
 
     /**
@@ -372,9 +372,9 @@ class ProductSynchronizer
      */
     protected function synchronizeAttributes(ProductBack $productBack, int $productFrontId)
     {
-        $productAttributesBack = $this->attributeBackRepository->findAllByProductBackId($productBack->getId());
+        $productAttributesBack = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
         foreach ($productAttributesBack as $productAttributeBack) {
-            $attribute = $this->attributeRepository->findOneByBackId($productAttributeBack->getId());
+            $attribute = $this->attributeRepository->findOneByBackId($productAttributeBack->getOptionId());
             if (null === $attribute) {
                 // @TODO Notify
                 continue;
@@ -394,7 +394,7 @@ class ProductSynchronizer
                     $this->storeFront->getDefaultLanguageId(),
                     $text
                 );
-                $this->productAttributeFrontRepository->saveAndFlush($productAttributeFront);
+                $this->productAttributeFrontRepository->persistAndFlush($productAttributeFront);
             }
         }
     }
@@ -413,10 +413,10 @@ class ProductSynchronizer
             $this->storeFront->getDefaultStoreId(),
             $this->storeFront->getDefaultLanguageId(),
             'product_id=' . $productFrontId,
-            StoreFront::generateURL($productBack->getId(), Store::encodingConvert($productBack->getName()))
+            StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
         );
 
-        $this->seoUrlFrontRepository->saveAndFlush($seoUrl);
+        $this->seoUrlFrontRepository->persistAndFlush($seoUrl);
     }
 
     /**
@@ -431,7 +431,7 @@ class ProductSynchronizer
         }
         $product->setBackId($backId);
         $product->setFrontId($frontId);
-        $this->productRepository->saveAndFlush($product);
+        $this->productRepository->persistAndFlush($product);
     }
 
     /**
@@ -440,7 +440,7 @@ class ProductSynchronizer
      */
     public function synchronizeImage(ProductBack $productBack, ProductFront $productFront): void
     {
-        $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getId());
+        $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
         foreach ($productBackImages as $key => $productBackImage) {
             $productFrontImage = $this->productImageSynchronizer->synchronizeProductImage(
                 $productBackImage,
@@ -449,21 +449,21 @@ class ProductSynchronizer
             );
             if (0 === $key) {
                 $productFront->setImage($productFrontImage->getImage());
-                $this->productFrontRepository->saveAndFlush($productFront);
+                $this->productFrontRepository->persistAndFlush($productFront);
                 continue;
             }
-            $this->productImageFrontRepository->saveAndFlush($productFrontImage);
+            $this->productImageFrontRepository->persistAndFlush($productFrontImage);
         }
 
         $count = count($productBackImages) + 1;
-        $photosBack = $this->photoBackRepository->findByProductBackId($productBack->getId());
+        $photosBack = $this->photoBackRepository->findByProductBackId($productBack->getProductId());
         foreach ($photosBack as $key => $photoBack) {
             $productFrontImage = $this->productImageSynchronizer->synchronizePhoto(
                 $photoBack,
                 $productFront,
                 $key + $count
             );
-            $this->productImageFrontRepository->saveAndFlush($productFrontImage);
+            $this->productImageFrontRepository->persistAndFlush($productFrontImage);
         }
     }
 }

@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerAffiliate[]    findAll()
  * @method CustomerAffiliate[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method CustomerAffiliate[]    findByIds(string $ids)
- * @method void    save(CustomerAffiliate $instance)
- * @method void    saveAndFlush(CustomerAffiliate $instance)
+ * @method void    persist(CustomerAffiliate $instance)
+ * @method void    persistAndFlush(CustomerAffiliate $instance)
  * @method void    remove(CustomerAffiliate $instance)
  * @method void    removeAndFlush(CustomerAffiliate $instance)
  */
 class CustomerAffiliateRepository extends EntityFrontRepository
 {
+    /**
+     * CustomerAffiliateRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerAffiliate::class);

@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderShipment[]    findAll()
  * @method OrderShipment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method OrderShipment[]    findByIds(string $ids)
- * @method void    save(OrderShipment $instance)
- * @method void    saveAndFlush(OrderShipment $instance)
+ * @method void    persist(OrderShipment $instance)
+ * @method void    persistAndFlush(OrderShipment $instance)
  * @method void    remove(OrderShipment $instance)
  * @method void    removeAndFlush(OrderShipment $instance)
  */
 class OrderShipmentRepository extends EntityFrontRepository
 {
+    /**
+     * OrderShipmentRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderShipment::class);

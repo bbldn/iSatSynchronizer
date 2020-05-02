@@ -2,55 +2,54 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_description`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductDescriptionRepository")
  */
-class ProductDescription extends Entity
+class ProductDescription
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $id;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`description`")
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="string", name="`tag`")
      */
-    private $tag;
+    protected $tag;
 
     /**
      * @ORM\Column(type="string", name="`meta_title`", length=255)
      */
-    private $metaTitle;
+    protected $metaTitle;
 
     /**
      * @ORM\Column(type="string", name="`meta_description`", length=255)
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * @ORM\Column(type="string", name="`meta_keyword`", length=255)
      */
-    private $metaKeyword;
+    protected $metaKeyword;
 
     /**
      * @param int $productId
@@ -73,7 +72,7 @@ class ProductDescription extends Entity
         string $metaKeyword
     )
     {
-        $this->id = $productId;
+        $this->productId = $productId;
         $this->languageId = $languageId;
         $this->name = $name;
         $this->description = $description;
@@ -83,17 +82,9 @@ class ProductDescription extends Entity
         $this->metaKeyword = $metaKeyword;
     }
 
-
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->productId;
     }
 
     public function getLanguageId(): ?int

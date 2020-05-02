@@ -2,46 +2,45 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_transaction`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerTransactionRepository")
  */
-class CustomerTransaction extends Entity
+class CustomerTransaction
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_transaction_id`")
      */
-    private $id;
+    protected $customerTransactionId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="string", name="`description`", length=255)
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="float", name="`amount`")
      */
-    private $amount;
+    protected $amount;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $customerId
@@ -62,17 +61,9 @@ class CustomerTransaction extends Entity
         $this->amount = $amount;
     }
 
-
-    public function getId(): ?int
+    public function getCustomerTransactionId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerTransactionId;
     }
 
     public function getCustomerId(): ?int

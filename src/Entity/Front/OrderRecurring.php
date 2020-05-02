@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,109 +9,109 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderRecurringRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class OrderRecurring extends Entity
+class OrderRecurring
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_recurring_id`")
      */
-    private $id;
+    protected $orderRecurringId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="string", name="`reference`", length=255)
      */
-    private $reference;
+    protected $reference;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`product_name`", length=255)
      */
-    private $productName;
+    protected $productName;
 
     /**
      * @ORM\Column(type="integer", name="`product_quantity`")
      */
-    private $productQuantity;
+    protected $productQuantity;
 
     /**
      * @ORM\Column(type="integer", name="`recurring_id`")
      */
-    private $recurringId;
+    protected $recurringId;
 
     /**
      * @ORM\Column(type="string", name="`recurring_name`", length=255)
      */
-    private $recurringName;
+    protected $recurringName;
 
     /**
      * @ORM\Column(type="string", name="`recurring_description`", length=255)
      */
-    private $recurringDescription;
+    protected $recurringDescription;
 
     /**
      * @ORM\Column(type="string", name="`recurring_frequency`", length=25)
      */
-    private $recurringFrequency;
+    protected $recurringFrequency;
 
     /**
      * @ORM\Column(type="smallint", name="`recurring_cycle`")
      */
-    private $recurringCycle;
+    protected $recurringCycle;
 
     /**
      * @ORM\Column(type="smallint", name="`recurring_duration`")
      */
-    private $recurringDuration;
+    protected $recurringDuration;
 
     /**
      * @ORM\Column(type="float", name="`recurring_price`")
      */
-    private $recurringPrice;
+    protected $recurringPrice;
 
     /**
      * @ORM\Column(type="boolean", name="`trial`")
      */
-    private $trial;
+    protected $trial;
 
     /**
      * @ORM\Column(type="string", name="`trial_frequency`", length=25)
      */
-    private $trialFrequency;
+    protected $trialFrequency;
 
     /**
      * @ORM\Column(type="smallint", name="`trial_cycle`")
      */
-    private $trialCycle;
+    protected $trialCycle;
 
     /**
      * @ORM\Column(type="smallint", name="`trial_duration`")
      */
-    private $trialDuration;
+    protected $trialDuration;
 
     /**
      * @ORM\Column(type="float", name="`trial_price`")
      */
-    private $trialPrice;
+    protected $trialPrice;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $orderId
@@ -175,17 +174,9 @@ class OrderRecurring extends Entity
         $this->status = $status;
     }
 
-
-    public function getId(): ?int
+    public function getOrderRecurringId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderRecurringId;
     }
 
     public function getOrderId(): ?int
@@ -404,6 +395,17 @@ class OrderRecurring extends Entity
         return $this;
     }
 
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
+    }
+
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
@@ -414,16 +416,5 @@ class OrderRecurring extends Entity
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

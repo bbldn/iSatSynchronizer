@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderRecurringTransaction[]    findAll()
  * @method OrderRecurringTransaction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method OrderRecurringTransaction[]    findByIds(string $ids)
- * @method void    save(OrderRecurringTransaction $instance)
- * @method void    saveAndFlush(OrderRecurringTransaction $instance)
+ * @method void    persist(OrderRecurringTransaction $instance)
+ * @method void    persistAndFlush(OrderRecurringTransaction $instance)
  * @method void    remove(OrderRecurringTransaction $instance)
  * @method void    removeAndFlush(OrderRecurringTransaction $instance)
  */
 class OrderRecurringTransactionRepository extends EntityFrontRepository
 {
+    /**
+     * OrderRecurringTransactionRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderRecurringTransaction::class);

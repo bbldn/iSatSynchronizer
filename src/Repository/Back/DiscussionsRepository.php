@@ -11,13 +11,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Discussions[]    findAll()
  * @method Discussions[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Discussions[]    findByIds(string $ids)
- * @method void    save(Discussions $instance)
- * @method void    saveAndFlush(Discussions $instance)
+ * @method void    persist(Discussions $instance)
+ * @method void    persistAndFlush(Discussions $instance)
  * @method void    remove(Discussions $instance)
  * @method void    removeAndFlush(Discussions $instance)
  */
 class DiscussionsRepository extends EntityBackRepository
 {
+    /**
+     * DiscussionsRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Discussions::class);

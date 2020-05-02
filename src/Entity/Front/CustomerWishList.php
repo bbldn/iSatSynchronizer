@@ -2,30 +2,29 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_wishlist`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerWishListRepository")
  */
-class CustomerWishList extends Entity
+class CustomerWishList
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $id;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $customerId
@@ -36,19 +35,19 @@ class CustomerWishList extends Entity
         int $productId
     )
     {
-        $this->id = $customerId;
+        $this->customerId = $customerId;
         $this->productId = $productId;
     }
 
 
-    public function getId(): ?int
+    public function getCustomerId(): ?int
     {
-        return $this->id;
+        return $this->customerId;
     }
 
-    public function setId(int $id): self
+    public function setCustomerId(int $customerId): self
     {
-        $this->id = $id;
+        $this->customerId = $customerId;
 
         return $this;
     }

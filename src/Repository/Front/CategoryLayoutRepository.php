@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CategoryLayout[]    findAll()
  * @method CategoryLayout[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method CategoryLayout[]    findByIds(string $ids)
- * @method void    save(CategoryLayout $instance)
- * @method void    saveAndFlush(CategoryLayout $instance)
+ * @method void    persist(CategoryLayout $instance)
+ * @method void    persistAndFlush(CategoryLayout $instance)
  * @method void    remove(CategoryLayout $instance)
  * @method void    removeAndFlush(CategoryLayout $instance)
  */
 class CategoryLayoutRepository extends EntityFrontRepository
 {
+    /**
+     * CategoryLayoutRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CategoryLayout::class);

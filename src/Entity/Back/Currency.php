@@ -14,34 +14,34 @@ class Currency
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="float", name="`value`")
      */
-    private $value;
+    protected $value;
 
     /**
      * @ORM\Column(type="integer", name="`shop_id`")
      */
-    private $shopId;
+    protected $shopId;
 
     /**
      * @ORM\Column(type="datetime", name="`date`")
      */
-    private $date;
+    protected $date;
 
     /**
      * @ORM\Column(type="integer", name="`customerID`")
      */
-    private $customerId;
+    protected $customerId;
 
     public function getId(): ?int
     {

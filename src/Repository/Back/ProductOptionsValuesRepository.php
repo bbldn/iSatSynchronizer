@@ -11,13 +11,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductOptionsValues[]    findAll()
  * @method ProductOptionsValues[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method ProductOptionsValues[]    findByIds(string $ids)
- * @method void    save(ProductOptionsValues $instance)
- * @method void    saveAndFlush(ProductOptionsValues $instance)
+ * @method void    persist(ProductOptionsValues $instance)
+ * @method void    persistAndFlush(ProductOptionsValues $instance)
  * @method void    remove(ProductOptionsValues $instance)
  * @method void    removeAndFlush(ProductOptionsValues $instance)
  */
 class ProductOptionsValuesRepository extends EntityBackRepository
 {
+    /**
+     * ProductOptionsValuesRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductOptionsValues::class);
@@ -25,9 +29,9 @@ class ProductOptionsValuesRepository extends EntityBackRepository
 
     /**
      * @param $value
-     * @return ProductOptionsValues[] Returns an array of ProductOptionsValues objects
+     * @return ProductOptionsValues[]
      */
-    public function findAllByProductBackId($value)
+    public function findAllByProductBackId($value): array
     {
         return $this->createQueryBuilder('po')
             ->andWhere('po.productId = :val')

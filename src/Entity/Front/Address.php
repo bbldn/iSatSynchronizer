@@ -2,76 +2,75 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_address`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\AddressRepository")
  */
-class Address extends Entity
+class Address
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`address_id`")
      */
-    private $id;
+    protected $addressId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`firstname`", length=32)
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @ORM\Column(type="string", name="`lastname`", length=32)
      */
-    private $lastName;
+    protected $lastName;
 
     /**
      * @ORM\Column(type="string", name="`company`", length=40)
      */
-    private $company;
+    protected $company;
 
     /**
      * @ORM\Column(type="string", name="`address_1`", length=128)
      */
-    private $address1;
+    protected $address1;
 
     /**
      * @ORM\Column(type="string", name="`address_2`", length=128)
      */
-    private $address2;
+    protected $address2;
 
     /**
      * @ORM\Column(type="string", name="`city`", length=128)
      */
-    private $city;
+    protected $city;
 
     /**
      * @ORM\Column(type="string", name="`postcode`", length=10)
      */
-    private $postCode;
+    protected $postCode;
 
     /**
      * @ORM\Column(type="integer", name="`country_id`")
      */
-    private $countryId = 0;
+    protected $countryId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`zone_id`")
      */
-    private $zoneId = 0;
+    protected $zoneId = 0;
 
     /**
      * @ORM\Column(type="string", name="`custom_field`")
      */
-    private $customField;
+    protected $customField;
 
     public function fill(
         int $customerId,
@@ -101,16 +100,9 @@ class Address extends Entity
     }
 
 
-    public function getId(): ?int
+    public function getAddressId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->addressId;
     }
 
     public function getCustomerId(): ?int

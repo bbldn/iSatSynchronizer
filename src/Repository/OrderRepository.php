@@ -11,8 +11,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Order[]    findAll()
  * @method Order[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Order[]    findByIds(string $ids)
- * @method void    save(Order $instance)
- * @method void    saveAndFlush(Order $instance)
+ * @method void    persist(Order $instance)
+ * @method void    persistAndFlush(Order $instance)
  * @method void    remove(Order $instance)
  * @method void    removeAndFlush(Order $instance)
  * @method ?Order    findOneByBackId(int $value)
@@ -20,6 +20,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class OrderRepository extends EntityRepository
 {
+    /**
+     * OrderRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Order::class);

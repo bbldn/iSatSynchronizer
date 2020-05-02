@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,314 +9,314 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Order extends Entity
+class Order
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $id;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="integer", name="`invoice_no`")
      */
-    private $invoiceNo = 0;
+    protected $invoiceNo = 0;
 
     /**
      * @ORM\Column(type="string", name="`invoice_prefix`", length=26)
      */
-    private $invoicePrefix;
+    protected $invoicePrefix;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId = 0;
+    protected $storeId = 0;
 
     /**
      * @ORM\Column(type="string", name="`store_name`", length=64)
      */
-    private $storeName;
+    protected $storeName;
 
     /**
      * @ORM\Column(type="string", name="`store_url`", length=255)
      */
-    private $storeUrl;
+    protected $storeUrl;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId = 0;
+    protected $customerId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId = 0;
+    protected $customerGroupId = 0;
 
     /**
      * @ORM\Column(type="string", name="`firstname`", length=32)
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @ORM\Column(type="string", name="`lastname`", length=32)
      */
-    private $lastName;
+    protected $lastName;
 
     /**
      * @ORM\Column(type="string", name="`email`", length=96)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", name="`telephone`", length=32)
      */
-    private $telephone;
+    protected $telephone;
 
     /**
      * @ORM\Column(type="string", name="`fax`", length=32)
      */
-    private $fax;
+    protected $fax;
 
     /**
      * @ORM\Column(type="string", name="`custom_field`", length=255)
      */
-    private $customField;
+    protected $customField;
 
     /**
      * @ORM\Column(type="string", name="`payment_firstname`", length=32)
      */
-    private $paymentFirstName;
+    protected $paymentFirstName;
 
     /**
      * @ORM\Column(type="string", name="`payment_lastname`", length=32)
      */
-    private $paymentLastName;
+    protected $paymentLastName;
 
     /**
      * @ORM\Column(type="string", name="`payment_company`", length=60)
      */
-    private $paymentCompany;
+    protected $paymentCompany;
 
     /**
      * @ORM\Column(type="string", name="`payment_address_1`", length=128)
      */
-    private $paymentAddress1;
+    protected $paymentAddress1;
 
     /**
      * @ORM\Column(type="string", name="`payment_address_2`", length=128)
      */
-    private $paymentAddress2;
+    protected $paymentAddress2;
 
     /**
      * @ORM\Column(type="string", name="`payment_city`", length=128)
      */
-    private $paymentCity;
+    protected $paymentCity;
 
     /**
      * @ORM\Column(type="string", name="`payment_postcode`", length=10)
      */
-    private $paymentPostCode;
+    protected $paymentPostCode;
 
     /**
      * @ORM\Column(type="string", name="`payment_country`", length=128)
      */
-    private $paymentCountry;
+    protected $paymentCountry;
 
     /**
      * @ORM\Column(type="integer", name="`payment_country_id`")
      */
-    private $paymentCountryId;
+    protected $paymentCountryId;
 
     /**
      * @ORM\Column(type="string", name="`payment_zone`", length=128)
      */
-    private $paymentZone;
+    protected $paymentZone;
 
     /**
      * @ORM\Column(type="integer", name="`payment_zone_id`")
      */
-    private $paymentZoneId;
+    protected $paymentZoneId;
 
     /**
      * @ORM\Column(type="string", name="`payment_address_format`", length=255)
      */
-    private $paymentAddressFormat;
+    protected $paymentAddressFormat;
 
     /**
      * @ORM\Column(type="string", name="`payment_custom_field`", length=255)
      */
-    private $paymentCustomField;
+    protected $paymentCustomField;
 
     /**
      * @ORM\Column(type="string", name="`payment_method`", length=128)
      */
-    private $paymentMethod;
+    protected $paymentMethod;
 
     /**
      * @ORM\Column(type="string", name="`payment_code`", length=128)
      */
-    private $paymentCode;
+    protected $paymentCode;
 
     /**
      * @ORM\Column(type="string", name="`shipping_firstname`", length=32)
      */
-    private $shippingFirstName;
+    protected $shippingFirstName;
 
     /**
      * @ORM\Column(type="string", name="`shipping_lastname`", length=32)
      */
-    private $shippingLastName;
+    protected $shippingLastName;
 
     /**
      * @ORM\Column(type="string", name="`shipping_company`", length=40)
      */
-    private $shippingCompany;
+    protected $shippingCompany;
 
     /**
      * @ORM\Column(type="string", name="`shipping_address_1`", length=128)
      */
-    private $shippingAddress1;
+    protected $shippingAddress1;
 
     /**
      * @ORM\Column(type="string", name="`shipping_address_2`", length=128)
      */
-    private $shippingAddress2;
+    protected $shippingAddress2;
 
     /**
      * @ORM\Column(type="string", name="`shipping_city`", length=128)
      */
-    private $shippingCity;
+    protected $shippingCity;
 
     /**
      * @ORM\Column(type="string", name="`shipping_postcode`", length=10)
      */
-    private $shippingPostCode;
+    protected $shippingPostCode;
 
     /**
      * @ORM\Column(type="string", name="`shipping_country`", length=128)
      */
-    private $shippingCountry;
+    protected $shippingCountry;
 
     /**
      * @ORM\Column(type="integer", name="`shipping_country_id`")
      */
-    private $shippingCountryId;
+    protected $shippingCountryId;
 
     /**
      * @ORM\Column(type="string", name="`shipping_zone`", length=128)
      */
-    private $shippingZone;
+    protected $shippingZone;
 
     /**
      * @ORM\Column(type="integer", name="`shipping_zone_id`")
      */
-    private $shippingZoneId;
+    protected $shippingZoneId;
 
     /**
      * @ORM\Column(type="string", name="`shipping_address_format`", length=255)
      */
-    private $shippingAddressFormat;
+    protected $shippingAddressFormat;
 
     /**
      * @ORM\Column(type="string", name="`shipping_custom_field`", length=255)
      */
-    private $shippingCustomField;
+    protected $shippingCustomField;
 
     /**
      * @ORM\Column(type="string", name="`shipping_method`", length=128)
      */
-    private $shippingMethod;
+    protected $shippingMethod;
 
     /**
      * @ORM\Column(type="string", name="`shipping_code`", length=128)
      */
-    private $shippingCode;
+    protected $shippingCode;
 
     /**
      * @ORM\Column(type="string", name="`comment`", length=255)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @ORM\Column(type="float", name="`total`")
      */
-    private $total = 0.0;
+    protected $total = 0.0;
 
     /**
      * @ORM\Column(type="integer", name="`order_status_id`")
      */
-    private $orderStatusId = 0;
+    protected $orderStatusId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`affiliate_id`")
      */
-    private $affiliateId;
+    protected $affiliateId;
 
     /**
      * @ORM\Column(type="float", name="`commission`")
      */
-    private $commission;
+    protected $commission;
 
     /**
      * @ORM\Column(type="integer", name="`marketing_id`")
      */
-    private $marketingId;
+    protected $marketingId;
 
     /**
      * @ORM\Column(type="string", name="`tracking`", length=64)
      */
-    private $tracking;
+    protected $tracking;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="integer", name="`currency_id`")
      */
-    private $currencyId;
+    protected $currencyId;
 
     /**
      * @ORM\Column(type="string", name="`currency_code`", length=3)
      */
-    private $currencyCode;
+    protected $currencyCode;
 
     /**
      * @ORM\Column(type="float", name="`currency_value`")
      */
-    private $currencyValue = 1.0;
+    protected $currencyValue = 1.0;
 
     /**
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="string", name="`forwarded_ip`", length=255)
      */
-    private $forwardedIp;
+    protected $forwardedIp;
 
     /**
      * @ORM\Column(type="string", name="`user_agent`", length=255)
      */
-    private $userAgent;
+    protected $userAgent;
 
     /**
      * @ORM\Column(type="string", name="`accept_language`", length=255)
      */
-    private $acceptLanguage;
+    protected $acceptLanguage;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
-    private $dateModified;
+    protected $dateModified;
 
     /**
      * @param int $invoiceNo
@@ -500,17 +499,9 @@ class Order extends Entity
         $this->acceptLanguage = $acceptLanguage;
     }
 
-
-    public function getId(): ?int
+    public function getOrderId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderId;
     }
 
     public function getInvoiceNo(): ?int
@@ -1209,18 +1200,6 @@ class Order extends Entity
         return $this;
     }
 
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
     public function getDateModified(): ?\DateTimeInterface
     {
         return $this->dateModified;
@@ -1244,5 +1223,17 @@ class Order extends Entity
         if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
+    }
+
+    public function getDateAdded(): ?\DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
     }
 }

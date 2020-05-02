@@ -41,10 +41,10 @@ class ReviewSynchronizer
      */
     protected function synchronizeReviewFront(ReviewFront $reviewFront): void
     {
-        $review = $this->reviewRepository->findOneByFrontId($reviewFront->getId());
+        $review = $this->reviewRepository->findOneByFrontId($reviewFront->getReviewId());
         $reviewBack = $this->getReviewBackFromReview($review);
         $this->updateReviewBackFromReviewFront($reviewBack, $reviewFront);
-        $this->createOrUpdateReview($review, $reviewBack->getId(), $reviewFront->getId());
+        $this->createOrUpdateReview($review, $reviewBack->getDid(), $reviewFront->getReviewId());
     }
 
     /**
@@ -73,7 +73,7 @@ class ReviewSynchronizer
             $this->storeBack->getDefaultSiteId()
         );
 
-        $this->reviewBackRepository->saveAndFlush($reviewBack);
+        $this->reviewBackRepository->persistAndFlush($reviewBack);
 
         return $reviewBack;
     }
@@ -109,6 +109,6 @@ class ReviewSynchronizer
         }
         $review->setBackId($backId);
         $review->setFrontId($frontId);
-        $this->reviewRepository->saveAndFlush($review);
+        $this->reviewRepository->persistAndFlush($review);
     }
 }

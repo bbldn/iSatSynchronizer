@@ -9,175 +9,168 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_categories`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\CategoryRepository")
  */
-class Category extends Entity
+class Category
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`categoryID`")
      */
-    private $id;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255, nullable=true)
      */
-    private $name = null;
+    protected $name = null;
 
     /**
      * @ORM\Column(type="integer", name="`parent`", nullable=true)
      */
-    private $parent = null;
+    protected $parent = null;
 
     /**
      * @ORM\Column(type="integer", name="`products_count`", nullable=true)
      */
-    private $productsCount = null;
+    protected $productsCount = null;
 
     /**
      * @ORM\Column(type="string", name="`description`", nullable=true)
      */
-    private $description = null;
+    protected $description = null;
 
     /**
      * @ORM\Column(type="string", name="`picture`", length=30, nullable=true)
      */
-    private $picture = null;
+    protected $picture = null;
 
     /**
      * @ORM\Column(type="integer", name="`products_count_admin`", nullable=true)
      */
-    private $productsCountAdmin = null;
+    protected $productsCountAdmin = null;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`", nullable=true)
      */
-    private $sortOrder = 0;
+    protected $sortOrder = 0;
 
     /**
      * @ORM\Column(type="integer", name="`viewed_times`", nullable=true)
      */
-    private $viewedTimes = 0;
+    protected $viewedTimes = 0;
 
     /**
      * @ORM\Column(type="integer", name="`allow_products_comparison`", nullable=true)
      */
-    private $allowProductsComparison = 0;
+    protected $allowProductsComparison = 0;
 
     /**
      * @ORM\Column(type="integer", name="`allow_products_search`", nullable=true)
      */
-    private $allowProductsSearch = 1;
+    protected $allowProductsSearch = 1;
 
     /**
      * @ORM\Column(type="integer", name="`show_subcategories_products`", nullable=true)
      */
-    private $showSubcategoriesProducts = 1;
+    protected $showSubcategoriesProducts = 1;
 
     /**
      * @ORM\Column(type="string", name="`meta_description`", length=255, nullable=true)
      */
-    private $metaDescription = null;
+    protected $metaDescription = null;
 
     /**
      * @ORM\Column(type="string", name="`meta_keywords`", length=255, nullable=true)
      */
-    private $metaKeywords = null;
+    protected $metaKeywords = null;
 
     /**
      * @ORM\Column(type="string", name="`big_image`", nullable=true)
      */
-    private $bigImage = null;
+    protected $bigImage = null;
 
     /**
      * @ORM\Column(type="string", name="`big_image_width`", length=25)
      */
-    private $bigImageWidth;
+    protected $bigImageWidth;
 
     /**
      * @ORM\Column(type="string", name="`big_image_height`", length=25)
      */
-    private $bigImageHeight;
+    protected $bigImageHeight;
 
     /**
      * @ORM\Column(type="string", name="`link_from_big_image`", nullable=true)
      */
-    private $linkFromBigImage = null;
+    protected $linkFromBigImage = null;
 
     /**
      * @ORM\Column(type="integer", name="`columns`")
      */
-    private $columns = 5;
+    protected $columns = 5;
 
     /**
      * @ORM\Column(type="integer", name="`rows`")
      */
-    private $rows = 10;
+    protected $rows = 10;
 
     /**
      * @ORM\Column(type="integer", name="`height`")
      */
-    private $height = 380;
+    protected $height = 380;
 
     /**
      * @ORM\Column(type="boolean", name="`active`")
      */
-    private $active = true;
+    protected $active = true;
 
     /**
      * @ORM\Column(type="integer", name="`kol_products_on_showcase`")
      */
-    private $kolProductsOnShowcase = 10;
+    protected $kolProductsOnShowcase = 10;
 
     /**
      * @ORM\Column(type="boolean", name="`enabled`")
      */
-    private $enabled = true;
+    protected $enabled = true;
 
     /**
      * @ORM\Column(type="string", name="`swf`", length=255)
      */
-    private $swf;
+    protected $swf;
 
     /**
      * @ORM\Column(type="string", name="`swf_width`", length=25)
      */
-    private $swfWidth;
+    protected $swfWidth;
 
     /**
      * @ORM\Column(type="string", name="`swf_height`", length=25)
      */
-    private $swfHeight;
+    protected $swfHeight;
 
     /**
      * @ORM\Column(type="boolean", name="`enable_sale`", nullable=true)
      */
-    private $enableSale = 0;
+    protected $enableSale = 0;
 
     /**
      * @ORM\Column(type="string", name="`brands`", length=255)
      */
-    private $brands;
+    protected $brands;
 
     /**
      * @ORM\Column(type="string", name="`h1`", length=255)
      */
-    private $h1;
+    protected $h1;
 
     /**
      * @ORM\Column(type="string", name="`slug`", length=255)
      */
-    private $slug;
+    protected $slug;
 
-    public function getId(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->categoryId;
     }
 
     public function getName(): ?string

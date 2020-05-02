@@ -9,39 +9,39 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`oc_customer_activity`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerActivityRepository")
  */
-class CustomerActivity extends Entity
+class CustomerActivity
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_activity_id`")
      */
-    private $id;
+    protected $customerActivityId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`key`", length=64)
      */
-    private $key;
+    protected $key;
 
     /**
      * @ORM\Column(type="string", name="`data`", length=255)
      */
-    private $data;
+    protected $data;
 
     /**
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $customerId
@@ -62,17 +62,9 @@ class CustomerActivity extends Entity
         $this->ip = $ip;
     }
 
-
-    public function getId(): ?int
+    public function getCustomerActivityId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerActivityId;
     }
 
     public function getCustomerId(): ?int

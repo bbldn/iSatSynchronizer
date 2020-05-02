@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,54 +9,54 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\ReviewRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Review extends Entity
+class Review
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`review_id`")
      */
-    private $id;
+    protected $reviewId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`author`", length=64)
      */
-    private $author;
+    protected $author;
 
     /**
      * @ORM\Column(type="string", name="`text`")
      */
-    private $text;
+    protected $text;
 
     /**
      * @ORM\Column(type="integer", name="`rating`")
      */
-    private $rating;
+    protected $rating;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status = false;
+    protected $status = false;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
-    private $dateModified;
+    protected $dateModified;
 
     public function fill(
         int $productId,
@@ -76,9 +75,9 @@ class Review extends Entity
     }
 
 
-    public function getId(): ?int
+    public function getReviewId(): ?int
     {
-        return $this->id;
+        return $this->reviewId;
     }
 
     public function getProductId(): ?int
@@ -153,18 +152,6 @@ class Review extends Entity
         return $this;
     }
 
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
     public function getDateModified(): ?\DateTimeInterface
     {
         return $this->dateModified;
@@ -188,5 +175,17 @@ class Review extends Entity
         if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
+    }
+
+    public function getDateAdded(): ?\DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
     }
 }

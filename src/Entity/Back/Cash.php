@@ -9,84 +9,84 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_cash`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\CashRepository")
  */
-class Cash extends Entity
+class Cash
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_num`")
      */
-    private $orderNum;
+    protected $orderNum;
 
     /**
      * @ORM\Column(type="date", name="`date`")
      */
-    private $date;
+    protected $date;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price;
+    protected $price;
 
     /**
      * @ORM\Column(type="string", name="`currency_name`", length=255)
      */
-    private $currencyName;
+    protected $currencyName;
 
     /**
      * @ORM\Column(type="float", name="`currency_value`")
      */
-    private $currencyValue;
+    protected $currencyValue;
 
     /**
      * @ORM\Column(type="boolean", name="`synchronize`")
      */
-    private $synchronize;
+    protected $synchronize;
 
     /**
      * @ORM\Column(type="string", name="`message`", length=255)
      */
-    private $message;
+    protected $message;
 
     /**
      * @ORM\Column(type="string", name="`fio`", length=255)
      */
-    private $fio;
+    protected $fio;
 
     /**
      * @ORM\Column(type="integer", name="`document_id`")
      */
-    private $documentId;
+    protected $documentId;
 
     /**
      * @ORM\Column(type="integer", name="`shop_id`")
      */
-    private $shopId;
+    protected $shopId;
 
     /**
      * @ORM\Column(type="integer", name="`cash_type_id`")
      */
-    private $cashTypeId;
+    protected $cashTypeId;
 
     /**
      * @ORM\Column(type="string", name="`card_num`")
      */
-    private $cardNum;
+    protected $cardNum;
 
     /**
      * @ORM\Column(type="boolean", name="`cash_out`")
      */
-    private $cashOut;
+    protected $cashOut;
 
     /**
      * @ORM\Column(type="integer", name="`shipping_order_id`")
      */
-    private $shippingOrderId;
+    protected $shippingOrderId;
 
     public function getId(): ?int
     {

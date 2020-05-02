@@ -54,10 +54,10 @@ class AttributeSynchronizer
      */
     protected function synchronizeAttribute(AttributeBack $attributeBack)
     {
-        $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getId());
+        $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getOptionId());
         $attributeFront = $this->getAttributeFrontFromAttribute($attribute);
         $this->updateAttributeFrontFromBackProduct($attributeBack, $attributeFront);
-        $this->createOrUpdateAttribute($attribute, $attributeBack->getId(), $attributeFront->getId());
+        $this->createOrUpdateAttribute($attribute, $attributeBack->getOptionId(), $attributeFront->getAttributeId());
     }
 
     protected function getAttributeFrontFromAttribute(?Attribute $attribute): AttributeFront
@@ -84,20 +84,20 @@ class AttributeSynchronizer
             $this->storeFront->getDefaultAttributeGroupId(),
             $this->storeFront->getDefaultSortOrder()
         );
-        $this->attributeFrontRepository->saveAndFlush($attributeFront);
+        $this->attributeFrontRepository->persistAndFlush($attributeFront);
 
-        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($attributeFront->getId());
+        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($attributeFront->getAttributeId());
         if (null === $attributeDescriptionFront) {
             $attributeDescriptionFront = new AttributeDescriptionFront();
         }
 
         $name = trim(Store::encodingConvert($attributeBack->getName()));
         $attributeDescriptionFront->fill(
-            $attributeFront->getId(),
+            $attributeFront->getAttributeId(),
             $this->storeFront->getDefaultLanguageId(),
             $name
         );
-        $this->attributeDescriptionFrontRepository->saveAndFlush($attributeDescriptionFront);
+        $this->attributeDescriptionFrontRepository->persistAndFlush($attributeDescriptionFront);
 
         return $attributeFront;
     }
@@ -114,6 +114,6 @@ class AttributeSynchronizer
         }
         $attribute->setBackId($backId);
         $attribute->setFrontId($frontId);
-        $this->attributeRepository->saveAndFlush($attribute);
+        $this->attributeRepository->persistAndFlush($attribute);
     }
 }

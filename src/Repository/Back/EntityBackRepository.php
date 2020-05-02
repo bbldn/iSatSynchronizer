@@ -6,5 +6,6 @@ use App\Other\EntityRepository;
 
 class EntityBackRepository extends EntityRepository
 {
+    /** @var string $entityManagerName */
     protected $entityManagerName = 'back';
 }

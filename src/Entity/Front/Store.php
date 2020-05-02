@@ -2,36 +2,35 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_store`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\StoreRepository")
  */
-class Store extends Entity
+class Store
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $id;
+    protected $storeId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=64)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`url`", length=255)
      */
-    private $url;
+    protected $url;
 
     /**
      * @ORM\Column(type="string", name="`ssl`", length=255)
      */
-    private $ssl;
+    protected $ssl;
 
     /**
      * @param $name
@@ -49,17 +48,9 @@ class Store extends Entity
         $this->ssl = $ssl;
     }
 
-
-    public function getId(): ?int
+    public function getStoreId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->storeId;
     }
 
     public function getName(): ?string

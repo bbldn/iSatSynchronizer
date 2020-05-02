@@ -89,7 +89,7 @@ class OrderSynchronizer
         $order = $this->orderRepository->findOneByBackId($orderBack->getId());
         $orderFront = $this->getOrderFrontFromOrder($order);
         $this->updateOrderFrontFromOrderBack($orderFront, $orderBack);
-        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getId());
+        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
     }
 
     /**
@@ -124,7 +124,7 @@ class OrderSynchronizer
         if (null !== $customer) {
             $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
             if (null !== $customerFront) {
-                $customerFrontId = $customerFront->getId();
+                $customerFrontId = $customerFront->getCustomerId();
             }
         }
 
@@ -198,7 +198,7 @@ class OrderSynchronizer
         $dateAdded->setTimestamp($mainOrderBack->getTime());
         $orderFront->setDateAdded($dateAdded);
 
-        $this->orderFrontRepository->saveAndFlush($orderFront);
+        $this->orderFrontRepository->persistAndFlush($orderFront);
 
         $ordersBack = $this->orderBackRepository->findByOrderNum($mainOrderBack->getId());
 
@@ -228,7 +228,7 @@ class OrderSynchronizer
             $total = $orderBack->getAmount() * $orderBack->getPrice();
             $orderProductFront = new OrderProductFront();
             $orderProductFront->fill(
-                $orderFront->getId(),
+                $orderFront->getOrderId(),
                 $product->getFrontId(),
                 Store::encodingConvert($productDescriptionFront->getName()),
                 Store::encodingConvert($productFront->getModel()),
@@ -238,7 +238,7 @@ class OrderSynchronizer
                 $this->storeFront->getDefaultTax(),
                 $this->storeFront->getDefaultReward()
             );
-            $this->orderProductFrontRepository->saveAndFlush($orderProductFront);
+            $this->orderProductFrontRepository->persistAndFlush($orderProductFront);
         }
 
         return $orderFront;
@@ -256,6 +256,6 @@ class OrderSynchronizer
         }
         $order->setBackId($backId);
         $order->setFrontId($frontId);
-        $this->orderRepository->saveAndFlush($order);
+        $this->orderRepository->persistAndFlush($order);
     }
 }

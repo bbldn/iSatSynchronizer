@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,39 +9,39 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerLoginRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class CustomerLogin extends Entity
+class CustomerLogin
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_login_id`")
      */
-    private $id;
+    protected $customerLoginId;
 
     /**
      * @ORM\Column(type="string", name="`email`", length=96)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="integer", name="`total`")
      */
-    private $total;
+    protected $total;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
-    private $dateModified;
+    protected $dateModified;
 
     /**
      * @param string $email
@@ -60,17 +59,9 @@ class CustomerLogin extends Entity
         $this->total = $total;
     }
 
-
-    public function getId(): ?int
+    public function getCustomerLoginId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerLoginId;
     }
 
     public function getEmail(): ?string
@@ -109,18 +100,6 @@ class CustomerLogin extends Entity
         return $this;
     }
 
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
     public function getDateModified(): ?\DateTimeInterface
     {
         return $this->dateModified;
@@ -144,5 +123,17 @@ class CustomerLogin extends Entity
         if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
+    }
+
+    public function getDateAdded(): ?\DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
     }
 }

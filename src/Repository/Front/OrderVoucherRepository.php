@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderVoucher[]    findAll()
  * @method OrderVoucher[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method OrderVoucher[]    findByIds(string $ids)
- * @method void    save(OrderVoucher $instance)
- * @method void    saveAndFlush(OrderVoucher $instance)
+ * @method void    persist(OrderVoucher $instance)
+ * @method void    persistAndFlush(OrderVoucher $instance)
  * @method void    remove(OrderVoucher $instance)
  * @method void    removeAndFlush(OrderVoucher $instance)
  */
 class OrderVoucherRepository extends EntityFrontRepository
 {
+    /**
+     * OrderVoucherRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderVoucher::class);

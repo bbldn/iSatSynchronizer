@@ -2,46 +2,45 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_total`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderTotalRepository")
  */
-class OrderTotal extends Entity
+class OrderTotal
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_total_id`")
      */
-    private $id;
+    protected $orderTotalId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="string", name="`code`", length=32)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\Column(type="string", name="`title`", length=255)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="float", name="`value`")
      */
-    private $value = 0.0;
+    protected $value = 0.0;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder;
+    protected $sortOrder;
 
     public function fill(
         int $orderId,
@@ -58,16 +57,9 @@ class OrderTotal extends Entity
         $this->sortOrder = $sortOrder;
     }
 
-    public function getId(): ?int
+    public function getOrderTotalId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderTotalId;
     }
 
     public function getOrderId(): ?int

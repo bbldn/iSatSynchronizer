@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Address[]    findAll()
  * @method Address[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Address[]    findByIds(string $ids)
- * @method void    save(Address $instance)
- * @method void    saveAndFlush(Address $instance)
+ * @method void    persist(Address $instance)
+ * @method void    persistAndFlush(Address $instance)
  * @method void    remove(Address $instance)
  * @method void    removeAndFlush(Address $instance)
  */
 class AddressRepository extends EntityFrontRepository
 {
+    /**
+     * AddressRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Address::class);

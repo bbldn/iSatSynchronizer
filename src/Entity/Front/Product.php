@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,164 +9,164 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Product extends Entity
+class Product
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $id;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`model`", length=64)
      */
-    private $model;
+    protected $model;
 
     /**
      * @ORM\Column(type="string", name="`sku`", length=64)
      */
-    private $sku;
+    protected $sku;
 
     /**
      * @ORM\Column(type="string", name="`upc`", length=12)
      */
-    private $upc;
+    protected $upc;
 
     /**
      * @ORM\Column(type="string", name="`ean`", length=14)
      */
-    private $ean;
+    protected $ean;
 
     /**
      * @ORM\Column(type="string", name="`jan`", length=13)
      */
-    private $jan;
+    protected $jan;
 
     /**
      * @ORM\Column(type="string", name="`isbn`", length=17)
      */
-    private $isbn;
+    protected $isbn;
 
     /**
      * @ORM\Column(type="string", name="`mpn`", length=64)
      */
-    private $mpn;
+    protected $mpn;
 
     /**
      * @ORM\Column(type="string", name="`location`", length=128)
      */
-    private $location;
+    protected $location;
 
     /**
      * @ORM\Column(type="integer", name="`quantity`")
      */
-    private $quantity = 0;
+    protected $quantity = 0;
 
     /**
      * @ORM\Column(type="integer", name="`stock_status_id`")
      */
-    private $stockStatusId;
+    protected $stockStatusId;
 
     /**
      * @ORM\Column(type="string", name="`image`", length=255)
      */
-    private $image = null;
+    protected $image = null;
 
     /**
      * @ORM\Column(type="integer", name="`manufacturer_id`")
      */
-    private $manufacturerId;
+    protected $manufacturerId;
 
     /**
      * @ORM\Column(type="boolean", name="`shipping`")
      */
-    private $shipping = true;
+    protected $shipping = true;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price = 0.0;
+    protected $price = 0.0;
 
     /**
      * @ORM\Column(type="integer", name="`points`")
      */
-    private $points = 0;
+    protected $points = 0;
 
     /**
      * @ORM\Column(type="integer", name="`tax_class_id`")
      */
-    private $taxClassId;
+    protected $taxClassId;
 
     /**
      * @ORM\Column(type="date", name="`date_available`")
      */
-    private $dateAvailable;
+    protected $dateAvailable;
 
     /**
      * @ORM\Column(type="float", name="`weight`")
      */
-    private $weight = 0.0;
+    protected $weight = 0.0;
 
     /**
      * @ORM\Column(type="integer", name="`weight_class_id`")
      */
-    private $weightClassId = 0;
+    protected $weightClassId = 0;
 
     /**
      * @ORM\Column(type="float", name="`length`")
      */
-    private $length = 0.0;
+    protected $length = 0.0;
 
     /**
      * @ORM\Column(type="float", name="`width`")
      */
-    private $width = 0.0;
+    protected $width = 0.0;
 
     /**
      * @ORM\Column(type="float", name="`height`")
      */
-    private $height = 0.0;
+    protected $height = 0.0;
 
     /**
      * @ORM\Column(type="integer", name="`length_class_id`")
      */
-    private $lengthClassId = 0;
+    protected $lengthClassId = 0;
 
     /**
      * @ORM\Column(type="boolean", name="`subtract`")
      */
-    private $subtract = true;
+    protected $subtract = true;
 
     /**
      * @ORM\Column(type="boolean", name="`minimum`")
      */
-    private $minimum = 1;
+    protected $minimum = 1;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder = 0;
+    protected $sortOrder = 0;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status = false;
+    protected $status = false;
 
     /**
      * @ORM\Column(type="integer", name="`viewed`")
      */
-    private $viewed = 0;
+    protected $viewed = 0;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
-    private $dateModified;
+    protected $dateModified;
 
     /**
      * @param string $model
@@ -260,17 +259,9 @@ class Product extends Entity
         $this->viewed = $viewed;
     }
 
-
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->productId;
     }
 
     public function getModel(): ?string
@@ -609,18 +600,6 @@ class Product extends Entity
         return $this;
     }
 
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
     public function getDateModified(): ?\DateTimeInterface
     {
         return $this->dateModified;
@@ -644,5 +623,17 @@ class Product extends Entity
         if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
+    }
+
+    public function getDateAdded(): ?\DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
     }
 }

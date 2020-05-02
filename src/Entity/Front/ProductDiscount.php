@@ -2,55 +2,54 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_discount`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductDiscountRepository")
  */
-class ProductDiscount extends Entity
+class ProductDiscount
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_discount_id`")
      */
-    private $id;
+    protected $productDiscountId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId;
+    protected $customerGroupId;
 
     /**
      * @ORM\Column(type="integer", name="`quantity`")
      */
-    private $quantity = 0;
+    protected $quantity = 0;
 
     /**
      * @ORM\Column(type="integer", name="`priority`")
      */
-    private $priority = 1;
+    protected $priority = 1;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price = 0.0;
+    protected $price = 0.0;
 
     /**
      * @ORM\Column(type="date", name="`date_start`")
      */
-    private $dateStart;
+    protected $dateStart;
 
     /**
      * @ORM\Column(type="date", name="`date_end`")
      */
-    private $dateEnd;
+    protected $dateEnd;
 
     /**
      * @param int $productId
@@ -81,14 +80,14 @@ class ProductDiscount extends Entity
     }
 
 
-    public function getId(): ?int
+    public function getProductDiscountId(): ?int
     {
-        return $this->id;
+        return $this->productDiscountId;
     }
 
-    public function setId(int $id): self
+    public function setProductDiscountId(int $productDiscountId): self
     {
-        $this->id = $id;
+        $this->productDiscountId = $productDiscountId;
 
         return $this;
     }

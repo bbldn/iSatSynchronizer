@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,39 +9,39 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderHistoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class OrderHistory extends Entity
+class OrderHistory
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_history_id`")
      */
-    private $id;
+    protected $orderHistoryId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="integer", name="`order_status_id`")
      */
-    private $orderStatusId;
+    protected $orderStatusId;
 
     /**
      * @ORM\Column(type="boolean", name="`notify`")
      */
-    private $notify = 0;
+    protected $notify = 0;
 
     /**
      * @ORM\Column(type="string", name="`comment`")
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $orderId
@@ -63,17 +62,9 @@ class OrderHistory extends Entity
         $this->comment = $comment;
     }
 
-
-    public function getId(): ?int
+    public function getOrderHistoryId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderHistoryId;
     }
 
     public function getOrderId(): ?int
@@ -124,6 +115,17 @@ class OrderHistory extends Entity
         return $this;
     }
 
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
+    }
+
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
@@ -134,16 +136,5 @@ class OrderHistory extends Entity
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

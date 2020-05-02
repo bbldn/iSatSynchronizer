@@ -2,40 +2,39 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_option`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductOptionRepository")
  */
-class ProductOption extends Entity
+class ProductOption
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_option_id`")
      */
-    private $id;
+    protected $productOptionId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`option_id`")
      */
-    private $optionId;
+    protected $optionId;
 
     /**
      * @ORM\Column(type="string", name="`value`", length=255)
      */
-    private $value;
+    protected $value;
 
     /**
      * @ORM\Column(type="boolean", name="`required`")
      */
-    private $required;
+    protected $required;
 
     /**
      * @param int $productId
@@ -56,15 +55,14 @@ class ProductOption extends Entity
         $this->required = $required;
     }
 
-
-    public function getId(): ?int
+    public function getProductOptionId(): ?int
     {
-        return $this->id;
+        return $this->productOptionId;
     }
 
-    public function setId(int $id): self
+    public function setProductOptionId(int $productOptionId): self
     {
-        $this->id = $id;
+        $this->productOptionId = $productOptionId;
 
         return $this;
     }

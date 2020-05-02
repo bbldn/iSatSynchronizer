@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,54 +9,54 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Category extends Entity
+class Category
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $id;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="string", name="`image`", nullable=true)
      */
-    private $image = null;
+    protected $image = null;
 
     /**
      * @ORM\Column(type="integer", name="`parent_id`")
      */
-    private $parentId = 0;
+    protected $parentId = 0;
 
     /**
      * @ORM\Column(type="boolean", name="`top`")
      */
-    private $top;
+    protected $top;
 
     /**
      * @ORM\Column(type="integer", name="`column`")
      */
-    private $column;
+    protected $column;
 
     /**
      * @ORM\Column(type="integer", name="sort_order")
      */
-    private $sortOrder = 0;
+    protected $sortOrder = 0;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
-    private $dateModified;
+    protected $dateModified;
 
     /**
      * @param string $image
@@ -84,10 +83,9 @@ class Category extends Entity
         $this->status = $status;
     }
 
-
-    public function getId(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->id;
+        return $this->categoryId;
     }
 
     public function getImage(): ?string
@@ -162,18 +160,6 @@ class Category extends Entity
         return $this;
     }
 
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
     public function getDateModified(): ?\DateTimeInterface
     {
         return $this->dateModified;
@@ -197,5 +183,17 @@ class Category extends Entity
         if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
+    }
+
+    public function getDateAdded(): ?\DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
     }
 }

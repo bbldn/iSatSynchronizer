@@ -9,24 +9,24 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_buyers_groups_extra`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\BuyersGroupsExtraRepository")
  */
-class BuyersGroupsExtra extends Entity
+class BuyersGroupsExtra
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder;
+    protected $sortOrder;
 
     public function getId(): ?int
     {

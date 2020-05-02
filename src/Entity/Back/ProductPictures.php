@@ -9,60 +9,53 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_product_pictures`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductPicturesRepository")
  */
-class ProductPictures extends Entity
+class ProductPictures
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`photoID`")
      */
-    private $id;
+    protected $photoId;
 
     /**
      * @ORM\Column(type="integer", name="`productID`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`filename`", length=255, nullable=true)
      */
-    private $fileName;
+    protected $fileName;
 
     /**
      * @ORM\Column(type="string", name="`thumbnail`", length=255, nullable=true)
      */
-    private $thumbnail;
+    protected $thumbnail;
 
     /**
      * @ORM\Column(type="string", name="`enlarged`", length=255, nullable=true)
      */
-    private $enlarged;
+    protected $enlarged;
 
     /**
      * @ORM\Column(type="string", name="`picture_vm`")
      */
-    private $pictureVm;
+    protected $pictureVm;
 
     /**
      * @ORM\Column(type="string", name="`thumbnail_vm`")
      */
-    private $thumbnailVm;
+    protected $thumbnailVm;
 
     /**
      * @ORM\Column(type="string", name="`enlarged_vm`")
      */
-    private $enlargedVm;
+    protected $enlargedVm;
 
-    public function getId(): ?int
+    public function getPhotoId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->photoId;
     }
 
     public function getProductId(): ?int

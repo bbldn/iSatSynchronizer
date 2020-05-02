@@ -2,66 +2,65 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_option`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderOptionRepository")
  */
-class OrderOption extends Entity
+class OrderOption
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_option_id`")
      */
-    private $id;
+    protected $orderOptionId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="integer", name="`order_product_id`")
      */
-    private $orderProductId;
+    protected $orderProductId;
 
     /**
      * @ORM\Column(type="integer", name="`product_option_id`")
      */
-    private $productOptionId;
+    protected $productOptionId;
 
     /**
      * @ORM\Column(type="integer", name="`product_option_value_id`")
      */
-    private $productOptionValueId = 0;
+    protected $productOptionValueId = 0;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`value`")
      */
-    private $value;
+    protected $value;
 
     /**
      * @ORM\Column(type="string", name="`type`", length=32)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", name="`sku`")
      */
-    private $sku;
+    protected $sku;
 
     /**
      * @ORM\Column(type="string", name="`model`")
      */
-    private $model;
+    protected $model;
 
     public function fill(
         int $orderId,
@@ -85,17 +84,9 @@ class OrderOption extends Entity
         $this->model = $model;
     }
 
-
-    public function getId(): ?int
+    public function getOrderOptionId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderOptionId;
     }
 
     public function getOrderId(): ?int

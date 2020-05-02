@@ -9,34 +9,34 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Address extends Entity
+class Address
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", name="`front_id`")
      */
-    private $frontId;
+    protected $frontId;
 
     /**
      * @ORM\Column(type="integer", name="`order_back_id`")
      */
-    private $orderBackId;
+    protected $orderBackId;
 
     /**
      * @ORM\Column(type="datetime", name="`created_at`", nullable=true)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @ORM\Column(type="datetime", name="`updated_at`", nullable=true)
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     public function getId(): ?int
     {

@@ -2,36 +2,35 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_reward`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductRewardRepository")
  */
-class ProductReward extends Entity
+class ProductReward
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_reward_id`")
      */
-    private $id;
+    protected $productRewardId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId = 0;
+    protected $productId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId = 0;
+    protected $customerGroupId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`points`")
      */
-    private $points = 0;
+    protected $points = 0;
 
     /**
      * @param int $productId
@@ -49,16 +48,9 @@ class ProductReward extends Entity
         $this->points = $points;
     }
 
-    public function getId(): ?int
+    public function getProductRewardId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->productRewardId;
     }
 
     public function getProductId(): ?int

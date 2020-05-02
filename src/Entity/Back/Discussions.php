@@ -9,59 +9,59 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_discussions`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\DiscussionsRepository")
  */
-class Discussions extends Entity
+class Discussions
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`DID`")
      */
-    private $id;
+    protected $did;
 
     /**
      * @ORM\Column(type="integer", name="`productID`", nullable=true)
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`Author`", nullable=true, length=40)
      */
-    private $author;
+    protected $author;
 
     /**
      * @ORM\Column(type="string", name="`Body`", nullable=true)
      */
-    private $body;
+    protected $body;
 
     /**
      * @ORM\Column(type="datetime", name="`add_time`", nullable=true)
      */
-    private $addTime;
+    protected $addTime;
 
     /**
      * @ORM\Column(type="string", name="`Topic`", nullable=true, length=255)
      */
-    private $topic;
+    protected $topic;
 
     /**
      * @ORM\Column(type="boolean", name="`enabled`")
      */
-    private $enabled;
+    protected $enabled;
 
     /**
      * @ORM\Column(type="integer", name="`stars`")
      */
-    private $stars = 5;
+    protected $stars = 5;
 
     /**
      * @ORM\Column(type="string", name="`answer`", length=255)
      */
-    private $answer;
+    protected $answer;
 
     /**
      * @ORM\Column(type="integer", name="`site_id`")
      */
-    private $siteId;
+    protected $siteId;
 
     public function fill(
         ?int $productId,
@@ -86,10 +86,9 @@ class Discussions extends Entity
         $this->siteId = $siteId;
     }
 
-
-    public function getId(): ?int
+    public function getDid(): ?int
     {
-        return $this->id;
+        return $this->did;
     }
 
     public function getProductId(): ?int

@@ -2,51 +2,50 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_special`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductSpecialRepository")
  */
-class ProductSpecial extends Entity
+class ProductSpecial
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_special_id`")
      */
-    private $id;
+    protected $productSpecialId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId;
+    protected $customerGroupId;
 
     /**
      * @ORM\Column(type="integer", name="`priority`")
      */
-    private $priority = 1;
+    protected $priority = 1;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price = 0.0;
+    protected $price = 0.0;
 
     /**
      * @ORM\Column(type="date", name="`date_start`")
      */
-    private $dateStart;
+    protected $dateStart;
 
     /**
      * @ORM\Column(type="date", name="`date_end`")
      */
-    private $dateEnd;
+    protected $dateEnd;
 
     /**
      * @param int $productId
@@ -73,16 +72,9 @@ class ProductSpecial extends Entity
         $this->dateEnd = $dateEnd;
     }
 
-    public function getId(): ?int
+    public function getProductSpecialId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->productSpecialId;
     }
 
     public function getProductId(): ?int

@@ -9,34 +9,34 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`oc_seo_url`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\SeoUrlRepository")
  */
-class SeoUrl extends Entity
+class SeoUrl
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`seo_url_id`")
      */
-    private $id;
+    protected $seoUrlId;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId;
+    protected $storeId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`query`", length=255)
      */
-    private $query;
+    protected $query;
 
     /**
      * @ORM\Column(type="string", name="`keyword`", length=255)
      */
-    private $keyword;
+    protected $keyword;
 
     public function fill(
         int $storeId,
@@ -51,9 +51,9 @@ class SeoUrl extends Entity
         $this->keyword = $keyword;
     }
 
-    public function getId(): ?int
+    public function getSeoUrlId(): ?int
     {
-        return $this->id;
+        return $this->seoUrlId;
     }
 
     public function getStoreId(): ?int

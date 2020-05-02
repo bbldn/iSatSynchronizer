@@ -2,25 +2,24 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_simple_fields`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerSimpleFieldsRepository")
  */
-class CustomerSimpleFields extends Entity
+class CustomerSimpleFields
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $id;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`metadata`", length=255, nullable=true)
      */
-    private $metadata;
+    protected $metadata;
 
     /**
      * @param int $customerId
@@ -31,19 +30,19 @@ class CustomerSimpleFields extends Entity
         string $metadata
     )
     {
-        $this->id = $customerId;
+        $this->customerId = $customerId;
         $this->metadata = $metadata;
     }
 
 
-    public function getId(): ?int
+    public function getCustomerId(): ?int
     {
-        return $this->id;
+        return $this->customerId;
     }
 
-    public function setId(int $id): self
+    public function setCustomerId(int $customerId): self
     {
-        $this->id = $id;
+        $this->customerId = $customerId;
 
         return $this;
     }

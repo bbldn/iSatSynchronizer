@@ -9,35 +9,28 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_order_price_discount`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\OrderPriceDiscountRepository")
  */
-class OrderPriceDiscount extends Entity
+class OrderPriceDiscount
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`discount_id`")
      */
-    private $id;
+    protected $discountId;
 
     /**
      * @ORM\Column(type="float", name="`price_range`", nullable=true)
      */
-    private $priceRange;
+    protected $priceRange;
 
     /**
      * @ORM\Column(type="float", name="`percent_discount`", nullable=true)
      */
-    private $percentDiscount;
+    protected $percentDiscount;
 
-    public function getId(): ?int
+    public function getDiscountId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->discountId;
     }
 
     public function getPriceRange(): ?float

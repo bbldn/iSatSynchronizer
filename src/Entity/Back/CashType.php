@@ -9,24 +9,24 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_cash_types`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\CashTypeRepository")
  */
-class CashType extends Entity
+class CashType
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`currency_name`", length=10)
      */
-    private $currency_name;
+    protected $currency_name;
 
     public function getId(): ?int
     {

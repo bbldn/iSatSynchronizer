@@ -2,19 +2,18 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_buyers_gamepost`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\BuyersGamePostAccountsRepository")
  */
-class BuyersGamePostAccounts extends Entity
+class BuyersGamePostAccounts
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
     private $id;
 

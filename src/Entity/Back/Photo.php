@@ -9,60 +9,53 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`photo`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\PhotoRepository")
  */
-class Photo extends Entity
+class Photo
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id_photo`")
      */
-    private $id;
+    protected $idPhoto;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="integer", name="`productID`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`small`")
      */
-    private $small;
+    protected $small;
 
     /**
      * @ORM\Column(type="string", name="`big`")
      */
-    private $big;
+    protected $big;
 
     /**
      * @ORM\Column(type="string", name="`hide`")
      */
-    private $hide = 'hide';
+    protected $hide = 'hide';
 
     /**
      * @ORM\Column(type="integer", name="`pos`")
      */
-    private $pos = 0;
+    protected $pos = 0;
 
     /**
      * @ORM\Column(type="integer", name="`id_catalog`")
      */
-    private $idCatalog = 0;
+    protected $idCatalog = 0;
 
-    public function getId(): ?int
+    public function getIdPhoto(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->idPhoto;
     }
 
     public function getName(): ?string

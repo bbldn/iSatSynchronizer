@@ -2,25 +2,24 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_filter`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryFilterRepository")
  */
-class CategoryFilter extends Entity
+class CategoryFilter
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $id;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="integer", name="`filter_id`")
      */
-    private $filterId;
+    protected $filterId;
 
     /**
      * @param int $categoryId
@@ -31,18 +30,18 @@ class CategoryFilter extends Entity
         int $filterId
     )
     {
-        $this->id = $categoryId;
+        $this->categoryId = $categoryId;
         $this->filterId = $filterId;
     }
 
-    public function getId(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->id;
+        return $this->categoryId;
     }
 
-    public function setId(int $id): self
+    public function setCategoryId(int $categoryId): self
     {
-        $this->id = $id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }

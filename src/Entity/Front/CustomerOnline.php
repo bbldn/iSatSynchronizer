@@ -15,27 +15,27 @@ class CustomerOnline
      * @ORM\Id()
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
-    private $id;
+    protected $ip;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`url`", length=255)
      */
-    private $url;
+    protected $url;
 
     /**
      * @ORM\Column(type="string", name="`referer`", length=255)
      */
-    private $referer;
+    protected $referer;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param string $ip
@@ -49,21 +49,20 @@ class CustomerOnline
         string $url,
         string $referer)
     {
-        $this->id = $ip;
+        $this->ip = $ip;
         $this->customerId = $customerId;
         $this->url = $url;
         $this->referer = $referer;
     }
 
-
-    public function getId(): ?string
+    public function getIp(): ?string
     {
-        return $this->id;
+        return $this->ip;
     }
 
-    public function setId(string $id): self
+    public function setIp(string $ip): self
     {
-        $this->id = $id;
+        $this->ip = $ip;
 
         return $this;
     }
@@ -104,6 +103,17 @@ class CustomerOnline
         return $this;
     }
 
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
+    }
+
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
@@ -114,16 +124,5 @@ class CustomerOnline
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,93 +9,93 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerAffiliateRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class CustomerAffiliate extends Entity
+class CustomerAffiliate
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $id;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="string", name="`company`", length=40)
      */
-    private $company;
+    protected $company;
 
     /**
      * @ORM\Column(type="string", name="`website`", length=255)
      */
-    private $website;
+    protected $website;
 
     /**
      * @ORM\Column(type="string", name="`tracking`", length=64)
      */
-    private $tracking;
+    protected $tracking;
 
     /**
      * @ORM\Column(type="float", name="`commission`")
      */
-    private $commission = 0.0;
+    protected $commission = 0.0;
 
     /**
      * @ORM\Column(type="string", name="`tax`", length=64)
      */
-    private $tax;
+    protected $tax;
 
     /**
      * @ORM\Column(type="string", name="`payment`", length=6)
      */
-    private $payment;
+    protected $payment;
 
     /**
      * @ORM\Column(type="string", name="`cheque`", length=100)
      */
-    private $cheque;
+    protected $cheque;
 
     /**
      * @ORM\Column(type="string", name="`paypal`", length=64)
      */
-    private $payPal;
+    protected $payPal;
 
     /**
      * @ORM\Column(type="string", name="`bank_name`", length=64)
      */
-    private $bankName;
+    protected $bankName;
 
     /**
      * @ORM\Column(type="string", name="`bank_branch_number`", length=64)
      */
-    private $bankBranchNumber;
+    protected $bankBranchNumber;
 
     /**
      * @ORM\Column(type="string", name="`bank_swift_code`", length=64)
      */
-    private $bankSwiftCode;
+    protected $bankSwiftCode;
 
     /**
      * @ORM\Column(type="string", name="`bank_account_name`", length=64)
      */
-    private $bankAccountName;
+    protected $bankAccountName;
 
     /**
      * @ORM\Column(type="string", name="`bank_account_number`", length=64)
      */
-    private $bankAccountNumber;
+    protected $bankAccountNumber;
 
     /**
      * @ORM\Column(type="string", name="`custom_field`", length=255)
      */
-    private $customField;
+    protected $customField;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param string $company
@@ -151,14 +150,14 @@ class CustomerAffiliate extends Entity
     }
 
 
-    public function getId(): ?int
+    public function getCustomerId(): ?int
     {
-        return $this->id;
+        return $this->customerId;
     }
 
-    public function setId(int $id): self
+    public function setCustomerId(int $customerId): self
     {
-        $this->id = $id;
+        $this->customerId = $customerId;
 
         return $this;
     }
@@ -343,6 +342,16 @@ class CustomerAffiliate extends Entity
         return $this;
     }
 
+    /**
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
+    }
+
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
@@ -353,15 +362,5 @@ class CustomerAffiliate extends Entity
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

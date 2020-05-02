@@ -2,46 +2,45 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_reward`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerRewardRepository")
  */
-class CustomerReward extends Entity
+class CustomerReward
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_reward_id`")
      */
-    private $id;
+    protected $customerRewardId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $customerId = 0;
+    protected $customerId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId = 0;
+    protected $orderId = 0;
 
     /**
      * @ORM\Column(type="string", name="`description`")
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="integer", name="`points`")
      */
-    private $points = 0;
+    protected $points = 0;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $customerId
@@ -62,16 +61,9 @@ class CustomerReward extends Entity
         $this->points = $points;
     }
 
-    public function getId(): ?int
+    public function getCustomerRewardId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerRewardId;
     }
 
     public function getCustomerId(): ?int

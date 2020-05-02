@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method CustomerSimpleFields[]    findAll()
  * @method CustomerSimpleFields[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method CustomerSimpleFields[]    findByIds(string $ids)
- * @method void    save(CustomerSimpleFields $instance)
- * @method void    saveAndFlush(CustomerSimpleFields $instance)
+ * @method void    persist(CustomerSimpleFields $instance)
+ * @method void    persistAndFlush(CustomerSimpleFields $instance)
  * @method void    remove(CustomerSimpleFields $instance)
  * @method void    removeAndFlush(CustomerSimpleFields $instance)
  */
 class CustomerSimpleFieldsRepository extends EntityFrontRepository
 {
+    /**
+     * CustomerSimpleFieldsRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CustomerSimpleFields::class);

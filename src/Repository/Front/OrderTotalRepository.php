@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method OrderTotal[]    findAll()
  * @method OrderTotal[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method OrderTotal[]    findByIds(string $ids)
- * @method void    save(OrderTotal $instance)
- * @method void    saveAndFlush(OrderTotal $instance)
+ * @method void    persist(OrderTotal $instance)
+ * @method void    persistAndFlush(OrderTotal $instance)
  * @method void    remove(OrderTotal $instance)
  * @method void    removeAndFlush(OrderTotal $instance)
  */
 class OrderTotalRepository extends EntityFrontRepository
 {
+    /**
+     * OrderTotalRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, OrderTotal::class);

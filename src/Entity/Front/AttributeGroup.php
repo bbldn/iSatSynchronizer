@@ -2,26 +2,25 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_attribute_group`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\AttributeGroupRepository")
  */
-class AttributeGroup extends Entity
+class AttributeGroup
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`attribute_group_id`")
      */
-    private $id;
+    protected $attributeGroupId;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder;
+    protected $sortOrder;
 
     /**
      * @param int $sortOrder
@@ -31,17 +30,9 @@ class AttributeGroup extends Entity
         $this->sortOrder = $sortOrder;
     }
 
-
-    public function getId(): ?int
+    public function getAttributeGroupId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->attributeGroupId;
     }
 
     public function getSortOrder(): ?int

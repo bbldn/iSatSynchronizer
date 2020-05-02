@@ -2,35 +2,34 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_group_description`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerGroupDescriptionRepository")
  */
-class CustomerGroupDescription extends Entity
+class CustomerGroupDescription
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $id;
+    protected $customerGroupId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=32)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`description`", length=255)
      */
-    private $description;
+    protected $description;
 
     /**
      * @param int $languageId
@@ -49,14 +48,14 @@ class CustomerGroupDescription extends Entity
     }
 
 
-    public function getId(): ?int
+    public function getCustomerGroupId(): ?int
     {
-        return $this->id;
+        return $this->customerGroupId;
     }
 
-    public function setId(int $id): self
+    public function setCustomerGroupId(int $customerGroupId): self
     {
-        $this->id = $id;
+        $this->customerGroupId = $customerGroupId;
 
         return $this;
     }

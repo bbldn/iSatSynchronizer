@@ -11,13 +11,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method BuyersGroupsExtra[]    findAll()
  * @method BuyersGroupsExtra[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method BuyersGroupsExtra[]    findByIds(string $ids)
- * @method void    save(BuyersGroupsExtra $instance)
- * @method void    saveAndFlush(BuyersGroupsExtra $instance)
+ * @method void    persist(BuyersGroupsExtra $instance)
+ * @method void    persistAndFlush(BuyersGroupsExtra $instance)
  * @method void    remove(BuyersGroupsExtra $instance)
  * @method void    removeAndFlush(BuyersGroupsExtra $instance)
  */
 class BuyersGroupsExtraRepository extends EntityBackRepository
 {
+    /**
+     * BuyersGroupsExtraRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BuyersGroupsExtra::class);

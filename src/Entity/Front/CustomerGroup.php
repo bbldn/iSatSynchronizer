@@ -2,31 +2,30 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_customer_group`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerGroupRepository")
  */
-class CustomerGroup extends Entity
+class CustomerGroup
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $id;
+    protected $customerGroupId;
 
     /**
      * @ORM\Column(type="boolean", name="`approval`")
      */
-    private $approval;
+    protected $approval;
 
     /**
      * @ORM\Column(type="integer", name="`sort_order`")
      */
-    private $sortOrder;
+    protected $sortOrder;
 
     /**
      * @param bool $approval
@@ -41,17 +40,9 @@ class CustomerGroup extends Entity
         $this->sortOrder = $sortOrder;
     }
 
-
-    public function getId(): ?int
+    public function getCustomerGroupId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerGroupId;
     }
 
     public function getApproval(): ?bool

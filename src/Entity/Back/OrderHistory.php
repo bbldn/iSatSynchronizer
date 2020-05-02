@@ -10,29 +10,29 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Back\OrderHistoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class OrderHistory extends Entity
+class OrderHistory
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", name="`order_num`")
      */
-    private $orderNum;
+    protected $orderNum;
 
     /**
      * @ORM\Column(type="integer", name="`customerID`")
      */
-    private $customerId;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="datetime", name="`date`")
      */
-    private $date;
+    protected $date;
 
     public function getId(): ?int
     {

@@ -2,36 +2,35 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_buyers_groups_prices`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\BuyersGroupsPricesRepository")
  */
-class BuyersGroupsPrices extends Entity
+class BuyersGroupsPrices
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", name="`productID`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`group_id`")
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price;
+    protected $price;
 
     public function getId(): ?int
     {

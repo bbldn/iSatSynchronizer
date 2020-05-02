@@ -2,35 +2,34 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_attribute`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductAttributeRepository")
  */
-class ProductAttribute extends Entity
+class ProductAttribute
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $id;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`attribute_id`")
      */
-    private $attributeId;
+    protected $attributeId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`text`")
      */
-    private $text;
+    protected $text;
 
     /**
      * @param int $productId
@@ -45,23 +44,15 @@ class ProductAttribute extends Entity
         string $text
     )
     {
-        $this->id = $productId;
+        $this->productId = $productId;
         $this->attributeId = $attributeId;
         $this->languageId = $languageId;
         $this->text = $text;
     }
 
-
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->productId;
     }
 
     public function getAttributeId(): ?int

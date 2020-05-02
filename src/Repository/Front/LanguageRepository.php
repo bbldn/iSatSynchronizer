@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Language[]    findAll()
  * @method Language[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Language[]    findByIds(string $ids)
- * @method void    save(Language $instance)
- * @method void    saveAndFlush(Language $instance)
+ * @method void    persist(Language $instance)
+ * @method void    persistAndFlush(Language $instance)
  * @method void    remove(Language $instance)
  * @method void    removeAndFlush(Language $instance)
  */
 class LanguageRepository extends EntityFrontRepository
 {
+    /**
+     * LanguageRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Language::class);

@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,124 +9,124 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\CustomerRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Customer extends Entity
+class Customer
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
-    private $id;
+    protected $customerId;
 
     /**
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
-    private $customerGroupId;
+    protected $customerGroupId;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId = 0;
+    protected $storeId = 0;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`firstname`", length=32)
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @ORM\Column(type="string", name="`lastname`", length=32)
      */
-    private $lastName;
+    protected $lastName;
 
     /**
      * @ORM\Column(type="string", name="`email`", length=96)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", name="`telephone`", length=32)
      */
-    private $telephone;
+    protected $telephone;
 
     /**
      * @ORM\Column(type="string", name="`fax`", length=32)
      */
-    private $fax;
+    protected $fax;
 
     /**
      * @ORM\Column(type="string", name="`password`", length=40)
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="string", name="`salt`", length=9)
      */
-    private $salt;
+    protected $salt;
 
     /**
      * @ORM\Column(type="string", name="`cart`", nullable=true)
      */
-    private $cart = null;
+    protected $cart = null;
 
     /**
      * @ORM\Column(type="string", name="`wishlist`", nullable=true)
      */
-    private $wishList = null;
+    protected $wishList = null;
 
     /**
      * @ORM\Column(type="boolean", name="`newsletter`")
      */
-    private $newsletter = 0;
+    protected $newsletter = 0;
 
     /**
      * @ORM\Column(type="integer", name="`address_id`")
      */
-    private $addressId = 0;
+    protected $addressId = 0;
 
     /**
      * @ORM\Column(type="string", name="`custom_field`")
      */
-    private $customField;
+    protected $customField;
 
     /**
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="boolean", name="`status`")
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="boolean", name="`safe`")
      */
-    private $safe;
+    protected $safe;
 
     /**
      * @ORM\Column(type="string", name="`token`")
      */
-    private $token;
+    protected $token;
 
     /**
      * @ORM\Column(type="string", name="`code`", length=40)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @ORM\Column(type="string", name="`pass`", nullable=true)
      */
-    private $pass = null;
+    protected $pass = null;
 
     /**
      * @param int $customerGroupId
@@ -199,17 +198,9 @@ class Customer extends Entity
         $this->pass = $pass;
     }
 
-
-    public function getId(): ?int
+    public function getCustomerId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->customerId;
     }
 
     public function getCustomerGroupId(): ?int
@@ -452,18 +443,6 @@ class Customer extends Entity
         return $this;
     }
 
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
     public function getPass(): string
     {
         return $this->pass;
@@ -485,5 +464,17 @@ class Customer extends Entity
         if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
+    }
+
+    public function getDateAdded(): ?\DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
     }
 }

@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductReward[]    findAll()
  * @method ProductReward[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method ProductReward[]    findByIds(string $ids)
- * @method void    save(ProductReward $instance)
- * @method void    saveAndFlush(ProductReward $instance)
+ * @method void    persist(ProductReward $instance)
+ * @method void    persistAndFlush(ProductReward $instance)
  * @method void    remove(ProductReward $instance)
  * @method void    removeAndFlush(ProductReward $instance)
  */
 class ProductRewardRepository extends EntityFrontRepository
 {
+    /**
+     * ProductRewardRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductReward::class);

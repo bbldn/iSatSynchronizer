@@ -12,13 +12,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method ProductFilter[]    findAll()
  * @method ProductFilter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method ProductFilter[]    findByIds(string $ids)
- * @method void    save(ProductFilter $instance)
- * @method void    saveAndFlush(ProductFilter $instance)
+ * @method void    persist(ProductFilter $instance)
+ * @method void    persistAndFlush(ProductFilter $instance)
  * @method void    remove(ProductFilter $instance)
  * @method void    removeAndFlush(ProductFilter $instance)
  */
 class ProductFilterRepository extends EntityFrontRepository
 {
+    /**
+     * ProductFilterRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductFilter::class);

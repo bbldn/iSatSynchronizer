@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,39 +9,39 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderRecurringTransactionRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class OrderRecurringTransaction extends Entity
+class OrderRecurringTransaction
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_recurring_transaction_id`")
      */
-    private $id;
+    protected $orderRecurringTransactionId;
 
     /**
      * @ORM\Column(type="integer", name="`order_recurring_id`")
      */
-    private $orderRecurringId;
+    protected $orderRecurringId;
 
     /**
      * @ORM\Column(type="string", name="`reference`", length=255)
      */
-    private $reference;
+    protected $reference;
 
     /**
      * @ORM\Column(type="string", name="`type`", length=255)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="float", name="`amount`")
      */
-    private $amount;
+    protected $amount;
 
     /**
      * @ORM\Column(type="datetime", name="`date_added`")
      */
-    private $dateAdded;
+    protected $dateAdded;
 
     /**
      * @param int $orderRecurringId
@@ -63,14 +62,14 @@ class OrderRecurringTransaction extends Entity
         $this->amount = $amount;
     }
 
-    public function getId(): ?int
+    public function getOrderRecurringTransactionId(): ?int
     {
-        return $this->id;
+        return $this->orderRecurringTransactionId;
     }
 
-    public function setId(int $id): self
+    public function setOrderRecurringTransactionId(int $orderRecurringTransactionId): self
     {
-        $this->id = $id;
+        $this->orderRecurringTransactionId = $orderRecurringTransactionId;
 
         return $this;
     }
@@ -123,6 +122,17 @@ class OrderRecurringTransaction extends Entity
         return $this;
     }
 
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new \DateTime('now'));
+        }
+    }
+
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
@@ -133,16 +143,5 @@ class OrderRecurringTransaction extends Entity
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

@@ -2,80 +2,79 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_option_value`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductOptionValueRepository")
  */
-class ProductOptionValue extends Entity
+class ProductOptionValue
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_option_value_id`")
      */
-    private $id;
+    protected $productOptionValueId;
 
     /**
      * @ORM\Column(type="integer", name="`product_option_id`")
      */
-    private $productOptionId;
+    protected $productOptionId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`option_id`")
      */
-    private $optionId;
+    protected $optionId;
 
     /**
      * @ORM\Column(type="integer", name="`option_value_id`")
      */
-    private $optionValueId;
+    protected $optionValueId;
 
     /**
      * @ORM\Column(type="integer", name="`quantity`")
      */
-    private $quantity;
+    protected $quantity;
 
     /**
      * @ORM\Column(type="boolean", name="`subtract`")
      */
-    private $subtract;
+    protected $subtract;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price;
+    protected $price;
 
     /**
      * @ORM\Column(type="string", name="`price_prefix`", length=1)
      */
-    private $pricePrefix;
+    protected $pricePrefix;
 
     /**
      * @ORM\Column(type="integer", name="`points`")
      */
-    private $points;
+    protected $points;
 
     /**
      * @ORM\Column(type="string", name="`points_prefix`", length=1)
      */
-    private $pointsPrefix;
+    protected $pointsPrefix;
 
     /**
      * @ORM\Column(type="float", name="`weight`")
      */
-    private $weight;
+    protected $weight;
 
     /**
      * @ORM\Column(type="string", name="`weight_prefix`", length=1)
      */
-    private $weightPrefix;
+    protected $weightPrefix;
 
     /**
      * @param int $productOptionId
@@ -120,14 +119,14 @@ class ProductOptionValue extends Entity
         $this->weightPrefix = $weightPrefix;
     }
 
-    public function getId(): ?int
+    public function getProductOptionValueId(): ?int
     {
-        return $this->id;
+        return $this->productOptionValueId;
     }
 
-    public function setId(int $id): self
+    public function setProductOptionValueId(int $productOptionValueId): self
     {
-        $this->id = $id;
+        $this->productOptionValueId = $productOptionValueId;
 
         return $this;
     }

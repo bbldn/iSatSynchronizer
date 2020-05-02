@@ -2,66 +2,65 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_product`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderProductRepository")
  */
-class OrderProduct extends Entity
+class OrderProduct
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_product_id`")
      */
-    private $id;
+    protected $orderProductId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $productId;
+    protected $productId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", name="`model`", length=64)
      */
-    private $model;
+    protected $model;
 
     /**
      * @ORM\Column(type="integer", name="`quantity`")
      */
-    private $quantity;
+    protected $quantity;
 
     /**
      * @ORM\Column(type="float", name="`price`")
      */
-    private $price = 0.0;
+    protected $price = 0.0;
 
     /**
      * @ORM\Column(type="float", name="`total`")
      */
-    private $total = 0.0;
+    protected $total = 0.0;
 
     /**
      * @ORM\Column(type="float", name="`tax`")
      */
-    private $tax = 0.0;
+    protected $tax = 0.0;
 
     /**
      * @ORM\Column(type="integer", name="`reward`")
      */
-    private $reward;
+    protected $reward;
 
     public function fill(
         int $orderId,
@@ -87,16 +86,9 @@ class OrderProduct extends Entity
     }
 
 
-    public function getId(): ?int
+    public function getOrderProductId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderProductId;
     }
 
     public function getOrderId(): ?int

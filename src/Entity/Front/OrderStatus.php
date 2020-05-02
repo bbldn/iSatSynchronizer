@@ -2,31 +2,30 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_status`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderStatusRepository")
  */
-class OrderStatus extends Entity
+class OrderStatus
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_status_id`")
      */
-    private $id;
+    protected $orderStatusId;
 
     /**
      * @ORM\Column(type="integer", name="`language_id`")
      */
-    private $languageId;
+    protected $languageId;
 
     /**
      * @ORM\Column(type="string", name="`name`", length=32)
      */
-    private $name;
+    protected $name;
 
     /**
      * @param int $languageId
@@ -41,16 +40,9 @@ class OrderStatus extends Entity
         $this->name = $name;
     }
 
-    public function getId(): ?int
+    public function getOrderStatusId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderStatusId;
     }
 
     public function getLanguageId(): ?int

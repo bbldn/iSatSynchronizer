@@ -2,76 +2,75 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order_voucher`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderVoucherRepository")
  */
-class OrderVoucher extends Entity
+class OrderVoucher
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_voucher_id`")
      */
-    private $id;
+    protected $orderVoucherId;
 
     /**
      * @ORM\Column(type="integer", name="`order_id`")
      */
-    private $orderId;
+    protected $orderId;
 
     /**
      * @ORM\Column(type="integer", name="`voucher_id`")
      */
-    private $voucherId;
+    protected $voucherId;
 
     /**
      * @ORM\Column(type="string", name="`description`", length=255)
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="string", name="`code`", length=10)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\Column(type="string", name="`from_name`", length=64)
      */
-    private $fromName;
+    protected $fromName;
 
     /**
      * @ORM\Column(type="string", name="`from_email`", length=96)
      */
-    private $fromEmail;
+    protected $fromEmail;
 
     /**
      * @ORM\Column(type="string", name="`to_name`", length=64)
      */
-    private $toName;
+    protected $toName;
 
     /**
      * @ORM\Column(type="string", name="`to_email`", length=96)
      */
-    private $toEmail;
+    protected $toEmail;
 
     /**
      * @ORM\Column(type="integer", name="`voucher_theme_id`")
      */
-    private $voucherThemeId;
+    protected $voucherThemeId;
 
     /**
      * @ORM\Column(type="string", name="`message`", length=255)
      */
-    private $message;
+    protected $message;
 
     /**
      * @ORM\Column(type="float", name="`amount`")
      */
-    private $amount;
+    protected $amount;
 
     public function fill(
         int $orderId,
@@ -99,17 +98,9 @@ class OrderVoucher extends Entity
         $this->amount = $amount;
     }
 
-
-    public function getId(): ?int
+    public function getOrderVoucherId(): ?int
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->orderVoucherId;
     }
 
     public function getOrderId(): ?int

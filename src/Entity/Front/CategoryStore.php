@@ -2,25 +2,24 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_category_to_store`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\CategoryStoreRepository")
  */
-class CategoryStore extends Entity
+class CategoryStore
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
-    private $id;
+    protected $categoryId;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId;
+    protected $storeId;
 
     /**
      * @param int $categoryId
@@ -31,18 +30,18 @@ class CategoryStore extends Entity
         int $storeId
     )
     {
-        $this->id = $categoryId;
+        $this->categoryId = $categoryId;
         $this->storeId = $storeId;
     }
 
-    public function getId(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->id;
+        return $this->categoryId;
     }
 
-    public function setId(int $id): self
+    public function setCategoryId(int $categoryId): self
     {
-        $this->id = $id;
+        $this->categoryId = $categoryId;
 
         return $this;
     }

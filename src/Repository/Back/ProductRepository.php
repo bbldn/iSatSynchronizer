@@ -11,13 +11,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Product[]    findAll()
  * @method Product[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Product[]    findByIds(string $ids)
- * @method void    save(Product $instance)
- * @method void    saveAndFlush(Product $instance)
+ * @method void    persist(Product $instance)
+ * @method void    persistAndFlush(Product $instance)
  * @method void    remove(Product $instance)
  * @method void    removeAndFlush(Product $instance)
  */
 class ProductRepository extends EntityBackRepository
 {
+    /**
+     * ProductRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
@@ -25,9 +29,9 @@ class ProductRepository extends EntityBackRepository
 
     /**
      * @param int $categoryId
-     * @return Product[] Returns an array of Product objects
+     * @return Product[]
      */
-    public function findByCategoryId(int $categoryId)
+    public function findByCategoryId(int $categoryId): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.categoryId = :val')
@@ -36,7 +40,12 @@ class ProductRepository extends EntityBackRepository
             ->getResult();
     }
 
-    public function findByName(string $name, int $max)
+    /**
+     * @param string $name
+     * @param int $max
+     * @return mixed
+     */
+    public function findByName(string $name, int $max): array
     {
         $name = mb_strtolower($name);
         $query = $this->createQueryBuilder('c')

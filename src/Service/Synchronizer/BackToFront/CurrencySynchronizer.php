@@ -28,7 +28,7 @@ class CurrencySynchronizer
             $backCurrency = Store::convertFrontToBackCurrency($currencyFront->getCode());
             $currencyBack = $this->currencyBackRepository->findOneByName($backCurrency['code']);
             $currencyFront->setValue($currencyBack->getValue());
-            $this->currencyFrontRepository->saveAndFlush($currencyFront);
+            $this->currencyFrontRepository->persistAndFlush($currencyFront);
         }
     }
 }

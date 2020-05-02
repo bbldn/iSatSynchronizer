@@ -2,196 +2,195 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_buyers_gamepost`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\BuyersGamePostRepository")
  */
-class BuyersGamePost extends Entity
+class BuyersGamePost
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", name="`login`", length=255)
      */
-    private $login;
+    protected $login;
 
     /**
      * @ORM\Column(type="string", name="`password`", length=255)
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="string", name="`fio`", length=255)
      */
-    private $fio;
+    protected $fio;
 
     /**
      * @ORM\Column(type="string", name="`phone`", length=255)
      */
-    private $phone;
+    protected $phone;
 
     /**
      * @ORM\Column(type="string", name="`region`", length=255)
      */
-    private $region;
+    protected $region;
 
     /**
      * @ORM\Column(type="string", name="`city`", length=255)
      */
-    private $city;
+    protected $city;
 
     /**
      * @ORM\Column(type="string", name="`street`", length=255)
      */
-    private $street;
+    protected $street;
 
     /**
      * @ORM\Column(type="string", name="`house`", length=255)
      */
-    private $house;
+    protected $house;
 
     /**
      * @ORM\Column(type="string", name="`mail`", length=255)
      */
-    private $mail;
+    protected $mail;
 
     /**
      * @ORM\Column(type="string", name="`code`", length=255)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\Column(type="boolean", name="`active`")
      */
-    private $active;
+    protected $active;
 
     /**
      * @ORM\Column(type="boolean", name="`account`")
      */
-    private $account;
+    protected $account;
 
     /**
      * @ORM\Column(type="integer", name="`date_reg`")
      */
-    private $dateReg;
+    protected $dateReg;
 
     /**
      * @ORM\Column(type="integer", name="`date_acc_begin`")
      */
-    private $dateAccBegin;
+    protected $dateAccBegin;
 
     /**
      * @ORM\Column(type="integer", name="`date_acc_end`")
      */
-    private $dateAccEnd;
+    protected $dateAccEnd;
 
     /**
      * @ORM\Column(type="string", name="`vip`", length=255)
      */
-    private $vip;
+    protected $vip;
 
     /**
      * @ORM\Column(type="string", name="`image_small`", length=255)
      */
-    private $imageSmall;
+    protected $imageSmall;
 
     /**
      * @ORM\Column(type="string", name="`image_big`", length=255)
      */
-    private $imageBig;
+    protected $imageBig;
 
     /**
      * @ORM\Column(type="string", name="`info`", length=255)
      */
-    private $info;
+    protected $info;
 
     /**
      * @ORM\Column(type="string", name="`ip`", length=250)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="string", name="`timestamp_online`", length=255)
      */
-    private $timestampOnline;
+    protected $timestampOnline;
 
     /**
      * @ORM\Column(type="string", name="`timestamp_active`", length=255)
      */
-    private $timestampActive;
+    protected $timestampActive;
 
     /**
      * @ORM\Column(type="string", name="`chatname_color`", length=6)
      */
-    private $chatNameColor = '006084';
+    protected $chatNameColor = '006084';
 
     /**
      * @ORM\Column(type="integer", name="`money_real`")
      */
-    private $moneyReal;
+    protected $moneyReal;
 
     /**
      * @ORM\Column(type="integer", name="`money_virtual`")
      */
-    private $moneyVirtual;
+    protected $moneyVirtual;
 
     /**
      * @ORM\Column(type="integer", name="`money_box`")
      */
-    private $moneyBox;
+    protected $moneyBox;
 
     /**
      * @ORM\Column(type="datetime", name="`date_birth`")
      */
-    private $dateBirth;
+    protected $dateBirth;
 
     /**
      * @ORM\Column(type="integer", name="`referer`")
      */
-    private $referer;
+    protected $referer;
 
     /**
      * @ORM\Column(type="integer", name="`group_id`")
      */
-    private $groupId;
+    protected $groupId;
 
     /**
      * @ORM\Column(type="integer", name="`group_extra_id`")
      */
-    private $groupExtraId = 1;
+    protected $groupExtraId = 1;
 
     /**
      * @ORM\Column(type="integer", name="`shop_id`")
      */
-    private $shopId = 1;
+    protected $shopId = 1;
 
     /**
      * @ORM\Column(type="string", name="`comment`", length=255)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @ORM\Column(type="integer", name="`delivery`")
      */
-    private $delivery;
+    protected $delivery;
 
     /**
      * @ORM\Column(type="integer", name="`payment`")
      */
-    private $payment;
+    protected $payment;
 
     /**
      * @ORM\Column(type="string", name="`warehouse`", length=255)
      */
-    private $warehouse;
+    protected $warehouse;
 
     public function fill(
         string $login,
@@ -267,7 +266,6 @@ class BuyersGamePost extends Entity
         $this->payment = $payment;
         $this->warehouse = $warehouse;
     }
-
 
     public function getId(): ?int
     {

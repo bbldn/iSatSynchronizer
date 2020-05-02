@@ -2,30 +2,29 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_product_to_layout`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ProductLayoutRepository")
  */
-class ProductLayout extends Entity
+class ProductLayout
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
-    private $id;
+    protected $productId;
 
     /**
      * @ORM\Column(type="integer", name="`store_id`")
      */
-    private $storeId;
+    protected $storeId;
 
     /**
      * @ORM\Column(type="integer", name="`layout_id`")
      */
-    private $layoutId;
+    protected $layoutId;
 
     /**
      * @param int $productId
@@ -38,20 +37,20 @@ class ProductLayout extends Entity
         int $layoutId
     )
     {
-        $this->id = $productId;
+        $this->productId = $productId;
         $this->storeId = $storeId;
         $this->layoutId = $layoutId;
     }
 
 
-    public function getId(): ?int
+    public function getProductId(): ?int
     {
-        return $this->id;
+        return $this->productId;
     }
 
-    public function setId(int $id): self
+    public function setProductId(int $productId): self
     {
-        $this->id = $id;
+        $this->productId = $productId;
 
         return $this;
     }
