@@ -114,11 +114,10 @@ class AttributeSynchronizer
         }
 
         $name = trim(Store::encodingConvert($attributeBack->getName()));
-        $attributeDescriptionFront->fill(
-            $attributeFront->getAttributeId(),
-            $this->storeFront->getDefaultLanguageId(),
-            $name
-        );
+        $attributeDescriptionFront->setAttributeId($attributeFront->getAttributeId());
+        $attributeDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
+        $attributeDescriptionFront->setName($name);
+
         $this->attributeDescriptionFrontRepository->persistAndFlush($attributeDescriptionFront);
 
         return $attributeFront;

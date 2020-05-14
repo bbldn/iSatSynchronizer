@@ -40,6 +40,7 @@ use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontReposito
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
+use DateTime;
 use Illuminate\Support\Str;
 
 class ProductSynchronizer
@@ -325,36 +326,33 @@ class ProductSynchronizer
             $stockAvailableStatusId = $this->storeFront->getProductNotAvailableStatusId();
         }
 
-        $productFront->fill(
-            'art' . $productBack->getProductId(),
-            $productBack->getProductId(),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            $quantity,
-            $stockAvailableStatusId,
-            Filler::securityString(null),
-            1,
-            true,
-            $productBack->getPrice(),
-            0,
-            0,
-            new \DateTime('now'),
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            false,
-            true,
-            0,
-            $productBack->getEnabled() !== 0,
-            0
-        );
+        $productFront->setModel('art' . $productBack->getProductId());
+        $productFront->setSku($productBack->getProductId());
+        $productFront->setUpc(Filler::securityString(null));
+        $productFront->setEan(Filler::securityString(null));
+        $productFront->setJan(Filler::securityString(null));
+        $productFront->setIsbn(Filler::securityString(null));
+        $productFront->setMpn(Filler::securityString(null));
+        $productFront->setLocation(Filler::securityString(null));
+        $productFront->setQuantity($quantity);
+        $productFront->setStockStatusId($stockAvailableStatusId);
+        $productFront->setImage(Filler::securityString(null));
+        $productFront->setManufacturerId(1);
+        $productFront->setShipping(true);
+        $productFront->setPrice($productBack->getPrice());
+        $productFront->setPoints(0);
+        $productFront->setTaxClassId(0);
+        $productFront->setDateAvailable(new DateTime('now'));
+        $productFront->setLength(0);
+        $productFront->setWeight(0);
+        $productFront->setWeightClassId(0);
+        $productFront->setHeight(0);
+        $productFront->setLengthClassId(0);
+        $productFront->setSubtract(false);
+        $productFront->setMinimum(true);
+        $productFront->setSortOrder(0);
+        $productFront->setStatus($productBack->getEnabled() !== 0);
+        $productFront->setViewed(0);
 
         $this->productFrontRepository->persistAndFlush($productFront);
 
@@ -363,16 +361,16 @@ class ProductSynchronizer
             $productDescriptionFront = new ProductDescriptionFront();
         }
 
-        $productDescriptionFront->fill(
-            $productFront->getProductId(),
-            $this->storeFront->getDefaultLanguageId(),
-            Filler::securityString(Store::encodingConvert($productBack->getName())),
-            Filler::securityString(Store::encodingConvert($productBack->getDescription())),
-            Filler::securityString(null),
-            Filler::securityString(Store::encodingConvert($productBack->getName())),
-            Filler::securityString(null),
-            Filler::securityString(null)
+        $productDescriptionFront->setProductId($productFront->getProductId());
+        $productDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
+        $productDescriptionFront->setName(Filler::securityString(Store::encodingConvert($productBack->getName())));
+        $productDescriptionFront->setDescription(
+            Filler::securityString(Store::encodingConvert($productBack->getDescription()))
         );
+        $productDescriptionFront->setTag(Filler::securityString(null));
+        $productDescriptionFront->setMetaTitle(Store::encodingConvert($productBack->getName()));
+        $productDescriptionFront->setMetaDescription(Filler::securityString(null));
+        $productDescriptionFront->setMetaKeyword(Filler::securityString(null));
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 
@@ -381,22 +379,19 @@ class ProductSynchronizer
             $productLayoutFront = new ProductLayoutFront();
         }
 
-        $productLayoutFront->fill(
-            $productFront->getProductId(),
-            $this->storeFront->getDefaultStoreId(),
-            $this->storeFront->getDefaultLayoutId()
-        );
-
+        $productLayoutFront->setProductId($productFront->getProductId());
+        $productLayoutFront->setStoreId($this->storeFront->getDefaultStoreId());
+        $productLayoutFront->setLayoutId($this->storeFront->getDefaultLayoutId());
         $this->productLayoutFrontRepository->persistAndFlush($productLayoutFront);
 
         $productStoreFront = $this->productStoreFrontRepository->find($productFront->getProductId());
         if (null === $productStoreFront) {
             $productStoreFront = new ProductStoreFront();
         }
-        $productStoreFront->fill(
-            $productFront->getProductId(),
-            $this->storeFront->getDefaultStoreId()
-        );
+
+        $productStoreFront->setProductId($productFront->getProductId());
+        $productStoreFront->setStoreId($this->storeFront->getDefaultStoreId());
+
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
         $categoryFrontId = $this->getCategoryFrontIdByBack($productBack->getCategoryId());
@@ -404,11 +399,11 @@ class ProductSynchronizer
         if (null === $productCategoryFront) {
             $productCategoryFront = new ProductCategoryFront();
         }
-        $productCategoryFront->fill(
-            $productFront->getProductId(),
-            $categoryFrontId,
-            true
-        );
+
+        $productCategoryFront->setProductId($productFront->getProductId());
+        $productCategoryFront->setCategoryId($categoryFrontId);
+        $productCategoryFront->setMainCategory(true);
+
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
         $productFrontId = $productFront->getProductId();
@@ -477,12 +472,12 @@ class ProductSynchronizer
                 );
 
                 $productAttributeFront = new ProductAttributeFront();
-                $productAttributeFront->fill(
-                    $productFrontId,
-                    $attribute->getFrontId(),
-                    $this->storeFront->getDefaultLanguageId(),
-                    $text
-                );
+
+                $productAttributeFront->setProductId($productFrontId);
+                $productAttributeFront->setAttributeId($attribute->getFrontId());
+                $productAttributeFront->setLanguageId($this->storeFront->getDefaultLanguageId());
+                $productAttributeFront->setText($text);
+
                 $this->productAttributeFrontRepository->persistAndFlush($productAttributeFront);
             }
         }
@@ -498,10 +493,11 @@ class ProductSynchronizer
         if (null === $seoUrl) {
             $seoUrl = new SeoUrlFront();
         }
-        $seoUrl->fill(
-            $this->storeFront->getDefaultStoreId(),
-            $this->storeFront->getDefaultLanguageId(),
-            'product_id=' . $productFrontId,
+
+        $seoUrl->setStoreId($this->storeFront->getDefaultStoreId());
+        $seoUrl->setLanguageId($this->storeFront->getDefaultLanguageId());
+        $seoUrl->setQuery('product_id=' . $productFrontId);
+        $seoUrl->setKeyword(
             StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
         );
 

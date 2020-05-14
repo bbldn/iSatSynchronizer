@@ -172,66 +172,66 @@ class OrderSynchronizer
         $currency = Store::convertFrontToBackCurrency($mainOrderBack->getCurrencyName());
         $zoneId = 3490;
 
-        $orderFront->fill(
-            $this->storeFront->getDefaultInvoiceNo(),
-            $this->storeFront->getInvoicePrefix(),
-            $this->storeFront->getDefaultShopId(),
-            $this->storeFront->getStoreName(),
-            $this->storeFront->getSiteUrl(),
-            $customerFrontId,
-            $this->storeFront->getDefaultCustomerGroupId(),
-            $fullName['firstName'],
-            $fullName['lastName'],
-            $mainOrderBack->getMail(),
-            $mainOrderBack->getPhone(),
-            Filler::securityString(null),
-            $this->storeFront->getDefaultCustomField(),
-            $fullName['firstName'],
-            $fullName['lastName'],
-            Filler::securityString(null),
-            $address,
-            Filler::securityString(null),
-            $mainOrderBack->getCity(),
-            Filler::securityString(null),
-            $this->storeFront->getDefaultCountry(),
-            $this->storeFront->getDefaultCountryId(),
-            $mainOrderBack->getCity(),
-            $zoneId,
-            Filler::securityString(null),
-            $this->storeFront->getDefaultCustomField(),
-            $this->storeFront->getDefaultPaymentMethod(),
-            $this->storeFront->getDefaultPaymentCode(),
-            $fullName['firstName'],
-            $fullName['lastName'],
-            Filler::securityString(null),
-            $address,
-            Filler::securityString(null),
-            $mainOrderBack->getCity(),
-            Filler::securityString(null),
-            $this->storeFront->getDefaultCountry(),
-            $this->storeFront->getDefaultCountryId(),
-            $mainOrderBack->getCity(),
-            $zoneId,
-            Filler::securityString(null),
-            $this->storeFront->getDefaultCustomField(),
-            $this->storeFront->getDefaultShippingMethod(),
-            $this->storeFront->getDefaultShippingCode(),
-            Filler::securityString(null),
-            $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum()) * $mainOrderBack->getCurrencyValue(),
-            StoreFront::convertBackToFrontStatusOrder($mainOrderBack->getStatus()),
-            $this->storeFront->getDefaultAffiliateId(),
-            $this->storeFront->getDefaultCommission(),
-            $this->storeFront->getDefaultMarketingId(),
-            Filler::securityString(null),
-            $this->storeFront->getDefaultLanguageId(),
-            $currency['id'],
-            $currency['code'],
-            $this->currencyFrontRepository->getCurrentCurrency($currency['id']),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null)
+        $orderFront->setInvoiceNo($this->storeFront->getDefaultInvoiceNo());
+        $orderFront->setInvoicePrefix($this->storeFront->getInvoicePrefix());
+        $orderFront->setStoreId($this->storeFront->getDefaultShopId());
+        $orderFront->setStoreName($this->storeFront->getStoreName());
+        $orderFront->setStoreUrl($this->storeFront->getSiteUrl());
+        $orderFront->setCustomerId($customerFrontId);
+        $orderFront->setCustomerGroupId($this->storeFront->getDefaultCustomerGroupId());
+        $orderFront->setFirstName($fullName['firstName']);
+        $orderFront->setLastName($fullName['lastName']);
+        $orderFront->setEmail($mainOrderBack->getMail());
+        $orderFront->setTelephone($mainOrderBack->getPhone());
+        $orderFront->setFax(Filler::securityString(null));
+        $orderFront->setCustomField($this->storeFront->getDefaultCustomField());
+        $orderFront->setPaymentFirstName($fullName['firstName']);
+        $orderFront->setPaymentLastName($fullName['lastName']);
+        $orderFront->setPaymentCompany(Filler::securityString(null));
+        $orderFront->setPaymentAddress1($address);
+        $orderFront->setPaymentAddress2(Filler::securityString(null));
+        $orderFront->setPaymentCity($mainOrderBack->getCity());
+        $orderFront->setPaymentPostCode(Filler::securityString(null));
+        $orderFront->setPaymentCountry($this->storeFront->getDefaultCountry());
+        $orderFront->setPaymentCountryId($this->storeFront->getDefaultCountryId());
+        $orderFront->setPaymentZone($mainOrderBack->getCity());
+        $orderFront->setPaymentZoneId($zoneId);
+        $orderFront->setPaymentAddressFormat(Filler::securityString(null));
+        $orderFront->setPaymentCustomField($this->storeFront->getDefaultCustomField());
+        $orderFront->setPaymentMethod($this->storeFront->getDefaultPaymentMethod());
+        $orderFront->setPaymentCode($this->storeFront->getDefaultPaymentCode());
+        $orderFront->setShippingFirstName($fullName['firstName']);
+        $orderFront->setShippingLastName($fullName['lastName']);
+        $orderFront->setShippingCompany(Filler::securityString(null));
+        $orderFront->setShippingAddress1($address);
+        $orderFront->setShippingAddress2(Filler::securityString(null));
+        $orderFront->setShippingCity($mainOrderBack->getCity());
+        $orderFront->setShippingPostCode(Filler::securityString(null));
+        $orderFront->setShippingCountry($this->storeFront->getDefaultCountry());
+        $orderFront->setShippingCountryId($this->storeFront->getDefaultCountryId());
+        $orderFront->setShippingZone($mainOrderBack->getCity());
+        $orderFront->setShippingZoneId($zoneId);
+        $orderFront->setShippingAddressFormat(Filler::securityString(null));
+        $orderFront->setShippingCustomField($this->storeFront->getDefaultCustomField());
+        $orderFront->setShippingMethod($this->storeFront->getDefaultShippingMethod());
+        $orderFront->setShippingCode($this->storeFront->getDefaultShippingCode());
+        $orderFront->setComment(Filler::securityString(null));
+        $orderFront->setTotal(
+            $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum()) * $mainOrderBack->getCurrencyValue()
         );
+        $orderFront->setOrderStatusId(StoreFront::convertBackToFrontStatusOrder($mainOrderBack->getStatus()));
+        $orderFront->setAffiliateId($this->storeFront->getDefaultAffiliateId());
+        $orderFront->setCommission($this->storeFront->getDefaultCommission());
+        $orderFront->setMarketingId($this->storeFront->getDefaultMarketingId());
+        $orderFront->setTracking(Filler::securityString(null));
+        $orderFront->setLanguageId($this->storeFront->getDefaultLanguageId());
+        $orderFront->setCurrencyId($currency['id']);
+        $orderFront->setCurrencyCode($currency['code']);
+        $orderFront->setCurrencyValue($this->currencyFrontRepository->getCurrentCurrency($currency['id']));
+        $orderFront->setIp(Filler::securityString(null));
+        $orderFront->setForwardedIp(Filler::securityString(null));
+        $orderFront->setUserAgent(Filler::securityString(null));
+        $orderFront->setAcceptLanguage(Filler::securityString(null));
 
         $dateAdded = new DateTime();
         $dateAdded->setTimestamp($mainOrderBack->getTime());
@@ -263,20 +263,18 @@ class OrderSynchronizer
                 return $orderFront;
             }
 
-
             $total = $orderBack->getAmount() * $orderBack->getPrice();
             $orderProductFront = new OrderProductFront();
-            $orderProductFront->fill(
-                $orderFront->getOrderId(),
-                $product->getFrontId(),
-                Store::encodingConvert($productDescriptionFront->getName()),
-                Store::encodingConvert($productFront->getModel()),
-                $orderBack->getAmount(),
-                $orderBack->getPrice(),
-                $total,
-                $this->storeFront->getDefaultTax(),
-                $this->storeFront->getDefaultReward()
-            );
+            $orderProductFront->setOrderId($orderFront->getOrderId());
+            $orderProductFront->setProductId($product->getFrontId());
+            $orderProductFront->setName(Store::encodingConvert($productDescriptionFront->getName()));
+            $orderProductFront->setModel(Store::encodingConvert($productFront->getModel()));
+            $orderProductFront->setQuantity($orderBack->getAmount());
+            $orderProductFront->setPrice($orderBack->getPrice());
+            $orderProductFront->setTotal($total);
+            $orderProductFront->setTax($this->storeFront->getDefaultTax());
+            $orderProductFront->setReward($this->storeFront->getDefaultReward());
+
             $this->orderProductFrontRepository->persistAndFlush($orderProductFront);
         }
 

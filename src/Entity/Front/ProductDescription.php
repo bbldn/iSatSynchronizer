@@ -99,6 +99,17 @@ class ProductDescription
     }
 
     /**
+     * @param int|null $productId
+     * @return ProductDescription
+     */
+    public function setProductId(?int $productId): self
+    {
+        $this->productId = $productId;
+
+        return $this;
+    }
+
+    /**
      * @return int|null
      */
     public function getLanguageId(): ?int

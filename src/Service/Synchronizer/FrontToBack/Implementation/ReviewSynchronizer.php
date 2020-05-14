@@ -78,17 +78,14 @@ class ReviewSynchronizer
             $productFrontId = $product->getFrontId();
         }
 
-        $reviewBack->fill(
-            $productFrontId,
-            $reviewFront->getAuthor(),
-            $reviewFront->getText(),
-            $reviewFront->getDateAdded(),
-            $reviewFront->getAuthor(),
-            Filler::securityString(null),
-            $reviewFront->getStatus(),
-            $reviewFront->getRating(),
-            $this->storeBack->getDefaultSiteId()
-        );
+        $reviewBack->setProductId($productFrontId);
+        $reviewBack->setAuthor($reviewFront->getAuthor());
+        $reviewBack->setBody($reviewFront->getText());
+        $reviewBack->setAddTime($reviewFront->getDateAdded());
+        $reviewBack->setTopic(Filler::securityString(null));
+        $reviewBack->setEnabled($reviewFront->getStatus());
+        $reviewBack->setStars($reviewFront->getRating());
+        $reviewBack->setSiteId($this->storeBack->getDefaultSiteId());
 
         $this->reviewBackRepository->persistAndFlush($reviewBack);
 
@@ -124,8 +121,10 @@ class ReviewSynchronizer
         if (null === $review) {
             $review = new Review();
         }
+
         $review->setBackId($backId);
         $review->setFrontId($frontId);
+
         $this->reviewRepository->persistAndFlush($review);
     }
 }

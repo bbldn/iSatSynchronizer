@@ -63,6 +63,17 @@ class ProductAttribute
     }
 
     /**
+     * @param int|null $productId
+     * @return ProductAttribute
+     */
+    public function setProductId(?int $productId): self
+    {
+        $this->productId = $productId;
+
+        return $this;
+    }
+
+    /**
      * @return int|null
      */
     public function getAttributeId(): ?int

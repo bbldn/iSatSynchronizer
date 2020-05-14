@@ -14,6 +14,7 @@ use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use DateTime;
 use Illuminate\Support\Str;
 
 class CustomerSynchronizer
@@ -154,7 +155,7 @@ class CustomerSynchronizer
             $this->storeBack->getDefaultMoneyReal(),
             $this->storeBack->getDefaultMoneyVirtual(),
             $this->storeBack->getDefaultMoneyBox(),
-            new \DateTime('0000-00-00 00:00:00'),
+            new DateTime('0000-00-00 00:00:00'),
             $this->storeBack->getDefaultReferer(),
             $this->storeBack->getDefaultGroupId(),
             $this->storeBack->getDefaultGroupExtraId(),
@@ -209,7 +210,7 @@ class CustomerSynchronizer
             $this->storeBack->getDefaultMoneyReal(),
             $this->storeBack->getDefaultMoneyVirtual(),
             $this->storeBack->getDefaultMoneyBox(),
-            new \DateTime('0000-00-00 00:00:00'),
+            new DateTime('0000-00-00 00:00:00'),
             $this->storeBack->getDefaultReferer(),
             $this->storeBack->getDefaultGroupId(),
             $this->storeBack->getDefaultGroupExtraId(),
@@ -235,8 +236,10 @@ class CustomerSynchronizer
         if (null === $customer) {
             $customer = new Customer();
         }
+
         $customer->setBackId($backId);
         $customer->setFrontId($frontId);
+
         $this->customerRepository->persistAndFlush($customer);
     }
 }

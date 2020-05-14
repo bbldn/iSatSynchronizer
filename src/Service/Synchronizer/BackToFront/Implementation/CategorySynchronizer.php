@@ -185,18 +185,16 @@ class CategorySynchronizer
     {
         $parentBackId = $categoryBack->getParent();
         $parentId = $this->storeFront->getDefaultCategoryFrontId();
-        if (!in_array($parentBackId, $this->storeBack->getRootCategories())) {
+        if (false === in_array($parentBackId, $this->storeBack->getRootCategories())) {
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
 
-        $categoryFront->fill(
-            Filler::securityString(null),
-            $parentId,
-            0,
-            1,
-            0,
-            $categoryBack->getEnabled()
-        );
+        $categoryFront->setImage(Filler::securityString(null));
+        $categoryFront->setParentId($parentId);
+        $categoryFront->setTop(false);
+        $categoryFront->setColumn(1);
+        $categoryFront->setSortOrder(0);
+        $categoryFront->setStatus($categoryBack->getEnabled());
 
         $this->categoryFrontRepository->persistAndFlush($categoryFront);
 
@@ -211,12 +209,11 @@ class CategorySynchronizer
             if (null !== $categoryPath) {
                 $this->categoryPathFrontRepository->removeAndFlush($categoryPath);
             }
+
             $categoryPath = new CategoryPathFront();
-            $categoryPath->fill(
-                $categoryFrontId,
-                $parentId,
-                0
-            );
+            $categoryPath->setCategoryId($categoryFrontId);
+            $categoryPath->setPathId($parentId);
+            $categoryPath->setLevel(0);
             $this->categoryPathFrontRepository->persistAndFlush($categoryPath);
         }
 
@@ -228,12 +225,11 @@ class CategorySynchronizer
         if (null !== $categoryPath) {
             $this->categoryPathFrontRepository->removeAndFlush($categoryPath);
         }
+
         $categoryPath = new CategoryPathFront();
-        $categoryPath->fill(
-            $categoryFrontId,
-            $categoryFrontId,
-            1
-        );
+        $categoryPath->setCategoryId($categoryFrontId);
+        $categoryPath->setPathId($categoryFrontId);
+        $categoryPath->setLevel(1);
         $this->categoryPathFrontRepository->persistAndFlush($categoryPath);
 
         $categoryDescription = $this->categoryDescriptionFrontRepository->find($categoryFrontId);
@@ -241,15 +237,15 @@ class CategorySynchronizer
             $categoryDescription = new CategoryDescription();
         }
 
-        $categoryDescription->fill(
-            $categoryFrontId,
-            $this->storeFront->getDefaultLanguageId(),
-            Filler::securityString(Store::encodingConvert($categoryBack->getName())),
-            Filler::securityString(Store::encodingConvert($categoryBack->getDescription())),
-            Filler::securityString(Store::encodingConvert($categoryBack->getName())),
-            Filler::securityString(null),
-            Filler::securityString(null)
+        $categoryDescription->setCategoryId($categoryFrontId);
+        $categoryDescription->setLanguageId($this->storeFront->getDefaultLanguageId());
+        $categoryDescription->setName(Filler::securityString(Store::encodingConvert($categoryBack->getName())));
+        $categoryDescription->setDescription(
+            Filler::securityString(Store::encodingConvert($categoryBack->getDescription()))
         );
+        $categoryDescription->setMetaTitle(Store::encodingConvert($categoryBack->getName()));
+        $categoryDescription->setMetaDescription(Filler::securityString(null));
+        $categoryDescription->setMetaKeyword(Filler::securityString(null));
         $this->categoryDescriptionFrontRepository->persistAndFlush($categoryDescription);
 
         $categoryLayout = $this->categoryLayoutFrontRepository->find($categoryFrontId);
@@ -257,11 +253,9 @@ class CategorySynchronizer
             $categoryLayout = new CategoryLayout();
         }
 
-        $categoryLayout->fill(
-            $categoryFrontId,
-            $this->storeFront->getDefaultStoreId(),
-            $this->storeFront->getDefaultLayoutId()
-        );
+        $categoryLayout->setCategoryId($categoryFrontId);
+        $categoryLayout->setStoreId($this->storeFront->getDefaultStoreId());
+        $categoryLayout->setLayoutId($this->storeFront->getDefaultLayoutId());
 
         $this->categoryLayoutFrontRepository->persistAndFlush($categoryLayout);
 
@@ -270,11 +264,8 @@ class CategorySynchronizer
             $categoryStore = new CategoryStore();
         }
 
-        $categoryStore->fill(
-            $categoryFrontId,
-            $this->storeFront->getDefaultStoreId()
-        );
-
+        $categoryStore->setCategoryId($categoryFrontId);
+        $categoryStore->setStoreId($this->storeFront->getDefaultStoreId());
         $this->categoryStoreFrontRepository->persistAndFlush($categoryStore);
 
         if (false === $this->seoProEnabled) {
@@ -329,10 +320,11 @@ class CategorySynchronizer
         if (null === $seoUrl) {
             $seoUrl = new SeoUrlFront();
         }
-        $seoUrl->fill(
-            $this->storeFront->getDefaultStoreId(),
-            $this->storeFront->getDefaultLanguageId(),
-            'category_id=' . $categoryFrontId,
+
+        $seoUrl->setStoreId($this->storeFront->getDefaultStoreId());
+        $seoUrl->setLanguageId($this->storeFront->getDefaultLanguageId());
+        $seoUrl->setQuery('category_id=' . $categoryFrontId);
+        $seoUrl->setKeyword(
             StoreFront::generateURL($categoryBack->getCategoryId(), Store::encodingConvert($categoryBack->getName()))
         );
 

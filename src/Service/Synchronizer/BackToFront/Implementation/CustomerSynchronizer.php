@@ -140,19 +140,19 @@ class CustomerSynchronizer
         }
 
         $fullName = $this->parseFirstLastName($customerBack->getFio());
-        $addressFront->fill(
-            0,
-            $fullName['firstName'],
-            $fullName['lastName'],
-            Filler::securityString(null),
-            trim($customerBack->getStreet() . ' ' . $customerBack->getHouse()),
-            Filler::securityString(null),
-            trim($customerBack->getCity()),
-            Filler::securityString(null),
-            $this->storeFront->getDefaultCountryId(),
-            3490,
-            Filler::securityString(null)
-        );
+
+        $addressFront->setCustomerId(0);
+        $addressFront->setFirstName($fullName['firstName']);
+        $addressFront->setLastName($fullName['lastName']);
+        $addressFront->setCompany(Filler::securityString(null));
+        $addressFront->setAddress1(trim($customerBack->getStreet() . ' ' . $customerBack->getHouse()));
+        $addressFront->setAddress2(Filler::securityString(null));
+        $addressFront->setCity(trim($customerBack->getCity()));
+        $addressFront->setPostCode(Filler::securityString(null));
+        $addressFront->setCountryId($this->storeFront->getDefaultCountryId());
+        $addressFront->setZoneId(3490);
+        $addressFront->setCustomField(Filler::securityString(null));
+
         $this->addressFrontRepository->persistAndFlush($addressFront);
 
         $saul = $customerFront->getSalt();
@@ -160,29 +160,27 @@ class CustomerSynchronizer
             $saul = Str::random($this->saulLength);
         }
 
-        $customerFront->fill(
-            $this->storeFront->getDefaultCustomerGroupId(),
-            $this->storeFront->getDefaultStoreId(),
-            $this->storeFront->getDefaultLanguageId(),
-            $fullName['firstName'],
-            $fullName['lastName'],
-            $customerBack->getMail(),
-            $customerBack->getPhone(),
-            Filler::securityString(null),
-            StoreFront::hashPassword($customerBack->getPassword(), $saul),
-            $saul,
-            null,
-            null,
-            false,
-            $addressFront->getAddressId(),
-            $this->storeFront->getDefaultCustomField(),
-            Filler::securityString(null),
-            $customerBack->getActive(),
-            false,
-            Filler::securityString(null),
-            Filler::securityString(null),
-            base64_encode($customerBack->getPassword())
-        );
+        $customerFront->setCustomerGroupId($this->storeFront->getDefaultCustomerGroupId());
+        $customerFront->setStoreId($this->storeFront->getDefaultStoreId());
+        $customerFront->setLanguageId($this->storeFront->getDefaultLanguageId());
+        $customerFront->setFirstName($fullName['firstName']);
+        $customerFront->setLastName($fullName['lastName']);
+        $customerFront->setEmail($customerBack->getMail());
+        $customerFront->setTelephone($customerBack->getPhone());
+        $customerFront->setFax(Filler::securityString(null));
+        $customerFront->setPassword(StoreFront::hashPassword($customerBack->getPassword(), $saul));
+        $customerFront->setSalt($saul);
+        $customerFront->setCart(null);
+        $customerFront->setWishList(null);
+        $customerFront->setNewsletter(false);
+        $customerFront->setAddressId($addressFront->getAddressId());
+        $customerFront->setCustomField($this->storeFront->getDefaultCustomField());
+        $customerFront->setIp(Filler::securityString(null));
+        $customerFront->setStatus($customerBack->getActive());
+        $customerFront->setSafe(false);
+        $customerFront->setToken(Filler::securityString(null));
+        $customerFront->setCode(Filler::securityString(null));
+        $customerFront->setPass(base64_encode($customerBack->getPassword()));
 
         $this->customerFrontRepository->persistAndFlush($customerFront);
         $addressFront->setCustomerId($customerFront->getCustomerId());

@@ -4,6 +4,7 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGamePost;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method BuyersGamePost|null find($id, $lockMode = null, $lockVersion = null)
@@ -30,14 +31,19 @@ class BuyersGamePostRepository extends BackRepository
     /**
      * @param $value
      * @return BuyersGamePost|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByTelephone($value): ?BuyersGamePost
     {
-        return $this->createQueryBuilder('bgp')
-            ->andWhere('bgp.phone = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult();
+        try {
+            $result = $this->createQueryBuilder('bgp')
+                ->andWhere('bgp.phone = :val')
+                ->setParameter('val', $value)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

@@ -303,9 +303,7 @@ class OrderSynchronizer
         $this->customerWishListFrontRepository->resetAutoIncrements();
     }
 
-    /**
-     * @param OrderFront $orderFront
-     */
+
     protected function synchronizeOrder(OrderFront $orderFront): void
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
@@ -334,7 +332,6 @@ class OrderSynchronizer
      * @param OrderFront $orderFront
      * @param OrderBack $orderBack
      * @return OrderBack
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
@@ -490,7 +487,6 @@ class OrderSynchronizer
     /**
      * @param OrderFront $orderFront
      * @return int
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function getClientIdByFrontCustomerPhone(OrderFront $orderFront): int
     {
