@@ -2,6 +2,8 @@
 
 namespace App\Entity\Front;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class OrderShipment
 {
     /**
+     * @var int|null $orderShipmentId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_shipment_id`")
@@ -19,21 +22,25 @@ class OrderShipment
     protected $orderShipmentId;
 
     /**
+     * @var int|null $orderId
      * @ORM\Column(type="integer", name="`order_id`")
      */
     protected $orderId;
 
     /**
+     * @var DateTimeInterface|null $dateAdded
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     protected $dateAdded;
 
     /**
+     * @var string|null $shippingCourierId
      * @ORM\Column(type="string", name="`shipping_courier_id`", length=255)
      */
     protected $shippingCourierId;
 
     /**
+     * @var string|null $trackingNumber
      * @ORM\Column(type="string", name="`tracking_number`", length=255)
      */
     protected $trackingNumber;
@@ -58,16 +65,26 @@ class OrderShipment
     }
 
 
+    /**
+     * @return int|null
+     */
     public function getOrderShipmentId(): ?int
     {
         return $this->orderShipmentId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getOrderId(): ?int
     {
         return $this->orderId;
     }
 
+    /**
+     * @param int $orderId
+     * @return OrderShipment
+     */
     public function setOrderId(int $orderId): self
     {
         $this->orderId = $orderId;
@@ -75,11 +92,18 @@ class OrderShipment
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShippingCourierId(): ?string
     {
         return $this->shippingCourierId;
     }
 
+    /**
+     * @param string $shippingCourierId
+     * @return OrderShipment
+     */
     public function setShippingCourierId(string $shippingCourierId): self
     {
         $this->shippingCourierId = $shippingCourierId;
@@ -87,14 +111,40 @@ class OrderShipment
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTrackingNumber(): ?string
     {
         return $this->trackingNumber;
     }
 
+    /**
+     * @param string $trackingNumber
+     * @return OrderShipment
+     */
     public function setTrackingNumber(string $trackingNumber): self
     {
         $this->trackingNumber = $trackingNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateAdded(): ?DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    /**
+     * @param DateTimeInterface $dateAdded
+     * @return OrderShipment
+     */
+    public function setDateAdded(DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
 
         return $this;
     }
@@ -105,19 +155,7 @@ class OrderShipment
     public function updatedTimestamps()
     {
         if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
+            $this->setDateAdded(new DateTime('now'));
         }
-    }
-
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
     }
 }

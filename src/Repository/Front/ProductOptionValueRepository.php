@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductOptionValue;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductOptionValue $instance)
  * @method void    removeAndFlush(ProductOptionValue $instance)
  */
-class ProductOptionValueRepository extends EntityFrontRepository
+class ProductOptionValueRepository extends FrontRepository
 {
     /**
      * ProductOptionValueRepository constructor.

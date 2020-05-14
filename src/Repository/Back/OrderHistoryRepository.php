@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderHistory $instance)
  * @method void    removeAndFlush(OrderHistory $instance)
  */
-class OrderHistoryRepository extends EntityBackRepository
+class OrderHistoryRepository extends BackRepository
 {
     /**
      * OrderHistoryRepository constructor.

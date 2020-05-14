@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\SeoUrl;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 
@@ -18,7 +18,7 @@ use Doctrine\ORM\NonUniqueResultException;
  * @method void    remove(SeoUrl $instance)
  * @method void    removeAndFlush(SeoUrl $instance)
  */
-class SeoUrlRepository extends EntityFrontRepository
+class SeoUrlRepository extends FrontRepository
 {
     /**
      * SeoUrlRepository constructor.

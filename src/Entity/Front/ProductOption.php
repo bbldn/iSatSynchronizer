@@ -11,27 +11,32 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductOption
 {
     /**
+     * @var int|null $productOptionId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_option_id`")
      */
     protected $productOptionId;
 
     /**
+     * @var int|null $productId
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;
 
     /**
+     * @var int|null $optionId
      * @ORM\Column(type="integer", name="`option_id`")
      */
     protected $optionId;
 
     /**
+     * @var string|null $value
      * @ORM\Column(type="string", name="`value`", length=255)
      */
     protected $value;
 
     /**
+     * @var bool|null $required
      * @ORM\Column(type="boolean", name="`required`")
      */
     protected $required;
@@ -55,11 +60,18 @@ class ProductOption
         $this->required = $required;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductOptionId(): ?int
     {
         return $this->productOptionId;
     }
 
+    /**
+     * @param int $productOptionId
+     * @return ProductOption
+     */
     public function setProductOptionId(int $productOptionId): self
     {
         $this->productOptionId = $productOptionId;
@@ -67,11 +79,18 @@ class ProductOption
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return ProductOption
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -79,11 +98,18 @@ class ProductOption
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getOptionId(): ?int
     {
         return $this->optionId;
     }
 
+    /**
+     * @param int $optionId
+     * @return ProductOption
+     */
     public function setOptionId(int $optionId): self
     {
         $this->optionId = $optionId;
@@ -91,11 +117,18 @@ class ProductOption
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue(): ?string
     {
         return $this->value;
     }
 
+    /**
+     * @param string $value
+     * @return ProductOption
+     */
     public function setValue(string $value): self
     {
         $this->value = $value;
@@ -103,11 +136,18 @@ class ProductOption
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getRequired(): ?bool
     {
         return $this->required;
     }
 
+    /**
+     * @param bool $required
+     * @return ProductOption
+     */
     public function setRequired(bool $required): self
     {
         $this->required = $required;

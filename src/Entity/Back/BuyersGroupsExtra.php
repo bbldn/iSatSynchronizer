@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class BuyersGroupsExtra
 {
     /**
+     * @var int|null $id
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id`")
@@ -19,25 +20,37 @@ class BuyersGroupsExtra
     protected $id;
 
     /**
+     * @var string|null $name
      * @ORM\Column(type="string", name="`name`", length=255)
      */
     protected $name;
 
     /**
+     * @var int|null $sortOrder
      * @ORM\Column(type="integer", name="`sort_order`")
      */
     protected $sortOrder;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return BuyersGroupsExtra
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -45,11 +58,18 @@ class BuyersGroupsExtra
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getSortOrder(): ?int
     {
         return $this->sortOrder;
     }
 
+    /**
+     * @param int $sortOrder
+     * @return BuyersGroupsExtra
+     */
     public function setSortOrder(int $sortOrder): self
     {
         $this->sortOrder = $sortOrder;

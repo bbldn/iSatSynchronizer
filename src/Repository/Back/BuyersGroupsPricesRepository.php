@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(BuyersGroupsPrices $instance)
  * @method void    removeAndFlush(BuyersGroupsPrices $instance)
  */
-class BuyersGroupsPricesRepository extends EntityBackRepository
+class BuyersGroupsPricesRepository extends BackRepository
 {
     /**
      * BuyersGroupsPricesRepository constructor.

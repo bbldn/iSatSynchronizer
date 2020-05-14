@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\OrderCustomField;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderCustomField $instance)
  * @method void    removeAndFlush(OrderCustomField $instance)
  */
-class OrderCustomFieldRepository extends EntityFrontRepository
+class OrderCustomFieldRepository extends FrontRepository
 {
     /**
      * OrderCustomFieldRepository constructor.

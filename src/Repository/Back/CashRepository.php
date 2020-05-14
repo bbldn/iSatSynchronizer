@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Cash $instance)
  * @method void    removeAndFlush(Cash $instance)
  */
-class CashRepository extends EntityBackRepository
+class CashRepository extends BackRepository
 {
     /**
      * CashRepository constructor.

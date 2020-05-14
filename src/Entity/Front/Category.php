@@ -2,6 +2,8 @@
 
 namespace App\Entity\Front;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     /**
+     * @var int|null $categoryId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`category_id`")
@@ -19,41 +22,49 @@ class Category
     protected $categoryId;
 
     /**
+     * @var string|null $image
      * @ORM\Column(type="string", name="`image`", nullable=true)
      */
     protected $image = null;
 
     /**
+     * @var int|null $parentId
      * @ORM\Column(type="integer", name="`parent_id`")
      */
     protected $parentId = 0;
 
     /**
+     * @var bool|null $top
      * @ORM\Column(type="boolean", name="`top`")
      */
     protected $top;
 
     /**
+     * @var int|null $column
      * @ORM\Column(type="integer", name="`column`")
      */
     protected $column;
 
     /**
+     * @var int|null $sortOrder
      * @ORM\Column(type="integer", name="sort_order")
      */
     protected $sortOrder = 0;
 
     /**
+     * @var bool|null $status
      * @ORM\Column(type="boolean", name="`status`")
      */
     protected $status;
 
     /**
+     * @var DateTimeInterface|null $dateAdded
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     protected $dateAdded;
 
     /**
+     * @var DateTimeInterface|null $dateModified
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
     protected $dateModified;
@@ -83,16 +94,26 @@ class Category
         $this->status = $status;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
+    /**
+     * @return string|null
+     */
     public function getImage(): ?string
     {
         return $this->image;
     }
 
+    /**
+     * @param string $image
+     * @return Category
+     */
     public function setImage(string $image): self
     {
         $this->image = $image;
@@ -100,11 +121,18 @@ class Category
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getParentId(): ?int
     {
         return $this->parentId;
     }
 
+    /**
+     * @param int $parentId
+     * @return Category
+     */
     public function setParentId(int $parentId): self
     {
         $this->parentId = $parentId;
@@ -112,11 +140,18 @@ class Category
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getTop(): ?bool
     {
         return $this->top;
     }
 
+    /**
+     * @param bool $top
+     * @return Category
+     */
     public function setTop(bool $top): self
     {
         $this->top = $top;
@@ -124,11 +159,18 @@ class Category
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getColumn(): ?int
     {
         return $this->column;
     }
 
+    /**
+     * @param int $column
+     * @return Category
+     */
     public function setColumn(int $column): self
     {
         $this->column = $column;
@@ -136,11 +178,18 @@ class Category
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getSortOrder(): ?int
     {
         return $this->sortOrder;
     }
 
+    /**
+     * @param int $sortOrder
+     * @return Category
+     */
     public function setSortOrder(int $sortOrder): self
     {
         $this->sortOrder = $sortOrder;
@@ -148,11 +197,18 @@ class Category
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getStatus(): ?bool
     {
         return $this->status;
     }
 
+    /**
+     * @param bool $status
+     * @return Category
+     */
     public function setStatus(bool $status): self
     {
         $this->status = $status;
@@ -160,14 +216,40 @@ class Category
         return $this;
     }
 
-    public function getDateModified(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateModified(): ?DateTimeInterface
     {
         return $this->dateModified;
     }
 
-    public function setDateModified(\DateTimeInterface $dateModified): self
+    /**
+     * @param DateTimeInterface $dateModified
+     * @return Category
+     */
+    public function setDateModified(DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateAdded(): ?DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    /**
+     * @param DateTimeInterface $dateAdded
+     * @return Category
+     */
+    public function setDateAdded(DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
 
         return $this;
     }
@@ -178,22 +260,10 @@ class Category
      */
     public function updatedTimestamps()
     {
-        $this->setDateModified(new \DateTime('now'));
+        $this->setDateModified(new DateTime('now'));
 
         if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
+            $this->setDateAdded(new DateTime('now'));
         }
-    }
-
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
     }
 }

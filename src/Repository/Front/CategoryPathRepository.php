@@ -17,7 +17,7 @@ use Doctrine\ORM\NonUniqueResultException;
  * @method void    remove(CategoryPath $instance)
  * @method void    removeAndFlush(CategoryPath $instance)
  */
-class CategoryPathRepository extends EntityFrontRepository
+class CategoryPathRepository extends FrontRepository
 {
     /**
      * CategoryPathRepository constructor.

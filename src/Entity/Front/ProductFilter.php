@@ -11,12 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductFilter
 {
     /**
+     * @var int|null $productId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;
 
     /**
+     * @var int|null $productId
      * @ORM\Column(type="integer", name="`filter_id`")
      */
     protected $filterId;
@@ -34,11 +36,18 @@ class ProductFilter
         $this->filterId = $filterId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return ProductFilter
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -46,11 +55,18 @@ class ProductFilter
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getFilterId(): ?int
     {
         return $this->filterId;
     }
 
+    /**
+     * @param int $filterId
+     * @return ProductFilter
+     */
     public function setFilterId(int $filterId): self
     {
         $this->filterId = $filterId;

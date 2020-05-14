@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductOptions $instance)
  * @method void    removeAndFlush(ProductOptions $instance)
  */
-class ProductOptionsRepository extends EntityBackRepository
+class ProductOptionsRepository extends BackRepository
 {
     /**
      * ProductOptionsRepository constructor.

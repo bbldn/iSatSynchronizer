@@ -11,32 +11,38 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductDiscount
 {
     /**
+     * @var int|null $productDiscountId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_discount_id`")
      */
     protected $productDiscountId;
 
     /**
+     * @var int|null $productId
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;
 
     /**
+     * @var int|null $customerGroupId
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
     protected $customerGroupId;
 
     /**
+     * @var int|null $quantity
      * @ORM\Column(type="integer", name="`quantity`")
      */
     protected $quantity = 0;
 
     /**
+     * @var int|null $priority
      * @ORM\Column(type="integer", name="`priority`")
      */
     protected $priority = 1;
 
     /**
+     * @var float|null $price
      * @ORM\Column(type="float", name="`price`")
      */
     protected $price = 0.0;

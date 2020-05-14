@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Attribute;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Attribute $instance)
  * @method void    removeAndFlush(Attribute $instance)
  */
-class AttributeRepository extends EntityFrontRepository
+class AttributeRepository extends FrontRepository
 {
     /**
      * AttributeRepository constructor.

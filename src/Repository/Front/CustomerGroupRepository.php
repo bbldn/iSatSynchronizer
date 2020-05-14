@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerGroup;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerGroup $instance)
  * @method void    removeAndFlush(CustomerGroup $instance)
  */
-class CustomerGroupRepository extends EntityFrontRepository
+class CustomerGroupRepository extends FrontRepository
 {
     /**
      * CustomerGroupRepository constructor.

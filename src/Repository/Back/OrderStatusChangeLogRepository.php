@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderStatusChangeLog $instance)
  * @method void    removeAndFlush(OrderStatusChangeLog $instance)
  */
-class OrderStatusChangeLogRepository extends EntityBackRepository
+class OrderStatusChangeLogRepository extends BackRepository
 {
     /**
      * OrderStatusChangeLogRepository constructor.

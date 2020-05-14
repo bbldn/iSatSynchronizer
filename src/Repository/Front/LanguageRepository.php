@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Language;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Language $instance)
  * @method void    removeAndFlush(Language $instance)
  */
-class LanguageRepository extends EntityFrontRepository
+class LanguageRepository extends FrontRepository
 {
     /**
      * LanguageRepository constructor.

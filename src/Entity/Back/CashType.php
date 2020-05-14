@@ -2,7 +2,6 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CashType
 {
     /**
+     * @var int|null $id
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id`")
@@ -19,25 +19,37 @@ class CashType
     protected $id;
 
     /**
+     * @var string|null $name
      * @ORM\Column(type="string", name="`name`", length=255)
      */
     protected $name;
 
     /**
+     * @var string|null $currencyName
      * @ORM\Column(type="string", name="`currency_name`", length=10)
      */
-    protected $currency_name;
+    protected $currencyName;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return CashType
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -45,14 +57,21 @@ class CashType
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrencyName(): ?string
     {
-        return $this->currency_name;
+        return $this->currencyName;
     }
 
-    public function setCurrencyName(string $currency_name): self
+    /**
+     * @param string $currencyName
+     * @return CashType
+     */
+    public function setCurrencyName(string $currencyName): self
     {
-        $this->currency_name = $currency_name;
+        $this->currencyName = $currencyName;
 
         return $this;
     }

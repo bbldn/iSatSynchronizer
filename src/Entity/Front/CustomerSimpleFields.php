@@ -11,12 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerSimpleFields
 {
     /**
+     * @var int|null $customerId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
     protected $customerId;
 
     /**
+     * @var string|null $metadata
      * @ORM\Column(type="string", name="`metadata`", length=255, nullable=true)
      */
     protected $metadata;
@@ -35,11 +37,18 @@ class CustomerSimpleFields
     }
 
 
+    /**
+     * @return int|null
+     */
     public function getCustomerId(): ?int
     {
         return $this->customerId;
     }
 
+    /**
+     * @param int $customerId
+     * @return CustomerSimpleFields
+     */
     public function setCustomerId(int $customerId): self
     {
         $this->customerId = $customerId;
@@ -47,11 +56,18 @@ class CustomerSimpleFields
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMetadata(): ?string
     {
         return $this->metadata;
     }
 
+    /**
+     * @param string|null $metadata
+     * @return CustomerSimpleFields
+     */
     public function setMetadata(?string $metadata): self
     {
         $this->metadata = $metadata;

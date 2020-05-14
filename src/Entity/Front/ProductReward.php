@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductReward
 {
     /**
+     * @var int|null $productRewardId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_reward_id`")
@@ -18,16 +19,19 @@ class ProductReward
     protected $productRewardId;
 
     /**
+     * @var int|null $productId
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId = 0;
 
     /**
+     * @var int|null $customerGroupId
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
     protected $customerGroupId = 0;
 
     /**
+     * @var int|null $points
      * @ORM\Column(type="integer", name="`points`")
      */
     protected $points = 0;
@@ -48,16 +52,26 @@ class ProductReward
         $this->points = $points;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductRewardId(): ?int
     {
         return $this->productRewardId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return ProductReward
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -65,11 +79,18 @@ class ProductReward
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCustomerGroupId(): ?int
     {
         return $this->customerGroupId;
     }
 
+    /**
+     * @param int $customerGroupId
+     * @return ProductReward
+     */
     public function setCustomerGroupId(int $customerGroupId): self
     {
         $this->customerGroupId = $customerGroupId;
@@ -77,11 +98,18 @@ class ProductReward
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPoints(): ?int
     {
         return $this->points;
     }
 
+    /**
+     * @param int $points
+     * @return ProductReward
+     */
     public function setPoints(int $points): self
     {
         $this->points = $points;

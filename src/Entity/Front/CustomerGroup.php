@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerGroup
 {
     /**
+     * @var int|null $customerGroupId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_group_id`")
@@ -18,6 +19,7 @@ class CustomerGroup
     protected $customerGroupId;
 
     /**
+     * @var bool|null $approval
      * @ORM\Column(type="boolean", name="`approval`")
      */
     protected $approval;
@@ -40,16 +42,26 @@ class CustomerGroup
         $this->sortOrder = $sortOrder;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCustomerGroupId(): ?int
     {
         return $this->customerGroupId;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getApproval(): ?bool
     {
         return $this->approval;
     }
 
+    /**
+     * @param bool $approval
+     * @return CustomerGroup
+     */
     public function setApproval(bool $approval): self
     {
         $this->approval = $approval;
@@ -57,11 +69,18 @@ class CustomerGroup
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getSortOrder(): ?int
     {
         return $this->sortOrder;
     }
 
+    /**
+     * @param int $sortOrder
+     * @return CustomerGroup
+     */
     public function setSortOrder(int $sortOrder): self
     {
         $this->sortOrder = $sortOrder;

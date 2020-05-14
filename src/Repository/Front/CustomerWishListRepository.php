@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerWishList;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerWishList $instance)
  * @method void    removeAndFlush(CustomerWishList $instance)
  */
-class CustomerWishListRepository extends EntityFrontRepository
+class CustomerWishListRepository extends FrontRepository
 {
     /**
      * CustomerWishListRepository constructor.

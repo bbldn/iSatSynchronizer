@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Category $instance)
  * @method void    removeAndFlush(Category $instance)
  */
-class CategoryRepository extends EntityBackRepository
+class CategoryRepository extends BackRepository
 {
     /**
      * CategoryRepository constructor.

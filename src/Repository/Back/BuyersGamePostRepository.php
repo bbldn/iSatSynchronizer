@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(BuyersGamePost $instance)
  * @method void    removeAndFlush(BuyersGamePost $instance)
  */
-class BuyersGamePostRepository extends EntityBackRepository
+class BuyersGamePostRepository extends BackRepository
 {
     /**
      * BuyersGamePostRepository constructor.

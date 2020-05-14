@@ -2,7 +2,7 @@
 
 namespace App\Entity\Front;
 
-use App\Entity\Entity;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerActivity
 {
     /**
+     * @var int|null $customerActivityId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_activity_id`")
@@ -19,26 +20,31 @@ class CustomerActivity
     protected $customerActivityId;
 
     /**
+     * @var int|null $customerId
      * @ORM\Column(type="integer", name="`customer_id`")
      */
     protected $customerId;
 
     /**
+     * @var string|null $key
      * @ORM\Column(type="string", name="`key`", length=64)
      */
     protected $key;
 
     /**
+     * @var string|null $data
      * @ORM\Column(type="string", name="`data`", length=255)
      */
     protected $data;
 
     /**
+     * @var string|null $ip
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
     protected $ip;
 
     /**
+     * @var DateTimeInterface|null $dateAdded
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     protected $dateAdded;
@@ -62,16 +68,26 @@ class CustomerActivity
         $this->ip = $ip;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCustomerActivityId(): ?int
     {
         return $this->customerActivityId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCustomerId(): ?int
     {
         return $this->customerId;
     }
 
+    /**
+     * @param int $customerId
+     * @return CustomerActivity
+     */
     public function setCustomerId(int $customerId): self
     {
         $this->customerId = $customerId;
@@ -79,11 +95,18 @@ class CustomerActivity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getKey(): ?string
     {
         return $this->key;
     }
 
+    /**
+     * @param string $key
+     * @return CustomerActivity
+     */
     public function setKey(string $key): self
     {
         $this->key = $key;
@@ -91,11 +114,18 @@ class CustomerActivity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getData(): ?string
     {
         return $this->data;
     }
 
+    /**
+     * @param string $data
+     * @return CustomerActivity
+     */
     public function setData(string $data): self
     {
         $this->data = $data;
@@ -103,11 +133,18 @@ class CustomerActivity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIp(): ?string
     {
         return $this->ip;
     }
 
+    /**
+     * @param string $ip
+     * @return CustomerActivity
+     */
     public function setIp(string $ip): self
     {
         $this->ip = $ip;
@@ -115,11 +152,18 @@ class CustomerActivity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDateAdded(): ?\DateTimeInterface
     {
         return $this->dateAdded;
     }
 
+    /**
+     * @param DateTimeInterface $dateAdded
+     * @return CustomerActivity
+     */
     public function setDateAdded(\DateTimeInterface $dateAdded): self
     {
         $this->dateAdded = $dateAdded;

@@ -11,17 +11,20 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductCategory
 {
     /**
+     * @var int|null $productId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="product_id")
      */
     protected $productId;
 
     /**
+     * @var int|null $categoryId
      * @ORM\Column(type="integer", name="category_id")
      */
     protected $categoryId;
 
     /**
+     * @var bool|null $mainCategory
      * @ORM\Column(type="boolean", name="main_category")
      */
     protected $mainCategory = false;
@@ -43,11 +46,18 @@ class ProductCategory
         $this->mainCategory = $mainCategory;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return ProductCategory
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -55,11 +65,18 @@ class ProductCategory
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
+    /**
+     * @param int $categoryId
+     * @return ProductCategory
+     */
     public function setCategoryId(int $categoryId): self
     {
         $this->categoryId = $categoryId;
@@ -67,11 +84,18 @@ class ProductCategory
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getMainCategory(): ?bool
     {
         return $this->mainCategory;
     }
 
+    /**
+     * @param bool $mainCategory
+     * @return ProductCategory
+     */
     public function setMainCategory(bool $mainCategory): self
     {
         $this->mainCategory = $mainCategory;

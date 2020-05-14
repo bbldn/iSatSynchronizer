@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Product;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
  * @method void    remove(Product $instance)
  * @method void    removeAndFlush(Product $instance)
  */
-class ProductRepository extends EntityFrontRepository
+class ProductRepository extends FrontRepository
 {
     /** @var ContainerBagInterface $containerBag */
     protected $containerBag;

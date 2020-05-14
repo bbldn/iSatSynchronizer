@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Store
 {
     /**
+     * @var int|null $storeId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`store_id`")
@@ -18,16 +19,19 @@ class Store
     protected $storeId;
 
     /**
+     * @var string|null $name
      * @ORM\Column(type="string", name="`name`", length=64)
      */
     protected $name;
 
     /**
+     * @var string|null $url
      * @ORM\Column(type="string", name="`url`", length=255)
      */
     protected $url;
 
     /**
+     * @var string|null $ssl
      * @ORM\Column(type="string", name="`ssl`", length=255)
      */
     protected $ssl;
@@ -48,16 +52,26 @@ class Store
         $this->ssl = $ssl;
     }
 
+    /**
+     * @return int|null
+     */
     public function getStoreId(): ?int
     {
         return $this->storeId;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Store
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -65,11 +79,18 @@ class Store
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
+    /**
+     * @param string $url
+     * @return Store
+     */
     public function setUrl(string $url): self
     {
         $this->url = $url;
@@ -77,11 +98,18 @@ class Store
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSsl(): ?string
     {
         return $this->ssl;
     }
 
+    /**
+     * @param string $ssl
+     * @return Store
+     */
     public function setSsl(string $ssl): self
     {
         $this->ssl = $ssl;

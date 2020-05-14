@@ -2,9 +2,9 @@
 
 namespace App\Repository\Back;
 
-use App\Other\EntityRepository;
+use App\Repository\Repository;
 
-class EntityBackRepository extends EntityRepository
+class BackRepository extends Repository
 {
     /** @var string $entityManagerName */
     protected $entityManagerName = 'back';

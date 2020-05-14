@@ -2,10 +2,9 @@
 
 namespace App\Repository;
 
-use App\Other\EntityRepository as BaseRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
-class EntityRepository extends BaseRepository
+abstract class EntityRepository extends Repository
 {
     /** @var string $entityManagerName */
     protected $entityManagerName = 'default';

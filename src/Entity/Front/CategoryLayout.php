@@ -11,17 +11,20 @@ use Doctrine\ORM\Mapping as ORM;
 class CategoryLayout
 {
     /**
+     * @var int|null $categoryId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
     protected $categoryId;
 
     /**
+     * @var int|null $storeId
      * @ORM\Column(type="integer", name="`store_id`")
      */
     protected $storeId;
 
     /**
+     * @var int|null $layoutId
      * @ORM\Column(type="integer", name="`layout_id`")
      */
     protected $layoutId;
@@ -42,11 +45,18 @@ class CategoryLayout
         $this->layoutId = $layoutId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
+    /**
+     * @param int $categoryId
+     * @return CategoryLayout
+     */
     public function setCategoryId(int $categoryId): self
     {
         $this->categoryId = $categoryId;
@@ -54,11 +64,18 @@ class CategoryLayout
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getStoreId(): ?int
     {
         return $this->storeId;
     }
 
+    /**
+     * @param int $storeId
+     * @return CategoryLayout
+     */
     public function setStoreId(int $storeId): self
     {
         $this->storeId = $storeId;
@@ -66,11 +83,18 @@ class CategoryLayout
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getLayoutId(): ?int
     {
         return $this->layoutId;
     }
 
+    /**
+     * @param int $layoutId
+     * @return CategoryLayout
+     */
     public function setLayoutId(int $layoutId): self
     {
         $this->layoutId = $layoutId;

@@ -11,12 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 class CategoryStore
 {
     /**
+     * @var int|null $categoryId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
     protected $categoryId;
 
     /**
+     * @var int|null $storeId
      * @ORM\Column(type="integer", name="`store_id`")
      */
     protected $storeId;
@@ -34,11 +36,18 @@ class CategoryStore
         $this->storeId = $storeId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
+    /**
+     * @param int $categoryId
+     * @return CategoryStore
+     */
     public function setCategoryId(int $categoryId): self
     {
         $this->categoryId = $categoryId;
@@ -46,11 +55,18 @@ class CategoryStore
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getStoreId(): ?int
     {
         return $this->storeId;
     }
 
+    /**
+     * @param int $storeId
+     * @return CategoryStore
+     */
     public function setStoreId(int $storeId): self
     {
         $this->storeId = $storeId;

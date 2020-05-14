@@ -11,22 +11,26 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductAttribute
 {
     /**
+     * @var int|null $productId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;
 
     /**
+     * @var int|null $attributeId
      * @ORM\Column(type="integer", name="`attribute_id`")
      */
     protected $attributeId;
 
     /**
+     * @var int|null $languageId
      * @ORM\Column(type="integer", name="`language_id`")
      */
     protected $languageId;
 
     /**
+     * @var string|null $text
      * @ORM\Column(type="string", name="`text`")
      */
     protected $text;
@@ -50,16 +54,26 @@ class ProductAttribute
         $this->text = $text;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getAttributeId(): ?int
     {
         return $this->attributeId;
     }
 
+    /**
+     * @param int $attributeId
+     * @return ProductAttribute
+     */
     public function setAttributeId(int $attributeId): self
     {
         $this->attributeId = $attributeId;
@@ -67,11 +81,18 @@ class ProductAttribute
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getLanguageId(): ?int
     {
         return $this->languageId;
     }
 
+    /**
+     * @param int $languageId
+     * @return ProductAttribute
+     */
     public function setLanguageId(int $languageId): self
     {
         $this->languageId = $languageId;
@@ -79,11 +100,18 @@ class ProductAttribute
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getText(): ?string
     {
         return $this->text;
     }
 
+    /**
+     * @param string $text
+     * @return ProductAttribute
+     */
     public function setText(string $text): self
     {
         $this->text = $text;

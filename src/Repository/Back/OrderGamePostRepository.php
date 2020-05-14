@@ -18,7 +18,7 @@ use Doctrine\ORM\NoResultException;
  * @method void    remove(OrderGamePost $instance)
  * @method void    removeAndFlush(OrderGamePost $instance)
  */
-class OrderGamePostRepository extends EntityBackRepository
+class OrderGamePostRepository extends BackRepository
 {
     /**
      * OrderGamePostRepository constructor.

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Other;
+namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\MappingException;
 
-class EntityRepository extends ServiceEntityRepository
+abstract class Repository extends ServiceEntityRepository
 {
     /** @var string $entityManagerName */
     protected $entityManagerName = 'default';

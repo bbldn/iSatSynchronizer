@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Attribute
 {
     /**
+     * @var int|null $attributeId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`attribute_id`")
@@ -18,11 +19,13 @@ class Attribute
     protected $attributeId;
 
     /**
+     * @var int|null $attributeGroupId
      * @ORM\Column(type="integer", name="`attribute_group_id`")
      */
     protected $attributeGroupId;
 
     /**
+     * @var int|null $sortOrder
      * @ORM\Column(type="integer", name="`sort_order`")
      */
     protected $sortOrder;
@@ -40,17 +43,26 @@ class Attribute
         $this->sortOrder = $sortOrder;
     }
 
-
+    /**
+     * @return int|null
+     */
     public function getAttributeId(): ?int
     {
         return $this->attributeId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getAttributeGroupId(): ?int
     {
         return $this->attributeGroupId;
     }
 
+    /**
+     * @param int $attributeGroupId
+     * @return Attribute
+     */
     public function setAttributeGroupId(int $attributeGroupId): self
     {
         $this->attributeGroupId = $attributeGroupId;
@@ -58,11 +70,18 @@ class Attribute
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSortOrder(): ?string
     {
         return $this->sortOrder;
     }
 
+    /**
+     * @param string $sortOrder
+     * @return Attribute
+     */
     public function setSortOrder(string $sortOrder): self
     {
         $this->sortOrder = $sortOrder;

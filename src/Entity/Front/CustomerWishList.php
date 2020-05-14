@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,17 +12,20 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerWishList
 {
     /**
+     * @var int|null $customerId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_id`")
      */
     protected $customerId;
 
     /**
+     * @var int|null $productId
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;
 
     /**
+     * @var DateTimeInterface|null $dateAdded
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     protected $dateAdded;
@@ -39,12 +43,18 @@ class CustomerWishList
         $this->productId = $productId;
     }
 
-
+    /**
+     * @return int|null
+     */
     public function getCustomerId(): ?int
     {
         return $this->customerId;
     }
 
+    /**
+     * @param int $customerId
+     * @return CustomerWishList
+     */
     public function setCustomerId(int $customerId): self
     {
         $this->customerId = $customerId;
@@ -52,11 +62,18 @@ class CustomerWishList
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return CustomerWishList
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -64,12 +81,19 @@ class CustomerWishList
         return $this;
     }
 
-    public function getDateAdded(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateAdded(): ?DateTimeInterface
     {
         return $this->dateAdded;
     }
 
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    /**
+     * @param DateTimeInterface $dateAdded
+     * @return CustomerWishList
+     */
+    public function setDateAdded(DateTimeInterface $dateAdded): self
     {
         $this->dateAdded = $dateAdded;
 

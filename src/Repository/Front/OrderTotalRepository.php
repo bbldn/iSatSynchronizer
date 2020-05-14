@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\OrderTotal;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderTotal $instance)
  * @method void    removeAndFlush(OrderTotal $instance)
  */
-class OrderTotalRepository extends EntityFrontRepository
+class OrderTotalRepository extends FrontRepository
 {
     /**
      * OrderTotalRepository constructor.

@@ -18,7 +18,7 @@ use Doctrine\ORM\NoResultException;
  * @method void    remove(Currency $instance)
  * @method void    removeAndFlush(Currency $instance)
  */
-class CurrencyRepository extends EntityFrontRepository
+class CurrencyRepository extends FrontRepository
 {
     /**
      * CurrencyRepository constructor.

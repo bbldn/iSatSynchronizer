@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerAffiliate;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CustomerAffiliate $instance)
  * @method void    removeAndFlush(CustomerAffiliate $instance)
  */
-class CustomerAffiliateRepository extends EntityFrontRepository
+class CustomerAffiliateRepository extends FrontRepository
 {
     /**
      * CustomerAffiliateRepository constructor.

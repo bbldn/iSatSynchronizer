@@ -17,7 +17,7 @@ use Doctrine\ORM\NonUniqueResultException;
  * @method void    remove(AttributeDescription $instance)
  * @method void    removeAndFlush(AttributeDescription $instance)
  */
-class AttributeDescriptionRepository extends EntityFrontRepository
+class AttributeDescriptionRepository extends FrontRepository
 {
     /**
      * AttributeDescriptionRepository constructor.

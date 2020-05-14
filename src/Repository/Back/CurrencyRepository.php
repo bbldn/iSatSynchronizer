@@ -17,7 +17,7 @@ use Doctrine\ORM\NonUniqueResultException;
  * @method void    remove(Currency $instance)
  * @method void    removeAndFlush(Currency $instance)
  */
-class CurrencyRepository extends EntityBackRepository
+class CurrencyRepository extends BackRepository
 {
     /**
      * CurrencyRepository constructor.

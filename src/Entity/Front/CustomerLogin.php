@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerLogin
 {
     /**
+     * @var int|null $customerLoginId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`customer_login_id`")
@@ -19,26 +21,31 @@ class CustomerLogin
     protected $customerLoginId;
 
     /**
+     * @var string|null $email
      * @ORM\Column(type="string", name="`email`", length=96)
      */
     protected $email;
 
     /**
+     * @var string|null $ip
      * @ORM\Column(type="string", name="`ip`", length=40)
      */
     protected $ip;
 
     /**
+     * @var int|null $total
      * @ORM\Column(type="integer", name="`total`")
      */
     protected $total;
 
     /**
+     * @var DateTimeInterface|null $dateAdded
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     protected $dateAdded;
 
     /**
+     * @var DateTimeInterface|null $dateModified
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
     protected $dateModified;
@@ -59,16 +66,26 @@ class CustomerLogin
         $this->total = $total;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCustomerLoginId(): ?int
     {
         return $this->customerLoginId;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return CustomerLogin
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -76,11 +93,18 @@ class CustomerLogin
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIp(): ?string
     {
         return $this->ip;
     }
 
+    /**
+     * @param string $ip
+     * @return CustomerLogin
+     */
     public function setIp(string $ip): self
     {
         $this->ip = $ip;
@@ -88,11 +112,18 @@ class CustomerLogin
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getTotal(): ?int
     {
         return $this->total;
     }
 
+    /**
+     * @param int $total
+     * @return CustomerLogin
+     */
     public function setTotal(int $total): self
     {
         $this->total = $total;
@@ -100,14 +131,40 @@ class CustomerLogin
         return $this;
     }
 
-    public function getDateModified(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateModified(): ?DateTimeInterface
     {
         return $this->dateModified;
     }
 
-    public function setDateModified(\DateTimeInterface $dateModified): self
+    /**
+     * @param DateTimeInterface $dateModified
+     * @return CustomerLogin
+     */
+    public function setDateModified(DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateAdded(): ?DateTimeInterface
+    {
+        return $this->dateAdded;
+    }
+
+    /**
+     * @param DateTimeInterface $dateAdded
+     * @return CustomerLogin
+     */
+    public function setDateAdded(DateTimeInterface $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
 
         return $this;
     }
@@ -123,17 +180,5 @@ class CustomerLogin
         if (null === $this->getDateAdded()) {
             $this->setDateAdded(new \DateTime('now'));
         }
-    }
-
-    public function getDateAdded(): ?\DateTimeInterface
-    {
-        return $this->dateAdded;
-    }
-
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
     }
 }

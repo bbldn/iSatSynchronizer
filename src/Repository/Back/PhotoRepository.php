@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Photo $instance)
  * @method void    removeAndFlush(Photo $instance)
  */
-class PhotoRepository extends EntityBackRepository
+class PhotoRepository extends BackRepository
 {
     /**
      * PhotoRepository constructor.

@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\OrderOption;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(OrderOption $instance)
  * @method void    removeAndFlush(OrderOption $instance)
  */
-class OrderOptionRepository extends EntityFrontRepository
+class OrderOptionRepository extends FrontRepository
 {
     /**
      * OrderOptionRepository constructor.

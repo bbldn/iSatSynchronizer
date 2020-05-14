@@ -5,8 +5,8 @@ namespace App\Other;
 class Filler
 {
     /**
-     * @param null|string $value
-     * @return null|string
+     * @param string|null $value
+     * @return string|null
      */
     public static function securityString(?string $value)
     {

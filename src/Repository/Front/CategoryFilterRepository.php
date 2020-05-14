@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CategoryFilter;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CategoryFilter $instance)
  * @method void    removeAndFlush(CategoryFilter $instance)
  */
-class CategoryFilterRepository extends EntityFrontRepository
+class CategoryFilterRepository extends FrontRepository
 {
     /**
      * CategoryFilterRepository constructor.

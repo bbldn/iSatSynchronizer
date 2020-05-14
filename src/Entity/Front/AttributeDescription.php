@@ -11,17 +11,20 @@ use Doctrine\ORM\Mapping as ORM;
 class AttributeDescription
 {
     /**
+     * @var int|null $attributeId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`attribute_id`")
      */
     protected $attributeId;
 
     /**
+     * @var int|null $languageId
      * @ORM\Column(type="integer", name="`language_id`")
      */
     protected $languageId;
 
     /**
+     * @var string|null $name
      * @ORM\Column(type="string", name="`name`", length=64)
      */
     protected $name;
@@ -37,11 +40,18 @@ class AttributeDescription
         $this->name = $name;
     }
 
+    /**
+     * @return int|null
+     */
     public function getAttributeId(): ?int
     {
         return $this->attributeId;
     }
 
+    /**
+     * @param int $attributeId
+     * @return AttributeDescription
+     */
     public function setAttributeId(int $attributeId): self
     {
         $this->attributeId = $attributeId;
@@ -49,11 +59,18 @@ class AttributeDescription
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getLanguageId(): ?int
     {
         return $this->languageId;
     }
 
+    /**
+     * @param int $languageId
+     * @return AttributeDescription
+     */
     public function setLanguageId(int $languageId): self
     {
         $this->languageId = $languageId;
@@ -61,11 +78,18 @@ class AttributeDescription
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return AttributeDescription
+     */
     public function setName(string $name): self
     {
         $this->name = $name;

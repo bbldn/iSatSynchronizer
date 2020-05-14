@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(ProductPictures $instance)
  * @method void    removeAndFlush(ProductPictures $instance)
  */
-class ProductPicturesRepository extends EntityBackRepository
+class ProductPicturesRepository extends BackRepository
 {
     /**
      * ProductPicturesRepository constructor.

@@ -2,16 +2,19 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`address`")
- * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Address
 {
     /**
+     * @var int|null $id
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -19,35 +22,49 @@ class Address
     protected $id;
 
     /**
+     * @var int|null $frontId
      * @ORM\Column(type="integer", name="`front_id`")
      */
     protected $frontId;
 
     /**
+     * @var int|null $orderBackId
      * @ORM\Column(type="integer", name="`order_back_id`")
      */
     protected $orderBackId;
 
     /**
+     * @var DateTimeInterface|null $createdAt
      * @ORM\Column(type="datetime", name="`created_at`", nullable=true)
      */
     protected $createdAt;
 
     /**
+     * @var DateTimeInterface|null $updatedAt
      * @ORM\Column(type="datetime", name="`updated_at`", nullable=true)
      */
     protected $updatedAt;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return int|null
+     */
     public function getFrontId(): ?int
     {
         return $this->frontId;
     }
 
+    /**
+     * @param int $frontId
+     * @return Address
+     */
     public function setFrontId(int $frontId): self
     {
         $this->frontId = $frontId;
@@ -55,11 +72,18 @@ class Address
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getOrderBackId(): ?int
     {
         return $this->orderBackId;
     }
 
+    /**
+     * @param int $orderBackId
+     * @return Address
+     */
     public function setOrderBackId(int $orderBackId): self
     {
         $this->orderBackId = $orderBackId;
@@ -67,24 +91,38 @@ class Address
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    /**
+     * @param DateTimeInterface|null $createdAt
+     * @return Address
+     */
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    /**
+     * @param DateTimeInterface|null $updatedAt
+     * @return Address
+     */
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -97,10 +135,10 @@ class Address
      */
     public function updatedTimestamps()
     {
-        $this->setUpdatedAt(new \DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
 
         if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTime('now'));
+            $this->setCreatedAt(new DateTime('now'));
         }
     }
 }

@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Discussions $instance)
  * @method void    removeAndFlush(Discussions $instance)
  */
-class DiscussionsRepository extends EntityBackRepository
+class DiscussionsRepository extends BackRepository
 {
     /**
      * DiscussionsRepository constructor.

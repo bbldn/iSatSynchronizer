@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class OrderSimpleFields
 {
     /**
+     * @var int|null $orderId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_id`")
@@ -18,6 +19,7 @@ class OrderSimpleFields
     protected $orderId;
 
     /**
+     * @var string|null $metadata
      * @ORM\Column(type="string", name="`metadata`", length=255)
      */
     protected $metadata;
@@ -35,12 +37,18 @@ class OrderSimpleFields
         $this->metadata = $metadata;
     }
 
-
+    /**
+     * @return int|null
+     */
     public function getOrderId(): ?int
     {
         return $this->orderId;
     }
 
+    /**
+     * @param int $orderId
+     * @return OrderSimpleFields
+     */
     public function setOrderId(int $orderId): self
     {
         $this->orderId = $orderId;
@@ -48,11 +56,18 @@ class OrderSimpleFields
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMetadata(): ?string
     {
         return $this->metadata;
     }
 
+    /**
+     * @param string $metadata
+     * @return OrderSimpleFields
+     */
     public function setMetadata(string $metadata): self
     {
         $this->metadata = $metadata;

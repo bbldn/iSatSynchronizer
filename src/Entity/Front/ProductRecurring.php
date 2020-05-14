@@ -11,17 +11,20 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductRecurring
 {
     /**
+     * @var int|null $productId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;
 
     /**
+     * @var int|null $recurringId
      * @ORM\Column(type="integer", name="`recurring_id`")
      */
     protected $recurringId;
 
     /**
+     * @var int|null $customerGroupId
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
     protected $customerGroupId;
@@ -39,11 +42,18 @@ class ProductRecurring
         $this->customerGroupId = $customerGroupId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return ProductRecurring
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -51,11 +61,18 @@ class ProductRecurring
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getRecurringId(): ?int
     {
         return $this->recurringId;
     }
 
+    /**
+     * @param int $recurringId
+     * @return ProductRecurring
+     */
     public function setRecurringId(int $recurringId): self
     {
         $this->recurringId = $recurringId;
@@ -63,11 +80,18 @@ class ProductRecurring
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCustomerGroupId(): ?int
     {
         return $this->customerGroupId;
     }
 
+    /**
+     * @param int $customerGroupId
+     * @return ProductRecurring
+     */
     public function setCustomerGroupId(int $customerGroupId): self
     {
         $this->customerGroupId = $customerGroupId;

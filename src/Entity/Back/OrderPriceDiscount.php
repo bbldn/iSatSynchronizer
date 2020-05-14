@@ -2,7 +2,6 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class OrderPriceDiscount
 {
     /**
+     * @var int|null $discountId
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`discount_id`")
@@ -19,25 +19,37 @@ class OrderPriceDiscount
     protected $discountId;
 
     /**
+     * @var float|null $priceRange
      * @ORM\Column(type="float", name="`price_range`", nullable=true)
      */
     protected $priceRange;
 
     /**
+     * @var float|null $percentDiscount
      * @ORM\Column(type="float", name="`percent_discount`", nullable=true)
      */
     protected $percentDiscount;
 
+    /**
+     * @return int|null
+     */
     public function getDiscountId(): ?int
     {
         return $this->discountId;
     }
 
+    /**
+     * @return float|null
+     */
     public function getPriceRange(): ?float
     {
         return $this->priceRange;
     }
 
+    /**
+     * @param float $priceRange
+     * @return OrderPriceDiscount
+     */
     public function setPriceRange(float $priceRange): self
     {
         $this->priceRange = $priceRange;
@@ -45,11 +57,18 @@ class OrderPriceDiscount
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getPercentDiscount(): ?float
     {
         return $this->percentDiscount;
     }
 
+    /**
+     * @param float|null $percentDiscount
+     * @return OrderPriceDiscount
+     */
     public function setPercentDiscount(?float $percentDiscount): self
     {
         $this->percentDiscount = $percentDiscount;

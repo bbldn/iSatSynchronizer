@@ -2,9 +2,9 @@
 
 namespace App\Repository\Front;
 
-use App\Other\EntityRepository;
+use App\Repository\Repository;
 
-class EntityFrontRepository extends EntityRepository
+class FrontRepository extends Repository
 {
     /** @var string $entityManagerName */
     protected $entityManagerName = 'front';

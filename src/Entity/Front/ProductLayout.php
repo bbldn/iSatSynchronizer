@@ -11,17 +11,20 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductLayout
 {
     /**
+     * @var int|null $productId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;
 
     /**
+     * @var int|null $storeId
      * @ORM\Column(type="integer", name="`store_id`")
      */
     protected $storeId;
 
     /**
+     * @var int|null $layoutId
      * @ORM\Column(type="integer", name="`layout_id`")
      */
     protected $layoutId;
@@ -42,12 +45,18 @@ class ProductLayout
         $this->layoutId = $layoutId;
     }
 
-
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return ProductLayout
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -55,11 +64,18 @@ class ProductLayout
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getStoreId(): ?int
     {
         return $this->storeId;
     }
 
+    /**
+     * @param int $storeId
+     * @return ProductLayout
+     */
     public function setStoreId(int $storeId): self
     {
         $this->storeId = $storeId;
@@ -67,11 +83,18 @@ class ProductLayout
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getLayoutId(): ?int
     {
         return $this->layoutId;
     }
 
+    /**
+     * @param int $layoutId
+     * @return ProductLayout
+     */
     public function setLayoutId(int $layoutId): self
     {
         $this->layoutId = $layoutId;

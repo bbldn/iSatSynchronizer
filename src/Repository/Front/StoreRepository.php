@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Store;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(Store $instance)
  * @method void    removeAndFlush(Store $instance)
  */
-class StoreRepository extends EntityFrontRepository
+class StoreRepository extends FrontRepository
 {
     /**
      * StoreRepository constructor.

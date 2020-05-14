@@ -11,37 +11,44 @@ use Doctrine\ORM\Mapping as ORM;
 class CategoryDescription
 {
     /**
+     * @var int|null $categoryId
      * @ORM\Id()
      * @ORM\Column(type="integer", name="`category_id`")
      */
     protected $categoryId;
 
     /**
+     * @var int|null $languageId
      * @ORM\Column(type="integer", name="`language_id`")
      */
     protected $languageId;
 
     /**
+     * @var string|null $name
      * @ORM\Column(type="string", name="`name`", length=255)
      */
     protected $name;
 
     /**
+     * @var string|null $description
      * @ORM\Column(type="string", name="`description`")
      */
     protected $description;
 
     /**
+     * @var string|null $metaTitle
      * @ORM\Column(type="string", name="`meta_title`", length=255)
      */
     protected $metaTitle;
 
     /**
+     * @var string|null $metaDescription
      * @ORM\Column(type="string", name="`meta_description`", length=255)
      */
     protected $metaDescription;
 
     /**
+     * @var string|null $metaKeyword
      * @ORM\Column(type="string", name="`meta_keyword`", length=255)
      */
     protected $metaKeyword;
@@ -74,12 +81,18 @@ class CategoryDescription
         $this->metaKeyword = $metaKeyword;
     }
 
-
+    /**
+     * @return int|null
+     */
     public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
+    /**
+     * @param int $categoryId
+     * @return $this
+     */
     public function setCategoryId(int $categoryId)
     {
         $this->categoryId = $categoryId;
@@ -87,11 +100,18 @@ class CategoryDescription
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getLanguageId(): ?int
     {
         return $this->languageId;
     }
 
+    /**
+     * @param int $languageId
+     * @return CategoryDescription
+     */
     public function setLanguageId(int $languageId): self
     {
         $this->languageId = $languageId;
@@ -99,11 +119,18 @@ class CategoryDescription
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return CategoryDescription
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -111,11 +138,18 @@ class CategoryDescription
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
+    /**
+     * @param string $description
+     * @return CategoryDescription
+     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -123,11 +157,18 @@ class CategoryDescription
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMetaTitle(): ?string
     {
         return $this->metaTitle;
     }
 
+    /**
+     * @param string $metaTitle
+     * @return CategoryDescription
+     */
     public function setMetaTitle(string $metaTitle): self
     {
         $this->metaTitle = $metaTitle;
@@ -135,11 +176,18 @@ class CategoryDescription
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
     }
 
+    /**
+     * @param string $metaDescription
+     * @return CategoryDescription
+     */
     public function setMetaDescription(string $metaDescription): self
     {
         $this->metaDescription = $metaDescription;
@@ -147,16 +195,22 @@ class CategoryDescription
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMetaKeyword(): ?string
     {
         return $this->metaKeyword;
     }
 
+    /**
+     * @param string $metaKeyword
+     * @return CategoryDescription
+     */
     public function setMetaKeyword(string $metaKeyword): self
     {
         $this->metaKeyword = $metaKeyword;
 
         return $this;
     }
-
 }

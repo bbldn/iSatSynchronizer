@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\CategoryDescription;
-use App\Other\EntityRepository;
+use App\Other\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    remove(CategoryDescription $instance)
  * @method void    removeAndFlush(CategoryDescription $instance)
  */
-class CategoryDescriptionRepository extends EntityFrontRepository
+class CategoryDescriptionRepository extends FrontRepository
 {
     /**
      * CategoryDescriptionRepository constructor.

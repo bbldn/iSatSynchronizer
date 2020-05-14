@@ -11,32 +11,45 @@ use Doctrine\ORM\Mapping as ORM;
 class BuyersGamePostAccounts
 {
     /**
+     * @var int|null $id
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`id`")
      */
-    private $id;
+    protected $id;
 
     /**
+     * @var string|null $accountName
      * @ORM\Column(type="string", name="`account_name`", length=255)
      */
-    private $accountName;
+    protected $accountName;
 
     /**
+     * @var int|null $accountTime
      * @ORM\Column(type="integer", name="`account_time`")
      */
-    private $accountTime;
+    protected $accountTime;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getAccountName(): ?string
     {
         return $this->accountName;
     }
 
+    /**
+     * @param string $accountName
+     * @return BuyersGamePostAccounts
+     */
     public function setAccountName(string $accountName): self
     {
         $this->accountName = $accountName;
@@ -44,11 +57,18 @@ class BuyersGamePostAccounts
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getAccountTime(): ?int
     {
         return $this->accountTime;
     }
 
+    /**
+     * @param int $accountTime
+     * @return BuyersGamePostAccounts
+     */
     public function setAccountTime(int $accountTime): self
     {
         $this->accountTime = $accountTime;
