@@ -8,8 +8,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SaveFrontFileToNetwork implements SaveFrontFileInterface
 {
-    private $httpClient;
+    /** @var HttpClientInterface $httpClient */
+    protected $httpClient;
 
+    /**
+     * SaveFrontFileToNetwork constructor.
+     * @param HttpClientInterface $httpClient
+     */
     public function __construct(HttpClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;

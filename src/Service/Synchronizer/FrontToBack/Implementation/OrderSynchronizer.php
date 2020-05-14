@@ -46,40 +46,141 @@ use Illuminate\Support\Str;
 
 class OrderSynchronizer
 {
+    /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var CustomerBackRepository $customerBackRepository */
     protected $customerBackRepository;
+
+    /** @var OrderBackRepository $orderBackRepository */
     protected $orderBackRepository;
+
+    /** @var OrderFrontRepository $orderFrontRepository */
     protected $orderFrontRepository;
+
+    /** @var OrderHistoryFrontRepository $orderHistoryRepository */
     protected $orderHistoryRepository;
+
+    /** @var OrderOptionFrontRepository $orderOptionRepository */
     protected $orderOptionRepository;
+
+    /** @var OrderProductFrontRepository $orderProductRepository */
     protected $orderProductRepository;
+
+    /** @var OrderRecurringFrontRepository $orderRecurringFrontRepository */
     protected $orderRecurringFrontRepository;
+
+    /** @var OrderRecurringTransactionFrontRepository $orderRecurringTransactionFrontRepository */
     protected $orderRecurringTransactionFrontRepository;
+
+    /** @var OrderShipmentFrontRepository $orderShipmentFrontRepository */
     protected $orderShipmentFrontRepository;
+
+    /** @var OrderStatusFrontRepository $orderStatusFrontRepository */
     protected $orderStatusFrontRepository;
+
+    /** @var OrderTotalFrontRepository $orderTotalFrontRepository */
     protected $orderTotalFrontRepository;
+
+    /** @var OrderVoucherFrontRepository $orderVoucherFrontRepository */
     protected $orderVoucherFrontRepository;
+
+    /** @var OrderRepository $orderRepository */
     protected $orderRepository;
+
+    /** @var AddressFrontRepository $addressFrontRepository */
     protected $addressFrontRepository;
+
+    /** @var CurrencyBackRepository $currencyBackRepository */
     protected $currencyBackRepository;
+
+    /** @var CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository */
     protected $categoryDescriptionFrontRepository;
+
+    /** @var CustomerFrontRepository $customerFrontRepository */
     protected $customerFrontRepository;
+
+    /** @var CustomerActivityFrontRepository $customerActivityFrontRepository */
     protected $customerActivityFrontRepository;
+
+    /** @var CustomerAffiliateFrontRepository $customerAffiliateFrontRepository */
     protected $customerAffiliateFrontRepository;
+
+    /** @var CustomerApprovalFrontRepository $customerApprovalFrontRepository */
     protected $customerApprovalFrontRepository;
+
+    /** @var CustomerHistoryFrontRepository $customerHistoryFrontRepository */
     protected $customerHistoryFrontRepository;
+
+    /** @var CustomerIpFrontRepository $customerIpFrontRepository */
     protected $customerIpFrontRepository;
+
+    /** @var CustomerLoginFrontRepository $customerLoginFrontRepository */
     protected $customerLoginFrontRepository;
+
+    /** @var CustomerOnlineFrontRepository $customerOnlineFrontRepository */
     protected $customerOnlineFrontRepository;
+
+    /** @var CustomerRewardFrontRepository $customerRewardFrontRepository */
     protected $customerRewardFrontRepository;
+
+    /** @var CustomerSearchFrontRepository $customerSearchFrontRepository */
     protected $customerSearchFrontRepository;
+
+    /** @var CustomerTransactionFrontRepository $customerTransactionFrontRepository */
     protected $customerTransactionFrontRepository;
+
+    /** @var CustomerWishListFrontRepository $customerWishListFrontRepository */
     protected $customerWishListFrontRepository;
+
+    /** @var ProductRepository $productRepository */
     protected $productRepository;
+
+    /** @var ProductCategoryFrontRepository $productCategoryFrontRepository */
     protected $productCategoryFrontRepository;
+
+    /** @var CustomerSynchronizer $customerSynchronizer */
     protected $customerSynchronizer;
 
+    /**
+     * OrderSynchronizer constructor.
+     * @param StoreFront $storeFront
+     * @param StoreBack $storeBack
+     * @param CustomerBackRepository $customerBackRepository
+     * @param OrderBackRepository $orderBackRepository
+     * @param OrderFrontRepository $orderFrontRepository
+     * @param OrderHistoryFrontRepository $orderHistoryRepository
+     * @param OrderOptionFrontRepository $orderOptionRepository
+     * @param OrderProductFrontRepository $orderProductRepository
+     * @param OrderRecurringFrontRepository $orderRecurringFrontRepository
+     * @param OrderRecurringTransactionFrontRepository $orderRecurringTransactionFrontRepository
+     * @param OrderShipmentFrontRepository $orderShipmentFrontRepository
+     * @param OrderStatusFrontRepository $orderStatusFrontRepository
+     * @param OrderTotalFrontRepository $orderTotalFrontRepository
+     * @param OrderVoucherFrontRepository $orderVoucherFrontRepository
+     * @param OrderRepository $orderRepository
+     * @param AddressFrontRepository $addressFrontRepository
+     * @param CurrencyBackRepository $currencyBackRepository
+     * @param CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository
+     * @param CustomerFrontRepository $customerFrontRepository
+     * @param CustomerActivityFrontRepository $customerActivityFrontRepository
+     * @param CustomerAffiliateFrontRepository $customerAffiliateFrontRepository
+     * @param CustomerApprovalFrontRepository $customerApprovalFrontRepository
+     * @param CustomerHistoryFrontRepository $customerHistoryFrontRepository
+     * @param CustomerIpFrontRepository $customerIpFrontRepository
+     * @param CustomerLoginFrontRepository $customerLoginFrontRepository
+     * @param CustomerOnlineFrontRepository $customerOnlineFrontRepository
+     * @param CustomerRewardFrontRepository $customerRewardFrontRepository
+     * @param CustomerSearchFrontRepository $customerSearchFrontRepository
+     * @param CustomerTransactionFrontRepository $customerTransactionFrontRepository
+     * @param CustomerWishListFrontRepository $customerWishListFrontRepository
+     * @param ProductRepository $productRepository
+     * @param ProductCategoryFrontRepository $productCategoryFrontRepository
+     * @param CustomerSynchronizer $customerSynchronizer
+     */
     public function __construct(
         StoreFront $storeFront,
         StoreBack $storeBack,
@@ -228,10 +329,12 @@ class OrderSynchronizer
         $this->orderRepository->persistAndFlush($order);
     }
 
+
     /**
      * @param OrderFront $orderFront
      * @param OrderBack $orderBack
      * @return OrderBack
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
@@ -384,6 +487,11 @@ class OrderSynchronizer
         return $this->currencyBackRepository->getCurrentCourse();
     }
 
+    /**
+     * @param OrderFront $orderFront
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     protected function getClientIdByFrontCustomerPhone(OrderFront $orderFront): int
     {
         $phone = Store::normalizePhone($orderFront->getTelephone());

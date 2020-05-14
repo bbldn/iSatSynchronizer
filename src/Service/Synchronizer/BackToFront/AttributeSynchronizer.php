@@ -28,6 +28,9 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer
         }
     }
 
+    /**
+     *
+     */
     public function clear(): void
     {
         parent::clear();

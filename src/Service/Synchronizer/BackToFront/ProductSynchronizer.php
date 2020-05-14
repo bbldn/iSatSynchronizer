@@ -66,6 +66,9 @@ class ProductSynchronizer extends ProductBaseSynchronizer
         $this->productFrontRepository->updateProductsPriceByCategoryIds($ids);
     }
 
+    /**
+     * @param bool $clearImage
+     */
     public function clear($clearImage = false): void
     {
         parent::clear($clearImage);

@@ -24,18 +24,40 @@ use DateTime;
 
 class OrderSynchronizer
 {
+    /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var CurrencyFrontRepository $currencyFrontRepository */
     protected $currencyFrontRepository;
+
+    /** @var CustomerRepository $customerRepository */
     protected $customerRepository;
+
+    /** @var CustomerFrontRepository $customerFrontRepository */
     protected $customerFrontRepository;
+
+    /** @var OrderRepository $orderRepository */
     protected $orderRepository;
+
+    /** @var OrderFrontRepository $orderFrontRepository */
     protected $orderFrontRepository;
+
+    /** @var OrderProductFrontRepository $orderProductFrontRepository */
     protected $orderProductFrontRepository;
+
+    /** @var OrderBackRepository $orderBackRepository */
     protected $orderBackRepository;
+
+    /** @var ProductRepository $productRepository */
     protected $productRepository;
+
+    /** @var ProductFrontRepository $productFrontRepository */
     protected $productFrontRepository;
+
+    /** @var ProductDescriptionFrontRepository $productDescriptionFrontRepository */
     protected $productDescriptionFrontRepository;
 
+    /** @var array $excludeCustomerIds */
     protected $excludeCustomerIds = [
         3233, 4835, 7436, 7439, 12012,
         12669, 12956, 13110, 14127,
@@ -43,6 +65,20 @@ class OrderSynchronizer
         15328, 16383, 0,
     ];
 
+    /**
+     * OrderSynchronizer constructor.
+     * @param StoreFront $storeFront
+     * @param CurrencyFrontRepository $currencyFrontRepository
+     * @param CustomerRepository $customerRepository
+     * @param CustomerFrontRepository $customerFrontRepository
+     * @param OrderRepository $orderRepository
+     * @param OrderFrontRepository $orderFrontRepository
+     * @param OrderProductFrontRepository $orderProductFrontRepository
+     * @param OrderBackRepository $orderBackRepository
+     * @param ProductFrontRepository $productFrontRepository
+     * @param ProductDescriptionFrontRepository $productDescriptionFrontRepository
+     * @param ProductRepository $productRepository
+     */
     public function __construct(
         StoreFront $storeFront,
         CurrencyFrontRepository $currencyFrontRepository,
@@ -70,6 +106,9 @@ class OrderSynchronizer
         $this->productDescriptionFrontRepository = $productDescriptionFrontRepository;
     }
 
+    /**
+     *
+     */
     protected function clear(): void
     {
         $this->orderProductFrontRepository->clear();

@@ -28,6 +28,9 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer
         }
     }
 
+    /**
+     *
+     */
     public function clear(): void
     {
         parent::clear();

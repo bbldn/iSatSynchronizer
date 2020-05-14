@@ -15,12 +15,29 @@ use App\Repository\Front\AttributeRepository as AttributeFrontRepository;
 
 class AttributeSynchronizer
 {
+    /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var AttributeRepository $attributeRepository */
     protected $attributeRepository;
+
+    /** @var AttributeFrontRepository $attributeFrontRepository */
     protected $attributeFrontRepository;
+
+    /** @var AttributeDescriptionFrontRepository $attributeDescriptionFrontRepository */
     protected $attributeDescriptionFrontRepository;
+
+    /** @var AttributeBackRepository $attributeBackRepository */
     protected $attributeBackRepository;
 
+    /**
+     * AttributeSynchronizer constructor.
+     * @param StoreFront $storeFront
+     * @param AttributeRepository $attributeRepository
+     * @param AttributeFrontRepository $attributeFrontRepository
+     * @param AttributeDescriptionFrontRepository $attributeDescriptionFrontRepository
+     * @param AttributeBackRepository $attributeBackRepository
+     */
     public function __construct(
         StoreFront $storeFront,
         AttributeRepository $attributeRepository,
@@ -75,6 +92,11 @@ class AttributeSynchronizer
         return $attributeFront;
     }
 
+    /**
+     * @param AttributeBack $attributeBack
+     * @param AttributeFront $attributeFront
+     * @return AttributeFront
+     */
     protected function updateAttributeFrontFromBackProduct(
         AttributeBack $attributeBack,
         AttributeFront $attributeFront

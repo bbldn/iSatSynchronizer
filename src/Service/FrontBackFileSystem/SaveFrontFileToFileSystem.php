@@ -6,22 +6,34 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class SaveFrontFileToFileSystem implements SaveFrontFileInterface
 {
-    private $fileSystem;
+    /** @var Filesystem $fileSystem */
+    protected $fileSystem;
 
+    /**
+     * SaveFrontFileToFileSystem constructor.
+     * @param Filesystem $fileSystem
+     */
     public function __construct(Filesystem $fileSystem)
     {
         $this->fileSystem = $fileSystem;
     }
 
+    /**
+     * @param string $path
+     * @param string $content
+     */
     public function saveFile(string $path, string $content): void
     {
         $this->fileSystem->appendToFile($path, $content);
     }
 
+    /**
+     * @param string $path
+     */
     public function clearFolder(string $path): void
     {
         foreach (scandir($path) as $link) {
-            if (in_array($link, ['.', '..',])) {
+            if (true === in_array($link, ['.', '..',])) {
                 continue;
             }
 

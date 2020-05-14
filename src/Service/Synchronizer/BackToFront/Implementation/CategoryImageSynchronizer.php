@@ -12,13 +12,33 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class CategoryImageSynchronizer
 {
+    /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var GetBackFileInterface $fileReader */
     protected $fileReader;
+
+    /** @var SaveFrontFileInterface $fileWriter */
     protected $fileWriter;
-    protected $backPath = ['/images_big/', '/products_pictures/',];
+
+    /** @var array $backPath */
+    protected $backPath = ['/images_big/', '/products_pictures/'];
+
+    /** @var string $frontPath */
     protected $frontPath = '/date/categories/';
 
+    /**
+     * CategoryImageSynchronizer constructor.
+     * @param StoreFront $storeFront
+     * @param StoreBack $storeBack
+     * @param GetBackFileInterface $fileReader
+     * @param SaveFrontFileInterface $fileWriter
+     * @param array $categoryImageBackPath
+     * @param string $categoryImageFrontPath
+     */
     public function __construct(
         StoreFront $storeFront,
         StoreBack $storeBack,
@@ -36,6 +56,9 @@ class CategoryImageSynchronizer
         $this->frontPath = $categoryImageFrontPath;
     }
 
+    /**
+     *
+     */
     public function clearFolder(): void
     {
         $path = $this->storeFront->getSitePath() . $this->frontPath;

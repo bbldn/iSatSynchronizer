@@ -44,36 +44,125 @@ use Illuminate\Support\Str;
 
 class ProductSynchronizer
 {
+    /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var AttributeRepository $attributeRepository */
     protected $attributeRepository;
+
+    /** @var CategoryRepository $categoryRepository */
     protected $categoryRepository;
+
+    /** @var PhotoBackRepository $photoBackRepository */
     protected $photoBackRepository;
+
+    /** @var ProductRepository $productRepository */
     protected $productRepository;
+
+    /** @var CategoryFrontRepository $categoryFrontRepository */
     protected $categoryFrontRepository;
+
+    /** @var ProductFrontRepository $productFrontRepository */
     protected $productFrontRepository;
+
+    /** @var ProductAttributeFrontRepository $productAttributeFrontRepository */
     protected $productAttributeFrontRepository;
+
+    /** @var ProductDescriptionFrontRepository $productDescriptionFrontRepository */
     protected $productDescriptionFrontRepository;
+
+    /** @var ProductDiscountFrontRepository $productDiscountFrontRepository */
     protected $productDiscountFrontRepository;
+
+    /** @var ProductFilterFrontRepository $productFilterFrontRepository */
     protected $productFilterFrontRepository;
+
+    /** @var ProductImageFrontRepository $productImageFrontRepository */
     protected $productImageFrontRepository;
+
+    /** @var ProductOptionFrontRepository $productOptionFrontRepository */
     protected $productOptionFrontRepository;
+
+    /** @var ProductOptionValueFrontRepository $productOptionValueFrontRepository */
     protected $productOptionValueFrontRepository;
+
+    /** @var ProductRecurringFrontRepository $productRecurringFrontRepository */
     protected $productRecurringFrontRepository;
+
+    /** @var ProductRelatedFrontRepository $productRelatedFrontRepository */
     protected $productRelatedFrontRepository;
+
+    /** @var ProductRewardFrontRepository $productRewardFrontRepository */
     protected $productRewardFrontRepository;
+
+    /** @var ProductSpecialFrontRepository $productSpecialFrontRepository */
     protected $productSpecialFrontRepository;
+
+    /** @var ProductCategoryFrontRepository $productCategoryFrontRepository */
     protected $productCategoryFrontRepository;
+
+    /** @var ProductDownloadFrontRepository $productDownloadFrontRepository */
     protected $productDownloadFrontRepository;
+
+    /** @var ProductLayoutFrontRepository $productLayoutFrontRepository */
     protected $productLayoutFrontRepository;
+
+    /** @var ProductStoreFrontRepository $productStoreFrontRepository */
     protected $productStoreFrontRepository;
+
+    /** @var AttributeBackRepository $attributeBackRepository */
     protected $attributeBackRepository;
+
+    /** @var ProductBackRepository $productBackRepository */
     protected $productBackRepository;
+
+    /** @var ProductPicturesBackRepository $productPicturesBackRepository */
     protected $productPicturesBackRepository;
-    protected $seoUrlFrontRepository;
-    protected $seoProEnabled;
+
+    /** @var ProductImageSynchronizer $productImageSynchronizer */
     protected $productImageSynchronizer;
 
+    /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
+    protected $seoUrlFrontRepository;
+
+    /** @var bool $seoProEnabled */
+    protected $seoProEnabled;
+
+    /**
+     * ProductSynchronizer constructor.
+     * @param StoreFront $storeFront
+     * @param StoreBack $storeBack
+     * @param AttributeRepository $attributeRepository
+     * @param CategoryRepository $categoryRepository
+     * @param ProductRepository $productRepository
+     * @param CategoryFrontRepository $categoryFrontRepository
+     * @param PhotoBackRepository $photoBackRepository
+     * @param ProductFrontRepository $productFrontRepository
+     * @param ProductAttributeFrontRepository $productAttributeFrontRepository
+     * @param ProductDescriptionFrontRepository $productDescriptionFrontRepository
+     * @param ProductDiscountFrontRepository $productDiscountFrontRepository
+     * @param ProductFilterFrontRepository $productFilterFrontRepository
+     * @param ProductImageFrontRepository $productImageFrontRepository
+     * @param ProductOptionFrontRepository $productOptionFrontRepository
+     * @param ProductOptionValueFrontRepository $productOptionValueFrontRepository
+     * @param ProductRecurringFrontRepository $productRecurringFrontRepository
+     * @param ProductRelatedFrontRepository $productRelatedFrontRepository
+     * @param ProductRewardFrontRepository $productRewardFrontRepository
+     * @param ProductSpecialFrontRepository $productSpecialFrontRepository
+     * @param ProductCategoryFrontRepository $productCategoryFrontRepository
+     * @param ProductDownloadFrontRepository $productDownloadFrontRepository
+     * @param ProductLayoutFrontRepository $productLayoutFrontRepository
+     * @param ProductStoreFrontRepository $productStoreFrontRepository
+     * @param AttributeBackRepository $attributeBackRepository
+     * @param ProductBackRepository $productBackRepository
+     * @param ProductPicturesBackRepository $productPicturesBackRepository
+     * @param ProductImageSynchronizer $productImageSynchronizer
+     * @param SeoUrlFrontRepository $seoUrlFrontRepository
+     * @param bool $seoProEnabled
+     */
     public function __construct(
         StoreFront $storeFront,
         StoreBack $storeBack,

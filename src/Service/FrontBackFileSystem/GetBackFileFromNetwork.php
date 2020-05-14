@@ -6,8 +6,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GetBackFileFromNetwork implements GetBackFileInterface
 {
-    private $httpClient;
+    /** @var HttpClientInterface $httpClient */
+    protected $httpClient;
 
+    /**
+     * GetBackFileFromNetwork constructor.
+     * @param HttpClientInterface $httpClient
+     */
     public function __construct(HttpClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;

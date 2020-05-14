@@ -29,6 +29,9 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
         }
     }
 
+    /**
+     * @param bool $synchronizeImage
+     */
     public function clear(bool $synchronizeImage = false): void
     {
         parent::clear($synchronizeImage);

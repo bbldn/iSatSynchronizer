@@ -26,20 +26,61 @@ use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 
 class CategorySynchronizer
 {
+    /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var CategoryFrontRepository $categoryFrontRepository */
     protected $categoryFrontRepository;
+
+    /** @var CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository */
     protected $categoryDescriptionFrontRepository;
+
+    /** @var CategoryFilterFrontRepository $categoryFilterFrontRepository */
     protected $categoryFilterFrontRepository;
+
+    /** @var CategoryPathFrontRepository $categoryPathFrontRepository */
     protected $categoryPathFrontRepository;
+
+    /** @var CategoryLayoutFrontRepository $categoryLayoutFrontRepository */
     protected $categoryLayoutFrontRepository;
+
+    /** @var CategoryStoreFrontRepository $categoryStoreFrontRepository */
     protected $categoryStoreFrontRepository;
+
+    /** @var CategoryRepository $categoryRepository */
     protected $categoryRepository;
+
+    /** @var CategoryBackRepository $categoryBackRepository */
     protected $categoryBackRepository;
+
+    /** @var CategoryImageSynchronizer $categoryImageSynchronizer */
     protected $categoryImageSynchronizer;
+
+    /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
     protected $seoUrlFrontRepository;
+
+    /** @var bool $seoProEnabled */
     protected $seoProEnabled;
 
+    /**
+     * CategorySynchronizer constructor.
+     * @param StoreFront $storeFront
+     * @param StoreBack $storeBack
+     * @param CategoryFrontRepository $categoryFrontRepository
+     * @param CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository
+     * @param CategoryFilterFrontRepository $categoryFilterFrontRepository
+     * @param CategoryPathFrontRepository $categoryPathFrontRepository
+     * @param CategoryLayoutFrontRepository $categoryLayoutFrontRepository
+     * @param CategoryStoreFrontRepository $categoryStoreFrontRepository
+     * @param CategoryRepository $categoryRepository
+     * @param CategoryBackRepository $categoryBackRepository
+     * @param CategoryImageSynchronizer $categoryImageSynchronizer
+     * @param SeoUrlFrontRepository $seoUrlFrontRepository
+     * @param bool $seoProEnabled
+     */
     public function __construct(
         StoreFront $storeFront,
         StoreBack $storeBack,
@@ -278,6 +319,11 @@ class CategorySynchronizer
         return $front->getCategoryId();
     }
 
+    /**
+     * @param SeoUrlFront|null $seoUrl
+     * @param int $categoryFrontId
+     * @param CategoryBack $categoryBack
+     */
     protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, int $categoryFrontId, CategoryBack $categoryBack): void
     {
         if (null === $seoUrl) {

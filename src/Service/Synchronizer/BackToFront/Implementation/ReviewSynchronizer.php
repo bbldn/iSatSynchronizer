@@ -14,12 +14,29 @@ use App\Repository\ReviewRepository;
 
 class ReviewSynchronizer
 {
+    /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var ReviewFrontRepository $reviewFrontRepository */
     protected $reviewFrontRepository;
+
+    /** @var ReviewBackRepository $reviewBackRepository */
     protected $reviewBackRepository;
+
+    /** @var ReviewRepository $reviewRepository */
     protected $reviewRepository;
+
+    /** @var ProductRepository $productRepository */
     protected $productRepository;
 
+    /**
+     * ReviewSynchronizer constructor.
+     * @param StoreFront $storeFront
+     * @param ReviewFrontRepository $reviewFrontRepository
+     * @param ReviewBackRepository $reviewBackRepository
+     * @param ReviewRepository $reviewRepository
+     * @param ProductRepository $productRepository
+     */
     public function __construct(
         StoreFront $storeFront,
         ReviewFrontRepository $reviewFrontRepository,
@@ -35,6 +52,9 @@ class ReviewSynchronizer
         $this->productRepository = $productRepository;
     }
 
+    /**
+     *
+     */
     protected function clear()
     {
         $this->reviewRepository->clear();

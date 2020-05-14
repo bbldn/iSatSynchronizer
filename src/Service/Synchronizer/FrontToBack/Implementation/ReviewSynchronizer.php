@@ -15,12 +15,29 @@ use App\Repository\ProductRepository;
 
 class ReviewSynchronizer
 {
+    /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var ReviewFrontRepository $reviewFrontRepository */
     protected $reviewFrontRepository;
+
+    /** @var ReviewBackRepository $reviewBackRepository */
     protected $reviewBackRepository;
+
+    /** @var ReviewRepository $reviewRepository */
     protected $reviewRepository;
+
+    /** @var ProductRepository $productRepository */
     protected $productRepository;
 
+    /**
+     * ReviewSynchronizer constructor.
+     * @param StoreBack $storeBack
+     * @param ReviewFrontRepository $reviewFrontRepository
+     * @param ReviewBackRepository $reviewBackRepository
+     * @param ReviewRepository $reviewRepository
+     * @param ProductRepository $productRepository
+     */
     public function __construct(
         StoreBack $storeBack,
         ReviewFrontRepository $reviewFrontRepository,

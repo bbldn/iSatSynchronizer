@@ -8,9 +8,17 @@ use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
 
 class CurrencySynchronizer
 {
+    /** @var CurrencyBackRepository $currencyBackRepository */
     protected $currencyBackRepository;
+
+    /** @var CurrencyFrontRepository $currencyFrontRepository */
     protected $currencyFrontRepository;
 
+    /**
+     * CurrencySynchronizer constructor.
+     * @param CurrencyBackRepository $currencyBackRepository
+     * @param CurrencyFrontRepository $currencyFrontRepository
+     */
     public function __construct(
         CurrencyBackRepository $currencyBackRepository,
         CurrencyFrontRepository $currencyFrontRepository
@@ -20,6 +28,9 @@ class CurrencySynchronizer
         $this->currencyFrontRepository = $currencyFrontRepository;
     }
 
+    /**
+     *
+     */
     public function synchronizeAll()
     {
         $currenciesFront = $this->currencyFrontRepository->findAll();

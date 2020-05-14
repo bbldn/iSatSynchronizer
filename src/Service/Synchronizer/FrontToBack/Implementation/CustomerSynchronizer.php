@@ -18,12 +18,29 @@ use Illuminate\Support\Str;
 
 class CustomerSynchronizer
 {
+    /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var AddressRepositoryFront $addressRepositoryFront */
     protected $addressRepositoryFront;
+
+    /** @var CustomerFrontRepository $customerFrontRepository */
     protected $customerFrontRepository;
+
+    /** @var CustomerBackRepository $customerBackRepository */
     protected $customerBackRepository;
+
+    /** @var CustomerRepository $customerRepository */
     protected $customerRepository;
 
+    /**
+     * CustomerSynchronizer constructor.
+     * @param StoreBack $storeBack
+     * @param AddressRepositoryFront $addressRepositoryFront
+     * @param CustomerFrontRepository $customerFrontRepository
+     * @param CustomerBackRepository $customerBackRepository
+     * @param CustomerRepository $customerRepository
+     */
     public function __construct(
         StoreBack $storeBack,
         AddressRepositoryFront $addressRepositoryFront,
