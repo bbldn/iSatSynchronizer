@@ -5,22 +5,32 @@ namespace App\Controller\API;
 use App\Controller\Controller;
 use App\Other\Errorer;
 use App\Service\API\ProductService;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends Controller
 {
+    /** @var ProductService $productService */
     protected $productService;
 
+    /**
+     * ProductController constructor.
+     * @param ValidatorInterface $validator
+     * @param ProductService $productService
+     */
     public function __construct(ValidatorInterface $validator, ProductService $productService)
     {
         parent::__construct($validator);
         $this->productService = $productService;
     }
 
-    public function updateProductsByIdsAction(Request $request): JsonResponse
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function updateProductsByIdsAction(Request $request): Response
     {
         $constraint = $this->getValidationCollection([
             'ids' => new Assert\Required(
@@ -34,7 +44,7 @@ class ProductController extends Controller
         $errors = $this->validator->validate($request->request->all(), $constraint);
 
         if ($errors->count() > 0) {
-            return JsonResponse::create([
+            return $this->json([
                 'ok' => false,
                 'errors' => Errorer::convertConstraintViolationListToArray($errors)
             ]);
@@ -45,10 +55,14 @@ class ProductController extends Controller
             $request->request->get('onlyPriceUpdate', false)
         );
 
-        return JsonResponse::create($result);
+        return $this->json($result);
     }
 
-    public function updateProductsByCategoriesIdsAction(Request $request): JsonResponse
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function updateProductsByCategoriesIdsAction(Request $request): Response
     {
         $constraint = $this->getValidationCollection([
             'ids' => new Assert\Required(
@@ -62,7 +76,7 @@ class ProductController extends Controller
         $errors = $this->validator->validate($request->request->all(), $constraint);
 
         if ($errors->count() > 0) {
-            return JsonResponse::create([
+            return $this->json([
                 'ok' => false,
                 'errors' => Errorer::convertConstraintViolationListToArray($errors)
             ]);
@@ -73,10 +87,14 @@ class ProductController extends Controller
             (bool)$request->request->get('onlyPriceUpdate', false)
         );
 
-        return JsonResponse::create($result);
+        return $this->json($result);
     }
 
-    public function getProductsByNameAction(Request $request)
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function getProductsByNameAction(Request $request): Response
     {
         $constraint = $this->getValidationCollection([
             'name' => new Assert\Required(),
@@ -89,7 +107,7 @@ class ProductController extends Controller
         $errors = $this->validator->validate($request->request->all(), $constraint);
 
         if ($errors->count() > 0) {
-            return JsonResponse::create([
+            return $this->json([
                 'ok' => false,
                 'errors' => Errorer::convertConstraintViolationListToArray($errors)
             ]);
@@ -104,11 +122,14 @@ class ProductController extends Controller
             );
         }
 
-        return JsonResponse::create($result);
+        return $this->json($result);
     }
 
-    public function getCategoriesAction(): JsonResponse
+    /**
+     * @return Response
+     */
+    public function getCategoriesAction(): Response
     {
-        return JsonResponse::create($this->productService->getCategories());
+        return $this->json($this->productService->getCategories());
     }
 }

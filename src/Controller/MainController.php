@@ -3,13 +3,18 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MainController extends AbstractController
 {
-    public function categoryAction(HttpClientInterface $httpClient, int $id)
+    /**
+     * @param HttpClientInterface $httpClient
+     * @param int $id
+     * @return Response
+     */
+    public function categoryAction(HttpClientInterface $httpClient, int $id): Response
     {
         try {
             $options = [
@@ -17,14 +22,20 @@ class MainController extends AbstractController
             ];
 
             $httpClient->request('POST', 'http://localhost:8081', $options);
-        }catch (TransportExceptionInterface $e) {
-            return JsonResponse::create(['ok' => false, 'errors' => [$e->getMessage()]]);
+        } catch (TransportExceptionInterface $e) {
+            return $this->json(['ok' => false, 'errors' => [$e->getMessage()]]);
         }
 
-        return JsonResponse::create(['ok' => true]);
+        return $this->json(['ok' => true]);
     }
 
-    public function productAction(HttpClientInterface $httpClient, int $id)
+
+    /**
+     * @param HttpClientInterface $httpClient
+     * @param int $id
+     * @return Response
+     */
+    public function productAction(HttpClientInterface $httpClient, int $id): Response
     {
         try {
             $options = [
@@ -32,10 +43,10 @@ class MainController extends AbstractController
             ];
 
             $httpClient->request('POST', 'http://localhost:8081', $options);
-        }catch (TransportExceptionInterface $e) {
-            return JsonResponse::create(['ok' => false, 'errors' => [$e->getMessage()]]);
+        } catch (TransportExceptionInterface $e) {
+            return $this->json(['ok' => false, 'errors' => [$e->getMessage()]]);
         }
 
-        return JsonResponse::create(['ok' => true]);
+        return $this->json(['ok' => true]);
     }
 }
