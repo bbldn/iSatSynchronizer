@@ -37,22 +37,6 @@ class ProductReward
     protected $points = 0;
 
     /**
-     * @param int $productId
-     * @param int $customerGroupId
-     * @param int $points
-     */
-    public function fill(
-        int $productId,
-        int $customerGroupId,
-        int $points
-    )
-    {
-        $this->productId = $productId;
-        $this->customerGroupId = $customerGroupId;
-        $this->points = $points;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductRewardId(): ?int

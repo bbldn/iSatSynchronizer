@@ -30,19 +30,6 @@ class ProductRecurring
     protected $customerGroupId;
 
     /**
-     * @param int $recurringId
-     * @param int $customerGroupId
-     */
-    public function fill(
-        int $recurringId,
-        int $customerGroupId
-    )
-    {
-        $this->recurringId = $recurringId;
-        $this->customerGroupId = $customerGroupId;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

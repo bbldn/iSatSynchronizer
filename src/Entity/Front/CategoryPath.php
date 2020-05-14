@@ -30,22 +30,6 @@ class CategoryPath
     protected $level;
 
     /**
-     * @param int $categoryId
-     * @param int $pathId
-     * @param int $level
-     */
-    public function fill(
-        int $categoryId,
-        int $pathId,
-        int $level
-    )
-    {
-        $this->categoryId = $categoryId;
-        $this->pathId = $pathId;
-        $this->level = $level;
-    }
-
-    /**
      * @return int|null
      */
     public function getCategoryId(): ?int

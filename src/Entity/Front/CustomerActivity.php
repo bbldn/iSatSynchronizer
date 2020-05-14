@@ -50,25 +50,6 @@ class CustomerActivity
     protected $dateAdded;
 
     /**
-     * @param int $customerId
-     * @param string $key
-     * @param string $data
-     * @param string $ip
-     */
-    public function fill(
-        int $customerId,
-        string $key,
-        string $data,
-        string $ip
-    )
-    {
-        $this->customerId = $customerId;
-        $this->key = $key;
-        $this->data = $data;
-        $this->ip = $ip;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerActivityId(): ?int
@@ -155,7 +136,7 @@ class CustomerActivity
     /**
      * @return DateTimeInterface|null
      */
-    public function getDateAdded(): ?\DateTimeInterface
+    public function getDateAdded(): ?DateTimeInterface
     {
         return $this->dateAdded;
     }
@@ -164,7 +145,7 @@ class CustomerActivity
      * @param DateTimeInterface $dateAdded
      * @return CustomerActivity
      */
-    public function setDateAdded(\DateTimeInterface $dateAdded): self
+    public function setDateAdded(DateTimeInterface $dateAdded): self
     {
         $this->dateAdded = $dateAdded;
 

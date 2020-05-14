@@ -37,22 +37,6 @@ class Store
     protected $ssl;
 
     /**
-     * @param $name
-     * @param $url
-     * @param $ssl
-     */
-    public function fill(
-        string $name,
-        string $url,
-        string $ssl
-    )
-    {
-        $this->name = $name;
-        $this->url = $url;
-        $this->ssl = $ssl;
-    }
-
-    /**
      * @return int|null
      */
     public function getStoreId(): ?int

@@ -24,19 +24,6 @@ class ProductRelated
     protected $relatedId;
 
     /**
-     * @param int $productId
-     * @param int $relatedId
-     */
-    public function fill(
-        int $productId,
-        int $relatedId
-    )
-    {
-        $this->productId = $productId;
-        $this->relatedId = $relatedId;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

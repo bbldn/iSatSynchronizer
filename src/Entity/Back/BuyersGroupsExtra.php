@@ -2,7 +2,6 @@
 
 namespace App\Entity\Back;
 
-use App\Entity\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

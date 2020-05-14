@@ -24,19 +24,6 @@ class CategoryStore
     protected $storeId;
 
     /**
-     * @param int $categoryId
-     * @param int $storeId
-     */
-    public function fill(
-        int $categoryId,
-        int $storeId
-    )
-    {
-        $this->categoryId = $categoryId;
-        $this->storeId = $storeId;
-    }
-
-    /**
      * @return int|null
      */
     public function getCategoryId(): ?int

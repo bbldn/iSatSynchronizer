@@ -46,26 +46,6 @@ class OrderShipment
     protected $trackingNumber;
 
     /**
-     * @param int $orderId
-     * @param \DateTimeInterface $dateAdded
-     * @param int $shippingCourierId
-     * @param string $trackingNumber
-     */
-    public function fill(
-        int $orderId,
-        \DateTimeInterface $dateAdded,
-        int $shippingCourierId,
-        string $trackingNumber
-    )
-    {
-        $this->orderId = $orderId;
-        $this->dateAdded = $dateAdded;
-        $this->shippingCourierId = $shippingCourierId;
-        $this->trackingNumber = $trackingNumber;
-    }
-
-
-    /**
      * @return int|null
      */
     public function getOrderShipmentId(): ?int
@@ -131,6 +111,16 @@ class OrderShipment
     }
 
     /**
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -147,15 +137,5 @@ class OrderShipment
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 }

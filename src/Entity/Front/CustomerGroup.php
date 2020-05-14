@@ -30,19 +30,6 @@ class CustomerGroup
     protected $sortOrder;
 
     /**
-     * @param bool $approval
-     * @param int $sortOrder
-     */
-    public function fill(
-        bool $approval,
-        int $sortOrder
-    )
-    {
-        $this->approval = $approval;
-        $this->sortOrder = $sortOrder;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerGroupId(): ?int

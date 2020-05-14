@@ -24,19 +24,6 @@ class ProductStore
     protected $storeId = 0;
 
     /**
-     * @param int $productId
-     * @param int $storeId
-     */
-    public function fill(
-        int $productId,
-        int $storeId
-    )
-    {
-        $this->productId = $productId;
-        $this->storeId = $storeId;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

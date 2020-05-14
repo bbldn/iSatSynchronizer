@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,16 +40,26 @@ class Review
      */
     protected $updatedAt;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return int|null
+     */
     public function getFrontId(): ?int
     {
         return $this->frontId;
     }
 
+    /**
+     * @param int $frontId
+     * @return Review
+     */
     public function setFrontId(int $frontId): self
     {
         $this->frontId = $frontId;
@@ -55,11 +67,18 @@ class Review
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getBackId(): ?int
     {
         return $this->backId;
     }
 
+    /**
+     * @param int $backId
+     * @return Review
+     */
     public function setBackId(int $backId): self
     {
         $this->backId = $backId;
@@ -67,24 +86,38 @@ class Review
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    /**
+     * @param DateTimeInterface|null $createdAt
+     * @return Review
+     */
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    /**
+     * @param DateTimeInterface|null $updatedAt
+     * @return Review
+     */
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -97,10 +130,10 @@ class Review
      */
     public function updatedTimestamps()
     {
-        $this->setUpdatedAt(new \DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
 
         if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTime('now'));
+            $this->setCreatedAt(new DateTime('now'));
         }
     }
 }

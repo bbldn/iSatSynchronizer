@@ -40,19 +40,6 @@ class CustomerApproval
     protected $dateAdded;
 
     /**
-     * @param int $customerId
-     * @param string $type
-     */
-    public function fill(
-        int $customerId,
-        string $type
-    )
-    {
-        $this->customerId = $customerId;
-        $this->type = $type;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerApprovalId(): ?int
@@ -99,6 +86,16 @@ class CustomerApproval
     }
 
     /**
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -115,15 +112,5 @@ class CustomerApproval
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 }

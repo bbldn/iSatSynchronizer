@@ -61,35 +61,6 @@ class Language
     protected $status;
 
     /**
-     * Language constructor.
-     * @param $name
-     * @param $code
-     * @param $locale
-     * @param $image
-     * @param $directory
-     * @param $sortOrder
-     * @param $status
-     */
-    public function fill(
-        string $name,
-        string $code,
-        string $locale,
-        string $image,
-        string $directory,
-        int $sortOrder,
-        bool $status
-    )
-    {
-        $this->name = $name;
-        $this->code = $code;
-        $this->locale = $locale;
-        $this->image = $image;
-        $this->directory = $directory;
-        $this->sortOrder = $sortOrder;
-        $this->status = $status;
-    }
-
-    /**
      * @return int|null
      */
     public function getLanguageId(): ?int

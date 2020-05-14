@@ -128,43 +128,41 @@ class CustomerSynchronizer
 
         $time = time();
 
-        $customerBack->fill(
-            Filler::securityString(Store::parseLogin($customerFront->getEmail())),
-            base64_decode($customerFront->getPass()),
-            $customerFront->getLastName() . ' ' . $customerFront->getFirstName(),
-            Store::normalizePhone($customerFront->getTelephone()),
-            Filler::securityString(null),
-            $city,
-            $street,
-            Filler::securityString(null),
-            $customerFront->getEmail(),
-            Str::lower(Str::random(32)),
-            true,
-            false,
-            $time,
-            $time,
-            $time,
-            '0',
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            '006084',
-            $this->storeBack->getDefaultMoneyReal(),
-            $this->storeBack->getDefaultMoneyVirtual(),
-            $this->storeBack->getDefaultMoneyBox(),
-            new DateTime('0000-00-00 00:00:00'),
-            $this->storeBack->getDefaultReferer(),
-            $this->storeBack->getDefaultGroupId(),
-            $this->storeBack->getDefaultGroupExtraId(),
-            $this->storeBack->getDefaultShopId(),
-            Filler::securityString(null),
-            $this->storeBack->getDefaultDelivery(),
-            $this->storeBack->getDefaultPayment(),
-            Filler::securityString(null)
-        );
+        $customerBack->setLogin(Filler::securityString(Store::parseLogin($customerFront->getEmail())));
+        $customerBack->setPassword(base64_decode($customerFront->getPass()));
+        $customerBack->setFio($customerFront->getLastName() . ' ' . $customerFront->getFirstName());
+        $customerBack->setPhone(Store::normalizePhone($customerFront->getTelephone()));
+        $customerBack->setRegion(Filler::securityString(null));
+        $customerBack->setCity($city);
+        $customerBack->setStreet($street);
+        $customerBack->setHouse(Filler::securityString(null));
+        $customerBack->setMail($customerFront->getEmail());
+        $customerBack->setCode(Str::lower(Str::random(32)));
+        $customerBack->setActive(true);
+        $customerBack->setAccount(false);
+        $customerBack->setDateReg($time);
+        $customerBack->setDateAccBegin($time);
+        $customerBack->setDateAccEnd($time);
+        $customerBack->setVip('0');
+        $customerBack->setImageSmall(Filler::securityString(null));
+        $customerBack->setImageBig(Filler::securityString(null));
+        $customerBack->setInfo(Filler::securityString(null));
+        $customerBack->setIp(Filler::securityString(null));
+        $customerBack->setTimestampOnline(Filler::securityString(null));
+        $customerBack->setTimestampActive(Filler::securityString(null));
+        $customerBack->setChatNameColor('006084');
+        $customerBack->setMoneyReal($this->storeBack->getDefaultMoneyReal());
+        $customerBack->setMoneyVirtual($this->storeBack->getDefaultMoneyVirtual());
+        $customerBack->setMoneyBox($this->storeBack->getDefaultMoneyBox());
+        $customerBack->setDateBirth(new DateTime('0000-00-00 00:00:00'));
+        $customerBack->setReferer($this->storeBack->getDefaultReferer());
+        $customerBack->setGroupId($this->storeBack->getDefaultGroupId());
+        $customerBack->setGroupExtraId($this->storeBack->getDefaultGroupExtraId());
+        $customerBack->setShopId($this->storeBack->getDefaultShopId());
+        $customerBack->setComment(Filler::securityString(null));
+        $customerBack->setDelivery($this->storeBack->getDefaultDelivery());
+        $customerBack->setPayment($this->storeBack->getDefaultPayment());
+        $customerBack->setWarehouse(Filler::securityString(null));
 
         $this->customerBackRepository->persistAndFlush($customerBack);
 
@@ -183,43 +181,41 @@ class CustomerSynchronizer
     {
         $time = time();
 
-        $customerBack->fill(
-            Filler::securityString(Store::parseLogin($orderFront->getEmail())),
-            rand(100000, 999999),
-            $orderFront->getLastName() . ' ' . $orderFront->getFirstName(),
-            Store::normalizePhone($orderFront->getTelephone()),
-            Filler::securityString(null),
-            $orderFront->getShippingCity(),
-            $orderFront->getShippingAddress1(),
-            Filler::securityString(null),
-            $orderFront->getEmail(),
-            Str::lower(Str::random(32)),
-            true,
-            false,
-            $time,
-            $time,
-            $time,
-            '0',
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            Filler::securityString(null),
-            '006084',
-            $this->storeBack->getDefaultMoneyReal(),
-            $this->storeBack->getDefaultMoneyVirtual(),
-            $this->storeBack->getDefaultMoneyBox(),
-            new DateTime('0000-00-00 00:00:00'),
-            $this->storeBack->getDefaultReferer(),
-            $this->storeBack->getDefaultGroupId(),
-            $this->storeBack->getDefaultGroupExtraId(),
-            $this->storeBack->getDefaultShopId(),
-            Filler::securityString(null),
-            $this->storeBack->getDefaultDelivery(),
-            $this->storeBack->getDefaultPayment(),
-            Filler::securityString(null)
-        );
+        $customerBack->setLogin(Filler::securityString(Store::parseLogin($orderFront->getEmail())));
+        $customerBack->setPassword(rand(100000, 999999));
+        $customerBack->setFio($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
+        $customerBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
+        $customerBack->setRegion(Filler::securityString(null));
+        $customerBack->setCity($orderFront->getShippingCity());
+        $customerBack->setStreet($orderFront->getShippingAddress1());
+        $customerBack->setHouse(Filler::securityString(null));
+        $customerBack->setMail($orderFront->getEmail());
+        $customerBack->setCode(Str::lower(Str::random(32)));
+        $customerBack->setActive(true);
+        $customerBack->setAccount(false);
+        $customerBack->setDateReg($time);
+        $customerBack->setDateAccBegin($time);
+        $customerBack->setDateAccEnd($time);
+        $customerBack->setVip('0');
+        $customerBack->setImageSmall(Filler::securityString(null));
+        $customerBack->setImageBig(Filler::securityString(null));
+        $customerBack->setInfo(Filler::securityString(null));
+        $customerBack->setIp(Filler::securityString(null));
+        $customerBack->setTimestampOnline(Filler::securityString(null));
+        $customerBack->setTimestampActive(Filler::securityString(null));
+        $customerBack->setChatNameColor('006084');
+        $customerBack->setMoneyReal($this->storeBack->getDefaultMoneyReal());
+        $customerBack->setMoneyVirtual($this->storeBack->getDefaultMoneyVirtual());
+        $customerBack->setMoneyBox($this->storeBack->getDefaultMoneyBox());
+        $customerBack->setDateBirth(new DateTime('0000-00-00 00:00:00'));
+        $customerBack->setReferer($this->storeBack->getDefaultReferer());
+        $customerBack->setGroupId($this->storeBack->getDefaultGroupId());
+        $customerBack->setGroupExtraId($this->storeBack->getDefaultGroupExtraId());
+        $customerBack->setShopId($this->storeBack->getDefaultShopId());
+        $customerBack->setComment(Filler::securityString(null));
+        $customerBack->setDelivery($this->storeBack->getDefaultDelivery());
+        $customerBack->setPayment($this->storeBack->getDefaultPayment());
+        $customerBack->setWarehouse(Filler::securityString(null));
 
         $this->customerBackRepository->persistAndFlush($customerBack);
 

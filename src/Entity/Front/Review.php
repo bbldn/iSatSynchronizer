@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -67,22 +68,6 @@ class Review
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
     protected $dateModified;
-
-    public function fill(
-        int $productId,
-        int $customerId,
-        string $author,
-        string $text,
-        int $rating,
-        bool $status)
-    {
-        $this->productId = $productId;
-        $this->customerId = $customerId;
-        $this->author = $author;
-        $this->text = $text;
-        $this->rating = $rating;
-        $this->status = $status;
-    }
 
     /**
      * @return int|null
@@ -226,6 +211,19 @@ class Review
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setDateModified(new DateTime('now'));
+
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -242,18 +240,5 @@ class Review
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-    
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDateModified(new \DateTime('now'));
-
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

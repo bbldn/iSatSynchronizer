@@ -117,25 +117,6 @@ class Currency
     }
 
     /**
-     * @return DateTimeInterface|null
-     */
-    public function getDate(): ?DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param DateTimeInterface $date
-     * @return Currency
-     */
-    public function setDate(DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerId(): ?int
@@ -162,5 +143,24 @@ class Currency
         if (null === $this->getDate()) {
             $this->setDate(new DateTime('now'));
         }
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDate(): ?DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param DateTimeInterface $date
+     * @return Currency
+     */
+    public function setDate(DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
     }
 }

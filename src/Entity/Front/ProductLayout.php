@@ -30,22 +30,6 @@ class ProductLayout
     protected $layoutId;
 
     /**
-     * @param int $productId
-     * @param int $storeId
-     * @param int $layoutId
-     */
-    public function fill(
-        int $productId,
-        int $storeId,
-        int $layoutId
-    )
-    {
-        $this->productId = $productId;
-        $this->storeId = $storeId;
-        $this->layoutId = $layoutId;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

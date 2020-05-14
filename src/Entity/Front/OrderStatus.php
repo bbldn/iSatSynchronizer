@@ -31,19 +31,6 @@ class OrderStatus
     protected $name;
 
     /**
-     * @param int $languageId
-     * @param string $name
-     */
-    public function fill(
-        int $languageId,
-        string $name
-    )
-    {
-        $this->languageId = $languageId;
-        $this->name = $name;
-    }
-
-    /**
      * @return int|null
      */
     public function getOrderStatusId(): ?int

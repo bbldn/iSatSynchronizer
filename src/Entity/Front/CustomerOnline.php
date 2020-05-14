@@ -45,24 +45,6 @@ class CustomerOnline
     protected $dateAdded;
 
     /**
-     * @param string $ip
-     * @param int $customerId
-     * @param string $url
-     * @param string $referer
-     */
-    public function fill(
-        string $ip,
-        int $customerId,
-        string $url,
-        string $referer)
-    {
-        $this->ip = $ip;
-        $this->customerId = $customerId;
-        $this->url = $url;
-        $this->referer = $referer;
-    }
-
-    /**
      * @return string|null
      */
     public function getIp(): ?string
@@ -139,6 +121,17 @@ class CustomerOnline
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -155,16 +148,5 @@ class CustomerOnline
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 }

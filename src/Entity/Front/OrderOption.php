@@ -72,28 +72,6 @@ class OrderOption
      */
     protected $model;
 
-    public function fill(
-        int $orderId,
-        int $orderProductId,
-        int $productOptionId,
-        int $productOptionValueId,
-        string $name,
-        string $value,
-        string $type,
-        string $sku,
-        string $model)
-    {
-        $this->orderId = $orderId;
-        $this->orderProductId = $orderProductId;
-        $this->productOptionId = $productOptionId;
-        $this->productOptionValueId = $productOptionValueId;
-        $this->name = $name;
-        $this->value = $value;
-        $this->type = $type;
-        $this->sku = $sku;
-        $this->model = $model;
-    }
-
     /**
      * @return int|null
      */

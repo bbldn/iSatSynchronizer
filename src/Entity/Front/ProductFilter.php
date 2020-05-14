@@ -24,19 +24,6 @@ class ProductFilter
     protected $filterId;
 
     /**
-     * @param int $productId
-     * @param int $filterId
-     */
-    public function fill(
-        int $productId,
-        int $filterId
-    )
-    {
-        $this->productId = $productId;
-        $this->filterId = $filterId;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

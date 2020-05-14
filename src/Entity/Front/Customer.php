@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -151,76 +152,6 @@ class Customer
      * @ORM\Column(type="string", name="`pass`", nullable=true)
      */
     protected $pass = null;
-
-    /**
-     * @param int $customerGroupId
-     * @param int $storeId
-     * @param int $languageId
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $email
-     * @param string $telephone
-     * @param string $fax
-     * @param string $password
-     * @param string $salt
-     * @param string|null $cart
-     * @param string|null $wishList
-     * @param bool $newsletter
-     * @param int $addressId
-     * @param string $customField
-     * @param string $ip
-     * @param bool $status
-     * @param bool $safe
-     * @param string $token
-     * @param string $code
-     * @param string|null $pass
-     */
-    public function fill(
-        int $customerGroupId,
-        int $storeId,
-        int $languageId,
-        string $firstName,
-        string $lastName,
-        string $email,
-        string $telephone,
-        string $fax,
-        string $password,
-        string $salt,
-        ?string $cart,
-        ?string $wishList,
-        bool $newsletter,
-        int $addressId,
-        string $customField,
-        string $ip,
-        bool $status,
-        bool $safe,
-        string $token,
-        string $code,
-        ?string $pass
-    )
-    {
-        $this->customerGroupId = $customerGroupId;
-        $this->storeId = $storeId;
-        $this->languageId = $languageId;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->email = $email;
-        $this->telephone = $telephone;
-        $this->fax = $fax;
-        $this->password = $password;
-        $this->salt = $salt;
-        $this->cart = $cart;
-        $this->wishList = $wishList;
-        $this->newsletter = $newsletter;
-        $this->addressId = $addressId;
-        $this->customField = $customField;
-        $this->ip = $ip;
-        $this->status = $status;
-        $this->safe = $safe;
-        $this->token = $token;
-        $this->code = $code;
-        $this->pass = $pass;
-    }
 
     /**
      * @return int|null
@@ -630,6 +561,17 @@ class Customer
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -646,16 +588,5 @@ class Customer
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

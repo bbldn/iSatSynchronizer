@@ -117,58 +117,6 @@ class CustomerAffiliate
     protected $dateAdded;
 
     /**
-     * @param string $company
-     * @param string $website
-     * @param string $tracking
-     * @param float $commission
-     * @param string $tax
-     * @param string $payment
-     * @param string $cheque
-     * @param string $payPal
-     * @param string $bankName
-     * @param string $bankBranchNumber
-     * @param string $bankSwiftCode
-     * @param string $bankAccountName
-     * @param string $bankAccountNumber
-     * @param string $customField
-     * @param bool $status
-     */
-    public function fill(
-        string $company,
-        string $website,
-        string $tracking,
-        float $commission,
-        string $tax,
-        string $payment,
-        string $cheque,
-        string $payPal,
-        string $bankName,
-        string $bankBranchNumber,
-        string $bankSwiftCode,
-        string $bankAccountName,
-        string $bankAccountNumber,
-        string $customField,
-        bool $status
-    )
-    {
-        $this->company = $company;
-        $this->website = $website;
-        $this->tracking = $tracking;
-        $this->commission = $commission;
-        $this->tax = $tax;
-        $this->payment = $payment;
-        $this->cheque = $cheque;
-        $this->payPal = $payPal;
-        $this->bankName = $bankName;
-        $this->bankBranchNumber = $bankBranchNumber;
-        $this->bankSwiftCode = $bankSwiftCode;
-        $this->bankAccountName = $bankAccountName;
-        $this->bankAccountNumber = $bankAccountNumber;
-        $this->customField = $customField;
-        $this->status = $status;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerId(): ?int
@@ -473,6 +421,16 @@ class CustomerAffiliate
     }
 
     /**
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -489,15 +447,5 @@ class CustomerAffiliate
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 }

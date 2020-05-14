@@ -31,19 +31,6 @@ class Attribute
     protected $sortOrder;
 
     /**
-     * @param int $attributeGroupId
-     * @param int $sortOrder
-     */
-    public function fill(
-        int $attributeGroupId,
-        int $sortOrder
-    )
-    {
-        $this->attributeGroupId = $attributeGroupId;
-        $this->sortOrder = $sortOrder;
-    }
-
-    /**
      * @return int|null
      */
     public function getAttributeId(): ?int

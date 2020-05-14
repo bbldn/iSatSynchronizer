@@ -31,19 +31,6 @@ class CustomerWishList
     protected $dateAdded;
 
     /**
-     * @param int $customerId
-     * @param int $productId
-     */
-    public function fill(
-        int $customerId,
-        int $productId
-    )
-    {
-        $this->customerId = $customerId;
-        $this->productId = $productId;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerId(): ?int

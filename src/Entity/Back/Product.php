@@ -781,7 +781,7 @@ class Product
     /**
      * @return DateTimeInterface|null
      */
-    public function getDateAdded(): ?\DateTimeInterface
+    public function getDateAdded(): ?DateTimeInterface
     {
         return $this->dateAdded;
     }

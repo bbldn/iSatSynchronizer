@@ -60,37 +60,6 @@ class ProductDescription
     protected $metaKeyword;
 
     /**
-     * @param int $productId
-     * @param int $languageId
-     * @param string $name
-     * @param string $description
-     * @param string $tag
-     * @param string $metaTitle
-     * @param string $metaDescription
-     * @param string $metaKeyword
-     */
-    public function fill(
-        int $productId,
-        int $languageId,
-        string $name,
-        string $description,
-        string $tag,
-        string $metaTitle,
-        string $metaDescription,
-        string $metaKeyword
-    )
-    {
-        $this->productId = $productId;
-        $this->languageId = $languageId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->tag = $tag;
-        $this->metaTitle = $metaTitle;
-        $this->metaDescription = $metaDescription;
-        $this->metaKeyword = $metaKeyword;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

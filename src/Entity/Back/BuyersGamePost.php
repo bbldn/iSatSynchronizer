@@ -229,81 +229,6 @@ class BuyersGamePost
      */
     protected $warehouse;
 
-    public function fill(
-        string $login,
-        string $password,
-        string $fio,
-        string $phone,
-        string $region,
-        string $city,
-        string $street,
-        string $house,
-        string $mail,
-        bool $code,
-        bool $active,
-        bool $account,
-        int $dateReg,
-        int $dateAccBegin,
-        int $dateAccEnd,
-        string $vip,
-        string $imageSmall,
-        string $imageBig,
-        string $info,
-        string $ip,
-        string $timestampOnline,
-        string $timestampActive,
-        string $chatNameColor,
-        int $moneyReal,
-        int $moneyVirtual,
-        int $moneyBox,
-        \DateTimeInterface $dateBirth,
-        int $referer,
-        int $groupId,
-        int $groupExtraId,
-        int $shopId,
-        string $comment,
-        int $delivery,
-        int $payment,
-        string $warehouse
-    )
-    {
-        $this->login = $login;
-        $this->password = $password;
-        $this->fio = $fio;
-        $this->phone = $phone;
-        $this->region = $region;
-        $this->city = $city;
-        $this->street = $street;
-        $this->house = $house;
-        $this->mail = $mail;
-        $this->code = $code;
-        $this->active = $active;
-        $this->account = $account;
-        $this->dateReg = $dateReg;
-        $this->dateAccBegin = $dateAccBegin;
-        $this->dateAccEnd = $dateAccEnd;
-        $this->vip = $vip;
-        $this->imageSmall = $imageSmall;
-        $this->imageBig = $imageBig;
-        $this->info = $info;
-        $this->ip = $ip;
-        $this->timestampOnline = $timestampOnline;
-        $this->timestampActive = $timestampActive;
-        $this->chatNameColor = $chatNameColor;
-        $this->moneyReal = $moneyReal;
-        $this->moneyVirtual = $moneyVirtual;
-        $this->moneyBox = $moneyBox;
-        $this->dateBirth = $dateBirth;
-        $this->referer = $referer;
-        $this->groupId = $groupId;
-        $this->groupExtraId = $groupExtraId;
-        $this->shopId = $shopId;
-        $this->comment = $comment;
-        $this->delivery = $delivery;
-        $this->payment = $payment;
-        $this->warehouse = $warehouse;
-    }
-
     /**
      * @return int|null
      */
@@ -809,7 +734,7 @@ class BuyersGamePost
     /**
      * @return DateTimeInterface|null
      */
-    public function getDateBirth(): ?\DateTimeInterface
+    public function getDateBirth(): ?DateTimeInterface
     {
         return $this->dateBirth;
     }
@@ -818,7 +743,7 @@ class BuyersGamePost
      * @param DateTimeInterface $dateBirth
      * @return BuyersGamePost
      */
-    public function setDateBirth(\DateTimeInterface $dateBirth): self
+    public function setDateBirth(DateTimeInterface $dateBirth): self
     {
         $this->dateBirth = $dateBirth;
 

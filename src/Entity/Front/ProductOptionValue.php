@@ -90,49 +90,6 @@ class ProductOptionValue
     protected $weightPrefix;
 
     /**
-     * @param int $productOptionId
-     * @param int $productId
-     * @param int $optionId
-     * @param int $optionValueId
-     * @param int $quantity
-     * @param bool $subtract
-     * @param float $price
-     * @param string $pricePrefix
-     * @param int $points
-     * @param string $pointsPrefix
-     * @param float $weight
-     * @param string $weightPrefix
-     */
-    public function fill(
-        int $productOptionId,
-        int $productId,
-        int $optionId,
-        int $optionValueId,
-        int $quantity,
-        bool $subtract,
-        float $price,
-        string $pricePrefix,
-        int $points,
-        string $pointsPrefix,
-        float $weight,
-        string $weightPrefix
-    )
-    {
-        $this->productOptionId = $productOptionId;
-        $this->productId = $productId;
-        $this->optionId = $optionId;
-        $this->optionValueId = $optionValueId;
-        $this->quantity = $quantity;
-        $this->subtract = $subtract;
-        $this->price = $price;
-        $this->pricePrefix = $pricePrefix;
-        $this->points = $points;
-        $this->pointsPrefix = $pointsPrefix;
-        $this->weight = $weight;
-        $this->weightPrefix = $weightPrefix;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductOptionValueId(): ?int

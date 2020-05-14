@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -49,22 +50,6 @@ class CustomerLogin
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
     protected $dateModified;
-
-    /**
-     * @param string $email
-     * @param string $ip
-     * @param int $total
-     */
-    public function fill(
-        string $email,
-        string $ip,
-        int $total
-    )
-    {
-        $this->email = $email;
-        $this->ip = $ip;
-        $this->total = $total;
-    }
 
     /**
      * @return int|null
@@ -151,6 +136,19 @@ class CustomerLogin
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setDateModified(new DateTime('now'));
+
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -167,18 +165,5 @@ class CustomerLogin
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDateModified(new \DateTime('now'));
-
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -49,25 +50,6 @@ class OrderHistory
      * @ORM\Column(type="datetime", name="`date_added`")
      */
     protected $dateAdded;
-
-    /**
-     * @param int $orderId
-     * @param int $orderStatusId
-     * @param bool $notify
-     * @param string $comment
-     */
-    public function fill(
-        int $orderId,
-        int $orderStatusId,
-        bool $notify,
-        string $comment
-    )
-    {
-        $this->orderId = $orderId;
-        $this->orderStatusId = $orderStatusId;
-        $this->notify = $notify;
-        $this->comment = $comment;
-    }
 
     /**
      * @return int|null
@@ -154,6 +136,17 @@ class OrderHistory
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -170,16 +163,5 @@ class OrderHistory
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-    
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

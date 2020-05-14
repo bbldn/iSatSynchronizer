@@ -25,14 +25,6 @@ class AttributeGroup
     protected $sortOrder;
 
     /**
-     * @param int $sortOrder
-     */
-    public function fill(int $sortOrder)
-    {
-        $this->sortOrder = $sortOrder;
-    }
-
-    /**
      * @return int|null
      */
     public function getAttributeGroupId(): ?int

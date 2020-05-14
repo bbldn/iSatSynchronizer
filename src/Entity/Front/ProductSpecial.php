@@ -56,31 +56,6 @@ class ProductSpecial
     protected $dateEnd;
 
     /**
-     * @param int $productId
-     * @param int $customerGroupId
-     * @param int $priority
-     * @param float $price
-     * @param \DateTimeInterface $dateStart
-     * @param \DateTimeInterface $dateEnd
-     */
-    public function fill(
-        int $productId,
-        int $customerGroupId,
-        int $priority,
-        float $price,
-        \DateTimeInterface $dateStart,
-        \DateTimeInterface $dateEnd
-    )
-    {
-        $this->productId = $productId;
-        $this->customerGroupId = $customerGroupId;
-        $this->priority = $priority;
-        $this->price = $price;
-        $this->dateStart = $dateStart;
-        $this->dateEnd = $dateEnd;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductSpecialId(): ?int

@@ -42,25 +42,6 @@ class ProductOption
     protected $required;
 
     /**
-     * @param int $productId
-     * @param int $optionId
-     * @param string $value
-     * @param bool $required
-     */
-    public function fill(
-        int $productId,
-        int $optionId,
-        string $value,
-        bool $required
-    )
-    {
-        $this->productId = $productId;
-        $this->optionId = $optionId;
-        $this->value = $value;
-        $this->required = $required;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductOptionId(): ?int

@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -199,97 +200,6 @@ class Product
      * @ORM\Column(type="datetime", name="`date_modified`")
      */
     protected $dateModified;
-
-    /**
-     * @param string $model
-     * @param string $sku
-     * @param string $upc
-     * @param string $ean
-     * @param string $jan
-     * @param string $isbn
-     * @param string $mpn
-     * @param string $location
-     * @param int $quantity
-     * @param int $stockStatusId
-     * @param string|null $image
-     * @param int $manufacturerId
-     * @param bool $shipping
-     * @param float $price
-     * @param int $points
-     * @param int $taxClassId
-     * @param \DateTimeInterface $dateAvailable
-     * @param float $weight
-     * @param int $weightClassId
-     * @param float $length
-     * @param float $width
-     * @param float $height
-     * @param int $lengthClassId
-     * @param bool $subtract
-     * @param int $minimum
-     * @param int $sortOrder
-     * @param bool $status
-     * @param int $viewed
-     */
-    public function fill(
-        string $model,
-        string $sku,
-        string $upc,
-        string $ean,
-        string $jan,
-        string $isbn,
-        string $mpn,
-        string $location,
-        int $quantity,
-        int $stockStatusId,
-        ?string $image,
-        int $manufacturerId,
-        bool $shipping,
-        float $price,
-        int $points,
-        int $taxClassId,
-        \DateTimeInterface $dateAvailable,
-        float $weight,
-        int $weightClassId,
-        float $length,
-        float $width,
-        float $height,
-        int $lengthClassId,
-        bool $subtract,
-        int $minimum,
-        int $sortOrder,
-        bool $status,
-        int $viewed
-    )
-    {
-        $this->model = $model;
-        $this->sku = $sku;
-        $this->upc = $upc;
-        $this->ean = $ean;
-        $this->jan = $jan;
-        $this->isbn = $isbn;
-        $this->mpn = $mpn;
-        $this->location = $location;
-        $this->quantity = $quantity;
-        $this->stockStatusId = $stockStatusId;
-        $this->image = $image;
-        $this->manufacturerId = $manufacturerId;
-        $this->shipping = $shipping;
-        $this->price = $price;
-        $this->points = $points;
-        $this->taxClassId = $taxClassId;
-        $this->dateAvailable = $dateAvailable;
-        $this->weight = $weight;
-        $this->weightClassId = $weightClassId;
-        $this->length = $length;
-        $this->width = $width;
-        $this->height = $height;
-        $this->lengthClassId = $lengthClassId;
-        $this->subtract = $subtract;
-        $this->minimum = $minimum;
-        $this->sortOrder = $sortOrder;
-        $this->status = $status;
-        $this->viewed = $viewed;
-    }
 
     /**
      * @return int|null
@@ -851,6 +761,19 @@ class Product
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setDateModified(new DateTime('now'));
+
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -867,18 +790,5 @@ class Product
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDateModified(new \DateTime('now'));
-
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new \DateTime('now'));
-        }
     }
 }

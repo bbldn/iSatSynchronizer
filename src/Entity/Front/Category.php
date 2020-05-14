@@ -70,31 +70,6 @@ class Category
     protected $dateModified;
 
     /**
-     * @param string $image
-     * @param int $parentId
-     * @param bool $top
-     * @param int $column
-     * @param int $sortOrder
-     * @param bool $status
-     */
-    public function fill(
-        string $image,
-        int $parentId,
-        bool $top,
-        int $column,
-        int $sortOrder,
-        bool $status
-    )
-    {
-        $this->image = $image;
-        $this->parentId = $parentId;
-        $this->top = $top;
-        $this->column = $column;
-        $this->sortOrder = $sortOrder;
-        $this->status = $status;
-    }
-
-    /**
      * @return int|null
      */
     public function getCategoryId(): ?int
@@ -236,6 +211,19 @@ class Category
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setDateModified(new DateTime('now'));
+
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -252,18 +240,5 @@ class Category
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDateModified(new DateTime('now'));
-
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 }

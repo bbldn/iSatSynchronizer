@@ -24,20 +24,6 @@ class CustomerSimpleFields
     protected $metadata;
 
     /**
-     * @param int $customerId
-     * @param string $metadata
-     */
-    public function fill(
-        int $customerId,
-        string $metadata
-    )
-    {
-        $this->customerId = $customerId;
-        $this->metadata = $metadata;
-    }
-
-
-    /**
      * @return int|null
      */
     public function getCustomerId(): ?int

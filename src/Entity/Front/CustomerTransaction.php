@@ -50,25 +50,6 @@ class CustomerTransaction
     protected $dateAdded;
 
     /**
-     * @param int $customerId
-     * @param int $orderId
-     * @param string $description
-     * @param int $amount
-     */
-    public function fill(
-        int $customerId,
-        int $orderId,
-        string $description,
-        int $amount
-    )
-    {
-        $this->customerId = $customerId;
-        $this->orderId = $orderId;
-        $this->description = $description;
-        $this->amount = $amount;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerTransactionId(): ?int

@@ -25,19 +25,6 @@ class OrderSimpleFields
     protected $metadata;
 
     /**
-     * @param int $orderId
-     * @param string $metadata
-     */
-    public function fill(
-        int $orderId,
-        string $metadata
-    )
-    {
-        $this->orderId = $orderId;
-        $this->metadata = $metadata;
-    }
-
-    /**
      * @return int|null
      */
     public function getOrderId(): ?int

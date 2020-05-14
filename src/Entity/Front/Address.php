@@ -84,33 +84,6 @@ class Address
      */
     protected $customField;
 
-    public function fill(
-        int $customerId,
-        string $firstName,
-        string $lastName,
-        string $company,
-        string $address1,
-        string $address2,
-        string $city,
-        string $postCode,
-        int $countryId,
-        int $zoneId,
-        string $customField
-    )
-    {
-        $this->customerId = $customerId;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->company = $company;
-        $this->address1 = $address1;
-        $this->address2 = $address2;
-        $this->city = $city;
-        $this->postCode = $postCode;
-        $this->countryId = $countryId;
-        $this->zoneId = $zoneId;
-        $this->customField = $customField;
-    }
-
     /**
      * @return int|null
      */

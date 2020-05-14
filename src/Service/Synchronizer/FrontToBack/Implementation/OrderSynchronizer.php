@@ -7,7 +7,6 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Exception\CustomerFrontNotFoundException;
-use App\Exception\OrderFrontNotFoundException;
 use App\Other\Back\Store as StoreBack;
 use App\Other\Filler;
 use App\Other\Front\Store as StoreFront;
@@ -42,7 +41,7 @@ use App\Repository\Front\OrderVoucherRepository as OrderVoucherFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
-use Illuminate\Support\Str;
+use DateTime;
 
 class OrderSynchronizer
 {
@@ -373,54 +372,54 @@ class OrderSynchronizer
                 $orderNum = $orderBack->getId();
             }
 
-            $currentOrderBack->fill(
-                'Покупка',
-                $orderProductFront->getName(),
-                $product->getBackId(),
-                $orderProductFront->getPrice(),
-                $orderProductFront->getQuantity(),
-                Store::convertBackToFrontCurrency($currencyCode),
-                $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId()),
-                $orderFront->getTelephone(),
-                $orderFront->getLastName() . ' ' . $orderFront->getFirstName(),
-                $orderFront->getShippingZone(),
-                $orderFront->getShippingCity(),
-                $orderFront->getShippingAddress1(),
-                $orderFront->getShippingAddress2(),
-                Filler::securityString(null),
-                $orderFront->getEmail(),
-                $orderFront->getComment(),
-                Filler::securityString(null),
-                time(),
-                $this->storeFront->getDefaultOrderStatus(),
-                Filler::securityString(null),
-                0,
-                0,
-                0,
-                $this->getClientIdByFrontCustomerPhone($orderFront),
-                13,
-                21,
-                $orderNum,
-                Filler::securityString(null),
-                new \DateTime(),
-                0,
-                0,
-                '',
-                $this->storeBack->getDefaultSiteId(),
-                0,
-                0,
-                0,
-                new \DateTime(),
-                0,
-                2,
-                new \DateTime(),
-                $currentCourse,
-                json_encode($courses),
-                0,
-                0,
-                Filler::securityString(null),
-                0
+            $currentOrderBack->setType('Покупка');
+            $currentOrderBack->setProductName($orderProductFront->getName());
+            $currentOrderBack->setProductId($product->getBackId());
+            $currentOrderBack->setPrice($orderProductFront->getPrice());
+            $currentOrderBack->setAmount($orderProductFront->getQuantity());
+            $currentOrderBack->setCurrencyName(Store::convertBackToFrontCurrency($currencyCode));
+            $currentOrderBack->setParentName(
+                $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId())
             );
+            $currentOrderBack->setPhone($orderFront->getTelephone());
+            $currentOrderBack->setFio($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
+            $currentOrderBack->setRegion($orderFront->getShippingZone());
+            $currentOrderBack->setCity($orderFront->getShippingCity());
+            $currentOrderBack->setStreet($orderFront->getShippingAddress1());
+            $currentOrderBack->setHouse($orderFront->getShippingAddress2());
+            $currentOrderBack->setWarehouse(Filler::securityString(null));
+            $currentOrderBack->setMail($orderFront->getEmail());
+            $currentOrderBack->setWhant(Filler::securityString(null));
+            $currentOrderBack->setVipNum(Filler::securityString(null));
+            $currentOrderBack->setTime(time());
+            $currentOrderBack->setStatus($this->storeFront->getDefaultOrderStatus());
+            $currentOrderBack->setComments($orderFront->getComment());
+            $currentOrderBack->setArchive(0);
+            $currentOrderBack->setRead(0);
+            $currentOrderBack->setSynchronize(false);
+            $currentOrderBack->setClientId($this->getClientIdByFrontCustomerPhone($orderFront));
+            $currentOrderBack->setPayment(13);
+            $currentOrderBack->setDelivery(21);
+            $currentOrderBack->setOrderNum($orderNum);
+            $currentOrderBack->setTrackNumber(Filler::securityString(null));
+            $currentOrderBack->setTrackNumberDate(new DateTime());
+            $currentOrderBack->setMoneyGiven(false);
+            $currentOrderBack->setTrackSent(false);
+            $currentOrderBack->setSerialNum('');
+            $currentOrderBack->setShopId($this->storeBack->getDefaultSiteId());
+            $currentOrderBack->setShopIdCounterparty(0);
+            $currentOrderBack->setPaymentWaitDays(0);
+            $currentOrderBack->setPaymentWaitFirstSum(0);
+            $currentOrderBack->setPaymentDate(new DateTime());
+            $currentOrderBack->setDocumentId(0);
+            $currentOrderBack->setDocumentType(2);
+            $currentOrderBack->setInvoiceSent(new DateTime());
+            $currentOrderBack->setCurrencyValue($currentCourse);
+            $currentOrderBack->setCurrencyValueWhenPurchasing(json_encode($courses));
+            $currentOrderBack->setShippingPrice(0);
+            $currentOrderBack->setShippingPriceOld(0);
+            $currentOrderBack->setShippingCurrencyName(Filler::securityString(null));
+            $currentOrderBack->setShippingCurrencyValue(0);
 
             $this->orderBackRepository->persistAndFlush($currentOrderBack);
 

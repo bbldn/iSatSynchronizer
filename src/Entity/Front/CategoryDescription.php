@@ -54,34 +54,6 @@ class CategoryDescription
     protected $metaKeyword;
 
     /**
-     * @param int $categoryId
-     * @param int $languageId
-     * @param string $name
-     * @param string $description
-     * @param string $metaTitle
-     * @param string $metaDescription
-     * @param string $metaKeyword
-     */
-    public function fill(
-        int $categoryId,
-        int $languageId,
-        string $name,
-        string $description,
-        string $metaTitle,
-        string $metaDescription,
-        string $metaKeyword
-    )
-    {
-        $this->categoryId = $categoryId;
-        $this->languageId = $languageId;
-        $this->name = $name;
-        $this->description = $description;
-        $this->metaTitle = $metaTitle;
-        $this->metaDescription = $metaDescription;
-        $this->metaKeyword = $metaKeyword;
-    }
-
-    /**
      * @return int|null
      */
     public function getCategoryId(): ?int

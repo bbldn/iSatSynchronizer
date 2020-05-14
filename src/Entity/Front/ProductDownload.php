@@ -24,19 +24,6 @@ class ProductDownload
     protected $downloadId;
 
     /**
-     * @param int $productId
-     * @param int $downloadId
-     */
-    public function fill(
-        int $productId,
-        int $downloadId
-    )
-    {
-        $this->productId = $productId;
-        $this->downloadId = $downloadId;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

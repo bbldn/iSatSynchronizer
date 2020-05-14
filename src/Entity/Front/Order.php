@@ -382,187 +382,6 @@ class Order
     protected $dateModified;
 
     /**
-     * @param int $invoiceNo
-     * @param string $invoicePrefix
-     * @param int $storeId
-     * @param string $storeName
-     * @param string $storeUrl
-     * @param int $customerId
-     * @param int $customerGroupId
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $email
-     * @param string $telephone
-     * @param string $fax
-     * @param string $customField
-     * @param string $paymentFirstName
-     * @param string $paymentLastName
-     * @param string $paymentCompany
-     * @param string $paymentAddress1
-     * @param string $paymentAddress2
-     * @param string $paymentCity
-     * @param string $paymentPostCode
-     * @param string $paymentCountry
-     * @param int $paymentCountryId
-     * @param string $paymentZone
-     * @param int $paymentZoneId
-     * @param string $paymentAddressFormat
-     * @param string $paymentCustomField
-     * @param string $paymentMethod
-     * @param string $paymentCode
-     * @param string $shippingFirstName
-     * @param string $shippingLastName
-     * @param string $shippingCompany
-     * @param string $shippingAddress1
-     * @param string $shippingAddress2
-     * @param string $shippingCity
-     * @param string $shippingPostCode
-     * @param string $shippingCountry
-     * @param int $shippingCountryId
-     * @param string $shippingZone
-     * @param int $shippingZoneId
-     * @param string $shippingAddressFormat
-     * @param string $shippingCustomField
-     * @param string $shippingMethod
-     * @param string $shippingCode
-     * @param string $comment
-     * @param float $total
-     * @param int $orderStatusId
-     * @param int $affiliateId
-     * @param float $commission
-     * @param int $marketingId
-     * @param string $tracking
-     * @param int $languageId
-     * @param int $currencyId
-     * @param string $currencyCode
-     * @param float $currencyValue
-     * @param string $ip
-     * @param string $forwardedIp
-     * @param string $userAgent
-     * @param string $acceptLanguage
-     */
-    public function fill(
-        int $invoiceNo,
-        string $invoicePrefix,
-        int $storeId,
-        string $storeName,
-        string $storeUrl,
-        int $customerId,
-        int $customerGroupId,
-        string $firstName,
-        string $lastName,
-        string $email,
-        string $telephone,
-        string $fax,
-        string $customField,
-        string $paymentFirstName,
-        string $paymentLastName,
-        string $paymentCompany,
-        string $paymentAddress1,
-        string $paymentAddress2,
-        string $paymentCity,
-        string $paymentPostCode,
-        string $paymentCountry,
-        int $paymentCountryId,
-        string $paymentZone,
-        int $paymentZoneId,
-        string $paymentAddressFormat,
-        string $paymentCustomField,
-        string $paymentMethod,
-        string $paymentCode,
-        string $shippingFirstName,
-        string $shippingLastName,
-        string $shippingCompany,
-        string $shippingAddress1,
-        string $shippingAddress2,
-        string $shippingCity,
-        string $shippingPostCode,
-        string $shippingCountry,
-        int $shippingCountryId,
-        string $shippingZone,
-        int $shippingZoneId,
-        string $shippingAddressFormat,
-        string $shippingCustomField,
-        string $shippingMethod,
-        string $shippingCode,
-        string $comment,
-        float $total,
-        int $orderStatusId,
-        int $affiliateId,
-        float $commission,
-        int $marketingId,
-        string $tracking,
-        int $languageId,
-        int $currencyId,
-        string $currencyCode,
-        float $currencyValue,
-        string $ip,
-        string $forwardedIp,
-        string $userAgent,
-        string $acceptLanguage
-    )
-    {
-        $this->invoiceNo = $invoiceNo;
-        $this->invoicePrefix = $invoicePrefix;
-        $this->storeId = $storeId;
-        $this->storeName = $storeName;
-        $this->storeUrl = $storeUrl;
-        $this->customerId = $customerId;
-        $this->customerGroupId = $customerGroupId;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->email = $email;
-        $this->telephone = $telephone;
-        $this->fax = $fax;
-        $this->customField = $customField;
-        $this->paymentFirstName = $paymentFirstName;
-        $this->paymentLastName = $paymentLastName;
-        $this->paymentCompany = $paymentCompany;
-        $this->paymentAddress1 = $paymentAddress1;
-        $this->paymentAddress2 = $paymentAddress2;
-        $this->paymentCity = $paymentCity;
-        $this->paymentPostCode = $paymentPostCode;
-        $this->paymentCountry = $paymentCountry;
-        $this->paymentCountryId = $paymentCountryId;
-        $this->paymentZone = $paymentZone;
-        $this->paymentZoneId = $paymentZoneId;
-        $this->paymentAddressFormat = $paymentAddressFormat;
-        $this->paymentCustomField = $paymentCustomField;
-        $this->paymentMethod = $paymentMethod;
-        $this->paymentCode = $paymentCode;
-        $this->shippingFirstName = $shippingFirstName;
-        $this->shippingLastName = $shippingLastName;
-        $this->shippingCompany = $shippingCompany;
-        $this->shippingAddress1 = $shippingAddress1;
-        $this->shippingAddress2 = $shippingAddress2;
-        $this->shippingCity = $shippingCity;
-        $this->shippingPostCode = $shippingPostCode;
-        $this->shippingCountry = $shippingCountry;
-        $this->shippingCountryId = $shippingCountryId;
-        $this->shippingZone = $shippingZone;
-        $this->shippingZoneId = $shippingZoneId;
-        $this->shippingAddressFormat = $shippingAddressFormat;
-        $this->shippingCustomField = $shippingCustomField;
-        $this->shippingMethod = $shippingMethod;
-        $this->shippingCode = $shippingCode;
-        $this->comment = $comment;
-        $this->total = $total;
-        $this->orderStatusId = $orderStatusId;
-        $this->affiliateId = $affiliateId;
-        $this->commission = $commission;
-        $this->marketingId = $marketingId;
-        $this->tracking = $tracking;
-        $this->languageId = $languageId;
-        $this->currencyId = $currencyId;
-        $this->currencyCode = $currencyCode;
-        $this->currencyValue = $currencyValue;
-        $this->ip = $ip;
-        $this->forwardedIp = $forwardedIp;
-        $this->userAgent = $userAgent;
-        $this->acceptLanguage = $acceptLanguage;
-    }
-
-    /**
      * @return int|null
      */
     public function getOrderId(): ?int
@@ -1692,6 +1511,19 @@ class Order
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setDateModified(new DateTime('now'));
+
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -1708,18 +1540,5 @@ class Order
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDateModified(new DateTime('now'));
-
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 }

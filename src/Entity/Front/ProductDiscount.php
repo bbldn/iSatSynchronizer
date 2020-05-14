@@ -2,6 +2,7 @@
 
 namespace App\Entity\Front;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,49 +49,29 @@ class ProductDiscount
     protected $price = 0.0;
 
     /**
+     * @var DateTimeInterface|null $dateStart
      * @ORM\Column(type="date", name="`date_start`")
      */
     protected $dateStart;
 
     /**
+     * @var DateTimeInterface|null $dateEnd
      * @ORM\Column(type="date", name="`date_end`")
      */
     protected $dateEnd;
 
     /**
-     * @param int $productId
-     * @param int $customerGroupId
-     * @param int $quantity
-     * @param int $priority
-     * @param float $price
-     * @param \DateTimeInterface $dateStart
-     * @param \DateTimeInterface $dateEnd
+     * @return int|null
      */
-    public function fill(
-        int $productId,
-        int $customerGroupId,
-        int $quantity,
-        int $priority,
-        float $price,
-        \DateTimeInterface $dateStart,
-        \DateTimeInterface $dateEnd
-    )
-    {
-        $this->productId = $productId;
-        $this->customerGroupId = $customerGroupId;
-        $this->quantity = $quantity;
-        $this->priority = $priority;
-        $this->price = $price;
-        $this->dateStart = $dateStart;
-        $this->dateEnd = $dateEnd;
-    }
-
-
     public function getProductDiscountId(): ?int
     {
         return $this->productDiscountId;
     }
 
+    /**
+     * @param int $productDiscountId
+     * @return ProductDiscount
+     */
     public function setProductDiscountId(int $productDiscountId): self
     {
         $this->productDiscountId = $productDiscountId;
@@ -98,11 +79,18 @@ class ProductDiscount
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getProductId(): ?int
     {
         return $this->productId;
     }
 
+    /**
+     * @param int $productId
+     * @return ProductDiscount
+     */
     public function setProductId(int $productId): self
     {
         $this->productId = $productId;
@@ -110,11 +98,18 @@ class ProductDiscount
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCustomerGroupId(): ?int
     {
         return $this->customerGroupId;
     }
 
+    /**
+     * @param int $customerGroupId
+     * @return ProductDiscount
+     */
     public function setCustomerGroupId(int $customerGroupId): self
     {
         $this->customerGroupId = $customerGroupId;
@@ -122,11 +117,18 @@ class ProductDiscount
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
+    /**
+     * @param int $quantity
+     * @return ProductDiscount
+     */
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
@@ -134,11 +136,18 @@ class ProductDiscount
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPriority(): ?int
     {
         return $this->priority;
     }
 
+    /**
+     * @param int $priority
+     * @return ProductDiscount
+     */
     public function setPriority(int $priority): self
     {
         $this->priority = $priority;
@@ -146,11 +155,18 @@ class ProductDiscount
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getPrice(): ?float
     {
         return $this->price;
     }
 
+    /**
+     * @param float $price
+     * @return ProductDiscount
+     */
     public function setPrice(float $price): self
     {
         $this->price = $price;
@@ -158,24 +174,38 @@ class ProductDiscount
         return $this;
     }
 
-    public function getDateStart(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateStart(): ?DateTimeInterface
     {
         return $this->dateStart;
     }
 
-    public function setDateStart(\DateTimeInterface $dateStart): self
+    /**
+     * @param DateTimeInterface $dateStart
+     * @return ProductDiscount
+     */
+    public function setDateStart(DateTimeInterface $dateStart): self
     {
         $this->dateStart = $dateStart;
 
         return $this;
     }
 
-    public function getDateEnd(): ?\DateTimeInterface
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateEnd(): ?DateTimeInterface
     {
         return $this->dateEnd;
     }
 
-    public function setDateEnd(\DateTimeInterface $dateEnd): self
+    /**
+     * @param DateTimeInterface $dateEnd
+     * @return ProductDiscount
+     */
+    public function setDateEnd(DateTimeInterface $dateEnd): self
     {
         $this->dateEnd = $dateEnd;
 

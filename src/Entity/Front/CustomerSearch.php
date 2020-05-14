@@ -80,40 +80,6 @@ class CustomerSearch
     protected $dateAdded;
 
     /**
-     * @param int $storeId
-     * @param int $languageId
-     * @param int $customerId
-     * @param string $keyword
-     * @param int $categoryId
-     * @param bool $subCategory
-     * @param string $description
-     * @param int $products
-     * @param string $ip
-     */
-    public function fill(
-        int $storeId,
-        int $languageId,
-        int $customerId,
-        string $keyword,
-        int $categoryId,
-        bool $subCategory,
-        string $description,
-        int $products,
-        string $ip
-    )
-    {
-        $this->storeId = $storeId;
-        $this->languageId = $languageId;
-        $this->customerId = $customerId;
-        $this->keyword = $keyword;
-        $this->categoryId = $categoryId;
-        $this->subCategory = $subCategory;
-        $this->description = $description;
-        $this->products = $products;
-        $this->ip = $ip;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerSearchId(): ?int

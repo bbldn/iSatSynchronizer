@@ -37,22 +37,6 @@ class ProductImage
     protected $sortOrder = 0;
 
     /**
-     * @param int $productId
-     * @param string $image
-     * @param int $sortOrder
-     */
-    public function fill(
-        int $productId,
-        string $image,
-        int $sortOrder
-    )
-    {
-        $this->productId = $productId;
-        $this->image = $image;
-        $this->sortOrder = $sortOrder;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductImageId(): ?int

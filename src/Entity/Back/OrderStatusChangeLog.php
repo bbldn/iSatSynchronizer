@@ -92,7 +92,7 @@ class OrderStatusChangeLog
     /**
      * @return DateTimeInterface|null
      */
-    public function getStatusChangeTime(): ?\DateTimeInterface
+    public function getStatusChangeTime(): ?DateTimeInterface
     {
         return $this->statusChangeTime;
     }
@@ -101,7 +101,7 @@ class OrderStatusChangeLog
      * @param DateTimeInterface|null $statusChangeTime
      * @return OrderStatusChangeLog
      */
-    public function setStatusChangeTime(?\DateTimeInterface $statusChangeTime): self
+    public function setStatusChangeTime(?DateTimeInterface $statusChangeTime): self
     {
         $this->statusChangeTime = $statusChangeTime;
 

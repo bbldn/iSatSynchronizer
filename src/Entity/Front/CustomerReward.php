@@ -50,25 +50,6 @@ class CustomerReward
     protected $dateAdded;
 
     /**
-     * @param int $customerId
-     * @param int $orderId
-     * @param string $description
-     * @param int $points
-     */
-    public function fill(
-        int $customerId,
-        int $orderId,
-        string $description,
-        int $points
-    )
-    {
-        $this->customerId = $customerId;
-        $this->orderId = $orderId;
-        $this->description = $description;
-        $this->points = $points;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerRewardId(): ?int

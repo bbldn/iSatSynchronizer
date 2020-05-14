@@ -42,19 +42,6 @@ class SeoUrl
      */
     protected $keyword;
 
-    public function fill(
-        int $storeId,
-        int $languageId,
-        string $query,
-        string $keyword
-    )
-    {
-        $this->storeId = $storeId;
-        $this->languageId = $languageId;
-        $this->query = $query;
-        $this->keyword = $keyword;
-    }
-
     /**
      * @return int|null
      */

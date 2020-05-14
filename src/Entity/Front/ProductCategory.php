@@ -30,23 +30,6 @@ class ProductCategory
     protected $mainCategory = false;
 
     /**
-     * ProductCategory constructor.
-     * @param $productId
-     * @param $categoryId
-     * @param bool $mainCategory
-     */
-    public function fill(
-        int $productId,
-        int $categoryId,
-        bool $mainCategory
-    )
-    {
-        $this->productId = $productId;
-        $this->categoryId = $categoryId;
-        $this->mainCategory = $mainCategory;
-    }
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int

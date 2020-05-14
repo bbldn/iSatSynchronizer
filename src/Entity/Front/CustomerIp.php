@@ -40,19 +40,6 @@ class CustomerIp
     protected $dateAdded;
 
     /**
-     * @param int $customerId
-     * @param string $ip
-     */
-    public function fill(
-        int $customerId,
-        string $ip
-    )
-    {
-        $this->customerId = $customerId;
-        $this->ip = $ip;
-    }
-
-    /**
      * @return int|null
      */
     public function getCustomerIpId(): ?int
@@ -99,6 +86,16 @@ class CustomerIp
     }
 
     /**
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps()
+    {
+        if (null === $this->getDateAdded()) {
+            $this->setDateAdded(new DateTime('now'));
+        }
+    }
+
+    /**
      * @return DateTimeInterface|null
      */
     public function getDateAdded(): ?DateTimeInterface
@@ -115,15 +112,5 @@ class CustomerIp
         $this->dateAdded = $dateAdded;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 }

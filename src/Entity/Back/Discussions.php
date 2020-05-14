@@ -73,29 +73,6 @@ class Discussions
      */
     protected $siteId;
 
-    public function fill(
-        ?int $productId,
-        ?string $author,
-        ?string $body,
-        ?\DateTimeInterface $addTime,
-        ?string $topic,
-        bool $enabled,
-        int $stars,
-        string $answer,
-        int $siteId
-    )
-    {
-        $this->productId = $productId;
-        $this->author = $author;
-        $this->body = $body;
-        $this->addTime = $addTime;
-        $this->topic = $topic;
-        $this->enabled = $enabled;
-        $this->stars = $stars;
-        $this->answer = $answer;
-        $this->siteId = $siteId;
-    }
-
     /**
      * @return int|null
      */

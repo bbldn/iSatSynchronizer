@@ -48,21 +48,6 @@ class OrderTotal
      */
     protected $sortOrder;
 
-    public function fill(
-        int $orderId,
-        string $code,
-        string $title,
-        float $value,
-        int $sortOrder
-    )
-    {
-        $this->orderId = $orderId;
-        $this->code = $code;
-        $this->title = $title;
-        $this->value = $value;
-        $this->sortOrder = $sortOrder;
-    }
-
     /**
      * @return int|null
      */

@@ -30,22 +30,6 @@ class AttributeGroupDescription
     protected $name;
 
     /**
-     * @param int $attributeGroupId
-     * @param int $languageId
-     * @param string $name
-     */
-    public function fill(
-        int $attributeGroupId,
-        int $languageId,
-        string $name
-    )
-    {
-        $this->attributeGroupId = $attributeGroupId;
-        $this->languageId = $languageId;
-        $this->name = $name;
-    }
-
-    /**
      * @return int|null
      */
     public function getAttributeGroupId(): ?int

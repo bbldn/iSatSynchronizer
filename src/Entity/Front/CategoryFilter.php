@@ -24,19 +24,6 @@ class CategoryFilter
     protected $filterId;
 
     /**
-     * @param int $categoryId
-     * @param int $filterId
-     */
-    public function fill(
-        int $categoryId,
-        int $filterId
-    )
-    {
-        $this->categoryId = $categoryId;
-        $this->filterId = $filterId;
-    }
-
-    /**
      * @return int|null
      */
     public function getCategoryId(): ?int
