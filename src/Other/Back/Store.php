@@ -22,6 +22,10 @@ class Store extends StoreBase
     protected $sitePath = '/home/user/PhpstormProjects/isat.com.ua';
     protected $defaultChatNameColor = '006084';
 
+    /**
+     * Store constructor.
+     * @param ContainerBagInterface $params
+     */
     public function __construct(ContainerBagInterface $params)
     {
         $this->rootCategories = $params->get('front.root_categories');

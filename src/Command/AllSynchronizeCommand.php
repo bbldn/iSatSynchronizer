@@ -13,10 +13,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AllSynchronizeCommand extends Command
 {
     protected static $defaultName = 'all:synchronize';
-    private $attributeSynchronize;
-    private $categorySynchronize;
-    private $productSynchronize;
 
+    /** @var AttributeSynchronizer $attributeSynchronize */
+    protected $attributeSynchronize;
+
+    /** @var CategorySynchronizer $categorySynchronize */
+    protected $categorySynchronize;
+
+    /** @var ProductSynchronizer $productSynchronize */
+    protected $productSynchronize;
+
+    /**
+     * AllSynchronizeCommand constructor.
+     * @param AttributeSynchronizer $attributeSynchronize
+     * @param CategorySynchronizer $categorySynchronize
+     * @param ProductSynchronizer $productSynchronize
+     */
     public function __construct(
         AttributeSynchronizer $attributeSynchronize,
         CategorySynchronizer $categorySynchronize,
@@ -29,12 +41,20 @@ class AllSynchronizeCommand extends Command
         parent::__construct();
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setDescription('Synchronize all');
         $this->addArgument('resetImage', InputArgument::OPTIONAL, 'Reset image');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $resetImage = $input->getArgument('resetImage') !== null;

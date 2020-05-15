@@ -4,6 +4,11 @@ namespace App\Other;
 
 class Store
 {
+    /**
+     * @param float $value
+     * @param float $course
+     * @return float
+     */
     public static function convertToCurrency(float $value, float $course = 0)
     {
         if (0 === $course) {
@@ -13,6 +18,10 @@ class Store
         return round($value / $course);
     }
 
+    /**
+     * @param null|string $value
+     * @return null|string|string[]
+     */
     public static function encodingConvert(?string $value)
     {
         if (null === $value) {
@@ -28,6 +37,10 @@ class Store
         return mb_convert_encoding($value, 'utf-8', $encoding);
     }
 
+    /**
+     * @param string $currency
+     * @return string
+     */
     public static function convertBackToFrontCurrency(string $currency): string
     {
         switch (mb_strtolower(trim($currency))) {
@@ -46,6 +59,10 @@ class Store
         }
     }
 
+    /**
+     * @param string $currency
+     * @return array
+     */
     public static function convertFrontToBackCurrency(string $currency): array
     {
         switch (mb_strtolower(trim($currency))) {
@@ -60,11 +77,19 @@ class Store
         }
     }
 
+    /**
+     * @param int $value
+     * @return int
+     */
     public static function convertBackToFrontStatusOrder(int $value): int
     {
         return $value;
     }
 
+    /**
+     * @param null|string $value
+     * @return null|string
+     */
     public static function parseLogin(?string $value): ?string
     {
         if (null === $value) {
@@ -81,6 +106,10 @@ class Store
         return $arr[0];
     }
 
+    /**
+     * @param string $phone
+     * @return string
+     */
     public static function normalizePhone(string $phone): string
     {
         $phone = preg_replace('/[-() ]/i', '', $phone);

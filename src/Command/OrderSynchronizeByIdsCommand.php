@@ -2,24 +2,28 @@
 
 namespace App\Command;
 
-use App\Exception\OrderBackNotFoundException;
-use App\Exception\OrderFrontNotFoundException;
-use App\Other\OneSynchronizeCommandTrait;
 use App\Service\Synchronizer\BackToFront\OrderSynchronizer as OrderBackToFrontSynchronizer;
 use App\Service\Synchronizer\FrontToBack\OrderSynchronizer as OrderFrontToBackSynchronizer;
-use Symfony\Component\Console\Command\Command;
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class OrderSynchronizeByIdsCommand extends Command
 {
-    use OneSynchronizeCommandTrait;
-
     protected static $defaultName = 'order:synchronize:by-ids';
-    private $orderFrontToBackSynchronizer;
-    private $orderBackToFrontSynchronizer;
 
+    /** @var OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer */
+    protected $orderFrontToBackSynchronizer;
+
+    /** @var OrderBackToFrontSynchronizer $orderBackToFrontSynchronizer */
+    protected $orderBackToFrontSynchronizer;
+
+    /**
+     * OrderSynchronizeByIdsCommand constructor.
+     * @param OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer
+     * @param OrderBackToFrontSynchronizer $orderBackToFrontSynchronizer
+     */
     public function __construct(
         OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer,
         OrderBackToFrontSynchronizer $orderBackToFrontSynchronizer
@@ -30,6 +34,9 @@ class OrderSynchronizeByIdsCommand extends Command
         parent::__construct();
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setDescription('Order one synchronize');
@@ -37,6 +44,11 @@ class OrderSynchronizeByIdsCommand extends Command
         $this->addArgument('ids', InputArgument::REQUIRED, 'Reset image');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $direction = $input->getArgument('direction');
@@ -48,7 +60,7 @@ class OrderSynchronizeByIdsCommand extends Command
             $ids = $this->testIds($input);
             $this->orderBackToFrontSynchronizer->synchronizeByIds($ids);
         } else {
-            throw new \InvalidArgumentException("Invalidate direction: {$direction}");
+            throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }
 
         return 0;

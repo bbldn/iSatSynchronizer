@@ -13,10 +13,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AllClearCommand extends Command
 {
     protected static $defaultName = 'all:clear';
-    private $attributeSynchronize;
-    private $categorySynchronize;
-    private $productSynchronize;
 
+    /** @var AttributeSynchronizer $attributeSynchronize */
+    protected $attributeSynchronize;
+
+    /** @var CategorySynchronizer $categorySynchronize */
+    protected $categorySynchronize;
+
+    /** @var ProductSynchronizer $productSynchronize */
+    protected $productSynchronize;
+
+    /**
+     * AllClearCommand constructor.
+     * @param AttributeSynchronizer $attributeSynchronize
+     * @param CategorySynchronizer $categorySynchronize
+     * @param ProductSynchronizer $productSynchronize
+     */
     public function __construct(
         AttributeSynchronizer $attributeSynchronize,
         CategorySynchronizer $categorySynchronize,
@@ -29,12 +41,20 @@ class AllClearCommand extends Command
         parent::__construct();
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setDescription('Clear all');
         $this->addArgument('resetImage', InputArgument::OPTIONAL, 'Reset image');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $resetImage = $input->getArgument('resetImage') !== null;

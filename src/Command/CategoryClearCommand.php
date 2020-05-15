@@ -11,20 +11,34 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CategoryClearCommand extends Command
 {
     protected static $defaultName = 'category:clear';
-    private $categorySynchronize;
 
+    /** @var CategorySynchronizer $categorySynchronize */
+    protected $categorySynchronize;
+
+    /**
+     * CategoryClearCommand constructor.
+     * @param CategorySynchronizer $categorySynchronize
+     */
     public function __construct(CategorySynchronizer $categorySynchronize)
     {
         $this->categorySynchronize = $categorySynchronize;
         parent::__construct();
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setDescription('Clear categories');
         $this->addArgument('removeImage', InputArgument::OPTIONAL, 'Remove image');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $removeImage = $input->getArgument('removeImage') !== null;

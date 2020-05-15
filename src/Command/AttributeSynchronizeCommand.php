@@ -10,19 +10,33 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AttributeSynchronizeCommand extends Command
 {
     protected static $defaultName = 'attribute:synchronize';
-    private $attributeSynchronize;
 
+    /** @var AttributeSynchronizer $attributeSynchronize */
+    protected $attributeSynchronize;
+
+    /**
+     * AttributeSynchronizeCommand constructor.
+     * @param AttributeSynchronizer $attributeSynchronize
+     */
     public function __construct(AttributeSynchronizer $attributeSynchronize)
     {
         $this->attributeSynchronize = $attributeSynchronize;
         parent::__construct();
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setDescription('Synchronize products');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->attributeSynchronize->synchronizeAll();

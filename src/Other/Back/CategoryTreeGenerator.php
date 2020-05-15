@@ -6,6 +6,10 @@ use App\Other\Back\Store as StoreBack;
 
 class CategoryTreeGenerator
 {
+    /**
+     * @param array $categoriesBack
+     * @return array
+     */
     public static function generate(array $categoriesBack): array
     {
         $ids = [];

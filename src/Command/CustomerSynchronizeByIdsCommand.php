@@ -2,24 +2,28 @@
 
 namespace App\Command;
 
-use App\Exception\CustomerBackNotFoundException;
-use App\Exception\CustomerFrontNotFoundException;
-use App\Other\OneSynchronizeCommandTrait;
 use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronize;
 use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronize;
-use Symfony\Component\Console\Command\Command;
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CustomerSynchronizeByIdsCommand extends Command
 {
-    use OneSynchronizeCommandTrait;
-
     protected static $defaultName = 'customer:synchronize:by-ids';
-    private $customerBackToFrontSynchronize;
-    private $customerFrontToBackSynchronize;
 
+    /** @var CustomerBackToFrontSynchronize $customerBackToFrontSynchronize */
+    protected $customerBackToFrontSynchronize;
+
+    /** @var CustomerFrontToBackSynchronize $customerFrontToBackSynchronize */
+    protected $customerFrontToBackSynchronize;
+
+    /**
+     * CustomerSynchronizeByIdsCommand constructor.
+     * @param CustomerBackToFrontSynchronize $customerBackToFrontSynchronize
+     * @param CustomerFrontToBackSynchronize $customerFrontToBackSynchronize
+     */
     public function __construct(
         CustomerBackToFrontSynchronize $customerBackToFrontSynchronize,
         CustomerFrontToBackSynchronize $customerFrontToBackSynchronize
@@ -30,6 +34,9 @@ class CustomerSynchronizeByIdsCommand extends Command
         parent::__construct();
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setDescription('Synchronize customers');
@@ -37,6 +44,11 @@ class CustomerSynchronizeByIdsCommand extends Command
         $this->addArgument('ids', InputArgument::REQUIRED, 'idCustomer');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $direction = $input->getArgument('direction');
@@ -48,7 +60,7 @@ class CustomerSynchronizeByIdsCommand extends Command
             $ids = $this->testIds($input);
             $this->customerBackToFrontSynchronize->synchronizeByIds($ids);
         } else {
-            throw new \InvalidArgumentException("Invalidate direction: {$direction}");
+            throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }
 
         return 0;

@@ -15,22 +15,42 @@ use Symfony\Component\Process\Process;
 class QueueHandlerCommand extends Command
 {
     protected static $defaultName = 'queue:handle';
+
+    /** @var string $handlerPort */
     protected $handlerPort;
+
+    /** @var string $consolePath */
     protected $consolePath;
+
+    /** @var array $processes */
     protected $processes = [];
 
-    public function __construct($handlerPort, $consolePath, $name = null)
+    /**
+     * QueueHandlerCommand constructor.
+     * @param string $handlerPort
+     * @param string $consolePath
+     * @param string $name
+     */
+    public function __construct(string $handlerPort, string $consolePath, string $name = null)
     {
         $this->handlerPort = $handlerPort;
         $this->consolePath = $consolePath;
         parent::__construct($name);
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setDescription('Queue handle');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $childPid = pcntl_fork();
@@ -47,6 +67,9 @@ class QueueHandlerCommand extends Command
         return 0;
     }
 
+    /**
+     *
+     */
     protected function startServer()
     {
         $path = $this->consolePath;
@@ -57,22 +80,15 @@ class QueueHandlerCommand extends Command
         });
 
         $loop = Factory::create();
-        $socket = new SocketServer('0.0.0.0:' . $this->handlerPort, $loop);
+        $socket = new SocketServer("0.0.0.0:{$this->handlerPort}", $loop);
         $server->listen($socket);
         $loop->run();
     }
 
-    protected function sortProcess()
-    {
-        foreach ($this->processes as $key => $process) {
-            if (false === $process['process']->isRunning()) {
-                unset($this->processes[$key]);
-            }
-        }
-
-        sort($this->processes);
-    }
-
+    /**
+     * @param array $parameters
+     * @return array
+     */
     protected function handle(array $parameters)
     {
         $command = trim($parameters['command']);
@@ -89,5 +105,21 @@ class QueueHandlerCommand extends Command
         $this->processes[] = ['command' => $command, 'process' => $process];
 
         return ['ok' => true, 'command' => $command];
+    }
+
+    /**
+     *
+     */
+    protected function sortProcess()
+    {
+        foreach ($this->processes as $key => $process) {
+            /** @var Process $process */
+            $process = $process['process'];
+            if (false === $process->isRunning()) {
+                unset($this->processes[$key]);
+            }
+        }
+
+        sort($this->processes);
     }
 }

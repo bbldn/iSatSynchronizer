@@ -38,6 +38,10 @@ class Store extends StoreBase
     protected $siteUrl = 'http://172.17.0.2';
     protected $sitePath = '/home/user/PhpstormProjects/uclan.com.ua';
 
+    /**
+     * Store constructor.
+     * @param ContainerBagInterface $params
+     */
     public function __construct(ContainerBagInterface $params)
     {
         $this->productAvailableStatusId = $params->get('front.available_status_id');
@@ -529,16 +533,30 @@ class Store extends StoreBase
         $this->sitePath = $sitePath;
     }
 
+    /**
+     * @param string $value
+     * @param string $salt
+     * @return string
+     */
     public static function hashPassword(string $value, string $salt)
     {
         return sha1($salt . sha1($salt . sha1($value)));
     }
 
+    /**
+     * @param string $value
+     * @return string
+     */
     public static function hashPasswordOld(string $value)
     {
         return md5($value);
     }
 
+    /**
+     * @param int $id
+     * @param string $name
+     * @return string
+     */
     public static function generateURL(int $id, string $name): string
     {
         $full = $id . '-' . Str::lower(static::encodingConvert($name));
