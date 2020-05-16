@@ -6,10 +6,11 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
 use App\Entity\Order;
-use App\Other\Back\Store as StoreBack;
-use App\Other\Filler;
-use App\Other\Front\Store as StoreFront;
-use App\Other\Store;
+use App\Helper\Back\Store as StoreBack;
+use App\Helper\ExceptionFormatter;
+use App\Helper\Filler;
+use App\Helper\Front\Store as StoreFront;
+use App\Helper\Store;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
@@ -21,9 +22,12 @@ use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use DateTime;
+use Psr\Log\LoggerInterface;
 
 class OrderSynchronizer
 {
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -67,6 +71,7 @@ class OrderSynchronizer
 
     /**
      * OrderSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param CurrencyFrontRepository $currencyFrontRepository
      * @param CustomerRepository $customerRepository
@@ -80,6 +85,7 @@ class OrderSynchronizer
      * @param ProductRepository $productRepository
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         CurrencyFrontRepository $currencyFrontRepository,
         CustomerRepository $customerRepository,
@@ -93,6 +99,7 @@ class OrderSynchronizer
         ProductRepository $productRepository
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->currencyFrontRepository = $currencyFrontRepository;
         $this->customerRepository = $customerRepository;
@@ -245,21 +252,30 @@ class OrderSynchronizer
             $product = $this->productRepository->findOneByBackId($orderBack->getProductId());
 
             if (null === $product) {
-                //@TODO Notify
+                $this->logger->error(
+                    ExceptionFormatter::f("Product with for back id {$orderBack->getProductId()} not found")
+                );
+
                 return $orderFront;
             }
 
             $productFront = $this->productFrontRepository->find($product->getFrontId());
 
             if (null === $productFront) {
-                //@TODO Notify
+                $this->logger->error(
+                    ExceptionFormatter::f("Product front with id: {$product->getFrontId()} not found")
+                );
+
                 return $orderFront;
             }
 
             $productDescriptionFront = $this->productDescriptionFrontRepository->find($product->getFrontId());
 
             if (null === $productDescriptionFront) {
-                //@TODO Notify
+                $this->logger->error(
+                    ExceptionFormatter::f("Product Description front with id: {$product->getFrontId()} not found")
+                );
+
                 return $orderFront;
             }
 
@@ -291,8 +307,10 @@ class OrderSynchronizer
         if (null === $order) {
             $order = new Order();
         }
+
         $order->setBackId($backId);
         $order->setFrontId($frontId);
+
         $this->orderRepository->persistAndFlush($order);
     }
 }

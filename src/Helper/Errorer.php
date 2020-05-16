@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Other;
+namespace App\Helper;
 
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 

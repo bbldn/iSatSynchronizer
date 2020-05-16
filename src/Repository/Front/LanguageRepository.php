@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Language;
-use App\Other\Repository;
+use App\Helper\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

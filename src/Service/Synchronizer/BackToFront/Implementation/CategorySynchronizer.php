@@ -10,10 +10,11 @@ use App\Entity\Front\CategoryLayout;
 use App\Entity\Front\CategoryPath as CategoryPathFront;
 use App\Entity\Front\CategoryStore;
 use App\Entity\Front\SeoUrl as SeoUrlFront;
-use App\Other\Back\Store as StoreBack;
-use App\Other\Filler;
-use App\Other\Front\Store as StoreFront;
-use App\Other\Store;
+use App\Helper\Back\Store as StoreBack;
+use App\Helper\ExceptionFormatter;
+use App\Helper\Filler;
+use App\Helper\Front\Store as StoreFront;
+use App\Helper\Store;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
@@ -23,9 +24,12 @@ use App\Repository\Front\CategoryPathRepository as CategoryPathFrontRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository;
 use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
+use Psr\Log\LoggerInterface;
 
 class CategorySynchronizer
 {
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -67,6 +71,7 @@ class CategorySynchronizer
 
     /**
      * CategorySynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param CategoryFrontRepository $categoryFrontRepository
@@ -82,6 +87,7 @@ class CategorySynchronizer
      * @param bool $seoProEnabled
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
         CategoryFrontRepository $categoryFrontRepository,
@@ -97,6 +103,7 @@ class CategorySynchronizer
         bool $seoProEnabled
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->categoryFrontRepository = $categoryFrontRepository;
@@ -290,20 +297,23 @@ class CategorySynchronizer
     {
         $category = $this->categoryRepository->findOneByBackId($backId);
         if (null === $category) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f("Category for backId: {$backId} not found"));
+
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $frontId = $category->getFrontId();
         if (null === $frontId) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f("Category with id: {$category->getId()} does not have frontId"));
+
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $front = $this->categoryFrontRepository->find($frontId);
 
         if (null === $front) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f("Front Category with id: {$frontId} not found"));
+
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
@@ -341,8 +351,10 @@ class CategorySynchronizer
         if (null === $category) {
             $category = new Category();
         }
+
         $category->setBackId($backId);
         $category->setFrontId($frontId);
+
         $this->categoryRepository->persistAndFlush($category);
     }
 

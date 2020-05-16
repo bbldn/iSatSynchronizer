@@ -3,7 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Product;
-use App\Other\Repository;
+use App\Helper\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;

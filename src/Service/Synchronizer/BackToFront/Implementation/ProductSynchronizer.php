@@ -11,10 +11,11 @@ use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
 use App\Entity\Front\SeoUrl as SeoUrlFront;
 use App\Entity\Product;
-use App\Other\Back\Store as StoreBack;
-use App\Other\Filler;
-use App\Other\Front\Store as StoreFront;
-use App\Other\Store;
+use App\Helper\Back\Store as StoreBack;
+use App\Helper\ExceptionFormatter;
+use App\Helper\Filler;
+use App\Helper\Front\Store as StoreFront;
+use App\Helper\Store;
 use App\Repository\AttributeRepository;
 use App\Repository\Back\PhotoRepository as PhotoBackRepository;
 use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
@@ -42,9 +43,12 @@ use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
 use DateTime;
 use Illuminate\Support\Str;
+use Psr\Log\LoggerInterface;
 
 class ProductSynchronizer
 {
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -134,6 +138,7 @@ class ProductSynchronizer
 
     /**
      * ProductSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param AttributeRepository $attributeRepository
@@ -165,6 +170,7 @@ class ProductSynchronizer
      * @param bool $seoProEnabled
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
         AttributeRepository $attributeRepository,
@@ -196,6 +202,7 @@ class ProductSynchronizer
         bool $seoProEnabled
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->attributeRepository = $attributeRepository;
@@ -425,18 +432,19 @@ class ProductSynchronizer
     protected function getCategoryFrontIdByBack(?int $categoryBackId): int
     {
         if (null === $categoryBackId) {
-            //@TODO Notify
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $category = $this->categoryRepository->findOneByBackId($categoryBackId);
         if (null === $category) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f("Category with backId {$categoryBackId} not found"));
+
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $frontId = $category->getFrontId();
         if (null === $frontId) {
+            $this->logger->error(ExceptionFormatter::f("Category front id is null"));
             //@TODO Notify
             return $this->storeFront->getDefaultCategoryFrontId();
         }

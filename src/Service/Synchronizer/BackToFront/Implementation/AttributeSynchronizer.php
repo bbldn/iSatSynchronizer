@@ -6,8 +6,8 @@ use App\Entity\Attribute;
 use App\Entity\Back\ProductOptions as AttributeBack;
 use App\Entity\Front\Attribute as AttributeFront;
 use App\Entity\Front\AttributeDescription as AttributeDescriptionFront;
-use App\Other\Front\Store as StoreFront;
-use App\Other\Store;
+use App\Helper\Front\Store as StoreFront;
+use App\Helper\Store;
 use App\Repository\AttributeRepository;
 use App\Repository\Back\ProductOptionsRepository as AttributeBackRepository;
 use App\Repository\Front\AttributeDescriptionRepository as AttributeDescriptionFrontRepository;
@@ -132,8 +132,10 @@ class AttributeSynchronizer
         if (null === $attribute) {
             $attribute = new Attribute();
         }
+
         $attribute->setBackId($backId);
         $attribute->setFrontId($frontId);
+
         $this->attributeRepository->persistAndFlush($attribute);
     }
 }

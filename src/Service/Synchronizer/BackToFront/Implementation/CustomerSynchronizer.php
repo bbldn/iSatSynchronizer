@@ -6,9 +6,9 @@ use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Customer;
 use App\Entity\Front\Address as AddressFront;
 use App\Entity\Front\Customer as CustomerFront;
-use App\Other\Back\Store as StoreBack;
-use App\Other\Filler;
-use App\Other\Front\Store as StoreFront;
+use App\Helper\Back\Store as StoreBack;
+use App\Helper\Filler;
+use App\Helper\Front\Store as StoreFront;
 use App\Repository\AddressRepository;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
@@ -221,8 +221,10 @@ class CustomerSynchronizer
         if (null === $customer) {
             $customer = new Customer();
         }
+
         $customer->setBackId($backId);
         $customer->setFrontId($frontId);
+
         $this->customerRepository->persistAndFlush($customer);
     }
 }

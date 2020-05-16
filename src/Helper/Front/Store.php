@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Other\Front;
+namespace App\Helper\Front;
 
-use App\Other\Store as StoreBase;
+use App\Helper\Store as StoreBase;
 use Illuminate\Support\Str;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 

@@ -6,15 +6,20 @@ use App\Entity\Back\Photo as PhotoBack;
 use App\Entity\Back\ProductPictures as ProductPicturesBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductImage as ProductImageFront;
-use App\Other\Back\Store as StoreBack;
-use App\Other\Filler;
-use App\Other\Front\Store as StoreFront;
+use App\Helper\Back\Store as StoreBack;
+use App\Helper\ExceptionFormatter;
+use App\Helper\Filler;
+use App\Helper\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class ProductImageSynchronizer
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -35,6 +40,7 @@ class ProductImageSynchronizer
 
     /**
      * ProductImageSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param GetBackFileInterface $fileReader
@@ -43,6 +49,7 @@ class ProductImageSynchronizer
      * @param string $productImageFrontPath
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
         GetBackFileInterface $fileReader,
@@ -51,6 +58,7 @@ class ProductImageSynchronizer
         string $productImageFrontPath
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->fileReader = $fileReader;
@@ -106,7 +114,10 @@ class ProductImageSynchronizer
             $path = $this->storeBack->getSitePath() . $this->backPath[1];
             $content = $this->fileReader->getFile($path . $picture);
             if (null === $content) {
-                //@TODO Notify
+                $this->logger->error(
+                    ExceptionFormatter::f('Image not found')
+                );
+
                 return $productPicturesFront;
             }
         }
@@ -119,7 +130,10 @@ class ProductImageSynchronizer
         try {
             $this->fileWriter->saveFile($this->storeFront->getSitePath() . $path, $content);
         } catch (UploadException $exception) {
-            //@TODO Notify
+            $this->logger->error(
+                ExceptionFormatter::f('Error image save')
+            );
+
             return $productPicturesFront;
         }
 

@@ -4,14 +4,19 @@ namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
-use App\Other\Back\Store as StoreBack;
-use App\Other\Front\Store as StoreFront;
+use App\Helper\Back\Store as StoreBack;
+use App\Helper\ExceptionFormatter;
+use App\Helper\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class CategoryImageSynchronizer
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -32,6 +37,7 @@ class CategoryImageSynchronizer
 
     /**
      * CategoryImageSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param GetBackFileInterface $fileReader
@@ -40,6 +46,7 @@ class CategoryImageSynchronizer
      * @param string $categoryImageFrontPath
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
         GetBackFileInterface $fileReader,
@@ -48,6 +55,7 @@ class CategoryImageSynchronizer
         string $categoryImageFrontPath
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->fileReader = $fileReader;
@@ -86,7 +94,8 @@ class CategoryImageSynchronizer
         $path = $this->storeBack->getSitePath() . $path;
         $content = $this->fileReader->getFile($path . $picture);
         if (null === $content) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f('Image not found'));
+
             return;
         }
 
@@ -98,7 +107,8 @@ class CategoryImageSynchronizer
         try {
             $this->fileWriter->saveFile($this->storeFront->getSitePath() . $path, $content);
         } catch (UploadException $exception) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f('Failed to save image'));
+
             return;
         }
 

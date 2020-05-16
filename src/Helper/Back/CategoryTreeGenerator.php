@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Other\Back;
+namespace App\Helper\Back;
 
-use App\Other\Back\Store as StoreBack;
+use App\Helper\Back\Store as StoreBack;
 
 class CategoryTreeGenerator
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Other\Back;
+namespace App\Helper\Back;
 
-use App\Other\Store as StoreBase;
+use App\Helper\Store as StoreBase;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store extends StoreBase

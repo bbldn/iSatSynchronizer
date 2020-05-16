@@ -3,7 +3,7 @@
 namespace App\Controller\API;
 
 use App\Controller\Controller;
-use App\Other\Errorer;
+use App\Helper\Errorer;
 use App\Service\API\ProductService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

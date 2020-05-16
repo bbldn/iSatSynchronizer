@@ -2,7 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Other\Store;
+use App\Helper\Store;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
 
