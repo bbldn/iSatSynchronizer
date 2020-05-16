@@ -102,10 +102,9 @@ class AttributeSynchronizer
         AttributeFront $attributeFront
     ): AttributeFront
     {
-        $attributeFront->fill(
-            $this->storeFront->getDefaultAttributeGroupId(),
-            $this->storeFront->getDefaultSortOrder()
-        );
+        $attributeFront->setAttributeGroupId($this->storeFront->getDefaultAttributeGroupId());
+        $attributeFront->setSortOrder($this->storeFront->getDefaultSortOrder());
+
         $this->attributeFrontRepository->persistAndFlush($attributeFront);
 
         $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($attributeFront->getAttributeId());
