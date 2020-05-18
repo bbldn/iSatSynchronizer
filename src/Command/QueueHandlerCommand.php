@@ -29,13 +29,12 @@ class QueueHandlerCommand extends Command
      * QueueHandlerCommand constructor.
      * @param string $handlerPort
      * @param string $consolePath
-     * @param string $name
      */
-    public function __construct(string $handlerPort, string $consolePath, string $name = null)
+    public function __construct(string $handlerPort, string $consolePath)
     {
         $this->handlerPort = $handlerPort;
         $this->consolePath = $consolePath;
-        parent::__construct($name);
+        parent::__construct();
     }
 
     /**

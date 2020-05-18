@@ -180,7 +180,6 @@ class CustomerSynchronizer
         $customerFront->setSafe(false);
         $customerFront->setToken(Filler::securityString(null));
         $customerFront->setCode(Filler::securityString(null));
-        $customerFront->setPass(base64_encode($customerBack->getPassword()));
 
         $this->customerFrontRepository->persistAndFlush($customerFront);
         $addressFront->setCustomerId($customerFront->getCustomerId());

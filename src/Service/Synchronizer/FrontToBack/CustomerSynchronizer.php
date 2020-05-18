@@ -2,29 +2,23 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
+use App\Exception\CustomerFrontNotFoundException;
 use App\Service\Synchronizer\FrontToBack\Implementation\CustomerSynchronizer as CustomerBackSynchronizer;
 
 class CustomerSynchronizer extends CustomerBackSynchronizer
 {
     /**
-     * @param string $ids
+     * @param int $id
+     * @param string $password
+     * @throws CustomerFrontNotFoundException
      */
-    public function synchronizeByIds(string $ids): void
+    public function synchronizeOne(int $id, string $password): void
     {
-        $customersFront = $this->customerFrontRepository->findByIds($ids);
-        foreach ($customersFront as $customerFront) {
-            $this->synchronizeCustomer($customerFront);
+        $customersFront = $this->customerFrontRepository->find($id);
+        if (null === $customersFront) {
+            throw new CustomerFrontNotFoundException();
         }
-    }
 
-    /**
-     *
-     */
-    public function synchronizeAll(): void
-    {
-        $customersFront = $this->customerFrontRepository->findAll();
-        foreach ($customersFront as $customerFront) {
-            $this->synchronizeCustomer($customerFront);
-        }
+        $this->synchronizeCustomer($customersFront, $password);
     }
 }

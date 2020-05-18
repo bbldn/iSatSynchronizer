@@ -148,12 +148,6 @@ class Customer
     protected $dateAdded;
 
     /**
-     * @var string|null $pass
-     * @ORM\Column(type="string", name="`pass`", nullable=true)
-     */
-    protected $pass = null;
-
-    /**
      * @return int|null
      */
     public function getCustomerId(): ?int
@@ -537,25 +531,6 @@ class Customer
     public function setCode(string $code): self
     {
         $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPass(): string
-    {
-        return $this->pass;
-    }
-
-    /**
-     * @param string|null $pass
-     * @return Customer
-     */
-    public function setPass(?string $pass): self
-    {
-        $this->pass = $pass;
 
         return $this;
     }

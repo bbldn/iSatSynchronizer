@@ -59,32 +59,17 @@ class CustomerSynchronizer
 
     /**
      * @param CustomerFront $customerFront
+     * @param string $password
      * @return CustomerBack
      */
-    protected function synchronizeCustomer(CustomerFront $customerFront): CustomerBack
+    protected function synchronizeCustomer(CustomerFront $customerFront, string $password): CustomerBack
     {
         $customer = $this->customerRepository->findOneByFrontId($customerFront->getCustomerId());
         $customerBack = $this->getCustomerBackFromCustomer($customer);
-        $this->updateCustomerBackFromCustomerFront($customerFront, $customerBack);
+        $this->updateCustomerBackFromCustomerFront($customerFront, $customerBack, $password);
         $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
 
         return $customerBack;
-    }
-
-    /**
-     * @param int $id
-     * @return CustomerBack
-     * @throws CustomerFrontNotFoundException
-     */
-    public function synchronizeOne(int $id): CustomerBack
-    {
-        $customerFront = $this->customerFrontRepository->find($id);
-
-        if (null === $customerFront) {
-            throw new CustomerFrontNotFoundException();
-        }
-
-        return $this->synchronizeCustomer($customerFront);
     }
 
     /**
@@ -109,16 +94,18 @@ class CustomerSynchronizer
     /**
      * @param CustomerFront $customerFront
      * @param CustomerBack $customerBack
+     * @param string $password
      * @return CustomerBack
      */
     protected function updateCustomerBackFromCustomerFront(
         CustomerFront $customerFront,
-        CustomerBack $customerBack
+        CustomerBack $customerBack,
+        string $password
     ): CustomerBack
     {
         $addressFront = $this->addressRepositoryFront->find($customerFront->getAddressId());
 
-        if (null === $addressFront) {
+        if (null !== $addressFront) {
             $city = $addressFront->getCity();
             $street = $addressFront->getAddress1();
         } else {
@@ -129,7 +116,7 @@ class CustomerSynchronizer
         $time = time();
 
         $customerBack->setLogin(Filler::securityString(Store::parseLogin($customerFront->getEmail())));
-        $customerBack->setPassword(base64_decode($customerFront->getPass()));
+        $customerBack->setPassword($password);
         $customerBack->setFio($customerFront->getLastName() . ' ' . $customerFront->getFirstName());
         $customerBack->setPhone(Store::normalizePhone($customerFront->getTelephone()));
         $customerBack->setRegion(Filler::securityString(null));
