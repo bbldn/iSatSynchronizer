@@ -3,7 +3,6 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductLayout;
-use App\Helper\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

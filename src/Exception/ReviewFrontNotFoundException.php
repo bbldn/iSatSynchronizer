@@ -2,6 +2,8 @@
 
 namespace App\Exception;
 
-class ReviewFrontNotFoundException extends \Exception
+use Exception;
+
+class ReviewFrontNotFoundException extends Exception
 {
 }

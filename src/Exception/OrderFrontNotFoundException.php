@@ -2,6 +2,8 @@
 
 namespace App\Exception;
 
-class OrderFrontNotFoundException extends \Exception
+use Exception;
+
+class OrderFrontNotFoundException extends Exception
 {
 }

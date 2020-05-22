@@ -31,7 +31,7 @@ class ProductOptionsValuesRepository extends BackRepository
      * @param $value
      * @return ProductOptionsValues[]
      */
-    public function findAllByProductBackId($value): array
+    public function findAllByProductBackId(int $value): array
     {
         return $this->createQueryBuilder('po')
             ->andWhere('po.productId = :val')

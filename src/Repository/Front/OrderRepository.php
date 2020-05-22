@@ -3,7 +3,6 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Order;
-use App\Helper\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

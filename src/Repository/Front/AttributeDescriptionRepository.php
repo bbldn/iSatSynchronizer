@@ -30,7 +30,7 @@ class AttributeDescriptionRepository extends FrontRepository
 
     /**
      * @param string $value
-     * @return mixed|null
+     * @return AttributeDescription|null
      */
     public function findByName(string $value): ?AttributeDescription
     {

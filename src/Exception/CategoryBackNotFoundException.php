@@ -2,6 +2,8 @@
 
 namespace App\Exception;
 
-class CategoryBackNotFoundException extends \Exception
+use Exception;
+
+class CategoryBackNotFoundException extends Exception
 {
 }

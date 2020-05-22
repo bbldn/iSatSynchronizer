@@ -3,7 +3,6 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductCategory;
-use App\Helper\Repository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -30,7 +29,7 @@ class ProductCategoryRepository extends FrontRepository
 
     /**
      * @param int $value
-     * @return ProductCategory[] Returns an array of Category objects
+     * @return ProductCategory[]
      */
     public function findByProductFrontId(int $value)
     {

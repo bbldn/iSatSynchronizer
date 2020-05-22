@@ -29,7 +29,7 @@ class PhotoRepository extends BackRepository
 
     /**
      * @param int $value
-     * @return Photo[] Returns an array of Photo objects
+     * @return Photo[]
      */
     public function findByProductBackId(int $value): array
     {

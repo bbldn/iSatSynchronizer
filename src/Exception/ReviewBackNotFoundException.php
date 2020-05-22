@@ -2,6 +2,8 @@
 
 namespace App\Exception;
 
-class ReviewBackNotFoundException extends \Exception
+use Exception;
+
+class ReviewBackNotFoundException extends Exception
 {
 }

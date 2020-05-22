@@ -87,8 +87,8 @@ class Store
     }
 
     /**
-     * @param null|string $value
-     * @return null|string
+     * @param string|null $value
+     * @return string|null
      */
     public static function parseLogin(?string $value): ?string
     {

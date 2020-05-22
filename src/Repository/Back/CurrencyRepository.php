@@ -48,9 +48,9 @@ class CurrencyRepository extends BackRepository
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getCurrentCourse()
+    public function getCurrentCourse(): array
     {
         $connection = $this->getEntityManager()->getConnection();
         $result = $connection->fetchAll("SELECT `one`.value as 'грн', `two`.value as 'р', 1 as '$' FROM

@@ -2,6 +2,8 @@
 
 namespace App\Exception;
 
-class ProductNotFoundException extends \Exception
+use Exception;
+
+class ProductNotFoundException extends Exception
 {
 }
