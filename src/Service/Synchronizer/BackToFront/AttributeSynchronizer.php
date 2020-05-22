@@ -20,12 +20,10 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function reload(): void
     {
-        $attributesBack = $this->attributeBackRepository->findAll();
-        foreach ($attributesBack as $attributeBack) {
-            $this->synchronizeAttribute($attributeBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 
     /**
@@ -39,9 +37,11 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer
     /**
      *
      */
-    public function reload(): void
+    public function synchronizeAll(): void
     {
-        $this->clear();
-        $this->synchronizeAll();
+        $attributesBack = $this->attributeBackRepository->findAll();
+        foreach ($attributesBack as $attributeBack) {
+            $this->synchronizeAttribute($attributeBack);
+        }
     }
 }

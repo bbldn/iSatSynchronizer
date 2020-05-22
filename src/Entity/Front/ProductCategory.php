@@ -24,12 +24,6 @@ class ProductCategory
     protected $categoryId;
 
     /**
-     * @var bool|null $mainCategory
-     * @ORM\Column(type="boolean", name="main_category")
-     */
-    protected $mainCategory = false;
-
-    /**
      * @return int|null
      */
     public function getProductId(): ?int
@@ -63,25 +57,6 @@ class ProductCategory
     public function setCategoryId(int $categoryId): self
     {
         $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function getMainCategory(): ?bool
-    {
-        return $this->mainCategory;
-    }
-
-    /**
-     * @param bool $mainCategory
-     * @return ProductCategory
-     */
-    public function setMainCategory(bool $mainCategory): self
-    {
-        $this->mainCategory = $mainCategory;
 
         return $this;
     }

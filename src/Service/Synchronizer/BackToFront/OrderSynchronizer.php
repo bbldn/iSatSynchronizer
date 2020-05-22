@@ -20,12 +20,10 @@ class OrderSynchronizer extends OrderBackSynchronizer
     /**
      *
      */
-    public function synchronizeAll()
+    public function reload(): void
     {
-        $ordersBack = $this->orderBackRepository->findWithoutIds($this->excludeCustomerIds);
-        foreach ($ordersBack as $orderBack) {
-            $this->synchronizeOrder($orderBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 
     /**
@@ -39,9 +37,11 @@ class OrderSynchronizer extends OrderBackSynchronizer
     /**
      *
      */
-    public function reload(): void
+    public function synchronizeAll()
     {
-        $this->clear();
-        $this->synchronizeAll();
+        $ordersBack = $this->orderBackRepository->findWithoutIds($this->excludeCustomerIds);
+        foreach ($ordersBack as $orderBack) {
+            $this->synchronizeOrder($orderBack);
+        }
     }
 }

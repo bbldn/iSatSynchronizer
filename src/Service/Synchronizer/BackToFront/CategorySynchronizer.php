@@ -21,12 +21,10 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
     /**
      * @param bool $synchronizeImage
      */
-    public function synchronizeAll(bool $synchronizeImage = false): void
+    public function reload(bool $synchronizeImage = false): void
     {
-        $categoriesBack = $this->categoryBackRepository->findAll();
-        foreach ($categoriesBack as $categoryBack) {
-            $this->synchronizeCategory($categoryBack, $synchronizeImage);
-        }
+        $this->clear($synchronizeImage);
+        $this->synchronizeAll($synchronizeImage);
     }
 
     /**
@@ -40,9 +38,11 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
     /**
      * @param bool $synchronizeImage
      */
-    public function reload(bool $synchronizeImage = false): void
+    public function synchronizeAll(bool $synchronizeImage = false): void
     {
-        $this->clear($synchronizeImage);
-        $this->synchronizeAll($synchronizeImage);
+        $categoriesBack = $this->categoryBackRepository->findAll();
+        foreach ($categoriesBack as $categoryBack) {
+            $this->synchronizeCategory($categoryBack, $synchronizeImage);
+        }
     }
 }

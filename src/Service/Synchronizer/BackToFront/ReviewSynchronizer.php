@@ -20,12 +20,10 @@ class ReviewSynchronizer extends ReviewBackSynchronizer
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function reload(): void
     {
-        $reviewsBack = $this->reviewBackRepository->findAll();
-        foreach ($reviewsBack as $reviewBack) {
-            $this->synchronizeReviewBack($reviewBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 
     /**
@@ -39,9 +37,11 @@ class ReviewSynchronizer extends ReviewBackSynchronizer
     /**
      *
      */
-    public function reload(): void
+    public function synchronizeAll(): void
     {
-        $this->clear();
-        $this->synchronizeAll();
+        $reviewsBack = $this->reviewBackRepository->findAll();
+        foreach ($reviewsBack as $reviewBack) {
+            $this->synchronizeReviewBack($reviewBack);
+        }
     }
 }

@@ -8,6 +8,7 @@ use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Helper\Back\Store as StoreBack;
+use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
@@ -41,10 +42,15 @@ use App\Repository\Front\OrderVoucherRepository as OrderVoucherFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer;
 use DateTime;
+use Psr\Log\LoggerInterface;
 
 class OrderSynchronizer
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -146,6 +152,7 @@ class OrderSynchronizer
 
     /**
      * OrderSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param CustomerBackRepository $customerBackRepository
@@ -181,6 +188,7 @@ class OrderSynchronizer
      * @param CustomerSynchronizer $customerSynchronizer
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
         CustomerBackRepository $customerBackRepository,
@@ -216,6 +224,7 @@ class OrderSynchronizer
         CustomerSynchronizer $customerSynchronizer
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->customerBackRepository = $customerBackRepository;
@@ -312,20 +321,23 @@ class OrderSynchronizer
     }
 
     /**
-     * @param Order $order
-     * @param int $backId
-     * @param int $frontId
+     * @param Order|null $order
+     * @return OrderBack
      */
-    protected function createOrUpdateOrder(?Order $order, int $backId, int $frontId): void
+    protected function getOrderBackFromOrder(?Order $order): OrderBack
     {
         if (null === $order) {
-            $order = new Order();
+            return new OrderBack();
         }
-        $order->setBackId($backId);
-        $order->setFrontId($frontId);
-        $this->orderRepository->persistAndFlush($order);
-    }
 
+        $orderBack = $this->orderBackRepository->find($order->getBackId());
+
+        if (null === $orderBack) {
+            return new OrderBack();
+        }
+
+        return $orderBack;
+    }
 
     /**
      * @param OrderFront $orderFront
@@ -338,7 +350,8 @@ class OrderSynchronizer
         $currentOrderBack = $orderBack;
 
         if (0 === count($orderProductsFront)) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f("Order without products: {$orderFront->getOrderId()}"));
+
             return $orderBack;
         }
 
@@ -346,7 +359,9 @@ class OrderSynchronizer
             $product = $this->productRepository->findOneByFrontId($orderProductFront->getProductId());
 
             if (null === $product) {
-                //@TODO Notify
+                $error = "Product with id: {$orderProductFront->getProductId()} not found";
+                $this->logger->error(ExceptionFormatter::f($error));
+
                 return $orderBack;
             }
 
@@ -433,22 +448,11 @@ class OrderSynchronizer
     }
 
     /**
-     * @param Order|null $order
-     * @return OrderBack
+     * @return array
      */
-    protected function getOrderBackFromOrder(?Order $order): OrderBack
+    protected function getCurrentCourse(): array
     {
-        if (null === $order) {
-            return new OrderBack();
-        }
-
-        $orderBack = $this->orderBackRepository->find($order->getBackId());
-
-        if (null === $orderBack) {
-            return new OrderBack();
-        }
-
-        return $orderBack;
+        return $this->currencyBackRepository->getCurrentCourse();
     }
 
     /**
@@ -460,7 +464,9 @@ class OrderSynchronizer
         $productCategories = $this->productCategoryFrontRepository->findByProductFrontId($frontId);
 
         if (0 === count($productCategories)) {
-            //@TODO Notify
+            $error = "ProductCategoryFront not found {$frontId}";
+            $this->logger->error(ExceptionFormatter::f($error));
+
             return '';
         }
 
@@ -468,19 +474,13 @@ class OrderSynchronizer
         $categoryDescription = $this->categoryDescriptionFrontRepository->find($categoryProduct->getCategoryId());
 
         if (null === $categoryDescription) {
-            //@TODO Notify
+            $error = "Category Description with id: {$categoryProduct->getCategoryId()} does not found";
+            $this->logger->error(ExceptionFormatter::f($error));
+
             return '';
         }
 
         return $categoryDescription->getName();
-    }
-
-    /**
-     * @return array
-     */
-    protected function getCurrentCourse(): array
-    {
-        return $this->currencyBackRepository->getCurrentCourse();
     }
 
     /**
@@ -497,7 +497,8 @@ class OrderSynchronizer
 
         if ($orderFront->getCustomerId() > 0) {
             try {
-                $customerBack = $this->customerSynchronizer->synchronizeOne($orderFront->getCustomerId());
+                $password = rand(10000000, 99999999);
+                $customerBack = $this->customerSynchronizer->synchronizeOne($orderFront->getCustomerId(), $password);
             } catch (CustomerFrontNotFoundException $e) {
                 $customerBack = null;
             }
@@ -511,5 +512,22 @@ class OrderSynchronizer
         $this->customerSynchronizer->updateCustomerBackFromOrderFront($orderFront, $customerBack);
 
         return $customerBack->getId();
+    }
+
+    /**
+     * @param Order $order
+     * @param int $backId
+     * @param int $frontId
+     */
+    protected function createOrUpdateOrder(?Order $order, int $backId, int $frontId): void
+    {
+        if (null === $order) {
+            $order = new Order();
+        }
+
+        $order->setBackId($backId);
+        $order->setFrontId($frontId);
+
+        $this->orderRepository->persistAndFlush($order);
     }
 }

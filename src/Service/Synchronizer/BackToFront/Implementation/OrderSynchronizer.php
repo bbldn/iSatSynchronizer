@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 
 class OrderSynchronizer
 {
+    /** @var LoggerInterface $logger */
     protected $logger;
 
     /** @var StoreFront $storeFront */

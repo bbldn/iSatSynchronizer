@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
 
 class CategorySynchronizer
 {
+    /** @var LoggerInterface $logger */
     protected $logger;
 
     /** @var StoreFront $storeFront */
@@ -297,8 +298,6 @@ class CategorySynchronizer
     {
         $category = $this->categoryRepository->findOneByBackId($backId);
         if (null === $category) {
-            $this->logger->error(ExceptionFormatter::f("Category for backId: {$backId} not found"));
-
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 

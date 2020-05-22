@@ -47,7 +47,7 @@ class ProductService
      * @param bool $onlyPriceUpdate
      * @return array
      */
-    public function updateProductsByIds(string $ids, bool $onlyPriceUpdate = false)
+    public function updateProductsByIds(string $ids, bool $onlyPriceUpdate = false): array
     {
         $command = (true === $onlyPriceUpdate) ? 'product:price:update:by-ids': 'product:synchronize:by-ids';
 
@@ -67,7 +67,7 @@ class ProductService
      * @param bool $onlyPriceUpdate
      * @return array
      */
-    public function updateProductsByCategoriesIds(string $ids, bool $onlyPriceUpdate = false)
+    public function updateProductsByCategoriesIds(string $ids, bool $onlyPriceUpdate = false): array
     {
         $command = (true === $onlyPriceUpdate) ? 'product:price:update:by-category-id': 'product:synchronize:by-category-id';
 
@@ -102,7 +102,7 @@ class ProductService
      * @param int $max
      * @return array
      */
-    public function getProductsByName(string $name, int $max)
+    public function getProductsByName(string $name, int $max): array
     {
         $result = [
             'ok' => true,

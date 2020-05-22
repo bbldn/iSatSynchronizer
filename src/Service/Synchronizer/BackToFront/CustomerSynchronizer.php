@@ -20,12 +20,10 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function reload(): void
     {
-        $customersBack = $this->customerBackRepository->findAll();
-        foreach ($customersBack as $customerBack) {
-            $this->synchronizeCustomer($customerBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 
     /**
@@ -39,9 +37,11 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer
     /**
      *
      */
-    public function reload(): void
+    public function synchronizeAll(): void
     {
-        $this->clear();
-        $this->synchronizeAll();
+        $customersBack = $this->customerBackRepository->findAll();
+        foreach ($customersBack as $customerBack) {
+            $this->synchronizeCustomer($customerBack);
+        }
     }
 }

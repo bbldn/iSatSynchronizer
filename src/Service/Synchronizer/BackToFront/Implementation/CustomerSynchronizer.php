@@ -15,9 +15,13 @@ use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use Illuminate\Support\Str;
+use Psr\Log\LoggerInterface;
 
 class CustomerSynchronizer
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -44,6 +48,7 @@ class CustomerSynchronizer
 
     /**
      * CustomerSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param AddressRepository $addressRepository
@@ -53,6 +58,7 @@ class CustomerSynchronizer
      * @param CustomerBackRepository $customerBackRepository
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
         AddressRepository $addressRepository,
@@ -62,6 +68,7 @@ class CustomerSynchronizer
         CustomerBackRepository $customerBackRepository
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->addressRepository = $addressRepository;

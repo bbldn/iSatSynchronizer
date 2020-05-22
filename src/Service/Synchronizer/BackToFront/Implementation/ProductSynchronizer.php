@@ -47,6 +47,7 @@ use Psr\Log\LoggerInterface;
 
 class ProductSynchronizer
 {
+    /** @var LoggerInterface $logger */
     protected $logger;
 
     /** @var StoreFront $storeFront */
@@ -409,7 +410,6 @@ class ProductSynchronizer
 
         $productCategoryFront->setProductId($productFront->getProductId());
         $productCategoryFront->setCategoryId($categoryFrontId);
-        $productCategoryFront->setMainCategory(true);
 
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 

@@ -6,7 +6,6 @@ use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Customer;
 use App\Entity\Front\Customer as CustomerFront;
 use App\Entity\Front\Order as OrderFront;
-use App\Exception\CustomerFrontNotFoundException;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\Filler;
 use App\Helper\Store;
@@ -16,9 +15,13 @@ use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use DateTime;
 use Illuminate\Support\Str;
+use Psr\Log\LoggerInterface;
 
 class CustomerSynchronizer
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var StoreBack $storeBack */
     protected $storeBack;
 
@@ -36,6 +39,7 @@ class CustomerSynchronizer
 
     /**
      * CustomerSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreBack $storeBack
      * @param AddressRepositoryFront $addressRepositoryFront
      * @param CustomerFrontRepository $customerFrontRepository
@@ -43,6 +47,7 @@ class CustomerSynchronizer
      * @param CustomerRepository $customerRepository
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreBack $storeBack,
         AddressRepositoryFront $addressRepositoryFront,
         CustomerFrontRepository $customerFrontRepository,
@@ -50,11 +55,65 @@ class CustomerSynchronizer
         CustomerRepository $customerRepository
     )
     {
+        $this->logger = $logger;
         $this->storeBack = $storeBack;
         $this->addressRepositoryFront = $addressRepositoryFront;
         $this->customerFrontRepository = $customerFrontRepository;
         $this->customerBackRepository = $customerBackRepository;
         $this->customerRepository = $customerRepository;
+    }
+
+    /**
+     * @param OrderFront $orderFront
+     * @param CustomerBack $customerBack
+     * @return CustomerBack
+     */
+    public function updateCustomerBackFromOrderFront(
+        OrderFront $orderFront,
+        CustomerBack $customerBack
+    ): CustomerBack
+    {
+        $time = time();
+
+        $customerBack->setLogin(Filler::securityString(Store::parseLogin($orderFront->getEmail())));
+        $customerBack->setPassword(rand(100000, 999999));
+        $customerBack->setFio($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
+        $customerBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
+        $customerBack->setRegion(Filler::securityString(null));
+        $customerBack->setCity($orderFront->getShippingCity());
+        $customerBack->setStreet($orderFront->getShippingAddress1());
+        $customerBack->setHouse(Filler::securityString(null));
+        $customerBack->setMail($orderFront->getEmail());
+        $customerBack->setCode(Str::lower(Str::random(32)));
+        $customerBack->setActive(true);
+        $customerBack->setAccount(false);
+        $customerBack->setDateReg($time);
+        $customerBack->setDateAccBegin($time);
+        $customerBack->setDateAccEnd($time);
+        $customerBack->setVip('0');
+        $customerBack->setImageSmall(Filler::securityString(null));
+        $customerBack->setImageBig(Filler::securityString(null));
+        $customerBack->setInfo(Filler::securityString(null));
+        $customerBack->setIp(Filler::securityString(null));
+        $customerBack->setTimestampOnline(Filler::securityString(null));
+        $customerBack->setTimestampActive(Filler::securityString(null));
+        $customerBack->setChatNameColor('006084');
+        $customerBack->setMoneyReal($this->storeBack->getDefaultMoneyReal());
+        $customerBack->setMoneyVirtual($this->storeBack->getDefaultMoneyVirtual());
+        $customerBack->setMoneyBox($this->storeBack->getDefaultMoneyBox());
+        $customerBack->setDateBirth(new DateTime('0000-00-00 00:00:00'));
+        $customerBack->setReferer($this->storeBack->getDefaultReferer());
+        $customerBack->setGroupId($this->storeBack->getDefaultGroupId());
+        $customerBack->setGroupExtraId($this->storeBack->getDefaultGroupExtraId());
+        $customerBack->setShopId($this->storeBack->getDefaultShopId());
+        $customerBack->setComment(Filler::securityString(null));
+        $customerBack->setDelivery($this->storeBack->getDefaultDelivery());
+        $customerBack->setPayment($this->storeBack->getDefaultPayment());
+        $customerBack->setWarehouse(Filler::securityString(null));
+
+        $this->customerBackRepository->persistAndFlush($customerBack);
+
+        return $customerBack;
     }
 
     /**
@@ -124,59 +183,6 @@ class CustomerSynchronizer
         $customerBack->setStreet($street);
         $customerBack->setHouse(Filler::securityString(null));
         $customerBack->setMail($customerFront->getEmail());
-        $customerBack->setCode(Str::lower(Str::random(32)));
-        $customerBack->setActive(true);
-        $customerBack->setAccount(false);
-        $customerBack->setDateReg($time);
-        $customerBack->setDateAccBegin($time);
-        $customerBack->setDateAccEnd($time);
-        $customerBack->setVip('0');
-        $customerBack->setImageSmall(Filler::securityString(null));
-        $customerBack->setImageBig(Filler::securityString(null));
-        $customerBack->setInfo(Filler::securityString(null));
-        $customerBack->setIp(Filler::securityString(null));
-        $customerBack->setTimestampOnline(Filler::securityString(null));
-        $customerBack->setTimestampActive(Filler::securityString(null));
-        $customerBack->setChatNameColor('006084');
-        $customerBack->setMoneyReal($this->storeBack->getDefaultMoneyReal());
-        $customerBack->setMoneyVirtual($this->storeBack->getDefaultMoneyVirtual());
-        $customerBack->setMoneyBox($this->storeBack->getDefaultMoneyBox());
-        $customerBack->setDateBirth(new DateTime('0000-00-00 00:00:00'));
-        $customerBack->setReferer($this->storeBack->getDefaultReferer());
-        $customerBack->setGroupId($this->storeBack->getDefaultGroupId());
-        $customerBack->setGroupExtraId($this->storeBack->getDefaultGroupExtraId());
-        $customerBack->setShopId($this->storeBack->getDefaultShopId());
-        $customerBack->setComment(Filler::securityString(null));
-        $customerBack->setDelivery($this->storeBack->getDefaultDelivery());
-        $customerBack->setPayment($this->storeBack->getDefaultPayment());
-        $customerBack->setWarehouse(Filler::securityString(null));
-
-        $this->customerBackRepository->persistAndFlush($customerBack);
-
-        return $customerBack;
-    }
-
-    /**
-     * @param OrderFront $orderFront
-     * @param CustomerBack $customerBack
-     * @return CustomerBack
-     */
-    public function updateCustomerBackFromOrderFront(
-        OrderFront $orderFront,
-        CustomerBack $customerBack
-    ): CustomerBack
-    {
-        $time = time();
-
-        $customerBack->setLogin(Filler::securityString(Store::parseLogin($orderFront->getEmail())));
-        $customerBack->setPassword(rand(100000, 999999));
-        $customerBack->setFio($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
-        $customerBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
-        $customerBack->setRegion(Filler::securityString(null));
-        $customerBack->setCity($orderFront->getShippingCity());
-        $customerBack->setStreet($orderFront->getShippingAddress1());
-        $customerBack->setHouse(Filler::securityString(null));
-        $customerBack->setMail($orderFront->getEmail());
         $customerBack->setCode(Str::lower(Str::random(32)));
         $customerBack->setActive(true);
         $customerBack->setAccount(false);

@@ -11,9 +11,13 @@ use App\Repository\Back\DiscussionsRepository as ReviewBackRepository;
 use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ReviewRepository;
+use Psr\Log\LoggerInterface;
 
 class ReviewSynchronizer
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -31,6 +35,7 @@ class ReviewSynchronizer
 
     /**
      * ReviewSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param ReviewFrontRepository $reviewFrontRepository
      * @param ReviewBackRepository $reviewBackRepository
@@ -38,6 +43,7 @@ class ReviewSynchronizer
      * @param ProductRepository $productRepository
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreFront $storeFront,
         ReviewFrontRepository $reviewFrontRepository,
         ReviewBackRepository $reviewBackRepository,
@@ -45,6 +51,7 @@ class ReviewSynchronizer
         ProductRepository $productRepository
     )
     {
+        $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->reviewFrontRepository = $reviewFrontRepository;
         $this->reviewBackRepository = $reviewBackRepository;

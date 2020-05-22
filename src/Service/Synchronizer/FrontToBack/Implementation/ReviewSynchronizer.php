@@ -3,18 +3,21 @@
 namespace App\Service\Synchronizer\FrontToBack\Implementation;
 
 use App\Entity\Back\Discussions as ReviewBack;
-use App\Entity\Review;
-use App\Exception\ReviewFrontNotFoundException;
-use App\Helper\Filler;
-use App\Helper\Back\Store as StoreBack;
-use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
-use App\Repository\Back\DiscussionsRepository as ReviewBackRepository;
 use App\Entity\Front\Review as ReviewFront;
-use App\Repository\ReviewRepository;
+use App\Entity\Review;
+use App\Helper\Back\Store as StoreBack;
+use App\Helper\Filler;
+use App\Repository\Back\DiscussionsRepository as ReviewBackRepository;
+use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\ProductRepository;
+use App\Repository\ReviewRepository;
+use Psr\Log\LoggerInterface;
 
 class ReviewSynchronizer
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var StoreBack $storeBack */
     protected $storeBack;
 
@@ -32,6 +35,7 @@ class ReviewSynchronizer
 
     /**
      * ReviewSynchronizer constructor.
+     * @param LoggerInterface $logger
      * @param StoreBack $storeBack
      * @param ReviewFrontRepository $reviewFrontRepository
      * @param ReviewBackRepository $reviewBackRepository
@@ -39,6 +43,7 @@ class ReviewSynchronizer
      * @param ProductRepository $productRepository
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreBack $storeBack,
         ReviewFrontRepository $reviewFrontRepository,
         ReviewBackRepository $reviewBackRepository,
@@ -46,6 +51,7 @@ class ReviewSynchronizer
         ProductRepository $productRepository
     )
     {
+        $this->logger = $logger;
         $this->storeBack = $storeBack;
         $this->reviewFrontRepository = $reviewFrontRepository;
         $this->reviewBackRepository = $reviewBackRepository;
@@ -62,6 +68,25 @@ class ReviewSynchronizer
         $reviewBack = $this->getReviewBackFromReview($review);
         $this->updateReviewBackFromReviewFront($reviewBack, $reviewFront);
         $this->createOrUpdateReview($review, $reviewBack->getDid(), $reviewFront->getReviewId());
+    }
+
+    /**
+     * @param Review|null $review
+     * @return ReviewBack
+     */
+    protected function getReviewBackFromReview(?Review $review): ReviewBack
+    {
+        if (null === $review) {
+            return new ReviewBack();
+        }
+
+        $reviewBack = $this->reviewBackRepository->find($review->getFrontId());
+
+        if (null === $reviewBack) {
+            return new ReviewBack();
+        }
+
+        return $reviewBack;
     }
 
     /**
@@ -88,25 +113,6 @@ class ReviewSynchronizer
         $reviewBack->setSiteId($this->storeBack->getDefaultSiteId());
 
         $this->reviewBackRepository->persistAndFlush($reviewBack);
-
-        return $reviewBack;
-    }
-
-    /**
-     * @param Review|null $review
-     * @return ReviewBack
-     */
-    protected function getReviewBackFromReview(?Review $review): ReviewBack
-    {
-        if (null === $review) {
-            return new ReviewBack();
-        }
-
-        $reviewBack = $this->reviewBackRepository->find($review->getFrontId());
-
-        if (null === $reviewBack) {
-            return new ReviewBack();
-        }
 
         return $reviewBack;
     }
