@@ -140,7 +140,7 @@ class ProductImageSynchronizer
 
         $name = $productFront->getProductId() . '_' . $number . '.' . mb_strtolower($pathInfo['extension']);
         $path = $this->frontPath . $name;
-        $bdFileName = str_replace('/image', '', $path);
+        $bdFileName = str_replace('/image/', '', $path);
 
         $productPicturesFront = $this->getProductImageFrontByProductIdAndImagePath(
             $productFront->getProductId(),
