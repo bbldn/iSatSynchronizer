@@ -49,10 +49,10 @@ class ProductRepository extends FrontRepository
      */
     public function updatePriceByData(array $data): bool
     {
-        $tableNameFront = $this->getClassMetadata()->getTableName();
-        $tableName = $this->productRepository->getClassMetadata()->getTableName();
         $dataBase = $this->containerBag->get('database_name');
         $dataBaseFront = $this->containerBag->get('front.database_name');
+        $tableNameFront = $this->getClassMetadata()->getTableName();
+        $tableName = $this->productRepository->getClassMetadata()->getTableName();
 
         $sql = '';
         foreach ($data as $value) {

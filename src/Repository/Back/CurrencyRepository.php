@@ -53,9 +53,30 @@ class CurrencyRepository extends BackRepository
     public function getCurrentCourse(): array
     {
         $connection = $this->getEntityManager()->getConnection();
-        $result = $connection->fetchAll("SELECT `one`.value as 'грн', `two`.value as 'р', 1 as '$' FROM
-(SELECT * FROM `SS_currencies` WHERE `shop_id` = 0 AND `name` = 'грн' ORDER BY `id` DESC LIMIT 1) as `one` INNER JOIN
-(SELECT * FROM `SS_currencies` WHERE `shop_id` = 0 AND `name` = 'р' ORDER BY `id` DESC LIMIT 1) as `two` ON 1 = 1");
+        $sql = "
+            SELECT 
+                `one`.value as 'грн', `two`.value as 'р', 1 as '$' 
+            FROM
+                (
+                    SELECT 
+                      * 
+                    FROM `SS_currencies` 
+                    WHERE 
+                        `shop_id` = 0 
+                        AND `name` = 'грн' 
+                    ORDER BY `id` DESC LIMIT 1) as `one` 
+                    INNER JOIN
+                        (
+                            SELECT 
+                                * 
+                            FROM 
+                                `SS_currencies` 
+                            WHERE `shop_id` = 0 
+                                  AND `name` = 'р' 
+                            ORDER BY `id` DESC LIMIT 1
+              ) 
+              as `two` ON 1 = 1";
+        $result = $connection->fetchAll($sql);
 
         return $result[0];
     }
