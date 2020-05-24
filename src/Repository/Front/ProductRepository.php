@@ -63,7 +63,7 @@ class ProductRepository extends FrontRepository
               SET 
                   pf.price = {$value['price']} 
               WHERE 
-                  pf.product_id = {$value['product_id']};
+                  p.back_id = {$value['product_id']};
             ";
         }
 
