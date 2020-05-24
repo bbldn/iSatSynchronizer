@@ -376,9 +376,18 @@ class ProductSynchronizer
             Filler::securityString(Store::encodingConvert($productBack->getDescription()))
         );
         $productDescriptionFront->setTag(Filler::securityString(null));
-        $productDescriptionFront->setMetaTitle(Store::encodingConvert($productBack->getName()));
-        $productDescriptionFront->setMetaDescription(Filler::securityString(null));
-        $productDescriptionFront->setMetaKeyword(Filler::securityString(null));
+
+        if (null === $productDescriptionFront->getMetaTitle()) {
+            $productDescriptionFront->setMetaTitle(Store::encodingConvert($productBack->getName()));
+        }
+
+        if (null === $productDescriptionFront->getMetaDescription()) {
+            $productDescriptionFront->setMetaDescription(Filler::securityString(null));
+        }
+
+        if (null === $productDescriptionFront->getMetaKeyword()) {
+            $productDescriptionFront->setMetaKeyword(Filler::securityString(null));
+        }
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 
