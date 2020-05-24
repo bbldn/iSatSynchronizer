@@ -261,9 +261,18 @@ class CategorySynchronizer
         $categoryDescription->setDescription(
             Filler::securityString(Store::encodingConvert($categoryBack->getDescription()))
         );
-        $categoryDescription->setMetaTitle(Store::encodingConvert($categoryBack->getName()));
-        $categoryDescription->setMetaDescription(Filler::securityString(null));
-        $categoryDescription->setMetaKeyword(Filler::securityString(null));
+        if (null === $categoryDescription->getMetaTitle()) {
+            $categoryDescription->setMetaTitle(Store::encodingConvert($categoryBack->getName()));
+        }
+
+        if (null === $categoryDescription->getMetaDescription()) {
+            $categoryDescription->setMetaDescription(Filler::securityString(null));
+        }
+
+        if (null === $categoryDescription->getMetaKeyword()) {
+            $categoryDescription->setMetaKeyword(Filler::securityString(null));
+        }
+
         $this->categoryDescriptionFrontRepository->persistAndFlush($categoryDescription);
 
         $categoryLayout = $this->categoryLayoutFrontRepository->find($categoryFrontId);
@@ -313,7 +322,8 @@ class CategorySynchronizer
 
         $frontId = $category->getFrontId();
         if (null === $frontId) {
-            $this->logger->error(ExceptionFormatter::f("Category with id: {$category->getId()} does not have frontId"));
+            $error = "Category with id: {$category->getId()} does not have frontId";
+            $this->logger->error(ExceptionFormatter::f($error));
 
             return $this->storeFront->getDefaultCategoryFrontId();
         }
