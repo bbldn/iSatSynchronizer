@@ -51,16 +51,20 @@ class ProductRepository extends FrontRepository
     {
         $tableNameFront = $this->getClassMetadata()->getTableName();
         $tableName = $this->productRepository->getClassMetadata()->getTableName();
+        $dataBase = $this->containerBag->get('database_name');
+        $dataBaseFront = $this->containerBag->get('front.database_name');
 
         $sql = '';
         foreach ($data as $value) {
-            $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
-            $queryBuilder->innerJoin('pb', $tableName, 'p', 'pb.product_id = p.front_id');
-            $queryBuilder->set('pb.price', $value['price']);
-            $queryBuilder->where("pb.`product_id` = {$value['product_id']}");
-            $queryBuilder->update($tableNameFront, 'pb');
-
-            $sql .= $queryBuilder->getSQL() . ';';
+            $sql .= "
+              UPDATE 
+                  {$dataBaseFront}.{$tableNameFront} pf 
+              INNER JOIN {$dataBase}.{$tableName} p ON pf.product_id = p.front_id 
+              SET 
+                  pf.price = {$value['price']} 
+              WHERE 
+                  pf.product_id = {$value['product_id']};
+            ";
         }
 
         try {
