@@ -199,8 +199,15 @@ class CategorySynchronizer
 
         $categoryFront->setImage(Filler::securityString(null));
         $categoryFront->setParentId($parentId);
-        $categoryFront->setTop(false);
-        $categoryFront->setColumn(1);
+
+        if (null === $categoryFront->getTop()) {
+            $categoryFront->setTop(false);
+        }
+
+        if (null === $categoryFront->getColumn()) {
+            $categoryFront->setColumn(1);
+        }
+
         $categoryFront->setSortOrder(0);
         $categoryFront->setStatus($categoryBack->getEnabled());
 
