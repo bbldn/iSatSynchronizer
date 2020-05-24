@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\ProductImage;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method ProductImage|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,27 @@ class ProductImageRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductImage::class);
+    }
+
+    /**
+     * @param int $productId
+     * @param string $imagePath
+     * @return ProductImage|null
+     */
+    public function findOneByProductIdAndImagePath(int $productId, string $imagePath): ?ProductImage
+    {
+        try {
+            $result = $this->createQueryBuilder('c')
+                ->andWhere('c.productId = :productId')
+                ->setParameter('productId', $productId)
+                ->andWhere('c.image = :imagePath')
+                ->setParameter('imagePath', $imagePath)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

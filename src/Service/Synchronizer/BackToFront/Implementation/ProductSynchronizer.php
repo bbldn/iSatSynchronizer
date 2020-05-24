@@ -540,12 +540,16 @@ class ProductSynchronizer
                 $productFront,
                 $key + 1
             );
+
+            if (null === $productFrontImage) {
+                continue;
+            }
+
             if (0 === $key) {
                 $productFront->setImage($productFrontImage->getImage());
                 $this->productFrontRepository->persistAndFlush($productFront);
                 continue;
             }
-            $this->productImageFrontRepository->persistAndFlush($productFrontImage);
         }
 
         $count = count($productBackImages) + 1;
@@ -556,7 +560,10 @@ class ProductSynchronizer
                 $productFront,
                 $key + $count
             );
-            $this->productImageFrontRepository->persistAndFlush($productFrontImage);
+
+            if (null === $productFrontImage) {
+                continue;
+            }
         }
     }
 }

@@ -5,11 +5,12 @@ namespace App\Service\Synchronizer\BackToFront\Implementation;
 use App\Entity\Back\Photo as PhotoBack;
 use App\Entity\Back\ProductPictures as ProductPicturesBack;
 use App\Entity\Front\Product as ProductFront;
+use App\Entity\Front\ProductImage;
 use App\Entity\Front\ProductImage as ProductImageFront;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
-use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
+use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use Psr\Log\LoggerInterface;
@@ -25,6 +26,9 @@ class ProductImageSynchronizer
 
     /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var ProductImageFrontRepository $productImageFrontRepository */
+    protected $productImageFrontRepository;
 
     /** @var GetBackFileInterface $fileReader */
     protected $fileReader;
@@ -43,6 +47,7 @@ class ProductImageSynchronizer
      * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
+     * @param ProductImageFrontRepository $productImageFrontRepository
      * @param GetBackFileInterface $fileReader
      * @param SaveFrontFileInterface $fileWriter
      * @param array $productImageBackPath
@@ -52,6 +57,7 @@ class ProductImageSynchronizer
         LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
+        ProductImageFrontRepository $productImageFrontRepository,
         GetBackFileInterface $fileReader,
         SaveFrontFileInterface $fileWriter,
         array $productImageBackPath,
@@ -61,6 +67,7 @@ class ProductImageSynchronizer
         $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
+        $this->productImageFrontRepository = $productImageFrontRepository;
         $this->fileReader = $fileReader;
         $this->fileWriter = $fileWriter;
         $this->backPath = $productImageBackPath;
@@ -80,32 +87,43 @@ class ProductImageSynchronizer
      * @param ProductPicturesBack $productPicturesBack
      * @param ProductFront $productFront
      * @param int $number
-     * @return ProductImageFront
+     * @return ProductImageFront|null
      */
     public function synchronizeProductImage(
         ProductPicturesBack $productPicturesBack,
         ProductFront $productFront,
         $number = 1
-    ): ProductImageFront
+    ): ?ProductImageFront
     {
         return $this->synchronize($productPicturesBack->getFileName(), $productFront, $number);
+    }
+
+    /**
+     * @param int $productId
+     * @param string $imagePath
+     * @return ProductImageFront
+     */
+    protected function getProductImageFrontByProductIdAndImagePath(int $productId, string $imagePath): ProductImageFront
+    {
+        $productImage = $this->productImageFrontRepository->findOneByProductIdAndImagePath($productId, $imagePath);
+
+        if (null === $productImage) {
+            $productImage = new ProductImageFront();
+        }
+
+        return $productImage;
     }
 
     /**
      * @param string $picture
      * @param ProductFront $productFront
      * @param int $number
-     * @return ProductImageFront
+     * @return ProductImageFront|null
      */
-    protected function synchronize(string $picture, ProductFront $productFront, $number = 1): ProductImageFront
+    protected function synchronize(string $picture, ProductFront $productFront, $number = 1): ?ProductImageFront
     {
-        $productPicturesFront = new ProductImageFront();
-        $productPicturesFront->setProductId($productFront->getProductId());
-        $productPicturesFront->setSortOrder($this->storeFront->getDefaultSortOrder());
-        $productPicturesFront->setImage(Filler::securityString(null));
-
         if (null === $picture) {
-            return $productPicturesFront;
+            return null;
         }
 
         $path = $this->storeBack->getSitePath() . $this->backPath[0];
@@ -118,7 +136,7 @@ class ProductImageSynchronizer
                     ExceptionFormatter::f('Image not found')
                 );
 
-                return $productPicturesFront;
+                return null;
             }
         }
 
@@ -126,18 +144,25 @@ class ProductImageSynchronizer
 
         $name = $productFront->getProductId() . '_' . $number . '.' . mb_strtolower($pathInfo['extension']);
         $path = $this->frontPath . $name;
+        $bdFileName = str_replace('/image', '', $path);
+
+        $productPicturesFront = $this->getProductImageFrontByProductIdAndImagePath(
+            $productFront->getProductId(),
+            $bdFileName
+        );
+        $productPicturesFront->setProductId($productFront->getProductId());
+        $productPicturesFront->setSortOrder($this->storeFront->getDefaultSortOrder());
 
         try {
             $this->fileWriter->saveFile($this->storeFront->getSitePath() . $path, $content);
         } catch (UploadException $exception) {
-            $this->logger->error(
-                ExceptionFormatter::f('Error image save')
-            );
+            $this->logger->error(ExceptionFormatter::f('Error image save'));
 
-            return $productPicturesFront;
+            return null;
         }
 
-        $productPicturesFront->setImage(str_replace('/image', '', $path));
+        $productPicturesFront->setImage($bdFileName);
+        $this->productImageFrontRepository->persistAndFlush($productPicturesFront);
 
         return $productPicturesFront;
     }
@@ -146,9 +171,9 @@ class ProductImageSynchronizer
      * @param PhotoBack $photoBack
      * @param ProductFront $productFront
      * @param int $number
-     * @return ProductImageFront
+     * @return ProductImageFront|null
      */
-    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ProductImageFront
+    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ?ProductImageFront
     {
         return $this->synchronize($photoBack->getBig(), $productFront, $number);
     }

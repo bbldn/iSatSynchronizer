@@ -29,6 +29,24 @@ class GetBackFileFromNetwork implements GetBackFileInterface
     public function getFile(string $path): ?string
     {
         $response = $this->httpClient->request('GET', $path);
+        $headers = $response->getHeaders();
+
+        if (false === key_exists('content-type', $headers)) {
+            return null;
+        }
+
+        $contentType = $headers['content-type'];
+
+        if (false === is_array($contentType) || 0 === count($contentType)) {
+            return null;
+        }
+
+        $contentType = array_shift($contentType);
+
+        if (0 === preg_match('/^image.+$/', $contentType)) {
+            return null;
+        }
+
         $statusCode = $response->getStatusCode();
         if (200 !== $statusCode) {
             return null;
