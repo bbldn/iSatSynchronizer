@@ -4,6 +4,8 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\Product;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\DBALException;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,12 +20,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ProductRepository extends BackRepository
 {
+    /** @var ContainerBagInterface $containerBag */
+    protected $containerBag;
+
     /**
      * ProductRepository constructor.
      * @param ManagerRegistry $registry
+     * @param ContainerBagInterface $containerBag
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ContainerBagInterface $containerBag)
     {
+        $this->containerBag = $containerBag;
         parent::__construct($registry, Product::class);
     }
 
@@ -57,5 +64,72 @@ class ProductRepository extends BackRepository
         }
 
         return $query->select('c.id, c.name')->getQuery()->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    public function getBackPrices(): array
+    {
+        $tableName = $this->getClassMetadata()->getTableName();
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $queryBuilder->select('p.`productID` as `product_id`, p.`Price` as `price`');
+        $queryBuilder->from($tableName, 'p');
+
+        try {
+            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
+        } catch (DBALException $e) {
+            return [];
+        }
+
+        $result->execute();
+
+        return $result->fetchAll();
+    }
+
+    /**
+     * @param string $ids
+     * @return array
+     */
+    public function getBackPricesByIds(string $ids): array
+    {
+        $tableName = $this->getClassMetadata()->getTableName();
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $queryBuilder->select('p.`productID` as `product_id`, p.`Price` as `price`');
+        $queryBuilder->from($tableName, 'p');
+        $queryBuilder->where("p.`productID` IN ({$ids})");
+
+        try {
+            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
+        } catch (DBALException $e) {
+            return [];
+        }
+
+        $result->execute();
+
+        return $result->fetchAll();
+    }
+
+    /**
+     * @param string $ids
+     * @return array
+     */
+    public function getBackPricesByCategoryIds(string $ids): array
+    {
+        $tableName = $this->getClassMetadata()->getTableName();
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $queryBuilder->select('p.`productID` as `product_id`, p.`Price` as `price`');
+        $queryBuilder->from($tableName, 'p');
+        $queryBuilder->where("p.`categoryID` IN ({$ids})");
+
+        try {
+            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
+        } catch (DBALException $e) {
+            return [];
+        }
+
+        $result->execute();
+
+        return $result->fetchAll();
     }
 }

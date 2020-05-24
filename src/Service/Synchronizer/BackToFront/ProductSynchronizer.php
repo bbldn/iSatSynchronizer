@@ -36,7 +36,8 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function updatePriceAll()
     {
-        $this->productFrontRepository->updateProductsPrice();
+        $data = $this->productBackRepository->getBackPrices();
+        $this->productFrontRepository->updatePriceByData($data);
     }
 
     /**
@@ -44,7 +45,8 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function updatePriceByIds(string $ids)
     {
-        $this->productFrontRepository->updateProductsPriceByIds($ids);
+        $data = $this->productBackRepository->getBackPricesByIds($ids);
+        $this->productFrontRepository->updatePriceByData($data);
     }
 
     /**
@@ -52,7 +54,8 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function updatePriceByCategoryIds(string $ids)
     {
-        $this->productFrontRepository->updateProductsPriceByCategoryIds($ids);
+        $data = $this->productBackRepository->getBackPricesByCategoryIds($ids);
+        $this->productFrontRepository->updatePriceByData($data);
     }
 
     /**

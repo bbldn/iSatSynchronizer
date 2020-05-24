@@ -23,80 +23,45 @@ class ProductRepository extends FrontRepository
     /** @var ContainerBagInterface $containerBag */
     protected $containerBag;
 
+    /** @var \App\Repository\ProductRepository $productRepository */
+    protected $productRepository;
+
     /**
      * ProductRepository constructor.
      * @param ManagerRegistry $registry
      * @param ContainerBagInterface $containerBag
+     * @param \App\Repository\ProductRepository $productRepository
      */
-    public function __construct(ManagerRegistry $registry, ContainerBagInterface $containerBag)
+    public function __construct(
+        ManagerRegistry $registry,
+        ContainerBagInterface $containerBag,
+        \App\Repository\ProductRepository $productRepository
+    )
     {
         $this->containerBag = $containerBag;
+        $this->productRepository = $productRepository;
         parent::__construct($registry, Product::class);
     }
 
     /**
+     * @param array $data
      * @return bool
      */
-    public function updateProductsPrice(): bool
+    public function updatePriceByData(array $data): bool
     {
-        $frontDatabaseName = $this->containerBag->get('front.database_name');
-        $databaseName = $this->containerBag->get('database_name');
-        $backDatabaseName = $this->containerBag->get('back.database_name');
+        $tableNameFront = $this->getClassMetadata()->getTableName();
+        $tableName = $this->productRepository->getClassMetadata()->getTableName();
 
-        $sql = "UPDATE `{$frontDatabaseName}`.`oc_product` oc 
-                INNER JOIN `{$databaseName}`.`products` as isp ON isp.`front_id` =  oc.`product_id`
-                INNER JOIN `{$backDatabaseName}`.`SS_products` as inp ON isp.`back_id` =  inp.`productID`
-                SET oc.`price` = inp.price;";
+        $sql = '';
+        foreach ($data as $value) {
+            $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+            $queryBuilder->innerJoin('pb', $tableName, 'p', 'pb.product_id = p.front_id');
+            $queryBuilder->set('pb.price', $value['price']);
+            $queryBuilder->where("pb.`product_id` = {$value['product_id']}");
+            $queryBuilder->update($tableNameFront, 'pb');
 
-        try {
-            $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
-        } catch (DBALException $e) {
-            //@TODO Notify
-            $result = false;
+            $sql .= $queryBuilder->getSQL() . ';';
         }
-
-        return $result;
-    }
-
-    /**
-     * @param string $ids
-     * @return bool
-     */
-    public function updateProductsPriceByIds(string $ids): bool
-    {
-        $frontDatabaseName = $this->containerBag->get('front.database_name');
-        $databaseName = $this->containerBag->get('database_name');
-        $backDatabaseName = $this->containerBag->get('back.database_name');
-
-        $sql = "UPDATE `{$frontDatabaseName}`.`oc_product` oc 
-                INNER JOIN `{$databaseName}`.`products` as isp ON isp.`front_id` =  oc.`product_id`
-                INNER JOIN `{$backDatabaseName}`.`SS_products` as inp ON isp.`back_id` =  inp.`productID`
-                SET oc.`price` = inp.price WHERE inp.`productID` IN ({$ids});";
-
-        try {
-            $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
-        } catch (DBALException $e) {
-            //@TODO
-            $result = false;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $ids
-     * @return bool
-     */
-    public function updateProductsPriceByCategoryIds(string $ids): bool
-    {
-        $frontDatabaseName = $this->containerBag->get('front.database_name');
-        $databaseName = $this->containerBag->get('database_name');
-        $backDatabaseName = $this->containerBag->get('back.database_name');
-
-        $sql = "UPDATE `{$frontDatabaseName}`.`oc_product` oc 
-                INNER JOIN `{$databaseName}`.`products` as isp ON isp.`front_id` =  oc.`product_id`
-                INNER JOIN `{$backDatabaseName}`.`SS_products` as inp ON isp.`back_id` =  inp.`productID`
-                SET oc.`price` = inp.price WHERE inp.`categoryID` IN ({$ids});";
 
         try {
             $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
