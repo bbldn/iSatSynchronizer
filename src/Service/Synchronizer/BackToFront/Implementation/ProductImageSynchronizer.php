@@ -132,10 +132,6 @@ class ProductImageSynchronizer
             $path = $this->storeBack->getSitePath() . $this->backPath[1];
             $content = $this->fileReader->getFile($path . $picture);
             if (null === $content) {
-                $this->logger->error(
-                    ExceptionFormatter::f('Image not found')
-                );
-
                 return null;
             }
         }
