@@ -208,7 +208,10 @@ class CategorySynchronizer
             $categoryFront->setColumn(1);
         }
 
-        $categoryFront->setSortOrder(0);
+        if (null === $categoryFront->getSortOrder()) {
+            $categoryFront->setSortOrder(0);
+        }
+
         $categoryFront->setStatus($categoryBack->getEnabled());
 
         $this->categoryFrontRepository->persistAndFlush($categoryFront);
