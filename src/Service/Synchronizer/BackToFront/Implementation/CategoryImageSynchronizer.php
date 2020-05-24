@@ -94,8 +94,6 @@ class CategoryImageSynchronizer
         $path = $this->storeBack->getSitePath() . $path;
         $content = $this->fileReader->getFile($path . $picture);
         if (null === $content) {
-            $this->logger->error(ExceptionFormatter::f('Image not found'));
-
             return;
         }
 
