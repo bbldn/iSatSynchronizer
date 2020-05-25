@@ -67,9 +67,6 @@ class CategorySynchronizer
     /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
     protected $seoUrlFrontRepository;
 
-    /** @var bool $seoProEnabled */
-    protected $seoProEnabled;
-
     /**
      * CategorySynchronizer constructor.
      * @param LoggerInterface $logger
@@ -85,7 +82,6 @@ class CategorySynchronizer
      * @param CategoryBackRepository $categoryBackRepository
      * @param CategoryImageSynchronizer $categoryImageSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
-     * @param bool $seoProEnabled
      */
     public function __construct(
         LoggerInterface $logger,
@@ -100,8 +96,7 @@ class CategorySynchronizer
         CategoryRepository $categoryRepository,
         CategoryBackRepository $categoryBackRepository,
         CategoryImageSynchronizer $categoryImageSynchronizer,
-        SeoUrlFrontRepository $seoUrlFrontRepository,
-        bool $seoProEnabled
+        SeoUrlFrontRepository $seoUrlFrontRepository
     )
     {
         $this->logger = $logger;
@@ -117,7 +112,6 @@ class CategorySynchronizer
         $this->categoryBackRepository = $categoryBackRepository;
         $this->categoryImageSynchronizer = $categoryImageSynchronizer;
         $this->seoUrlFrontRepository = $seoUrlFrontRepository;
-        $this->seoProEnabled = $seoProEnabled;
     }
 
     /**
@@ -137,7 +131,7 @@ class CategorySynchronizer
         $this->categoryRepository->resetAutoIncrements();
         $this->categoryFrontRepository->resetAutoIncrements();
 
-        if (true === $this->seoProEnabled) {
+        if (true === $this->seoUrlFrontRepository->tableExists()) {
             $this->seoUrlFrontRepository->removeAllByQuery('category_id');
         }
 
@@ -295,7 +289,7 @@ class CategorySynchronizer
         $categoryStore->setStoreId($this->storeFront->getDefaultStoreId());
         $this->categoryStoreFrontRepository->persistAndFlush($categoryStore);
 
-        if (false === $this->seoProEnabled) {
+        if (false === $this->seoUrlFrontRepository->tableExists()) {
             return $categoryFront;
         }
 

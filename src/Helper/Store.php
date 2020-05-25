@@ -19,8 +19,8 @@ class Store
     }
 
     /**
-     * @param null|string $value
-     * @return null|string|string[]
+     * @param string|null $value
+     * @return string[]|string|null
      */
     public static function encodingConvert(?string $value)
     {
@@ -67,14 +67,15 @@ class Store
     {
         switch (mb_strtolower(trim($currency))) {
             case 'грн':
-                return ['code' => 'UAH', 'id' => 4];
+            case '₴':
+                return ['code' => 'UAH', 'id' => 2];
             case 'р':
-                return ['code' => 'RUB', 'id' => 1];
+                return ['code' => 'RUB', 'id' => 3];
             case '$':
-                return ['code' => 'USD', 'id' => 2];
-            default:
-                return ['code' => 'UAH', 'id' => 4];
+                return ['code' => 'USD', 'id' => 1];
         }
+
+        return ['code' => 'USD', 'id' => 1];
     }
 
     /**

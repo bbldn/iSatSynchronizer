@@ -229,6 +229,7 @@ class OrderSynchronizer
         } else {
             $comment = $mainOrderBack->getWhant();
         }
+
         $orderFront->setComment($comment);
         $orderFront->setTotal(
             $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum()) * $mainOrderBack->getCurrencyValue()
@@ -238,14 +239,23 @@ class OrderSynchronizer
         $orderFront->setCommission($this->storeFront->getDefaultCommission());
         $orderFront->setMarketingId($this->storeFront->getDefaultMarketingId());
 
-        if (null === $orderFront->getTracking()) {
+
+        if (null === $mainOrderBack->getTrackNumber()) {
             $orderFront->setTracking(Filler::securityString(null));
+        } else {
+            $orderFront->setTracking($mainOrderBack->getTrackNumber());
         }
 
         $orderFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $orderFront->setCurrencyId($currency['id']);
         $orderFront->setCurrencyCode($currency['code']);
-        $orderFront->setCurrencyValue($this->currencyFrontRepository->getCurrentCurrency($currency['id']));
+
+        $currencyValue = $this->currencyFrontRepository->getCurrentCurrency($currency['id']);
+        if (null === $currencyValue) {
+            $currencyValue = 1;
+        }
+
+        $orderFront->setCurrencyValue($currencyValue);
 
         if (null === $orderFront->getIp()) {
             $orderFront->setIp(Filler::securityString(null));

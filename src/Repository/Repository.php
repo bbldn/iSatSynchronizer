@@ -4,8 +4,8 @@ namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\DBALException;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\Persistence\ManagerRegistry;
 
 abstract class Repository extends ServiceEntityRepository
 {
@@ -108,5 +108,29 @@ abstract class Repository extends ServiceEntityRepository
             ->setParameter('ids', $ids)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return bool
+     */
+    public function tableExists(): bool
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $database = $connection->getDatabase();
+        $queryBuilder = $connection->createQueryBuilder();
+        $queryBuilder->select('count(*)');
+        $queryBuilder->from('information_schema.tables', 't');
+        $queryBuilder->andWhere("table_name = '{$this->tableName}'");
+        $queryBuilder->andWhere("table_schema = '{$database}'");
+        $queryBuilder->setMaxResults(1);
+
+        try {
+            $query = $connection->prepare($queryBuilder->getSQL());
+
+            return $query->execute() > 0;
+        } catch (DBALException $e) {
+            return false;
+        }
     }
 }

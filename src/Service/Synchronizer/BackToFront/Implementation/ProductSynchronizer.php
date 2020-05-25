@@ -134,9 +134,6 @@ class ProductSynchronizer
     /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
     protected $seoUrlFrontRepository;
 
-    /** @var bool $seoProEnabled */
-    protected $seoProEnabled;
-
     /**
      * ProductSynchronizer constructor.
      * @param LoggerInterface $logger
@@ -168,7 +165,6 @@ class ProductSynchronizer
      * @param ProductPicturesBackRepository $productPicturesBackRepository
      * @param ProductImageSynchronizer $productImageSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
-     * @param bool $seoProEnabled
      */
     public function __construct(
         LoggerInterface $logger,
@@ -199,8 +195,7 @@ class ProductSynchronizer
         ProductBackRepository $productBackRepository,
         ProductPicturesBackRepository $productPicturesBackRepository,
         ProductImageSynchronizer $productImageSynchronizer,
-        SeoUrlFrontRepository $seoUrlFrontRepository,
-        bool $seoProEnabled
+        SeoUrlFrontRepository $seoUrlFrontRepository
     )
     {
         $this->logger = $logger;
@@ -232,7 +227,6 @@ class ProductSynchronizer
         $this->productPicturesBackRepository = $productPicturesBackRepository;
         $this->seoUrlFrontRepository = $seoUrlFrontRepository;
         $this->productImageSynchronizer = $productImageSynchronizer;
-        $this->seoProEnabled = $seoProEnabled;
     }
 
     /**
@@ -268,7 +262,7 @@ class ProductSynchronizer
         $this->productRewardFrontRepository->resetAutoIncrements();
         $this->productSpecialFrontRepository->resetAutoIncrements();
 
-        if (true === $this->seoProEnabled) {
+        if (true === $this->seoUrlFrontRepository->tableExists()) {
             $this->seoUrlFrontRepository->removeAllByQuery('product_id');
         }
 
@@ -425,6 +419,10 @@ class ProductSynchronizer
         $productFrontId = $productFront->getProductId();
         $this->synchronizeAttributes($productBack, $productFrontId);
 
+        if (false === $this->seoUrlFrontRepository->tableExists()) {
+            return $productFront;
+        }
+
         $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
             'product_id=' . $productFrontId,
             $this->storeFront->getDefaultLanguageId()
@@ -454,13 +452,14 @@ class ProductSynchronizer
         $frontId = $category->getFrontId();
         if (null === $frontId) {
             $this->logger->error(ExceptionFormatter::f("Category front id is null"));
-            //@TODO Notify
+
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $categoryFront = $this->categoryFrontRepository->find($frontId);
         if (null === $categoryFront) {
-            //@TODO Notify
+            $this->logger->error(ExceptionFormatter::f("Category front is null"));
+
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
@@ -531,8 +530,10 @@ class ProductSynchronizer
         if (null === $product) {
             $product = new Product();
         }
+
         $product->setBackId($backId);
         $product->setFrontId($frontId);
+
         $this->productRepository->persistAndFlush($product);
     }
 
