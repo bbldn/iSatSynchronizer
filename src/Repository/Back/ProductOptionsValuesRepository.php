@@ -28,7 +28,7 @@ class ProductOptionsValuesRepository extends BackRepository
     }
 
     /**
-     * @param $value
+     * @param int $value
      * @return ProductOptionsValues[]
      */
     public function findAllByProductBackId(int $value): array

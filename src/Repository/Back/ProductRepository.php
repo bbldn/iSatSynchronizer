@@ -5,7 +5,6 @@ namespace App\Repository\Back;
 use App\Entity\Back\Product;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,17 +19,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
  */
 class ProductRepository extends BackRepository
 {
-    /** @var ContainerBagInterface $containerBag */
-    protected $containerBag;
-
     /**
      * ProductRepository constructor.
      * @param ManagerRegistry $registry
-     * @param ContainerBagInterface $containerBag
      */
-    public function __construct(ManagerRegistry $registry, ContainerBagInterface $containerBag)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->containerBag = $containerBag;
         parent::__construct($registry, Product::class);
     }
 

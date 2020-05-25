@@ -55,7 +55,7 @@ class OrderGamePostRepository extends BackRepository
      * @param array $ids
      * @return OrderGamePost[]
      */
-    public function findWithoutIds(array $ids = [])
+    public function findWithoutIds(array $ids = []): array
     {
         $queryBuilder = $this->createQueryBuilder('o');
 

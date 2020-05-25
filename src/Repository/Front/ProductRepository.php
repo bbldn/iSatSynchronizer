@@ -3,9 +3,9 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Product;
+use App\Repository\ProductRepository as ProductRepositoryMain;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,26 +20,32 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
  */
 class ProductRepository extends FrontRepository
 {
-    /** @var ContainerBagInterface $containerBag */
-    protected $containerBag;
-
     /** @var \App\Repository\ProductRepository $productRepository */
     protected $productRepository;
+
+    /** @var string $dataBaseName */
+    protected $dataBaseName;
+
+    /** @var string $dataBaseNameFront */
+    protected $dataBaseNameFront;
 
     /**
      * ProductRepository constructor.
      * @param ManagerRegistry $registry
-     * @param ContainerBagInterface $containerBag
-     * @param \App\Repository\ProductRepository $productRepository
+     * @param ProductRepositoryMain $productRepository
+     * @param string $dataBaseName
+     * @param string $dataBaseNameFront
      */
     public function __construct(
         ManagerRegistry $registry,
-        ContainerBagInterface $containerBag,
-        \App\Repository\ProductRepository $productRepository
+        ProductRepositoryMain $productRepository,
+        string $dataBaseName,
+        string $dataBaseNameFront
     )
     {
-        $this->containerBag = $containerBag;
         $this->productRepository = $productRepository;
+        $this->dataBaseName = $dataBaseName;
+        $this->dataBaseNameFront = $dataBaseNameFront;
         parent::__construct($registry, Product::class);
     }
 
@@ -49,17 +55,15 @@ class ProductRepository extends FrontRepository
      */
     public function updatePriceByData(array $data): bool
     {
-        $dataBase = $this->containerBag->get('database_name');
-        $dataBaseFront = $this->containerBag->get('front.database_name');
-        $tableNameFront = $this->getClassMetadata()->getTableName();
         $tableName = $this->productRepository->getClassMetadata()->getTableName();
+        $tableNameFront = $this->getClassMetadata()->getTableName();
 
         $sql = '';
         foreach ($data as $value) {
             $sql .= "
               UPDATE 
-                  {$dataBaseFront}.{$tableNameFront} pf 
-              INNER JOIN {$dataBase}.{$tableName} p ON pf.product_id = p.front_id 
+                  {$this->dataBaseNameFront}.{$tableNameFront} pf 
+              INNER JOIN {$this->dataBaseName}.{$tableName} p ON pf.product_id = p.front_id 
               SET 
                   pf.price = {$value['price']} 
               WHERE 

@@ -70,3 +70,9 @@ services:
     App\EventListener\OnConnect:
         tags:
         - { name: doctrine.event_listener, event: postConnect }
+    App\Repository\Front\ProductRepository:
+        arguments:
+        - '@Doctrine\Common\Persistence\ManagerRegistry'
+        - '@App\Repository\ProductRepository'
+        - '%database_name%'
+        - '%front.database_name%'

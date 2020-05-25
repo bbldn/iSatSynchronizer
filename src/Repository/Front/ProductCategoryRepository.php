@@ -31,7 +31,7 @@ class ProductCategoryRepository extends FrontRepository
      * @param int $value
      * @return ProductCategory[]
      */
-    public function findByProductFrontId(int $value)
+    public function findByProductFrontId(int $value): array
     {
         return $this->createQueryBuilder('cr')
             ->andWhere('cr.productId = :val')
