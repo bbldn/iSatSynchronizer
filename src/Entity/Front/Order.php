@@ -2,14 +2,12 @@
 
 namespace App\Entity\Front;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`oc_order`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\OrderRepository")
- * @ORM\HasLifecycleCallbacks()
  */
 class Order
 {
@@ -1508,19 +1506,6 @@ class Order
         $this->dateModified = $dateModified;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDateModified(new DateTime('now'));
-
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 
     /**

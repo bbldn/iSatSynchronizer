@@ -241,9 +241,10 @@ class OrderSynchronizer
         $orderFront->setUserAgent(Filler::securityString(null));
         $orderFront->setAcceptLanguage(Filler::securityString(null));
 
-        $dateAdded = new DateTime();
-        $dateAdded->setTimestamp($mainOrderBack->getTime());
-        $orderFront->setDateAdded($dateAdded);
+        $date = new DateTime();
+        $date->setTimestamp($mainOrderBack->getTime());
+        $orderFront->setDateAdded($date);
+        $orderFront->setDateModified($date);
 
         $this->orderFrontRepository->persistAndFlush($orderFront);
 
@@ -273,9 +274,8 @@ class OrderSynchronizer
             $productDescriptionFront = $this->productDescriptionFrontRepository->find($product->getFrontId());
 
             if (null === $productDescriptionFront) {
-                $this->logger->error(
-                    ExceptionFormatter::f("Product Description front with id: {$product->getFrontId()} not found")
-                );
+                $message = "Product Description front with id: {$product->getFrontId()} not found";
+                $this->logger->error(ExceptionFormatter::f($message));
 
                 return $orderFront;
             }
