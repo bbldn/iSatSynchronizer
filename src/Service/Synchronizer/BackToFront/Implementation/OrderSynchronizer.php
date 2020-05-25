@@ -223,7 +223,13 @@ class OrderSynchronizer
         $orderFront->setShippingCustomField($this->storeFront->getDefaultCustomField());
         $orderFront->setShippingMethod($this->storeFront->getDefaultShippingMethod());
         $orderFront->setShippingCode($this->storeFront->getDefaultShippingCode());
-        $orderFront->setComment(Filler::securityString(null));
+
+        if (null === $mainOrderBack->getWhant()) {
+            $comment = Filler::securityString(null);
+        } else {
+            $comment = $mainOrderBack->getWhant();
+        }
+        $orderFront->setComment($comment);
         $orderFront->setTotal(
             $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum()) * $mainOrderBack->getCurrencyValue()
         );
@@ -231,15 +237,31 @@ class OrderSynchronizer
         $orderFront->setAffiliateId($this->storeFront->getDefaultAffiliateId());
         $orderFront->setCommission($this->storeFront->getDefaultCommission());
         $orderFront->setMarketingId($this->storeFront->getDefaultMarketingId());
-        $orderFront->setTracking(Filler::securityString(null));
+
+        if (null === $orderFront->getTracking()) {
+            $orderFront->setTracking(Filler::securityString(null));
+        }
+
         $orderFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $orderFront->setCurrencyId($currency['id']);
         $orderFront->setCurrencyCode($currency['code']);
         $orderFront->setCurrencyValue($this->currencyFrontRepository->getCurrentCurrency($currency['id']));
-        $orderFront->setIp(Filler::securityString(null));
-        $orderFront->setForwardedIp(Filler::securityString(null));
-        $orderFront->setUserAgent(Filler::securityString(null));
-        $orderFront->setAcceptLanguage(Filler::securityString(null));
+
+        if (null === $orderFront->getIp()) {
+            $orderFront->setIp(Filler::securityString(null));
+        }
+
+        if (null === $orderFront->getForwardedIp()) {
+            $orderFront->setForwardedIp(Filler::securityString(null));
+        }
+
+        if (null === $orderFront->getUserAgent()) {
+            $orderFront->setUserAgent(Filler::securityString(null));
+        }
+
+        if (null === $orderFront->getAcceptLanguage()) {
+            $orderFront->setAcceptLanguage(Filler::securityString(null));
+        }
 
         $date = new DateTime();
         $date->setTimestamp($mainOrderBack->getTime());
