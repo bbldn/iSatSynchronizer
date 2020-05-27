@@ -159,6 +159,28 @@ class OrderSynchronizer
     }
 
     /**
+     * @param int $orderFrontId
+     * @param int $productFrontId
+     * @return OrderProductFront
+     */
+    protected function getOrderProductFrontFromOrderFrontIdAndProductFrontId(
+        int $orderFrontId,
+        int $productFrontId
+    ): OrderProductFront
+    {
+        $orderProductFront = $this->orderProductFrontRepository->findOneByOrderFrontIdAndProductFrontId(
+            $orderFrontId,
+            $productFrontId
+        );
+
+        if (null === $orderProductFront) {
+            $orderProductFront = new OrderProductFront();
+        }
+
+        return $orderProductFront;
+    }
+
+    /**
      * @param OrderFront $orderFront
      * @param OrderBack $mainOrderBack
      * @return OrderFront
@@ -197,10 +219,10 @@ class OrderSynchronizer
         $orderFront->setPaymentLastName($fullName['lastName']);
         $orderFront->setPaymentCompany(Filler::securityString(null));
         $orderFront->setPaymentAddress1($address);
-        $orderFront->setPaymentAddress2(Filler::securityString(null));
-        $orderFront->setPaymentCity($mainOrderBack->getCity());
+        $orderFront->setPaymentAddress2($address);
+        $orderFront->setPaymentCity($mainOrderBack->getWarehouse());
         $orderFront->setPaymentPostCode(Filler::securityString(null));
-        $orderFront->setPaymentCountry($this->storeFront->getDefaultCountry());
+        $orderFront->setPaymentCountry($mainOrderBack->getRegion());
         $orderFront->setPaymentCountryId($this->storeFront->getDefaultCountryId());
         $orderFront->setPaymentZone($mainOrderBack->getCity());
         $orderFront->setPaymentZoneId($zoneId);
@@ -212,10 +234,10 @@ class OrderSynchronizer
         $orderFront->setShippingLastName($fullName['lastName']);
         $orderFront->setShippingCompany(Filler::securityString(null));
         $orderFront->setShippingAddress1($address);
-        $orderFront->setShippingAddress2(Filler::securityString(null));
-        $orderFront->setShippingCity($mainOrderBack->getCity());
+        $orderFront->setShippingAddress2($address);
+        $orderFront->setShippingCity($mainOrderBack->getWarehouse());
         $orderFront->setShippingPostCode(Filler::securityString(null));
-        $orderFront->setShippingCountry($this->storeFront->getDefaultCountry());
+        $orderFront->setShippingCountry($mainOrderBack->getRegion());
         $orderFront->setShippingCountryId($this->storeFront->getDefaultCountryId());
         $orderFront->setShippingZone($mainOrderBack->getCity());
         $orderFront->setShippingZoneId($zoneId);
@@ -223,12 +245,8 @@ class OrderSynchronizer
         $orderFront->setShippingCustomField($this->storeFront->getDefaultCustomField());
         $orderFront->setShippingMethod($this->storeFront->getDefaultShippingMethod());
         $orderFront->setShippingCode($this->storeFront->getDefaultShippingCode());
+        $comment = Filler::securityString($mainOrderBack->getWhant());
 
-        if (null === $mainOrderBack->getWhant()) {
-            $comment = Filler::securityString(null);
-        } else {
-            $comment = $mainOrderBack->getWhant();
-        }
 
         $orderFront->setComment($comment);
         $orderFront->setTotal(
@@ -238,13 +256,8 @@ class OrderSynchronizer
         $orderFront->setAffiliateId($this->storeFront->getDefaultAffiliateId());
         $orderFront->setCommission($this->storeFront->getDefaultCommission());
         $orderFront->setMarketingId($this->storeFront->getDefaultMarketingId());
+        $orderFront->setTracking(Filler::securityString($mainOrderBack->getTrackNumber()));
 
-
-        if (null === $mainOrderBack->getTrackNumber()) {
-            $orderFront->setTracking(Filler::securityString(null));
-        } else {
-            $orderFront->setTracking($mainOrderBack->getTrackNumber());
-        }
 
         $orderFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $orderFront->setCurrencyId($currency['id']);
@@ -256,25 +269,14 @@ class OrderSynchronizer
         }
 
         $orderFront->setCurrencyValue($currencyValue);
-
-        if (null === $orderFront->getIp()) {
-            $orderFront->setIp(Filler::securityString(null));
-        }
-
-        if (null === $orderFront->getForwardedIp()) {
-            $orderFront->setForwardedIp(Filler::securityString(null));
-        }
-
-        if (null === $orderFront->getUserAgent()) {
-            $orderFront->setUserAgent(Filler::securityString(null));
-        }
-
-        if (null === $orderFront->getAcceptLanguage()) {
-            $orderFront->setAcceptLanguage(Filler::securityString(null));
-        }
+        $orderFront->setIp(Filler::securityString($orderFront->getIp()));
+        $orderFront->setForwardedIp(Filler::securityString($orderFront->getForwardedIp()));
+        $orderFront->setUserAgent(Filler::securityString($orderFront->getUserAgent()));
+        $orderFront->setAcceptLanguage(Filler::securityString($orderFront->getAcceptLanguage()));
 
         $date = new DateTime();
         $date->setTimestamp($mainOrderBack->getTime());
+
         $orderFront->setDateAdded($date);
         $orderFront->setDateModified($date);
 
@@ -286,9 +288,8 @@ class OrderSynchronizer
             $product = $this->productRepository->findOneByBackId($orderBack->getProductId());
 
             if (null === $product) {
-                $this->logger->error(
-                    ExceptionFormatter::f("Product with for back id {$orderBack->getProductId()} not found")
-                );
+                $message = "Product with for back id {$orderBack->getProductId()} not found";
+                $this->logger->error(ExceptionFormatter::f($message));
 
                 return $orderFront;
             }
@@ -296,9 +297,8 @@ class OrderSynchronizer
             $productFront = $this->productFrontRepository->find($product->getFrontId());
 
             if (null === $productFront) {
-                $this->logger->error(
-                    ExceptionFormatter::f("Product front with id: {$product->getFrontId()} not found")
-                );
+                $message = "Product front with id: {$product->getFrontId()} not found";
+                $this->logger->error(ExceptionFormatter::f($message));
 
                 return $orderFront;
             }
@@ -312,14 +312,19 @@ class OrderSynchronizer
                 return $orderFront;
             }
 
-            $total = $orderBack->getAmount() * $orderBack->getPrice();
-            $orderProductFront = new OrderProductFront();
+            $orderProductFront = $this->getOrderProductFrontFromOrderFrontIdAndProductFrontId(
+                $orderFront->getOrderId(),
+                $product->getFrontId()
+            );
+
             $orderProductFront->setOrderId($orderFront->getOrderId());
             $orderProductFront->setProductId($product->getFrontId());
             $orderProductFront->setName(Store::encodingConvert($productDescriptionFront->getName()));
             $orderProductFront->setModel(Store::encodingConvert($productFront->getModel()));
             $orderProductFront->setQuantity($orderBack->getAmount());
             $orderProductFront->setPrice($orderBack->getPrice());
+
+            $total = $orderBack->getAmount() * $orderBack->getPrice();
             $orderProductFront->setTotal($total);
             $orderProductFront->setTax($this->storeFront->getDefaultTax());
             $orderProductFront->setReward($this->storeFront->getDefaultReward());

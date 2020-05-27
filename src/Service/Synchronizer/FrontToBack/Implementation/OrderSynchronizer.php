@@ -350,7 +350,8 @@ class OrderSynchronizer
         $currentOrderBack = $orderBack;
 
         if (0 === count($orderProductsFront)) {
-            $this->logger->error(ExceptionFormatter::f("Order without products: {$orderFront->getOrderId()}"));
+            $message = "Order without products: {$orderFront->getOrderId()}";
+            $this->logger->error(ExceptionFormatter::f($message));
 
             return $orderBack;
         }
@@ -397,14 +398,14 @@ class OrderSynchronizer
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId())
             );
             $currentOrderBack->setPhone($orderFront->getTelephone());
-            $currentOrderBack->setFio($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
+            $currentOrderBack->setFio("{$orderFront->getLastName()} {$orderFront->getFirstName()}");
             $currentOrderBack->setRegion($orderFront->getShippingZone());
             $currentOrderBack->setCity($orderFront->getShippingCity());
             $currentOrderBack->setStreet($orderFront->getShippingAddress1());
-            $currentOrderBack->setHouse($orderFront->getShippingAddress2());
-            $currentOrderBack->setWarehouse(Filler::securityString(null));
+            $currentOrderBack->setHouse(Filler::securityString(null));
+            $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
             $currentOrderBack->setMail($orderFront->getEmail());
-            $currentOrderBack->setWhant(Filler::securityString(null));
+            $currentOrderBack->setWhant($orderFront->getComment());
             $currentOrderBack->setVipNum(Filler::securityString(null));
 
             if (null === $orderFront->getDateAdded()) {
@@ -420,14 +421,8 @@ class OrderSynchronizer
                 $orderStatus = $orderFront->getOrderStatusId();
             }
 
-            if (null === $orderFront->getComment()) {
-                $comment = Filler::securityString(null);
-            } else {
-                $comment = $orderFront->getComment();
-            }
-
             $currentOrderBack->setStatus($orderStatus);
-            $currentOrderBack->setComments($comment);
+            $currentOrderBack->setComments(Filler::securityString(null));
             $currentOrderBack->setArchive(0);
             $currentOrderBack->setRead(0);
             $currentOrderBack->setSynchronize(false);
@@ -435,20 +430,29 @@ class OrderSynchronizer
             $currentOrderBack->setPayment(13);
             $currentOrderBack->setDelivery(21);
             $currentOrderBack->setOrderNum($orderNum);
-            $currentOrderBack->setTrackNumber(Filler::securityString(null));
+            $currentOrderBack->setTrackNumber($orderFront->getTracking());
             $currentOrderBack->setTrackNumberDate(new DateTime());
-            $currentOrderBack->setMoneyGiven(false);
-            $currentOrderBack->setTrackSent(false);
-            $currentOrderBack->setSerialNum('');
+
+            if (null === $currentOrderBack->getMoneyGiven()) {
+                $currentOrderBack->setMoneyGiven(false);
+            }
+
+            if (null === $currentOrderBack->getTrackSent()) {
+                $currentOrderBack->setTrackSent(false);
+            }
+
+            if (null === $currentOrderBack->getSerialNum()) {
+                $currentOrderBack->setSerialNum('');
+            }
+
             $currentOrderBack->setShopId($this->storeBack->getDefaultSiteId());
             $currentOrderBack->setShopIdCounterparty(0);
             $currentOrderBack->setPaymentWaitDays(0);
             $currentOrderBack->setPaymentWaitFirstSum(0);
-            $data = new DateTime();
-            $currentOrderBack->setPaymentDate($data);
+            $currentOrderBack->setPaymentDate($orderFront->getDateAdded());
             $currentOrderBack->setDocumentId(0);
             $currentOrderBack->setDocumentType(2);
-            $currentOrderBack->setInvoiceSent($data);
+            $currentOrderBack->setInvoiceSent($orderFront->getDateAdded());
             $currentOrderBack->setCurrencyValue($currentCourse);
             $currentOrderBack->setCurrencyValueWhenPurchasing(json_encode($courses));
             $currentOrderBack->setShippingPrice(0);

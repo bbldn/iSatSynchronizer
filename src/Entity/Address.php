@@ -28,10 +28,10 @@ class Address
     protected $frontId;
 
     /**
-     * @var int|null $orderBackId
-     * @ORM\Column(type="integer", name="`order_back_id`")
+     * @var int|null $customerBackId
+     * @ORM\Column(type="integer", name="`customer_back_id`")
      */
-    protected $orderBackId;
+    protected $customerBackId;
 
     /**
      * @var DateTimeInterface|null $createdAt
@@ -75,18 +75,18 @@ class Address
     /**
      * @return int|null
      */
-    public function getOrderBackId(): ?int
+    public function getCustomerBackId(): ?int
     {
-        return $this->orderBackId;
+        return $this->customerBackId;
     }
 
     /**
-     * @param int $orderBackId
+     * @param int $customerBackId
      * @return Address
      */
-    public function setOrderBackId(int $orderBackId): self
+    public function setCustomerBackId(int $customerBackId): self
     {
-        $this->orderBackId = $orderBackId;
+        $this->customerBackId = $customerBackId;
 
         return $this;
     }

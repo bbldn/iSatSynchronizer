@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\OrderProduct;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method OrderProduct|null find($id, $lockMode = null, $lockVersion = null)
@@ -38,5 +39,26 @@ class OrderProductRepository extends FrontRepository
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param int $orderFrontId
+     * @param int $productFrontId
+     * @return OrderProduct|null
+     */
+    public function findOneByOrderFrontIdAndProductFrontId(int $orderFrontId, int $productFrontId): ?OrderProduct
+    {
+        try {
+            return $this->createQueryBuilder('op')
+                ->andWhere('op.orderId = :orderFrontId')
+                ->setParameter('orderFrontId', $orderFrontId)
+                ->andWhere('op.productId = :productFrontId')
+                ->setParameter('productFrontId', $productFrontId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }
