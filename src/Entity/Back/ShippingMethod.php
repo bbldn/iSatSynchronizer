@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_shipping_methods`")
- * @ORM\Entity(repositoryClass="App\Repository\Back\ShippingMethodsRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Back\ShippingMethodRepository")
  */
-class ShippingMethods
+class ShippingMethod
 {
     /**
      * @var int|null $sid
@@ -23,31 +23,31 @@ class ShippingMethods
      * @var string|null $name
      * @ORM\Column(type="string", name="`Name`", length=30, nullable=true)
      */
-    protected $name;
+    protected $name = null;
 
     /**
      * @var string|null $description
      * @ORM\Column(type="string", name="`description`", length=255, nullable=true)
      */
-    protected $description;
+    protected $description = null;
 
     /**
      * @var string|null $emailCommentsText
      * @ORM\Column(type="text", name="`email_comments_text`", nullable=true)
      */
-    protected $emailCommentsText;
+    protected $emailCommentsText = null;
 
     /**
      * @var int|null $enabled
      * @ORM\Column(type="integer", name="`Enabled`", nullable=true)
      */
-    protected $enabled;
+    protected $enabled = null;
 
     /**
      * @var int|null $moduleId
      * @ORM\Column(type="integer", name="`module_id`", nullable=true)
      */
-    protected $moduleId;
+    protected $moduleId = null;
 
     /**
      * @var int|null $sortOrder
@@ -91,7 +91,7 @@ class ShippingMethods
 
     /**
      * @param string|null $name
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setName(?string $name): self
     {
@@ -110,7 +110,7 @@ class ShippingMethods
 
     /**
      * @param string|null $description
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setDescription(?string $description): self
     {
@@ -129,7 +129,7 @@ class ShippingMethods
 
     /**
      * @param string|null $emailCommentsText
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setEmailCommentsText(?string $emailCommentsText): self
     {
@@ -148,7 +148,7 @@ class ShippingMethods
 
     /**
      * @param int|null $enabled
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setEnabled(?int $enabled): self
     {
@@ -167,7 +167,7 @@ class ShippingMethods
 
     /**
      * @param int|null $moduleId
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setModuleId(?int $moduleId): self
     {
@@ -186,7 +186,7 @@ class ShippingMethods
 
     /**
      * @param int|null $sortOrder
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setSortOrder(?int $sortOrder): self
     {
@@ -205,7 +205,7 @@ class ShippingMethods
 
     /**
      * @param string $warehouses
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setWarehouses(string $warehouses): self
     {
@@ -224,7 +224,7 @@ class ShippingMethods
 
     /**
      * @param DateTimeInterface $warehousesLastUpdate
-     * @return ShippingMethods
+     * @return ShippingMethod
      */
     public function setWarehousesLastUpdate(DateTimeInterface $warehousesLastUpdate): self
     {

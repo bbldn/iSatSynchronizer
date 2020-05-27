@@ -12,7 +12,7 @@ use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
-use App\Repository\Back\ShippingMethodsRepository;
+use App\Repository\Back\ShippingMethodRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
@@ -33,7 +33,7 @@ class OrderSynchronizer
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
-    /** @var ShippingMethodsRepository $shippingMethodsRepository */
+    /** @var ShippingMethodRepository $shippingMethodsRepository */
     protected $shippingMethodsRepository;
 
     /** @var CurrencyFrontRepository $currencyFrontRepository */
@@ -78,7 +78,7 @@ class OrderSynchronizer
      * OrderSynchronizer constructor.
      * @param LoggerInterface $logger
      * @param StoreFront $storeFront
-     * @param ShippingMethodsRepository $shippingMethodsRepository
+     * @param ShippingMethodRepository $shippingMethodsRepository
      * @param CurrencyFrontRepository $currencyFrontRepository
      * @param CustomerRepository $customerRepository
      * @param CustomerFrontRepository $customerFrontRepository
@@ -93,7 +93,7 @@ class OrderSynchronizer
     public function __construct(
         LoggerInterface $logger,
         StoreFront $storeFront,
-        ShippingMethodsRepository $shippingMethodsRepository,
+        ShippingMethodRepository $shippingMethodsRepository,
         CurrencyFrontRepository $currencyFrontRepository,
         CustomerRepository $customerRepository,
         CustomerFrontRepository $customerFrontRepository,
