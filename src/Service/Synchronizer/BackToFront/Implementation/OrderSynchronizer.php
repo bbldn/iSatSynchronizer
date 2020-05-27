@@ -12,6 +12,7 @@ use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
+use App\Repository\Back\ShippingMethodsRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
@@ -31,6 +32,9 @@ class OrderSynchronizer
 
     /** @var StoreFront $storeFront */
     protected $storeFront;
+
+    /** @var ShippingMethodsRepository $shippingMethodsRepository */
+    protected $shippingMethodsRepository;
 
     /** @var CurrencyFrontRepository $currencyFrontRepository */
     protected $currencyFrontRepository;
@@ -74,6 +78,7 @@ class OrderSynchronizer
      * OrderSynchronizer constructor.
      * @param LoggerInterface $logger
      * @param StoreFront $storeFront
+     * @param ShippingMethodsRepository $shippingMethodsRepository
      * @param CurrencyFrontRepository $currencyFrontRepository
      * @param CustomerRepository $customerRepository
      * @param CustomerFrontRepository $customerFrontRepository
@@ -88,6 +93,7 @@ class OrderSynchronizer
     public function __construct(
         LoggerInterface $logger,
         StoreFront $storeFront,
+        ShippingMethodsRepository $shippingMethodsRepository,
         CurrencyFrontRepository $currencyFrontRepository,
         CustomerRepository $customerRepository,
         CustomerFrontRepository $customerFrontRepository,
@@ -102,6 +108,7 @@ class OrderSynchronizer
     {
         $this->logger = $logger;
         $this->storeFront = $storeFront;
+        $this->shippingMethodsRepository = $shippingMethodsRepository;
         $this->currencyFrontRepository = $currencyFrontRepository;
         $this->customerRepository = $customerRepository;
         $this->customerFrontRepository = $customerFrontRepository;
@@ -234,7 +241,7 @@ class OrderSynchronizer
         $orderFront->setShippingLastName($fullName['lastName']);
         $orderFront->setShippingCompany(Filler::securityString(null));
         $orderFront->setShippingAddress1($address);
-        $orderFront->setShippingAddress2($address);
+        $orderFront->setShippingAddress2(null);
         $orderFront->setShippingCity($mainOrderBack->getWarehouse());
         $orderFront->setShippingPostCode(Filler::securityString(null));
         $orderFront->setShippingCountry($mainOrderBack->getRegion());
@@ -243,22 +250,28 @@ class OrderSynchronizer
         $orderFront->setShippingZoneId($zoneId);
         $orderFront->setShippingAddressFormat(Filler::securityString(null));
         $orderFront->setShippingCustomField($this->storeFront->getDefaultCustomField());
-        $orderFront->setShippingMethod($this->storeFront->getDefaultShippingMethod());
-        $orderFront->setShippingCode($this->storeFront->getDefaultShippingCode());
-        $comment = Filler::securityString($mainOrderBack->getWhant());
 
+        $shippingMethod = $this->shippingMethodsRepository->find($mainOrderBack->getDelivery());
+        if (null === $shippingMethod || null === $shippingMethod->getName()) {
+            $shippingMethodName = $this->storeFront->getDefaultShippingMethod();
+        } else {
+            $shippingMethodName = $shippingMethod->getName();
+        }
+
+        $orderFront->setShippingMethod($shippingMethodName);
+        $orderFront->setShippingCode($this->storeFront->getDefaultShippingCode());//@TODO
+        $comment = Filler::securityString($mainOrderBack->getWhant());
 
         $orderFront->setComment($comment);
         $orderFront->setTotal(
             $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum()) * $mainOrderBack->getCurrencyValue()
         );
+
         $orderFront->setOrderStatusId(StoreFront::convertBackToFrontStatusOrder($mainOrderBack->getStatus()));
         $orderFront->setAffiliateId($this->storeFront->getDefaultAffiliateId());
         $orderFront->setCommission($this->storeFront->getDefaultCommission());
         $orderFront->setMarketingId($this->storeFront->getDefaultMarketingId());
         $orderFront->setTracking(Filler::securityString($mainOrderBack->getTrackNumber()));
-
-
         $orderFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $orderFront->setCurrencyId($currency['id']);
         $orderFront->setCurrencyCode($currency['code']);
