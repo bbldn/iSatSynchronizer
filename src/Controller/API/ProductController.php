@@ -2,7 +2,7 @@
 
 namespace App\Controller\API;
 
-use App\Controller\Controller;
+use App\Controller\ApiController;
 use App\Helper\Errorer;
 use App\Service\API\ProductService;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ProductController extends Controller
+class ProductController extends ApiController
 {
     /** @var ProductService $productService */
     protected $productService;
