@@ -12,6 +12,7 @@ use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
+use App\Repository\Back\PaymentTypeRepository;
 use App\Repository\Back\ShippingMethodRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
@@ -35,6 +36,9 @@ class OrderSynchronizer
 
     /** @var ShippingMethodRepository $shippingMethodsRepository */
     protected $shippingMethodsRepository;
+
+    /** @var PaymentTypeRepository $paymentTypeRepository */
+    protected $paymentTypeRepository;
 
     /** @var CurrencyFrontRepository $currencyFrontRepository */
     protected $currencyFrontRepository;
@@ -79,6 +83,7 @@ class OrderSynchronizer
      * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param ShippingMethodRepository $shippingMethodsRepository
+     * @param PaymentTypeRepository $paymentTypeRepository
      * @param CurrencyFrontRepository $currencyFrontRepository
      * @param CustomerRepository $customerRepository
      * @param CustomerFrontRepository $customerFrontRepository
@@ -94,6 +99,7 @@ class OrderSynchronizer
         LoggerInterface $logger,
         StoreFront $storeFront,
         ShippingMethodRepository $shippingMethodsRepository,
+        PaymentTypeRepository $paymentTypeRepository,
         CurrencyFrontRepository $currencyFrontRepository,
         CustomerRepository $customerRepository,
         CustomerFrontRepository $customerFrontRepository,
@@ -109,6 +115,7 @@ class OrderSynchronizer
         $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->shippingMethodsRepository = $shippingMethodsRepository;
+        $this->paymentTypeRepository = $paymentTypeRepository;
         $this->currencyFrontRepository = $currencyFrontRepository;
         $this->customerRepository = $customerRepository;
         $this->customerFrontRepository = $customerFrontRepository;
@@ -235,7 +242,15 @@ class OrderSynchronizer
         $orderFront->setPaymentZoneId($zoneId);
         $orderFront->setPaymentAddressFormat(Filler::securityString(null));
         $orderFront->setPaymentCustomField($this->storeFront->getDefaultCustomField());
-        $orderFront->setPaymentMethod($this->storeFront->getDefaultPaymentMethod());
+
+        $paymentType = $this->paymentTypeRepository->find($mainOrderBack->getPayment());
+        if (null === $paymentType || null === $paymentType->getName()) {
+            $paymentTypeName = $this->storeFront->getDefaultPaymentMethod();
+        } else {
+            $paymentTypeName = $paymentType->getName();
+        }
+
+        $orderFront->setPaymentMethod($paymentTypeName);
         $orderFront->setPaymentCode($this->storeFront->getDefaultPaymentCode());
         $orderFront->setShippingFirstName($fullName['firstName']);
         $orderFront->setShippingLastName($fullName['lastName']);
