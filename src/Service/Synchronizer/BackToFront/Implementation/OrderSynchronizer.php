@@ -10,6 +10,8 @@ use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
+use App\Helper\PaymentConverter;
+use App\Helper\ShippingConverter;
 use App\Helper\Store;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
 use App\Repository\Back\PaymentTypeRepository;
@@ -251,12 +253,13 @@ class OrderSynchronizer
         }
 
         $orderFront->setPaymentMethod($paymentTypeName);
-        $orderFront->setPaymentCode($this->storeFront->getDefaultPaymentCode());
+        $paymentCode = PaymentConverter::backToFront($mainOrderBack->getPayment());
+        $orderFront->setPaymentCode($paymentCode);
         $orderFront->setShippingFirstName($fullName['firstName']);
         $orderFront->setShippingLastName($fullName['lastName']);
         $orderFront->setShippingCompany(Filler::securityString(null));
         $orderFront->setShippingAddress1($address);
-        $orderFront->setShippingAddress2(null);
+        $orderFront->setShippingAddress2($address);
         $orderFront->setShippingCity($mainOrderBack->getWarehouse());
         $orderFront->setShippingPostCode(Filler::securityString(null));
         $orderFront->setShippingCountry($mainOrderBack->getRegion());
@@ -274,14 +277,13 @@ class OrderSynchronizer
         }
 
         $orderFront->setShippingMethod($shippingMethodName);
-        $orderFront->setShippingCode($this->storeFront->getDefaultShippingCode());//@TODO
+        $shippingCode = ShippingConverter::backToFront($mainOrderBack->getPayment());
+        $orderFront->setShippingCode($shippingCode);
         $comment = Filler::securityString($mainOrderBack->getWhant());
 
         $orderFront->setComment($comment);
-        $orderFront->setTotal(
-            $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum()) * $mainOrderBack->getCurrencyValue()
-        );
-
+        $total = $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum()) * $mainOrderBack->getCurrencyValue();
+        $orderFront->setTotal($total);
         $orderFront->setOrderStatusId(StoreFront::convertBackToFrontStatusOrder($mainOrderBack->getStatus()));
         $orderFront->setAffiliateId($this->storeFront->getDefaultAffiliateId());
         $orderFront->setCommission($this->storeFront->getDefaultCommission());
