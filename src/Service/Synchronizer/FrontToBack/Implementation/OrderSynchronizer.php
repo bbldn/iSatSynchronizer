@@ -44,7 +44,7 @@ use App\Repository\Front\OrderVoucherRepository as OrderVoucherFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
-use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer;
+use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 
@@ -149,8 +149,8 @@ class OrderSynchronizer
     /** @var ProductCategoryFrontRepository $productCategoryFrontRepository */
     protected $productCategoryFrontRepository;
 
-    /** @var CustomerSynchronizer $customerSynchronizer */
-    protected $customerSynchronizer;
+    /** @var CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer */
+    protected $customerFrontToBackSynchronizer;
 
     /**
      * OrderSynchronizer constructor.
@@ -187,7 +187,7 @@ class OrderSynchronizer
      * @param CustomerWishListFrontRepository $customerWishListFrontRepository
      * @param ProductRepository $productRepository
      * @param ProductCategoryFrontRepository $productCategoryFrontRepository
-     * @param CustomerSynchronizer $customerSynchronizer
+     * @param CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
@@ -223,7 +223,7 @@ class OrderSynchronizer
         CustomerWishListFrontRepository $customerWishListFrontRepository,
         ProductRepository $productRepository,
         ProductCategoryFrontRepository $productCategoryFrontRepository,
-        CustomerSynchronizer $customerSynchronizer
+        CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
     )
     {
         $this->logger = $logger;
@@ -259,7 +259,7 @@ class OrderSynchronizer
         $this->customerWishListFrontRepository = $customerWishListFrontRepository;
         $this->productRepository = $productRepository;
         $this->productCategoryFrontRepository = $productCategoryFrontRepository;
-        $this->customerSynchronizer = $customerSynchronizer;
+        $this->customerFrontToBackSynchronizer = $customerFrontToBackSynchronizer;
     }
 
     /**
@@ -570,7 +570,7 @@ class OrderSynchronizer
         if ($orderFront->getCustomerId() > 0) {
             try {
                 $password = rand(10000000, 99999999);
-                $customerBack = $this->customerSynchronizer->synchronizeOne($orderFront->getCustomerId(), $password);
+                $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOne($orderFront->getCustomerId(), $password);
             } catch (CustomerFrontNotFoundException $e) {
                 $customerBack = null;
             }
@@ -581,7 +581,7 @@ class OrderSynchronizer
         }
 
         $customerBack = new CustomerBack();
-        $this->customerSynchronizer->updateCustomerBackFromOrderFront($orderFront, $customerBack);
+        $this->customerFrontToBackSynchronizer->updateCustomerBackFromOrderFront($orderFront, $customerBack);
 
         return $customerBack->getId();
     }

@@ -26,7 +26,7 @@ class Store extends StoreBase
     protected $defaultCustomField = '[]';
     protected $invoicePrefix = 'INV-2020-00';
     protected $defaultCustomerGroupId = 1;
-    protected $storeName = 'uclan.com.ua';
+    protected $storeName = 'isat.com.ua';
     protected $defaultPaymentCode = 'cod';
     protected $defaultAffiliateId = 0;
     protected $defaultCommission = 0;
