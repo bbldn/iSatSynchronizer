@@ -32,7 +32,7 @@ class PaymentType
 
     /**
      * @var int|null $enabled
-     * @ORM\Column(type="integer", name="`calculate_tax`", nullable=true)
+     * @ORM\Column(type="integer", name="`Enabled`", nullable=true)
      */
     protected $enabled = null;
 

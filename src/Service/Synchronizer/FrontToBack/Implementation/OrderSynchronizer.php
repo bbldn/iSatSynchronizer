@@ -401,13 +401,13 @@ class OrderSynchronizer
             );
             $currentOrderBack->setPhone($orderFront->getTelephone());
             $currentOrderBack->setFio("{$orderFront->getLastName()} {$orderFront->getFirstName()}");
-            $currentOrderBack->setRegion($orderFront->getShippingZone());
+            $currentOrderBack->setRegion($orderFront->getPaymentCountry());
             $currentOrderBack->setCity($orderFront->getShippingCity());
             $currentOrderBack->setStreet($orderFront->getShippingAddress1());
             $currentOrderBack->setHouse(Filler::securityString(null));
             $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
             $currentOrderBack->setMail($orderFront->getEmail());
-            $currentOrderBack->setWhant($orderFront->getComment());
+            $currentOrderBack->setWhant(Filler::securityString($orderFront->getComment()));
             $currentOrderBack->setVipNum(Filler::securityString(null));
 
             if (null === $orderFront->getDateAdded()) {
@@ -424,18 +424,40 @@ class OrderSynchronizer
             }
 
             $currentOrderBack->setStatus($orderStatus);
-            $currentOrderBack->setComments(Filler::securityString(null));
-            $currentOrderBack->setArchive(0);
+
+            if (null === $currentOrderBack->getComments()) {
+                $currentOrderBack->setComments(Filler::securityString(null));
+            }
+
+            if (null === $currentOrderBack->getArchive()) {
+                $currentOrderBack->setArchive(0);
+            }
+
             $currentOrderBack->setRead(0);
-            $currentOrderBack->setSynchronize(false);
+            if (null === $currentOrderBack->getSynchronize()) {
+                $currentOrderBack->setSynchronize(false);
+            }
             $currentOrderBack->setClientId($this->getClientIdByFrontCustomerPhone($orderFront));
+
             $paymentId = PaymentConverter::frontToBack(Filler::securityString($orderFront->getPaymentCode()));
             $currentOrderBack->setPayment($paymentId);
+
             $shippingId = ShippingConverter::frontToBack(Filler::securityString($orderFront->getShippingCode()));
             $currentOrderBack->setDelivery($shippingId);
+
             $currentOrderBack->setOrderNum($orderNum);
-            $currentOrderBack->setTrackNumber($orderFront->getTracking());
-            $currentOrderBack->setTrackNumberDate(new DateTime());
+
+            $tracking = Filler::securityString($orderFront->getTracking());
+
+            if (0 === mb_strlen($tracking)) {
+                $currentOrderBack->setTrackNumber($tracking);
+                $currentOrderBack->setTrackNumberDate(new DateTime('0000-00-00 00:00:00'));
+            } else {
+                $currentOrderBack->setTrackNumber($tracking);
+                if (null === $currentOrderBack->getTrackNumberDate()) {
+                    $currentOrderBack->setTrackNumberDate(new DateTime());
+                }
+            }
 
             if (null === $currentOrderBack->getMoneyGiven()) {
                 $currentOrderBack->setMoneyGiven(false);
@@ -449,14 +471,36 @@ class OrderSynchronizer
                 $currentOrderBack->setSerialNum('');
             }
 
-            $currentOrderBack->setShopId($this->storeBack->getDefaultSiteId());
-            $currentOrderBack->setShopIdCounterparty(0);
-            $currentOrderBack->setPaymentWaitDays(0);
+            if (null === $currentOrderBack->getShopId()) {
+                $currentOrderBack->setShopId($this->storeBack->getDefaultSiteId());
+            }
+
+            if (null === $currentOrderBack->getShopIdCounterparty()) {
+                $currentOrderBack->setShopIdCounterparty(0);
+            }
+
+            if (null === $currentOrderBack->getPaymentWaitDays()) {
+                $currentOrderBack->setPaymentWaitDays(0);
+            }
+
             $currentOrderBack->setPaymentWaitFirstSum(0);
-            $currentOrderBack->setPaymentDate($orderFront->getDateAdded());
+
+            if (null === $currentOrderBack->getPaymentDate()) {
+                $currentOrderBack->setPaymentDate($orderFront->getDateAdded());
+            } else {
+                $currentOrderBack->setPaymentDate(new DateTime('0000-00-00 00:00:00'));
+            }
+
             $currentOrderBack->setDocumentId(0);
-            $currentOrderBack->setDocumentType(2);
-            $currentOrderBack->setInvoiceSent($orderFront->getDateAdded());
+
+            if (null === $currentOrderBack->getDocumentType()) {
+                $currentOrderBack->setDocumentType(2);
+            }
+
+            if (null === $currentOrderBack->getInvoiceSent()) {
+                $currentOrderBack->setInvoiceSent(new DateTime('0000-00-00 00:00:00'));
+            }
+
             $currentOrderBack->setCurrencyValue($currentCourse);
             $currentOrderBack->setCurrencyValueWhenPurchasing(json_encode($courses));
             $currentOrderBack->setShippingPrice(0);
