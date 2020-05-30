@@ -15,8 +15,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    persistAndFlush(Order $instance)
  * @method void    remove(Order $instance)
  * @method void    removeAndFlush(Order $instance)
- * @method ?Order    findOneByBackId(int $value)
- * @method ?Order    findOneByFrontId(int $value)
+ * @method Order|null    findOneByBackId(int $value)
+ * @method Order|null    findOneByFrontId(int $value)
  */
 class OrderRepository extends EntityRepository
 {

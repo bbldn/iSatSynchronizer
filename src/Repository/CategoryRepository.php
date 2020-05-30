@@ -15,8 +15,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    persistAndFlush(Category $instance)
  * @method void    remove(Category $instance)
  * @method void    removeAndFlush(Category $instance)
- * @method ?Category    findOneByBackId(int $value)
- * @method ?Category    findOneByFrontId(int $value)
+ * @method Category|null    findOneByBackId(int $value)
+ * @method Category|null    findOneByFrontId(int $value)
  */
 class CategoryRepository extends EntityRepository
 {

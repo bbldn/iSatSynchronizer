@@ -3,6 +3,7 @@
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\OrderGamePost as OrderBack;
+use App\Entity\Front\Customer as CustomerFront;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
 use App\Entity\Order;
@@ -26,6 +27,7 @@ use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFront
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 
@@ -76,6 +78,9 @@ class OrderSynchronizer
     /** @var CountryRepository $countryRepository */
     protected $countryRepository;
 
+    /** @var CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer */
+    protected $customerBackToFrontSynchronizer;
+
     /** @var array $excludeCustomerIds */
     protected $excludeCustomerIds = [
         3233, 4835, 7436, 7439, 12012,
@@ -101,6 +106,7 @@ class OrderSynchronizer
      * @param ProductDescriptionFrontRepository $productDescriptionFrontRepository
      * @param ProductRepository $productRepository
      * @param CountryRepository $countryRepository
+     * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
@@ -117,7 +123,8 @@ class OrderSynchronizer
         ProductFrontRepository $productFrontRepository,
         ProductDescriptionFrontRepository $productDescriptionFrontRepository,
         ProductRepository $productRepository,
-        CountryRepository $countryRepository
+        CountryRepository $countryRepository,
+        CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
     )
     {
         $this->logger = $logger;
@@ -135,6 +142,7 @@ class OrderSynchronizer
         $this->productFrontRepository = $productFrontRepository;
         $this->productDescriptionFrontRepository = $productDescriptionFrontRepository;
         $this->countryRepository = $countryRepository;
+        $this->customerBackToFrontSynchronizer = $customerBackToFrontSynchronizer;
     }
 
     /**
@@ -210,14 +218,10 @@ class OrderSynchronizer
      */
     protected function updateOrderFrontFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
     {
-        $customerFrontId = 0;
-        $customer = $this->customerRepository->findOneByBackId($mainOrderBack->getClientId());
-
-        if (null !== $customer) {
-            $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
-            if (null !== $customerFront) {
-                $customerFrontId = $customerFront->getCustomerId();
-            }
+        if (0 === $mainOrderBack->getClientId()) {
+            $customerFrontId = 0;
+        } else {
+            $customerFrontId = $this->getCustomerFrontByCustomerBackId($mainOrderBack);
         }
 
         $fullName = StoreBack::parseFirstLastName($mainOrderBack->getFio());
@@ -399,5 +403,30 @@ class OrderSynchronizer
         $order->setFrontId($frontId);
 
         $this->orderRepository->persistAndFlush($order);
+    }
+
+    /**
+     * @param OrderBack $mainOrderBack
+     * @return CustomerFront|null
+     */
+    protected function getCustomerFrontByCustomerBackId(OrderBack $mainOrderBack): ?int
+    {
+        $clientId = $mainOrderBack->getClientId();
+        $customer = $this->customerRepository->findOneByBackId($clientId);
+
+        if (null !== $customer) {
+            $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
+            if (null !== $customerFront && null !== $customerFront->getCustomerId()) {
+                return $customerFront->getCustomerId();
+            }
+        }
+
+        $customerFront = $this->customerBackToFrontSynchronizer->synchronizeOneAndReturnCustomerFront($clientId);
+
+        if (null !== $customerFront && null !== $customerFront->getCustomerId()) {
+            return $customerFront->getCustomerId();
+        }
+
+        return 0;
     }
 }

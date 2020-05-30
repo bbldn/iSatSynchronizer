@@ -15,8 +15,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    persistAndFlush(Attribute $instance)
  * @method void    remove(Attribute $instance)
  * @method void    removeAndFlush(Attribute $instance)
- * @method ?Attribute    findOneByBackId(int $value)
- * @method ?Attribute    findOneByFrontId(int $value)
+ * @method Attribute|null findOneByBackId(int $value)
+ * @method Attribute|null findOneByFrontId(int $value)
  */
 class AttributeRepository extends EntityRepository
 {

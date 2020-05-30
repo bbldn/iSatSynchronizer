@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\Customer;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Customer|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,25 @@ class CustomerRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Customer::class);
+    }
+
+    /**
+     * @param string $email
+     * @return Customer|null
+     */
+    public function findOneByEmail(string $email): ?Customer
+    {
+        try {
+            $result = $this->createQueryBuilder('c')
+                ->andWhere('c.email = :email')
+                ->setParameter('email', $email)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

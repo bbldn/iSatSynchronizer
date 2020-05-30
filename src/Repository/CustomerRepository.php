@@ -15,8 +15,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    persistAndFlush(Customer $instance)
  * @method void    remove(Customer $instance)
  * @method void    removeAndFlush(Customer $instance)
- * @method ?Customer    findOneByBackId(int $value)
- * @method ?Customer    findOneByFrontId(int $value)
+ * @method Customer|null    findOneByBackId(int $value)
+ * @method Customer|null    findOneByFrontId(int $value)
  */
 class CustomerRepository extends EntityRepository
 {

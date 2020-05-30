@@ -15,8 +15,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method void    persistAndFlush(Review $instance)
  * @method void    remove(Review $instance)
  * @method void    removeAndFlush(Review $instance)
- * @method ?Review    findOneByBackId(int $value)
- * @method ?Review    findOneByFrontId(int $value)
+ * @method Review|null findOneByBackId(int $value)
+ * @method Review|null findOneByFrontId(int $value)
  */
 class ReviewRepository extends EntityRepository
 {

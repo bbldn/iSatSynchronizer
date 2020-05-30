@@ -5,6 +5,7 @@ namespace App\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 abstract class Repository extends ServiceEntityRepository
@@ -132,5 +133,53 @@ abstract class Repository extends ServiceEntityRepository
         } catch (DBALException $e) {
             return false;
         }
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function findOneLast()
+    {
+        try {
+            $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
+        } catch (MappingException $e) {
+            return null;
+        }
+
+        try {
+            $result = $this->createQueryBuilder('a')
+                ->orderBy("a.{$identifier}", 'ASC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function findOneFirst()
+    {
+        try {
+            $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
+        } catch (MappingException $e) {
+            return null;
+        }
+
+        try {
+            $result = $this->createQueryBuilder('a')
+                ->orderBy("a.{$identifier}", 'DESC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

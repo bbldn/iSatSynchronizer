@@ -16,7 +16,7 @@ use Doctrine\ORM\NonUniqueResultException;
  * @method void    persistAndFlush(Address $instance)
  * @method void    remove(Address $instance)
  * @method void    removeAndFlush(Address $instance)
- * @method ?Address    findOneByFrontId(int $value)
+ * @method Address|null    findOneByFrontId(int $value)
  */
 class AddressRepository extends EntityRepository
 {
@@ -46,7 +46,7 @@ class AddressRepository extends EntityRepository
     {
         try {
             $result = $this->createQueryBuilder('c')
-                ->andWhere('c.orderBackId = :val')
+                ->andWhere('c.customerBackId = :val')
                 ->setParameter('val', $value)
                 ->getQuery()
                 ->getOneOrNullResult();

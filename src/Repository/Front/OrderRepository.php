@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\Order;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Order|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,25 @@ class OrderRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Order::class);
+    }
+
+    /**
+     * @param int $customerId
+     * @return Order|null
+     */
+    public function findOneLastByCustomerId(int $customerId): ?Order
+    {
+        try {
+            $result = $this->createQueryBuilder('o')
+                ->orderBy('o.orderId', 'ASC')
+                ->andWhere('o.customerId = :customerId')
+                ->setParameter('customerId', $customerId)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

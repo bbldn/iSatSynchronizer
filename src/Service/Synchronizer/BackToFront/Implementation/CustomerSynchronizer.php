@@ -11,6 +11,7 @@ use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Service\Synchronizer\BackToFront\AddressSynchronizer;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
@@ -85,32 +86,40 @@ class CustomerSynchronizer
 
     /**
      * @param CustomerBack $customerBack
+     * @return CustomerFront
      */
-    protected function synchronizeCustomer(CustomerBack $customerBack): void
+    protected function synchronizeCustomer(CustomerBack $customerBack): CustomerFront
     {
         $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
-        $customerFront = $this->getCustomerFrontFromCustomer($customer);
+        $customerFront = $this->getCustomerFrontFromCustomer($customer, $customerBack->getMail());
         $this->updateCustomerFrontFromCustomerBack($customerBack, $customerFront);
         $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
+
+        return $customerFront;
     }
 
     /**
      * @param Customer|null $customer
+     * @param string|null $email
      * @return CustomerFront
      */
-    protected function getCustomerFrontFromCustomer(?Customer $customer): CustomerFront
+    protected function getCustomerFrontFromCustomer(?Customer $customer, ?string $email = null): CustomerFront
     {
-        if (null === $customer) {
-            return new CustomerFront();
+        if (null !== $customer) {
+            $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
+            if (null !== $customerFront) {
+                return $customerFront;
+            }
         }
 
-        $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
-
-        if (null === $customerFront) {
-            return new CustomerFront();
+        if (null !== $email) {
+            $customerFront = $this->customerFrontRepository->findOneByEmail($email);
+            if (null !== $customerFront) {
+                return $customerFront;
+            }
         }
 
-        return $customerFront;
+        return new CustomerFront();
     }
 
     /**
@@ -130,26 +139,46 @@ class CustomerSynchronizer
             $saul = Str::random($this->saulLength);
         }
 
+        $parsedFIO = $this->parseFIO($customerBack->getFio());
+
         $customerFront->setCustomerGroupId($this->storeFront->getDefaultCustomerGroupId());
         $customerFront->setStoreId($this->storeFront->getDefaultStoreId());
         $customerFront->setLanguageId($this->storeFront->getDefaultLanguageId());
-        $customerFront->setFirstName($addressFront->getFirstName());
-        $customerFront->setLastName($addressFront->getLastName());
+        $customerFront->setFirstName($parsedFIO['firstName']);
+        $customerFront->setLastName($parsedFIO['lastName']);
         $customerFront->setEmail($customerBack->getMail());
         $customerFront->setTelephone($customerBack->getPhone());
         $customerFront->setFax(Filler::securityString(null));
-        $customerFront->setPassword(StoreFront::hashPassword($customerBack->getPassword(), $saul));
+
+        if (null === $customerFront->getPassword()) {
+            $customerFront->setPassword(StoreFront::hashPassword($customerBack->getPassword(), $saul));
+        }
+
         $customerFront->setSalt($saul);
-        $customerFront->setCart(null);
-        $customerFront->setWishList(null);
-        $customerFront->setNewsletter(false);
+        if (null === $customerFront->getCart()) {
+            $customerFront->setCart(null);
+        }
+
+        if (null === $customerFront->getWishList()) {
+            $customerFront->setWishList(null);
+        }
+
+        if (null === $customerFront->getNewsletter()) {
+            $customerFront->setNewsletter(false);
+        }
+
         $customerFront->setAddressId($addressFront->getAddressId());
         $customerFront->setCustomField($this->storeFront->getDefaultCustomField());
         $customerFront->setIp(Filler::securityString(null));
         $customerFront->setStatus($customerBack->getActive());
         $customerFront->setSafe(false);
-        $customerFront->setToken(Filler::securityString(null));
-        $customerFront->setCode(Filler::securityString(null));
+        if (null === $customerFront->getToken()) {
+            $customerFront->setToken(Filler::securityString(null));
+        }
+
+        if (null === $customerFront->getCode()) {
+            $customerFront->setCode(Filler::securityString(null));
+        }
 
         $this->customerFrontRepository->persistAndFlush($customerFront);
         $addressFront->setCustomerId($customerFront->getCustomerId());
@@ -173,5 +202,32 @@ class CustomerSynchronizer
         $customer->setFrontId($frontId);
 
         $this->customerRepository->persistAndFlush($customer);
+    }
+
+    /**
+     * @param string $fio
+     * @return array
+     */
+    protected function parseFIO(string $fio): array
+    {
+        $parsedFio = explode(' ', $fio);
+        if (0 === count($parsedFio)) {
+            $data =  [
+                'lastName' => ' ',
+                'firstName' => ' ',
+            ];
+        } elseif (1 == count($parsedFio)) {
+            $data = [
+                'lastName' => $parsedFio[0],
+                'firstName' => ' ',
+            ];
+        } else {
+            $data = [
+                'lastName' => $parsedFio[0],
+                'firstName' => $parsedFio[1],
+            ];
+        }
+
+        return $data;
     }
 }
