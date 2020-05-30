@@ -39,6 +39,9 @@ class CustomerSynchronizer
     /** @var CustomerBackRepository $customerBackRepository */
     protected $customerBackRepository;
 
+    /** @var OrderFrontRepository $orderFrontRepository */
+    protected $orderFrontRepository;
+
     /** @var int $saulLength */
     protected $saulLength = 9;
 
@@ -51,6 +54,7 @@ class CustomerSynchronizer
      * @param AddressFrontRepository $addressFrontRepository
      * @param CustomerFrontRepository $customerFrontRepository
      * @param CustomerBackRepository $customerBackRepository
+     * @param OrderFrontRepository $orderFrontRepository
      */
     public function __construct(
         LoggerInterface $logger,
@@ -59,7 +63,8 @@ class CustomerSynchronizer
         CustomerRepository $customerRepository,
         AddressFrontRepository $addressFrontRepository,
         CustomerFrontRepository $customerFrontRepository,
-        CustomerBackRepository $customerBackRepository
+        CustomerBackRepository $customerBackRepository,
+        OrderFrontRepository $orderFrontRepository
     )
     {
         $this->logger = $logger;
@@ -69,6 +74,7 @@ class CustomerSynchronizer
         $this->addressFrontRepository = $addressFrontRepository;
         $this->customerFrontRepository = $customerFrontRepository;
         $this->customerBackRepository = $customerBackRepository;
+        $this->orderFrontRepository = $orderFrontRepository;
     }
 
     /**
@@ -168,10 +174,23 @@ class CustomerSynchronizer
         }
 
         $customerFront->setAddressId($addressFront->getAddressId());
-        $customerFront->setCustomField($this->storeFront->getDefaultCustomField());
-        $customerFront->setIp(Filler::securityString(null));
+        $customerFront->setCustomField(Filler::securityString(null));
+
+        if (null === $customerFront->getIp()) {
+            $ip = null;
+            if (null !== $customerFront->getCustomerId()) {
+                $orderFrontLast = $this->orderFrontRepository->findOneLastByCustomerId($customerFront->getCustomerId());
+                if (null !== $orderFrontLast) {
+                    $ip = $orderFrontLast->getIp();
+                }
+            }
+
+            $customerFront->setIp(Filler::securityString($ip));
+        }
+
         $customerFront->setStatus($customerBack->getActive());
         $customerFront->setSafe(false);
+
         if (null === $customerFront->getToken()) {
             $customerFront->setToken(Filler::securityString(null));
         }
