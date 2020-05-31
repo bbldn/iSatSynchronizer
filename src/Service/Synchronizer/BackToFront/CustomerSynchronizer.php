@@ -47,12 +47,12 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer
     }
 
     /**
-     * @param int $customerId
+     * @param int $customerBackId
      * @return CustomerFront|null
      */
-    public function synchronizeOneAndReturnCustomerFront(int $customerId): ?CustomerFront
+    public function synchronizeOneAndReturnCustomerFront(int $customerBackId): ?CustomerFront
     {
-        $customerBack = $this->customerBackRepository->find($customerId);
+        $customerBack = $this->customerBackRepository->find($customerBackId);
         if (null === $customerBack) {
             return null;
         }

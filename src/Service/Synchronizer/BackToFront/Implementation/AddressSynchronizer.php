@@ -9,12 +9,17 @@ use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\AddressRepository;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
+use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
+use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 
 class AddressSynchronizer
 {
     /** @var CustomerBackRepository $customerBackRepository */
     protected $customerBackRepository;
+
+    /** @var CustomerRepository $customerRepository */
+    protected $customerRepository;
 
     /** @var AddressFrontRepository $addressFrontRepository */
     protected $addressFrontRepository;
@@ -22,26 +27,35 @@ class AddressSynchronizer
     /** @var AddressRepository $addressRepository */
     protected $addressRepository;
 
+    /** @var CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer */
+    protected $customerBackToFrontSynchronizer;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
     /**
      * AddressSynchronizer constructor.
      * @param CustomerBackRepository $customerBackRepository
+     * @param CustomerRepository $customerRepository
      * @param AddressFrontRepository $addressFrontRepository
      * @param AddressRepository $addressRepository
+     * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      * @param StoreFront $storeFront
      */
     public function __construct(
         CustomerBackRepository $customerBackRepository,
+        CustomerRepository $customerRepository,
         AddressFrontRepository $addressFrontRepository,
         AddressRepository $addressRepository,
+        CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer,
         StoreFront $storeFront
     )
     {
         $this->customerBackRepository = $customerBackRepository;
+        $this->customerRepository = $customerRepository;
         $this->addressFrontRepository = $addressFrontRepository;
         $this->addressRepository = $addressRepository;
+        $this->customerBackToFrontSynchronizer = $customerBackToFrontSynchronizer;
         $this->storeFront = $storeFront;
     }
 
@@ -90,20 +104,26 @@ class AddressSynchronizer
         AddressFront $addressFront
     ): AddressFront
     {
-        $zoneId = 3490;
+        if (null === $addressFront->getCustomerId()) {
+            $customerFrontId = $this->getCustomerFrontIdByCustomerBack($customerBack);
+            $addressFront->setCustomerId($customerFrontId);
+        }
+
         $fullName = $this->parseFirstLastName($customerBack->getFio());
 
-        $addressFront->setCustomerId(0);
         $addressFront->setFirstName($fullName['firstName']);
         $addressFront->setLastName($fullName['lastName']);
         $addressFront->setCompany(Filler::securityString(null));
-        $addressFront->setAddress1(trim($customerBack->getStreet() . ' ' . $customerBack->getHouse()));
-        $addressFront->setAddress2(Filler::securityString(null));
+        $address = trim("{$customerBack->getStreet()} {$customerBack->getHouse()}");
+        $addressFront->setAddress1($address);
+        $addressFront->setAddress2($address);
         $addressFront->setCity(trim($customerBack->getCity()));
         $addressFront->setPostCode(Filler::securityString(null));
         $addressFront->setCountryId($this->storeFront->getDefaultCountryId());
+
+        $zoneId = 0;
         $addressFront->setZoneId($zoneId);
-        $addressFront->setCustomField($this->storeFront->getDefaultCustomField());
+        $addressFront->setCustomField(Filler::securityString(null));
         $this->addressFrontRepository->persistAndFlush($addressFront);
 
         return $addressFront;
@@ -124,19 +144,47 @@ class AddressSynchronizer
      */
     protected function parseFirstLastName(string $fio): array
     {
-        $result = [
-            'firstName' => ' ',
-            'lastName' => ' ',
-        ];
+        $parsedFio = explode(' ', $fio);
 
-        $fullName = explode(' ', $fio);
-        if (count($fullName) > 1) {
-            $result['lastName'] = trim($fullName[0]);
-            $result['firstName'] = trim($fullName[1]);
-        } elseif (count($fullName) == 1) {
-            $result['lastName'] = trim($fullName[0]);
+        if (0 === count($parsedFio)) {
+            $data = [
+                'firstName' => ' ',
+                'lastName' => ' ',
+            ];
+        } elseif (1 === count($parsedFio)) {
+            $data = [
+                'firstName' => ' ',
+                'lastName' => trim($parsedFio[0]),
+            ];
+        } else {
+            $data = [
+                'firstName' => trim($parsedFio[1]),
+                'lastName' => trim($parsedFio[0]),
+            ];
         }
 
-        return $result;
+        return $data;
+    }
+
+    /**
+     * @param CustomerBack $customerBack
+     * @return int
+     */
+    protected function getCustomerFrontIdByCustomerBack(CustomerBack $customerBack): int
+    {
+        $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
+        if ($customer !== null && null !== $customer->getBackId()) {
+            return $customer->getBackId();
+        }
+
+        $customerFront = $this->customerBackToFrontSynchronizer->synchronizeOneAndReturnCustomerFront(
+            $customerBack->getId()
+        );
+
+        if (null !== $customerFront && null !== $customerFront->getCustomerId()) {
+            return $customerFront->getCustomerId();
+        }
+
+        return 0;
     }
 }
