@@ -11,7 +11,6 @@ use App\Repository\AddressRepository;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
-use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 
 class AddressSynchronizer
 {
@@ -27,9 +26,6 @@ class AddressSynchronizer
     /** @var AddressRepository $addressRepository */
     protected $addressRepository;
 
-    /** @var CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer */
-    protected $customerBackToFrontSynchronizer;
-
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -39,7 +35,6 @@ class AddressSynchronizer
      * @param CustomerRepository $customerRepository
      * @param AddressFrontRepository $addressFrontRepository
      * @param AddressRepository $addressRepository
-     * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      * @param StoreFront $storeFront
      */
     public function __construct(
@@ -47,7 +42,6 @@ class AddressSynchronizer
         CustomerRepository $customerRepository,
         AddressFrontRepository $addressFrontRepository,
         AddressRepository $addressRepository,
-        CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer,
         StoreFront $storeFront
     )
     {
@@ -55,7 +49,6 @@ class AddressSynchronizer
         $this->customerRepository = $customerRepository;
         $this->addressFrontRepository = $addressFrontRepository;
         $this->addressRepository = $addressRepository;
-        $this->customerBackToFrontSynchronizer = $customerBackToFrontSynchronizer;
         $this->storeFront = $storeFront;
     }
 
@@ -175,14 +168,6 @@ class AddressSynchronizer
         $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
         if ($customer !== null && null !== $customer->getBackId()) {
             return $customer->getBackId();
-        }
-
-        $customerFront = $this->customerBackToFrontSynchronizer->synchronizeOneAndReturnCustomerFront(
-            $customerBack->getId()
-        );
-
-        if (null !== $customerFront && null !== $customerFront->getCustomerId()) {
-            return $customerFront->getCustomerId();
         }
 
         return 0;
