@@ -134,6 +134,9 @@ class ProductSynchronizer
     /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
     protected $seoUrlFrontRepository;
 
+    /** @var string $defaultImagePath */
+    protected $defaultImagePath = 'catalog/products/white.jpg';
+
     /**
      * ProductSynchronizer constructor.
      * @param LoggerInterface $logger
@@ -543,7 +546,7 @@ class ProductSynchronizer
      */
     public function synchronizeImage(ProductBack $productBack, ProductFront $productFront): void
     {
-        $productFront->setImage('catalog/products/white.jpg');
+        $productFront->setImage($this->defaultImagePath);
         $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
         foreach ($productBackImages as $key => $productBackImage) {
             $productFrontImage = $this->productImageSynchronizer->synchronizeProductImage(
@@ -556,7 +559,7 @@ class ProductSynchronizer
                 continue;
             }
 
-            if ('catalog/products/white.jpg' === $productFront->getImage()) {
+            if ($this->defaultImagePath === $productFront->getImage()) {
                 $productFront->setImage($productFrontImage->getImage());
             }
         }
@@ -574,7 +577,7 @@ class ProductSynchronizer
                 continue;
             }
 
-            if ('catalog/products/white.jpg' === $productFront->getImage()) {
+            if ($this->defaultImagePath === $productFront->getImage()) {
                 $productFront->setImage($productFrontImage->getImage());
             }
         }
