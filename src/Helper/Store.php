@@ -118,6 +118,6 @@ class Store
             return $phone;
         }
 
-        return '+380' . $matches[1];
+        return '380' . $matches[1];
     }
 }
