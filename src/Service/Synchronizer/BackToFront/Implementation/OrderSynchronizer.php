@@ -228,7 +228,6 @@ class OrderSynchronizer
         $address = $mainOrderBack->getStreet() . ' ' . $mainOrderBack->getHouse();
         $currency = Store::convertBackToFrontCurrency($mainOrderBack->getCurrencyName());
 
-
         $orderFront->setInvoiceNo($this->storeFront->getDefaultInvoiceNo());
         $orderFront->setInvoicePrefix($this->storeFront->getInvoicePrefix());
         $orderFront->setStoreId($this->storeFront->getDefaultShopId());
@@ -248,7 +247,10 @@ class OrderSynchronizer
         $orderFront->setPaymentAddress1($address);
         $orderFront->setPaymentAddress2($address);
         $orderFront->setPaymentCity($mainOrderBack->getWarehouse());
-        $orderFront->setPaymentPostCode(Filler::securityString(null));
+
+        if (null === $orderFront->getPaymentPostCode()) {
+            $orderFront->setPaymentPostCode(Filler::securityString(null));
+        }
 
         $countryName = Filler::securityString($mainOrderBack->getRegion());
 
@@ -261,10 +263,14 @@ class OrderSynchronizer
 
         $orderFront->setPaymentCountry($countryName);
         $orderFront->setPaymentCountryId($countryId);
-        $orderFront->setPaymentZone(Filler::securityString(null));
+        $orderFront->setPaymentZone($mainOrderBack->getCity());
 
         $zoneId = 0;
-        $orderFront->setPaymentZoneId($zoneId);
+
+        if (null === $orderFront->getPaymentZoneId()) {
+            $orderFront->setPaymentZoneId($zoneId);
+        }
+
         $orderFront->setPaymentAddressFormat(Filler::securityString(null));
         $orderFront->setPaymentCustomField($this->storeFront->getDefaultCustomField());
 
@@ -284,11 +290,19 @@ class OrderSynchronizer
         $orderFront->setShippingAddress1($address);
         $orderFront->setShippingAddress2($address);
         $orderFront->setShippingCity($mainOrderBack->getWarehouse());
-        $orderFront->setShippingPostCode(Filler::securityString(null));
+
+        if (null === $orderFront->getShippingPostCode()) {
+            $orderFront->setShippingPostCode(Filler::securityString(null));
+        }
+
         $orderFront->setShippingCountry($countryName);
         $orderFront->setShippingCountryId($countryId);
-        $orderFront->setShippingZone(Filler::securityString(null));
-        $orderFront->setShippingZoneId($zoneId);
+        $orderFront->setShippingZone($mainOrderBack->getCity());
+
+        if (null === $orderFront->getShippingZone()) {
+            $orderFront->setShippingZoneId($zoneId);
+        }
+
         $orderFront->setShippingAddressFormat(Filler::securityString(null));
         $orderFront->setShippingCustomField($this->storeFront->getDefaultCustomField());
 
@@ -330,7 +344,10 @@ class OrderSynchronizer
         $date = new DateTime();
         $date->setTimestamp($mainOrderBack->getTime());
 
-        $orderFront->setDateAdded($date);
+        if (null === $orderFront->getDateAdded()) {
+            $orderFront->setDateAdded($date);
+        }
+
         $orderFront->setDateModified($date);
 
         $this->orderFrontRepository->persistAndFlush($orderFront);

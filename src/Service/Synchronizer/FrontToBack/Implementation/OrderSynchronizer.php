@@ -402,7 +402,7 @@ class OrderSynchronizer
             $currentOrderBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
             $currentOrderBack->setFio("{$orderFront->getLastName()} {$orderFront->getFirstName()}");
             $currentOrderBack->setRegion($orderFront->getPaymentCountry());
-            $currentOrderBack->setCity($orderFront->getShippingCity());
+            $currentOrderBack->setCity($orderFront->getPaymentZone());
             $currentOrderBack->setStreet($orderFront->getShippingAddress1());
             $currentOrderBack->setHouse(Filler::securityString(null));
             $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
@@ -415,15 +415,9 @@ class OrderSynchronizer
             } else {
                 $time = $orderFront->getDateAdded()->getTimestamp();
             }
+
             $currentOrderBack->setTime($time);
-
-            if (null === $orderFront->getOrderStatusId()) {
-                $orderStatus = $this->storeFront->getDefaultOrderStatus();
-            } else {
-                $orderStatus = $orderFront->getOrderStatusId();
-            }
-
-            $currentOrderBack->setStatus($orderStatus);
+            $currentOrderBack->setStatus($orderFront->getOrderStatusId());
 
             if (null === $currentOrderBack->getComments()) {
                 $currentOrderBack->setComments(Filler::securityString(null));
@@ -505,8 +499,14 @@ class OrderSynchronizer
             $currentOrderBack->setCurrencyValueWhenPurchasing(json_encode($courses));
             $currentOrderBack->setShippingPrice(0);
             $currentOrderBack->setShippingPriceOld(0);
-            $currentOrderBack->setShippingCurrencyName(Filler::securityString(null));
-            $currentOrderBack->setShippingCurrencyValue(0);
+
+            if (null === $currentOrderBack->getShippingCurrencyName()) {
+                $currentOrderBack->setShippingCurrencyName(Filler::securityString(null));
+            }
+
+            if (null === $currentOrderBack->getShippingCurrencyValue()) {
+                $currentOrderBack->setShippingCurrencyValue(0);
+            }
 
             $this->orderBackRepository->persistAndFlush($currentOrderBack);
 

@@ -173,10 +173,16 @@ class CustomerSynchronizer
         }
 
         $time = time();
+        if (null === $customerBack->getLogin()) {
+            $customerBack->setLogin(Filler::securityString(Store::parseLogin($customerFront->getEmail())));
+        }
 
-        $customerBack->setLogin(Filler::securityString(Store::parseLogin($customerFront->getEmail())));
         $customerBack->setPassword($password);
-        $customerBack->setFio($customerFront->getLastName() . ' ' . $customerFront->getFirstName());
+
+        if (null === $customerBack->getFio()) {
+            $customerBack->setFio($customerFront->getLastName() . ' ' . $customerFront->getFirstName());
+        }
+
         $customerBack->setPhone(Store::normalizePhone($customerFront->getTelephone()));
         $customerBack->setRegion(Filler::securityString(null));
         $customerBack->setCity($city);

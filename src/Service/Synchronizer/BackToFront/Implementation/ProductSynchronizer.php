@@ -341,7 +341,11 @@ class ProductSynchronizer
         $productFront->setLocation(Filler::securityString(null));
         $productFront->setQuantity($quantity);
         $productFront->setStockStatusId($stockAvailableStatusId);
-        $productFront->setImage(Filler::securityString(null));
+
+        if (null ===  $productFront->getImage()) {
+            $productFront->setImage(Filler::securityString(null));
+        }
+
         $productFront->setManufacturerId(1);
         $productFront->setShipping(true);
         $productFront->setPrice($productBack->getPrice());
@@ -516,9 +520,14 @@ class ProductSynchronizer
         $seoUrl->setStoreId($this->storeFront->getDefaultStoreId());
         $seoUrl->setLanguageId($this->storeFront->getDefaultLanguageId());
         $seoUrl->setQuery('product_id=' . $productFrontId);
-        $seoUrl->setKeyword(
-            StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
-        );
+
+        if (null === $productBack->getSlug()) {
+            $seoUrl->setKeyword(
+                StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
+            );
+        } else {
+            $seoUrl->setKeyword($productBack->getSlug());
+        }
 
         $this->seoUrlFrontRepository->persistAndFlush($seoUrl);
     }
