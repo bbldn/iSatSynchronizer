@@ -399,7 +399,7 @@ class OrderSynchronizer
             $currentOrderBack->setParentName(
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId())
             );
-            $currentOrderBack->setPhone($orderFront->getTelephone());
+            $currentOrderBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
             $currentOrderBack->setFio("{$orderFront->getLastName()} {$orderFront->getFirstName()}");
             $currentOrderBack->setRegion($orderFront->getPaymentCountry());
             $currentOrderBack->setCity($orderFront->getShippingCity());
