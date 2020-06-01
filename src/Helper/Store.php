@@ -114,8 +114,8 @@ class Store
     {
         $phone = preg_replace('/[-() ]/i', '', $phone);
         $matches = [];
-        if (null === preg_match('/\+?3?8?0?([0-9]{9})/i', $phone, $matches)) {
-            return $phone;
+        if (0 === preg_match('/\+?3?8?0?([0-9]{9})/i', $phone, $matches)) {
+            return '380' . $phone;
         }
 
         return '380' . $matches[1];
