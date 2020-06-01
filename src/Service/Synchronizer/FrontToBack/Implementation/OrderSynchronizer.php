@@ -383,7 +383,7 @@ class OrderSynchronizer
 
             $currencyCode = $orderFront->getCurrencyCode();
             $courses = $this->getCurrentCourse();
-            $currentCourse = $courses[Store::convertBackToFrontCurrency($currencyCode)];
+            $currentCourse = $courses[Store::convertFrontToBackCurrency($currencyCode)];
 
             $orderNum = 0;
             if (null !== $orderBack->getId()) {
@@ -395,7 +395,7 @@ class OrderSynchronizer
             $currentOrderBack->setProductId($product->getBackId());
             $currentOrderBack->setPrice($orderProductFront->getPrice());
             $currentOrderBack->setAmount($orderProductFront->getQuantity());
-            $currentOrderBack->setCurrencyName(Store::convertBackToFrontCurrency($currencyCode));
+            $currentOrderBack->setCurrencyName(Store::convertFrontToBackCurrency($currencyCode));
             $currentOrderBack->setParentName(
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId())
             );

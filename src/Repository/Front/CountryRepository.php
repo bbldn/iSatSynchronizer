@@ -33,6 +33,7 @@ class CountryRepository extends FrontRepository
             return $this->createQueryBuilder('c')
                 ->andWhere('c.name = :name')
                 ->setParameter('name', $name)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

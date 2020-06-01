@@ -128,8 +128,9 @@ abstract class Repository extends ServiceEntityRepository
 
         try {
             $query = $connection->prepare($queryBuilder->getSQL());
-
-            return $query->execute() > 0;
+            $query->execute();
+            
+            return $query->rowCount() > 0;
         } catch (DBALException $e) {
             return false;
         }

@@ -36,9 +36,10 @@ class OrderRepository extends FrontRepository
     {
         try {
             $result = $this->createQueryBuilder('o')
-                ->orderBy('o.orderId', 'ASC')
                 ->andWhere('o.customerId = :customerId')
                 ->setParameter('customerId', $customerId)
+                ->orderBy('o.orderId', 'ASC')
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

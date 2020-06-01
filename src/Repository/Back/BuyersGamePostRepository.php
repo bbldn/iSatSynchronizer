@@ -38,6 +38,7 @@ class BuyersGamePostRepository extends BackRepository
             $result = $this->createQueryBuilder('bgp')
                 ->andWhere('bgp.phone = :val')
                 ->setParameter('val', $value)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

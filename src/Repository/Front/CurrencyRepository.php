@@ -37,9 +37,10 @@ class CurrencyRepository extends FrontRepository
     {
         try {
             $result = $this->createQueryBuilder('c')
+                ->select('SUM(c.value) as total')
                 ->andWhere('c.currencyId = :val')
                 ->setParameter('val', $currencyId)
-                ->select('SUM(c.value) as total')
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getSingleScalarResult();
         } catch (NoResultException $e) {

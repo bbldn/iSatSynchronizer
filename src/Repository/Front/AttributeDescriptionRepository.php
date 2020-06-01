@@ -38,6 +38,7 @@ class AttributeDescriptionRepository extends FrontRepository
             $result = $this->createQueryBuilder('a')
                 ->andWhere('a.name = :val')
                 ->setParameter('val', $value)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

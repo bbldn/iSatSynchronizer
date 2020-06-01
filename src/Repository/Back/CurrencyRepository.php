@@ -30,14 +30,19 @@ class CurrencyRepository extends BackRepository
 
     /**
      * @param string $name
+     * @param int $shopId
      * @return Currency|null
      */
-    public function findOneByName(string $name): ?Currency
+    public function findOneByNameAndShopId(string $name, int $shopId): ?Currency
     {
         try {
             $result = $this->createQueryBuilder('c')
-                ->andWhere('c.name = :val')
-                ->setParameter('val', $name)
+                ->andWhere('c.name = :name')
+                ->setParameter('name', $name)
+                ->andWhere('c.shopId = :shopId')
+                ->setParameter('shopId', $shopId)
+                ->orderBy('c.id', 'DESC')
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

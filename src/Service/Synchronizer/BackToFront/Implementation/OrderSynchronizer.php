@@ -226,7 +226,7 @@ class OrderSynchronizer
 
         $fullName = StoreBack::parseFirstLastName($mainOrderBack->getFio());
         $address = $mainOrderBack->getStreet() . ' ' . $mainOrderBack->getHouse();
-        $currency = Store::convertFrontToBackCurrency($mainOrderBack->getCurrencyName());
+        $currency = Store::convertBackToFrontCurrency($mainOrderBack->getCurrencyName());
 
 
         $orderFront->setInvoiceNo($this->storeFront->getDefaultInvoiceNo());

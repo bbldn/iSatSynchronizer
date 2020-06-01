@@ -41,6 +41,7 @@ class SeoUrlRepository extends FrontRepository
                 ->andWhere('su.languageId = :languageId')
                 ->setParameter('query', $query)
                 ->setParameter('languageId', $languageId)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

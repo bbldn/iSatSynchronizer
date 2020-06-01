@@ -41,7 +41,7 @@ class Store
      * @param string $currency
      * @return string
      */
-    public static function convertBackToFrontCurrency(string $currency): string
+    public static function convertFrontToBackCurrency(string $currency): string
     {
         switch (mb_strtolower(trim($currency))) {
             case 'uah':
@@ -63,7 +63,7 @@ class Store
      * @param string $currency
      * @return array
      */
-    public static function convertFrontToBackCurrency(string $currency): array
+    public static function convertBackToFrontCurrency(string $currency): array
     {
         switch (mb_strtolower(trim($currency))) {
             case 'грн':
@@ -72,10 +72,9 @@ class Store
             case 'р':
                 return ['code' => 'RUB', 'id' => 3];
             case '$':
+            default:
                 return ['code' => 'USD', 'id' => 1];
         }
-
-        return ['code' => 'USD', 'id' => 1];
     }
 
     /**

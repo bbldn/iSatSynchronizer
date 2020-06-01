@@ -61,6 +61,7 @@ class ProductAttributeRepository extends FrontRepository
                 ->andWhere('par.productId = :productId')
                 ->setParameter('attributeId', $attributeId)
                 ->setParameter('productId', $productId)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

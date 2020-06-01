@@ -41,6 +41,7 @@ class ProductImageRepository extends FrontRepository
                 ->setParameter('productId', $productId)
                 ->andWhere('c.image = :imagePath')
                 ->setParameter('imagePath', $imagePath)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

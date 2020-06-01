@@ -19,6 +19,7 @@ abstract class EntityRepository extends Repository
             $result = $this->createQueryBuilder('c')
                 ->andWhere('c.backId = :val')
                 ->setParameter('val', $value)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
@@ -38,6 +39,7 @@ abstract class EntityRepository extends Repository
             $result = $this->createQueryBuilder('c')
                 ->andWhere('c.frontId = :val')
                 ->setParameter('val', $value)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

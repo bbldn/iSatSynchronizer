@@ -48,6 +48,7 @@ class AddressRepository extends EntityRepository
             $result = $this->createQueryBuilder('c')
                 ->andWhere('c.customerBackId = :val')
                 ->setParameter('val', $value)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

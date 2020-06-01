@@ -41,6 +41,7 @@ class CategoryPathRepository extends FrontRepository
                 ->andWhere('cp.pathId = :pathId')
                 ->setParameter('categoryId', $categoryId)
                 ->setParameter('pathId', $pathId)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

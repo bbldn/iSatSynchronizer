@@ -42,6 +42,7 @@ class OrderGamePostRepository extends BackRepository
                 ->andWhere('o.productId = :productId')
                 ->setParameter('orderNum', $orderNum)
                 ->setParameter('productId', $productId)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
