@@ -552,7 +552,7 @@ class ProductSynchronizer
                 $key + 1
             );
 
-            if (null === $productFrontImage) {
+            if ('catalog/products/white.jpg' === $productFrontImage) {
                 continue;
             }
 
