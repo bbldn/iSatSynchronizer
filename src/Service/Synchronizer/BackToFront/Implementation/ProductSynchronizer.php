@@ -552,10 +552,6 @@ class ProductSynchronizer
                 $key + 1
             );
 
-            if ('catalog/products/white.jpg' === $productFrontImage->getImage()) {
-                continue;
-            }
-
             if (0 === $key) {
                 $productFront->setImage($productFrontImage->getImage());
                 continue;
