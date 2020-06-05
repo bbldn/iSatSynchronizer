@@ -38,6 +38,7 @@ use App\Repository\Front\OrderRecurringRepository as OrderRecurringFrontReposito
 use App\Repository\Front\OrderRecurringTransactionRepository as OrderRecurringTransactionFrontRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Repository\Front\OrderShipmentRepository as OrderShipmentFrontRepository;
+use App\Repository\Front\OrderSimpleFieldsRepository as OrderSimpleFieldsFrontRepository;
 use App\Repository\Front\OrderStatusRepository as OrderStatusFrontRepository;
 use App\Repository\Front\OrderTotalRepository as OrderTotalFrontRepository;
 use App\Repository\Front\OrderVoucherRepository as OrderVoucherFrontRepository;
@@ -149,6 +150,9 @@ class OrderSynchronizer
     /** @var ProductCategoryFrontRepository $productCategoryFrontRepository */
     protected $productCategoryFrontRepository;
 
+    /** @var OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository */
+    protected $orderSimpleFieldsFrontRepository;
+
     /** @var CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer */
     protected $customerFrontToBackSynchronizer;
 
@@ -187,6 +191,7 @@ class OrderSynchronizer
      * @param CustomerWishListFrontRepository $customerWishListFrontRepository
      * @param ProductRepository $productRepository
      * @param ProductCategoryFrontRepository $productCategoryFrontRepository
+     * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
      * @param CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
      */
     public function __construct(
@@ -223,6 +228,7 @@ class OrderSynchronizer
         CustomerWishListFrontRepository $customerWishListFrontRepository,
         ProductRepository $productRepository,
         ProductCategoryFrontRepository $productCategoryFrontRepository,
+        OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
         CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
     )
     {
@@ -259,6 +265,7 @@ class OrderSynchronizer
         $this->customerWishListFrontRepository = $customerWishListFrontRepository;
         $this->productRepository = $productRepository;
         $this->productCategoryFrontRepository = $productCategoryFrontRepository;
+        $this->orderSimpleFieldsFrontRepository = $orderSimpleFieldsFrontRepository;
         $this->customerFrontToBackSynchronizer = $customerFrontToBackSynchronizer;
     }
 
@@ -311,9 +318,16 @@ class OrderSynchronizer
         $this->customerSearchFrontRepository->resetAutoIncrements();
         $this->customerTransactionFrontRepository->resetAutoIncrements();
         $this->customerWishListFrontRepository->resetAutoIncrements();
+
+        if (true === $this->orderSimpleFieldsFrontRepository->tableExists()) {
+            $this->orderSimpleFieldsFrontRepository->removeAll();
+            $this->orderSimpleFieldsFrontRepository->resetAutoIncrements();
+        }
     }
 
-
+    /**
+     * @param OrderFront $orderFront
+     */
     protected function synchronizeOrder(OrderFront $orderFront): void
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
@@ -401,11 +415,8 @@ class OrderSynchronizer
             );
             $currentOrderBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
             $currentOrderBack->setFio("{$orderFront->getLastName()} {$orderFront->getFirstName()}");
-            $currentOrderBack->setRegion($orderFront->getPaymentCountry());
-            $currentOrderBack->setCity($orderFront->getPaymentZone());
             $currentOrderBack->setStreet($orderFront->getShippingAddress1());
             $currentOrderBack->setHouse(Filler::securityString(null));
-            $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
             $currentOrderBack->setMail($orderFront->getEmail());
             $currentOrderBack->setWhant(Filler::securityString($orderFront->getComment()));
             $currentOrderBack->setVipNum(Filler::securityString(null));
@@ -436,8 +447,29 @@ class OrderSynchronizer
             $paymentId = PaymentConverter::frontToBack(Filler::securityString($orderFront->getPaymentCode()));
             $currentOrderBack->setPayment($paymentId);
 
+            $shippingCode = Filler::securityString($orderFront->getShippingCode());
             $shippingId = ShippingConverter::frontToBack(Filler::securityString($orderFront->getShippingCode()));
             $currentOrderBack->setDelivery($shippingId);
+
+            if ('novaposhta.novaposhta' === $shippingCode) {
+                if (true === $this->orderSimpleFieldsFrontRepository->tableExists()) {
+                    $orderSimpleFields = $this->orderSimpleFieldsFrontRepository->find($orderFront->getOrderId());
+                } else {
+                    $orderSimpleFields = null;
+                }
+            } else {
+                $orderSimpleFields = null;
+            }
+
+            if (null !== $orderSimpleFields) {
+                $currentOrderBack->setRegion($orderSimpleFields->getOblast());
+                $currentOrderBack->setCity($orderSimpleFields->getGorod());
+                $currentOrderBack->setWarehouse($orderSimpleFields->getOtdelenie());
+            } else {
+                $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                $currentOrderBack->setCity($orderFront->getPaymentZone());
+                $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
+            }
 
             $currentOrderBack->setOrderNum($orderNum);
 
