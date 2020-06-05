@@ -19,6 +19,7 @@ use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
+use App\Repository\Front\CountryRepository as CountryFrontRepository;
 use App\Repository\Front\CustomerActivityRepository as CustomerActivityFrontRepository;
 use App\Repository\Front\CustomerAffiliateRepository as CustomerAffiliateFrontRepository;
 use App\Repository\Front\CustomerApprovalRepository as CustomerApprovalFrontRepository;
@@ -43,6 +44,7 @@ use App\Repository\Front\OrderStatusRepository as OrderStatusFrontRepository;
 use App\Repository\Front\OrderTotalRepository as OrderTotalFrontRepository;
 use App\Repository\Front\OrderVoucherRepository as OrderVoucherFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
+use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronizer;
@@ -153,6 +155,12 @@ class OrderSynchronizer
     /** @var OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository */
     protected $orderSimpleFieldsFrontRepository;
 
+    /** @var CountryFrontRepository $countryFrontRepository */
+    protected $countryFrontRepository;
+
+    /** @var ZoneFrontRepository $zoneFrontRepository */
+    protected $zoneFrontRepository;
+
     /** @var CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer */
     protected $customerFrontToBackSynchronizer;
 
@@ -192,6 +200,8 @@ class OrderSynchronizer
      * @param ProductRepository $productRepository
      * @param ProductCategoryFrontRepository $productCategoryFrontRepository
      * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
+     * @param CountryFrontRepository $countryFrontRepository
+     * @param ZoneFrontRepository $zoneFrontRepository
      * @param CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
      */
     public function __construct(
@@ -229,6 +239,8 @@ class OrderSynchronizer
         ProductRepository $productRepository,
         ProductCategoryFrontRepository $productCategoryFrontRepository,
         OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
+        CountryFrontRepository $countryFrontRepository,
+        ZoneFrontRepository $zoneFrontRepository,
         CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
     )
     {
@@ -266,6 +278,8 @@ class OrderSynchronizer
         $this->productRepository = $productRepository;
         $this->productCategoryFrontRepository = $productCategoryFrontRepository;
         $this->orderSimpleFieldsFrontRepository = $orderSimpleFieldsFrontRepository;
+        $this->countryFrontRepository = $countryFrontRepository;
+        $this->zoneFrontRepository = $zoneFrontRepository;
         $this->customerFrontToBackSynchronizer = $customerFrontToBackSynchronizer;
     }
 
@@ -462,9 +476,33 @@ class OrderSynchronizer
             }
 
             if (null !== $orderSimpleFields) {
-                $currentOrderBack->setRegion($orderSimpleFields->getOblast());
-                $currentOrderBack->setCity($orderSimpleFields->getGorod());
-                $currentOrderBack->setWarehouse($orderSimpleFields->getOtdelenie());
+                if (null === $orderSimpleFields->getOblast()) {
+                    $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                } else {
+                    $country = $this->countryFrontRepository->find($orderSimpleFields->getOblast());
+                    if (null === $country) {
+                        $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                    } else {
+                        $currentOrderBack->setRegion($country->getName());
+                    }
+                }
+
+                if (null === $orderSimpleFields->getGorod()) {
+                    $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                } else {
+                    $zone = $this->zoneFrontRepository->find($orderSimpleFields->getGorod());
+                    if (null === $zone) {
+                        $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                    } else {
+                        $currentOrderBack->setCity($zone->getName());
+                    }
+                }
+
+                if (null === $orderSimpleFields->getOtdelenie()) {
+                    $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
+                } else {
+                    $currentOrderBack->setWarehouse((string)$orderSimpleFields->getOtdelenie());
+                }
             } else {
                 $currentOrderBack->setRegion($orderFront->getPaymentCountry());
                 $currentOrderBack->setCity($orderFront->getPaymentZone());
