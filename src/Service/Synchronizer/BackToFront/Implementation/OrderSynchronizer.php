@@ -6,6 +6,7 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Customer as CustomerFront;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
+use App\Entity\Front\OrderSimpleFields as OrderSimpleFieldsFront;
 use App\Entity\Order;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
@@ -23,6 +24,7 @@ use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use App\Repository\Front\OrderProductRepository as OrderProductFrontRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
+use App\Repository\Front\OrderSimpleFieldsRepository as OrderSimpleFieldsFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\OrderRepository;
@@ -30,6 +32,7 @@ use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
+use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 
 class OrderSynchronizer
 {
@@ -78,6 +81,12 @@ class OrderSynchronizer
     /** @var CountryRepository $countryRepository */
     protected $countryRepository;
 
+    /** @var OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository */
+    protected $orderSimpleFieldsFrontRepository;
+
+    /** @var ZoneFrontRepository $zoneFrontRepository */
+    protected $zoneFrontRepository;
+
     /** @var CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer */
     protected $customerBackToFrontSynchronizer;
 
@@ -106,6 +115,8 @@ class OrderSynchronizer
      * @param ProductDescriptionFrontRepository $productDescriptionFrontRepository
      * @param ProductRepository $productRepository
      * @param CountryRepository $countryRepository
+     * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
+     * @param ZoneFrontRepository $zoneFrontRepository
      * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      */
     public function __construct(
@@ -124,6 +135,8 @@ class OrderSynchronizer
         ProductDescriptionFrontRepository $productDescriptionFrontRepository,
         ProductRepository $productRepository,
         CountryRepository $countryRepository,
+        OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
+        ZoneFrontRepository $zoneFrontRepository,
         CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
     )
     {
@@ -142,6 +155,8 @@ class OrderSynchronizer
         $this->productFrontRepository = $productFrontRepository;
         $this->productDescriptionFrontRepository = $productDescriptionFrontRepository;
         $this->countryRepository = $countryRepository;
+        $this->orderSimpleFieldsFrontRepository = $orderSimpleFieldsFrontRepository;
+        $this->zoneFrontRepository = $zoneFrontRepository;
         $this->customerBackToFrontSynchronizer = $customerBackToFrontSynchronizer;
     }
 
@@ -263,14 +278,17 @@ class OrderSynchronizer
 
         $orderFront->setPaymentCountry($countryName);
         $orderFront->setPaymentCountryId($countryId);
-        $orderFront->setPaymentZone($mainOrderBack->getCity());
+        $shippingZone = Filler::securityString($mainOrderBack->getCity());
+        $orderFront->setPaymentZone($shippingZone);
 
-        $zoneId = 0;
-
-        if (null === $orderFront->getPaymentZoneId()) {
-            $orderFront->setPaymentZoneId($zoneId);
+        $zone = $this->zoneFrontRepository->findOneByCountryIdAndName($countryId, $shippingZone);
+        if (null === $zone) {
+            $zoneId = 0;
+        } else {
+            $zoneId = $zone->getZoneId();
         }
 
+        $orderFront->setPaymentZoneId($zoneId);
         $orderFront->setPaymentAddressFormat(Filler::securityString(null));
         $orderFront->setPaymentCustomField($this->storeFront->getDefaultCustomField());
 
@@ -297,11 +315,8 @@ class OrderSynchronizer
 
         $orderFront->setShippingCountry($countryName);
         $orderFront->setShippingCountryId($countryId);
-        $orderFront->setShippingZone($mainOrderBack->getCity());
-
-        if (null === $orderFront->getShippingZone()) {
-            $orderFront->setShippingZoneId($zoneId);
-        }
+        $orderFront->setShippingZone($shippingZone);
+        $orderFront->setShippingZoneId($zoneId);
 
         $orderFront->setShippingAddressFormat(Filler::securityString(null));
         $orderFront->setShippingCustomField($this->storeFront->getDefaultCustomField());
@@ -351,6 +366,19 @@ class OrderSynchronizer
         $orderFront->setDateModified($date);
 
         $this->orderFrontRepository->persistAndFlush($orderFront);
+
+        if ('novaposhta.novaposhta' === $shippingCode) {
+            if (true === $this->orderSimpleFieldsFrontRepository->tableExists()) {
+                $orderSimpleFieldsFront = $this->getOrderSimpleFieldsFront($orderFront);
+                $orderSimpleFieldsFront->setOrderId($orderFront->getOrderId());
+                $orderSimpleFieldsFront->setMetadata('oblast,gorod,otdelenie');
+                $orderSimpleFieldsFront->setOblast($countryId);
+                $orderSimpleFieldsFront->setGorod($zoneId);
+                $orderSimpleFieldsFront->setOtdelenie($mainOrderBack->getWarehouse());
+
+                $this->orderSimpleFieldsFrontRepository->persistAndFlush($orderSimpleFieldsFront);
+            }
+        }
 
         $ordersBack = $this->orderBackRepository->findByOrderNum($mainOrderBack->getId());
 
@@ -445,5 +473,23 @@ class OrderSynchronizer
         }
 
         return 0;
+    }
+
+    /**
+     * @param OrderFront $orderFront
+     * @return OrderSimpleFieldsFront
+     */
+    protected function getOrderSimpleFieldsFront(OrderFront $orderFront): OrderSimpleFieldsFront
+    {
+        if (null === $orderFront->getOrderId()) {
+            return new OrderSimpleFieldsFront();
+        }
+
+        $orderSimpleFields = $this->orderSimpleFieldsFrontRepository->find($orderFront->getOrderId());
+        if (null === $orderSimpleFields) {
+            return $orderSimpleFields;
+        }
+
+        return $orderSimpleFields;
     }
 }
