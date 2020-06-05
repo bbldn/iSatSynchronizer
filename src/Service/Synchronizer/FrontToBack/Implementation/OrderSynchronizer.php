@@ -503,6 +503,9 @@ class OrderSynchronizer
                 } else {
                     $currentOrderBack->setWarehouse((string)$orderSimpleFields->getOtdelenie());
                 }
+
+                $currentOrderBack->setStreet(Filler::securityString(null));
+                $currentOrderBack->setHouse(Filler::securityString(null));
             } else {
                 $currentOrderBack->setRegion($orderFront->getPaymentCountry());
                 $currentOrderBack->setCity($orderFront->getPaymentZone());
