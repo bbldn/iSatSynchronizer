@@ -521,12 +521,14 @@ class ProductSynchronizer
         $seoUrl->setLanguageId($this->storeFront->getDefaultLanguageId());
         $seoUrl->setQuery('product_id=' . $productFrontId);
 
-        if (null === $productBack->getSlug()) {
+        $slug = trim(Filler::securityString($productBack->getSlug()));
+
+        if (mb_strlen($slug) > 0) {
             $seoUrl->setKeyword(
                 StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
             );
         } else {
-            $seoUrl->setKeyword($productBack->getSlug());
+            $seoUrl->setKeyword($slug);
         }
 
         $this->seoUrlFrontRepository->persistAndFlush($seoUrl);
