@@ -529,7 +529,12 @@ class ProductSynchronizer
                 StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
             );
         } else {
-            $seoUrl->setKeyword($slug);
+            $slugs = explode('/', $slug);
+            if (count($slugs) > 1) {
+                $seoUrl->setKeyword($slugs[1]);
+            } else {
+                $seoUrl->setKeyword($slug);
+            }
         }
 
         $this->seoUrlFrontRepository->persistAndFlush($seoUrl);
