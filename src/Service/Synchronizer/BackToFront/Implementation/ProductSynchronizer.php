@@ -570,6 +570,7 @@ class ProductSynchronizer
 
             if ($this->defaultImagePath === $productFront->getImage()) {
                 $productFront->setImage($productFrontImage->getImage());
+                $this->productImageFrontRepository->remove($productFrontImage);
             }
         }
 
@@ -588,6 +589,7 @@ class ProductSynchronizer
 
             if ($this->defaultImagePath === $productFront->getImage()) {
                 $productFront->setImage($productFrontImage->getImage());
+                $this->productImageFrontRepository->remove($productFrontImage);
             }
         }
 

@@ -4,6 +4,7 @@ namespace App\Service\FrontBackFileSystem;
 
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SaveFrontFileToNetwork implements SaveFrontFileInterface
@@ -23,7 +24,7 @@ class SaveFrontFileToNetwork implements SaveFrontFileInterface
     /**
      * @param string $path
      * @param string $content
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function saveFile(string $path, string $content): void
     {
@@ -43,7 +44,7 @@ class SaveFrontFileToNetwork implements SaveFrontFileInterface
 
     /**
      * @param string $path
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function clearFolder(string $path): void
     {

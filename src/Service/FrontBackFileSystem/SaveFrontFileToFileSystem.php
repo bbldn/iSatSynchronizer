@@ -24,6 +24,10 @@ class SaveFrontFileToFileSystem implements SaveFrontFileInterface
      */
     public function saveFile(string $path, string $content): void
     {
+        if (true === $this->fileSystem->exists($path)) {
+            $this->fileSystem->remove($path);
+        }
+
         $this->fileSystem->appendToFile($path, $content);
     }
 
