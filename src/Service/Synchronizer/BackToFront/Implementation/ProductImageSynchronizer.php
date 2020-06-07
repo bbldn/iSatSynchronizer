@@ -171,6 +171,8 @@ class ProductImageSynchronizer
      */
     public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ?ProductImageFront
     {
-        return $this->synchronize(md5($photoBack->getBig()), $productFront, $number);
+        $pathInfo = pathinfo($photoBack->getBig());
+
+        return $this->synchronize(md5($photoBack->getBig()). '.' . $pathInfo['extension'], $productFront, $number);
     }
 }

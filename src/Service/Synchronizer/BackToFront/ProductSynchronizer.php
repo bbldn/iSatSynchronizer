@@ -13,7 +13,6 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     public function synchronizeByIds(string $ids, $synchronizeImage = false): void
     {
         $productsBack = $this->productBackRepository->findByIds($ids);
-
         foreach ($productsBack as $productBack) {
             $this->synchronizeProduct($productBack, $synchronizeImage);
         }

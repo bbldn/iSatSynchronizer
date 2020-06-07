@@ -575,8 +575,11 @@ class ProductSynchronizer
                 continue;
             }
 
-            if ($this->defaultImagePath === $productFront->getImage()) {
+            if ($productFront->getImage() === $this->defaultImagePath) {
                 $productFront->setImage($productFrontImage->getImage());
+            }
+
+            if ($productFront->getImage() === $productFrontImage->getImage()) {
                 $this->productImageFrontRepository->remove($productFrontImage);
             }
         }
@@ -594,8 +597,11 @@ class ProductSynchronizer
                 continue;
             }
 
-            if ($this->defaultImagePath === $productFront->getImage()) {
+            if ($productFront->getImage() === $this->defaultImagePath) {
                 $productFront->setImage($productFrontImage->getImage());
+            }
+
+            if ($productFront->getImage() === $productFrontImage->getImage()) {
                 $this->productImageFrontRepository->remove($productFrontImage);
             }
         }
