@@ -347,9 +347,16 @@ class CategorySynchronizer
         $seoUrl->setStoreId($this->storeFront->getDefaultStoreId());
         $seoUrl->setLanguageId($this->storeFront->getDefaultLanguageId());
         $seoUrl->setQuery('category_id=' . $categoryFrontId);
-        $seoUrl->setKeyword(
-            StoreFront::generateURL($categoryBack->getCategoryId(), Store::encodingConvert($categoryBack->getName()))
-        );
+
+        $slug = trim(Filler::securityString($categoryBack->getSlug()));
+
+        if (0 === mb_strlen($slug)) {
+            $seoUrl->setKeyword(
+                StoreFront::generateURL($categoryBack->getCategoryId(), Store::encodingConvert($categoryBack->getName()))
+            );
+        } else {
+            $seoUrl->setKeyword($slug);
+        }
 
         $this->seoUrlFrontRepository->persistAndFlush($seoUrl);
     }

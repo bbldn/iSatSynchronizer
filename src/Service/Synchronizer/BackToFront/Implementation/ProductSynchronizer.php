@@ -522,7 +522,6 @@ class ProductSynchronizer
         $seoUrl->setQuery('product_id=' . $productFrontId);
 
         $slug = trim(Filler::securityString($productBack->getSlug()));
-        var_dump($slug);
 
         if (0 === mb_strlen($slug)) {
             $seoUrl->setKeyword(
