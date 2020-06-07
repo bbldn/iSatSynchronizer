@@ -67,6 +67,7 @@ class GetBackFileFromNetwork implements GetBackFileInterface
         } catch (TransportExceptionInterface $e) {
             return null;
         }
+
         if (200 !== $statusCode) {
             return null;
         }

@@ -95,7 +95,7 @@ class ProductImageSynchronizer
         $number = 1
     ): ?ProductImageFront
     {
-        return $this->synchronize($productPicturesBack->getFileName(), $productFront, $number);
+        return $this->synchronize($productPicturesBack->getEnlargedVm(), $productFront, $number);
     }
 
     /**
@@ -171,6 +171,6 @@ class ProductImageSynchronizer
      */
     public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ?ProductImageFront
     {
-        return $this->synchronize($photoBack->getBig(), $productFront, $number);
+        return $this->synchronize(md5($photoBack->getBig()), $productFront, $number);
     }
 }
