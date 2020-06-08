@@ -360,7 +360,9 @@ class ProductSynchronizer
         $productFront->setSubtract(false);
         $productFront->setMinimum(true);
         $productFront->setSortOrder(0);
-        $productFront->setStatus($productBack->getEnabled() !== 0);
+        if (null === $productFront->getStatus() || true === $productFront->getStatus()) {
+            $productFront->setStatus($productBack->getEnabled() !== 0);
+        }
         $productFront->setViewed(0);
 
         $this->productFrontRepository->persistAndFlush($productFront);

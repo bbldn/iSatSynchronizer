@@ -216,7 +216,9 @@ class CategorySynchronizer
             $categoryFront->setSortOrder(0);
         }
 
-        $categoryFront->setStatus($categoryBack->getEnabled());
+        if (null === $categoryFront->getStatus() || true === $categoryFront->getStatus()) {
+            $categoryFront->setStatus($categoryBack->getEnabled());
+        }
 
         $this->categoryFrontRepository->persistAndFlush($categoryFront);
 
