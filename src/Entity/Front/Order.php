@@ -1435,7 +1435,7 @@ class Order
     /**
      * @return string
      */
-    public function getForwardedIp(): string
+    public function getForwardedIp(): ?string
     {
         return $this->forwardedIp;
     }
