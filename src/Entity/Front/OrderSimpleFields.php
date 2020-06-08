@@ -13,7 +13,6 @@ class OrderSimpleFields
     /**
      * @var int|null $orderId
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_id`")
      */
     protected $orderId;
