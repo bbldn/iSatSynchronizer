@@ -481,7 +481,7 @@ class OrderSynchronizer
      */
     protected function getOrderSimpleFieldsFront(OrderFront $orderFront): OrderSimpleFieldsFront
     {
-        if (null === $orderFront->getOrderId()) {
+        if (null === $orderFront->getOrderId() || 0 === $orderFront->getOrderId()) {
             return new OrderSimpleFieldsFront();
         }
 
