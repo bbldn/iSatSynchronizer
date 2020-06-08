@@ -487,7 +487,7 @@ class OrderSynchronizer
 
         $orderSimpleFields = $this->orderSimpleFieldsFrontRepository->find($orderFront->getOrderId());
         if (null === $orderSimpleFields) {
-            return $orderSimpleFields;
+            return new OrderSimpleFieldsFront();
         }
 
         return $orderSimpleFields;
