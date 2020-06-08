@@ -16,6 +16,7 @@ use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;
+use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
 use App\Repository\Front\CategoryFilterRepository as CategoryFilterFrontRepository;
@@ -61,11 +62,17 @@ class CategorySynchronizer
     /** @var CategoryBackRepository $categoryBackRepository */
     protected $categoryBackRepository;
 
+    /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
+    protected $seoUrlFrontRepository;
+
+    /** @var ProductBackRepository $productBackRepository */
+    protected $productBackRepository;
+
     /** @var CategoryImageSynchronizer $categoryImageSynchronizer */
     protected $categoryImageSynchronizer;
 
-    /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
-    protected $seoUrlFrontRepository;
+    /** @var array $urls */
+    protected $urls = [];
 
     /**
      * CategorySynchronizer constructor.
@@ -80,8 +87,9 @@ class CategorySynchronizer
      * @param CategoryStoreFrontRepository $categoryStoreFrontRepository
      * @param CategoryRepository $categoryRepository
      * @param CategoryBackRepository $categoryBackRepository
-     * @param CategoryImageSynchronizer $categoryImageSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
+     * @param ProductBackRepository $productBackRepository
+     * @param CategoryImageSynchronizer $categoryImageSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
@@ -95,8 +103,9 @@ class CategorySynchronizer
         CategoryStoreFrontRepository $categoryStoreFrontRepository,
         CategoryRepository $categoryRepository,
         CategoryBackRepository $categoryBackRepository,
-        CategoryImageSynchronizer $categoryImageSynchronizer,
-        SeoUrlFrontRepository $seoUrlFrontRepository
+        SeoUrlFrontRepository $seoUrlFrontRepository,
+        ProductBackRepository $productBackRepository,
+        CategoryImageSynchronizer $categoryImageSynchronizer
     )
     {
         $this->logger = $logger;
@@ -110,8 +119,9 @@ class CategorySynchronizer
         $this->categoryStoreFrontRepository = $categoryStoreFrontRepository;
         $this->categoryRepository = $categoryRepository;
         $this->categoryBackRepository = $categoryBackRepository;
-        $this->categoryImageSynchronizer = $categoryImageSynchronizer;
         $this->seoUrlFrontRepository = $seoUrlFrontRepository;
+        $this->productBackRepository = $productBackRepository;
+        $this->categoryImageSynchronizer = $categoryImageSynchronizer;
     }
 
     /**
@@ -351,9 +361,16 @@ class CategorySynchronizer
         $slug = trim(Filler::securityString($categoryBack->getSlug()));
 
         if (0 === mb_strlen($slug)) {
-            $seoUrl->setKeyword(
-                StoreFront::generateURL($categoryBack->getCategoryId(), Store::encodingConvert($categoryBack->getName()))
-            );
+            if (true === key_exists($categoryBack->getCategoryId(), $this->urls)) {
+                $slug = $this->urls[$categoryBack->getCategoryId()];
+            } else {
+                $slug = StoreFront::generateURL(
+                    $categoryBack->getCategoryId(),
+                    Store::encodingConvert($categoryBack->getName())
+                );
+            }
+
+            $seoUrl->setKeyword($slug);
         } else {
             $seoUrl->setKeyword($slug);
         }
@@ -386,5 +403,25 @@ class CategorySynchronizer
     {
         $this->categoryImageSynchronizer->synchronizeImage($categoryBack, $categoryFront);
         $this->categoryFrontRepository->persistAndFlush($categoryFront);
+    }
+
+    /**
+     *
+     */
+    protected function getSeoUrlFromProducts(): array
+    {
+        $urls = [];
+        $slugs = $this->productBackRepository->getAllSlugs();
+
+        foreach ($slugs as $slug) {
+            $result = preg_match('/^([0-9]+)(.+)?\/([0-9]+)(.+)$/', $slug['slug'], $data);
+            if (0 === $result) {
+                continue;
+            }
+
+            $urls[$data[1]] = $data[1] . $data[2];
+        }
+
+        return $urls;
     }
 }

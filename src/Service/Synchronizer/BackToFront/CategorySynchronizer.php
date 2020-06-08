@@ -12,6 +12,7 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
      */
     public function synchronizeByIds(string $ids, bool $synchronizeImage = false): void
     {
+        $this->urls = $this->getSeoUrlFromProducts();
         $categoriesBack = $this->categoryBackRepository->findByIds($ids);
         foreach ($categoriesBack as $categoryBack) {
             $this->synchronizeCategory($categoryBack, $synchronizeImage);
@@ -40,6 +41,7 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
      */
     public function synchronizeAll(bool $synchronizeImage = false): void
     {
+        $this->urls = $this->getSeoUrlFromProducts();
         $categoriesBack = $this->categoryBackRepository->findAll();
         foreach ($categoriesBack as $categoryBack) {
             $this->synchronizeCategory($categoryBack, $synchronizeImage);

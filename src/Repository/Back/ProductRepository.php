@@ -126,4 +126,26 @@ class ProductRepository extends BackRepository
 
         return $result->fetchAll();
     }
+
+    /**
+     * @return array
+     */
+    public function getAllSlugs(): array
+    {
+        $tableName = $this->getClassMetadata()->getTableName();
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $queryBuilder->select('p.`slug` as `slug`');
+        $queryBuilder->from($tableName, 'p');
+        $queryBuilder->where('CHAR_LENGTH(p.`slug`) > 0');
+
+        try {
+            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
+        } catch (DBALException $e) {
+            return [];
+        }
+
+        $result->execute();
+
+        return $result->fetchAll();
+    }
 }
