@@ -92,6 +92,9 @@ class Store extends StoreBase
     /** @var int $defaultZoneId */
     protected $defaultZoneId = 0;
 
+    /** @var int $defaultManufacturerId */
+    protected $defaultManufacturerId = 1;
+
     /** @var mixed|string $siteUrl */
     protected $siteUrl = 'http://172.17.0.2';
 
@@ -686,6 +689,25 @@ class Store extends StoreBase
     public function setSitePath($sitePath): self
     {
         $this->sitePath = $sitePath;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultManufacturerId(): int
+    {
+        return $this->defaultManufacturerId;
+    }
+
+    /**
+     * @param int $defaultManufacturerId
+     * @return Store
+     */
+    public function setDefaultManufacturerId(int $defaultManufacturerId): self
+    {
+        $this->defaultManufacturerId = $defaultManufacturerId;
 
         return $this;
     }

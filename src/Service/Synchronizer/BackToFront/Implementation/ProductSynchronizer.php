@@ -24,6 +24,7 @@ use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackReposito
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
+use App\Repository\Front\ManufacturerRepository as ManufacturerFrontRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
@@ -138,6 +139,9 @@ class ProductSynchronizer
     /** @var ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository */
     protected $productDiscontinuedFrontRepository;
 
+    /** @var ManufacturerFrontRepository $manufacturerFrontRepository */
+    protected $manufacturerFrontRepository;
+
     /** @var string $defaultImagePath */
     protected $defaultImagePath = 'catalog/products/white.jpg';
 
@@ -173,6 +177,7 @@ class ProductSynchronizer
      * @param ProductImageSynchronizer $productImageSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
      * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
+     * @param ManufacturerFrontRepository $manufacturerFrontRepository
      */
     public function __construct(
         LoggerInterface $logger,
@@ -204,7 +209,8 @@ class ProductSynchronizer
         ProductPicturesBackRepository $productPicturesBackRepository,
         ProductImageSynchronizer $productImageSynchronizer,
         SeoUrlFrontRepository $seoUrlFrontRepository,
-        ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
+        ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository,
+        ManufacturerFrontRepository $manufacturerFrontRepository
     )
     {
         $this->logger = $logger;
@@ -237,6 +243,7 @@ class ProductSynchronizer
         $this->seoUrlFrontRepository = $seoUrlFrontRepository;
         $this->productImageSynchronizer = $productImageSynchronizer;
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
+        $this->manufacturerFrontRepository = $manufacturerFrontRepository;
     }
 
     /**
@@ -358,7 +365,8 @@ class ProductSynchronizer
             $productFront->setImage(Filler::securityString(null));
         }
 
-        $productFront->setManufacturerId(1);
+        $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
+        $productFront->setManufacturerId($this->getManufacturerId($productName));
         $productFront->setShipping(true);
         $productFront->setPrice($productBack->getPrice());
         $productFront->setPoints(0);
@@ -387,7 +395,7 @@ class ProductSynchronizer
 
         $productDescriptionFront->setProductId($productFrontId);
         $productDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
-        $productDescriptionFront->setName(Filler::securityString(Store::encodingConvert($productBack->getName())));
+        $productDescriptionFront->setName($productName);
         $productDescriptionFront->setDescription(
             Filler::securityString(Store::encodingConvert($productBack->getDescription()))
         );
@@ -637,5 +645,22 @@ class ProductSynchronizer
         }
 
         $this->productFrontRepository->persistAndFlush($productFront);
+    }
+
+    /**
+     * @param string $productName
+     * @return int
+     */
+    public function getManufacturerId(string $productName): int
+    {
+        $values = explode(' ', $productName);
+        foreach ($values as $value) {
+            $manufacturer = $this->manufacturerFrontRepository->findOneByName($value);
+            if (null !== $manufacturer) {
+                return $manufacturer->getManufacturerId();
+            }
+        }
+
+        return $this->storeFront->getDefaultManufacturerId();
     }
 }
