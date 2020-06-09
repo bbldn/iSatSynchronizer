@@ -74,6 +74,9 @@ class CategorySynchronizer
     /** @var array $urls */
     protected $urls = [];
 
+    /** @var string $defaultImagePath */
+    protected $defaultImagePath = 'catalog/categories/white.jpg';
+
     /**
      * CategorySynchronizer constructor.
      * @param LoggerInterface $logger
@@ -161,7 +164,7 @@ class CategorySynchronizer
         $this->updateCategoryFrontFromCategoryBack($categoryBack, $categoryFront);
         $this->createOrUpdateCategory($category, $categoryBack->getCategoryId(), $categoryFront->getCategoryId());
 
-        if (true === $synchronizeImage && null !== $categoryFront) {
+        if (true === $synchronizeImage) {
             $this->synchronizeImage($categoryBack, $categoryFront);
         }
     }
@@ -201,7 +204,7 @@ class CategorySynchronizer
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
 
-        $categoryFront->setImage(Filler::securityString(null));
+        $categoryFront->setImage($this->defaultImagePath);
         $categoryFront->setParentId($parentId);
 
         if (null === $categoryFront->getTop()) {
