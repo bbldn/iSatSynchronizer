@@ -5,6 +5,7 @@ namespace App\Repository\Front;
 use App\Entity\Front\ProductAttribute;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @method ProductAttribute|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,20 +33,34 @@ class ProductAttributeRepository extends FrontRepository
      * @param int $productId
      * @param int $attributeId
      * @param int $languageId
-     * @return mixed
+     * @param string $text
+     * @return bool
      */
-    public function removeByProductIdAttributeIdLanguageId(int $productId, int $attributeId, int $languageId)
+    public function existsByProductIdAttributeIdLanguageIdText(
+        int $productId,
+        int $attributeId,
+        int $languageId,
+        string $text
+    ): bool
     {
-        return $this->createQueryBuilder('par')
-            ->andWhere('par.attributeId = :attributeId')
-            ->andWhere('par.productId = :productId')
-            ->andWhere('par.languageId = :languageId')
-            ->setParameter('attributeId', $attributeId)
-            ->setParameter('productId', $productId)
-            ->setParameter('languageId', $languageId)
-            ->delete()
-            ->getQuery()
-            ->execute();
+        try {
+            return $this->createQueryBuilder('par')
+                    ->select('count(par.productId)')
+                    ->andWhere('par.productId = :productId')
+                    ->andWhere('par.attributeId = :attributeId')
+                    ->andWhere('par.languageId = :languageId')
+                    ->andWhere('par.text = :text')
+                    ->setParameter('productId', $productId)
+                    ->setParameter('attributeId', $attributeId)
+                    ->setParameter('languageId', $languageId)
+                    ->setParameter('text', $text)
+                    ->getQuery()
+                    ->getSingleScalarResult() > 0;
+        } catch (NonUniqueResultException $e) {
+            return false;
+        } catch (NoResultException $e) {
+            return false;
+        }
     }
 
     /**
@@ -56,7 +71,7 @@ class ProductAttributeRepository extends FrontRepository
     public function findOneByAttributeFrontIdAndProductFrontId(int $attributeId, int $productId): ?ProductAttribute
     {
         try {
-            $result = $this->createQueryBuilder('par')
+            return $this->createQueryBuilder('par')
                 ->andWhere('par.attributeId = :attributeId')
                 ->andWhere('par.productId = :productId')
                 ->setParameter('attributeId', $attributeId)
@@ -65,9 +80,7 @@ class ProductAttributeRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

@@ -8,35 +8,98 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store extends StoreBase
 {
+    /** @var int|mixed $productAvailableStatusId */
     protected $productAvailableStatusId = 7;
+
+    /** @var int|mixed $productNotAvailableStatusId */
     protected $productNotAvailableStatusId = 5;
+
+    /** @var int|mixed $defaultLanguageId */
     protected $defaultLanguageId = 1;
+
+    /** @var int|mixed $defaultStoreId */
     protected $defaultStoreId = 0;
+
+    /** @var int|mixed $defaultLayoutId */
     protected $defaultLayoutId = 0;
+
+    /** @var int|mixed $defaultCategoryFrontId */
     protected $defaultCategoryFrontId = 0;
+
+    /** @var int|mixed $defaultSortOrder */
     protected $defaultSortOrder = 0;
+
+    /** @var int|mixed $defaultAttributeGroupId */
     protected $defaultAttributeGroupId = 1;
+
+    /** @var int|mixed $defaultOrderStatus */
     protected $defaultOrderStatus = 1;
+
+    /** @var int $defaultShopId */
     protected $defaultShopId = 0;
+
+    /** @var string $defaultCountry */
     protected $defaultCountry = 'Украина';
+
+    /** @var int $defaultCountryId */
     protected $defaultCountryId = 220;
+
+    /** @var string $defaultPaymentMethod */
     protected $defaultPaymentMethod = 'Оплата при доставке';
+
+    /** @var string $defaultShippingMethod */
     protected $defaultShippingMethod = 'Доставка с фиксированной стоимостью';
+
+    /** @var string $defaultShippingCode */
     protected $defaultShippingCode = 'flat.flat';
+
+    /** @var string $defaultCustomField */
     protected $defaultCustomField = '[]';
+
+    /** @var string $invoicePrefix */
     protected $invoicePrefix = 'INV-2020-00';
+
+    /** @var int $defaultCustomerGroupId */
     protected $defaultCustomerGroupId = 1;
+
+    /** @var string $storeName */
     protected $storeName = 'isat.com.ua';
+
+    /** @var string $defaultPaymentCode */
     protected $defaultPaymentCode = 'cod';
+
+    /** @var int $defaultAffiliateId */
     protected $defaultAffiliateId = 0;
+
+    /** @var int $defaultCommission */
     protected $defaultCommission = 0;
+
+    /** @var int $defaultMarketingId */
     protected $defaultMarketingId = 0;
+
+    /** @var int $defaultTax */
     protected $defaultTax = 0;
+
+    /** @var int $defaultReward */
     protected $defaultReward = 0;
+
+    /** @var int $defaultInvoiceNo */
     protected $defaultInvoiceNo = 0;
+
+    /** @var int $defaultCustomerId */
     protected $defaultCustomerId = 0;
+
+    /** @var int $defaultZoneId */
+    protected $defaultZoneId = 0;
+
+    /** @var mixed|string $siteUrl */
     protected $siteUrl = 'http://172.17.0.2';
+
+    /** @var mixed|string $sitePath */
     protected $sitePath = '/home/user/PhpstormProjects/uclan.com.ua';
+
+    /** @var string $frontCategoryPath */
+    protected $frontCategoryPath = '/date/categories/';
 
     /**
      * Store constructor.
@@ -67,10 +130,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $productAvailableStatusId
+     * @return Store
      */
-    public function setProductAvailableStatusId($productAvailableStatusId): void
+    public function setProductAvailableStatusId($productAvailableStatusId): self
     {
         $this->productAvailableStatusId = $productAvailableStatusId;
+
+        return $this;
     }
 
     /**
@@ -83,10 +149,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $productNotAvailableStatusId
+     * @return Store
      */
-    public function setProductNotAvailableStatusId($productNotAvailableStatusId): void
+    public function setProductNotAvailableStatusId($productNotAvailableStatusId): self
     {
         $this->productNotAvailableStatusId = $productNotAvailableStatusId;
+
+        return $this;
     }
 
     /**
@@ -99,10 +168,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $defaultLanguageId
+     * @return Store
      */
-    public function setDefaultLanguageId($defaultLanguageId): void
+    public function setDefaultLanguageId($defaultLanguageId): self
     {
         $this->defaultLanguageId = $defaultLanguageId;
+
+        return $this;
     }
 
     /**
@@ -115,10 +187,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $defaultStoreId
+     * @return Store
      */
-    public function setDefaultStoreId($defaultStoreId): void
+    public function setDefaultStoreId($defaultStoreId): self
     {
         $this->defaultStoreId = $defaultStoreId;
+
+        return $this;
     }
 
     /**
@@ -131,10 +206,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $defaultLayoutId
+     * @return Store
      */
-    public function setDefaultLayoutId($defaultLayoutId): void
+    public function setDefaultLayoutId($defaultLayoutId): self
     {
         $this->defaultLayoutId = $defaultLayoutId;
+
+        return $this;
     }
 
     /**
@@ -147,10 +225,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $defaultCategoryFrontId
+     * @return Store
      */
-    public function setDefaultCategoryFrontId($defaultCategoryFrontId): void
+    public function setDefaultCategoryFrontId($defaultCategoryFrontId): self
     {
         $this->defaultCategoryFrontId = $defaultCategoryFrontId;
+
+        return $this;
     }
 
     /**
@@ -163,10 +244,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $defaultSortOrder
+     * @return Store
      */
-    public function setDefaultSortOrder($defaultSortOrder): void
+    public function setDefaultSortOrder($defaultSortOrder): self
     {
         $this->defaultSortOrder = $defaultSortOrder;
+
+        return $this;
     }
 
     /**
@@ -179,10 +263,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $defaultAttributeGroupId
+     * @return Store
      */
-    public function setDefaultAttributeGroupId($defaultAttributeGroupId): void
+    public function setDefaultAttributeGroupId($defaultAttributeGroupId): self
     {
         $this->defaultAttributeGroupId = $defaultAttributeGroupId;
+
+        return $this;
     }
 
     /**
@@ -195,10 +282,13 @@ class Store extends StoreBase
 
     /**
      * @param int|mixed $defaultOrderStatus
+     * @return Store
      */
-    public function setDefaultOrderStatus($defaultOrderStatus): void
+    public function setDefaultOrderStatus($defaultOrderStatus): self
     {
         $this->defaultOrderStatus = $defaultOrderStatus;
+
+        return $this;
     }
 
     /**
@@ -211,10 +301,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultShopId
+     * @return Store
      */
-    public function setDefaultShopId(int $defaultShopId): void
+    public function setDefaultShopId(int $defaultShopId): self
     {
         $this->defaultShopId = $defaultShopId;
+
+        return $this;
     }
 
     /**
@@ -227,10 +320,13 @@ class Store extends StoreBase
 
     /**
      * @param string $defaultCountry
+     * @return Store
      */
-    public function setDefaultCountry(string $defaultCountry): void
+    public function setDefaultCountry(string $defaultCountry): self
     {
         $this->defaultCountry = $defaultCountry;
+
+        return $this;
     }
 
     /**
@@ -243,10 +339,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultCountryId
+     * @return Store
      */
-    public function setDefaultCountryId(int $defaultCountryId): void
+    public function setDefaultCountryId(int $defaultCountryId): self
     {
         $this->defaultCountryId = $defaultCountryId;
+
+        return $this;
     }
 
     /**
@@ -255,6 +354,17 @@ class Store extends StoreBase
     public function getSiteUrl()
     {
         return $this->siteUrl;
+    }
+
+    /**
+     * @param mixed|string $siteUrl
+     * @return Store
+     */
+    public function setSiteUrl($siteUrl): self
+    {
+        $this->siteUrl = $siteUrl;
+
+        return $this;
     }
 
     /**
@@ -267,10 +377,13 @@ class Store extends StoreBase
 
     /**
      * @param string $defaultPaymentMethod
+     * @return Store
      */
-    public function setDefaultPaymentMethod(string $defaultPaymentMethod): void
+    public function setDefaultPaymentMethod(string $defaultPaymentMethod): self
     {
         $this->defaultPaymentMethod = $defaultPaymentMethod;
+
+        return $this;
     }
 
     /**
@@ -283,10 +396,13 @@ class Store extends StoreBase
 
     /**
      * @param string $defaultShippingMethod
+     * @return Store
      */
-    public function setDefaultShippingMethod(string $defaultShippingMethod): void
+    public function setDefaultShippingMethod(string $defaultShippingMethod): self
     {
         $this->defaultShippingMethod = $defaultShippingMethod;
+
+        return $this;
     }
 
     /**
@@ -356,10 +472,13 @@ class Store extends StoreBase
 
     /**
      * @param string $defaultCustomField
+     * @return Store
      */
-    public function setDefaultCustomField(string $defaultCustomField): void
+    public function setDefaultCustomField(string $defaultCustomField): self
     {
         $this->defaultCustomField = $defaultCustomField;
+
+        return $this;
     }
 
     /**
@@ -372,10 +491,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultCustomerGroupId
+     * @return Store
      */
-    public function setDefaultCustomerGroupId(int $defaultCustomerGroupId): void
+    public function setDefaultCustomerGroupId(int $defaultCustomerGroupId): self
     {
         $this->defaultCustomerGroupId = $defaultCustomerGroupId;
+
+        return $this;
     }
 
     /**
@@ -388,10 +510,13 @@ class Store extends StoreBase
 
     /**
      * @param string $defaultPaymentCode
+     * @return Store
      */
-    public function setDefaultPaymentCode(string $defaultPaymentCode): void
+    public function setDefaultPaymentCode(string $defaultPaymentCode): self
     {
         $this->defaultPaymentCode = $defaultPaymentCode;
+
+        return $this;
     }
 
     /**
@@ -404,10 +529,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultAffiliateId
+     * @return Store
      */
-    public function setDefaultAffiliateId(int $defaultAffiliateId): void
+    public function setDefaultAffiliateId(int $defaultAffiliateId): self
     {
         $this->defaultAffiliateId = $defaultAffiliateId;
+
+        return $this;
     }
 
     /**
@@ -420,10 +548,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultCommission
+     * @return Store
      */
-    public function setDefaultCommission(int $defaultCommission): void
+    public function setDefaultCommission(int $defaultCommission): self
     {
         $this->defaultCommission = $defaultCommission;
+
+        return $this;
     }
 
     /**
@@ -436,10 +567,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultMarketingId
+     * @return Store
      */
-    public function setDefaultMarketingId(int $defaultMarketingId): void
+    public function setDefaultMarketingId(int $defaultMarketingId): self
     {
         $this->defaultMarketingId = $defaultMarketingId;
+
+        return $this;
     }
 
     /**
@@ -452,10 +586,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultReward
+     * @return Store
      */
-    public function setDefaultReward(int $defaultReward): void
+    public function setDefaultReward(int $defaultReward): self
     {
         $this->defaultReward = $defaultReward;
+
+        return $this;
     }
 
     /**
@@ -468,10 +605,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultTax
+     * @return Store
      */
-    public function setDefaultTax(int $defaultTax): void
+    public function setDefaultTax(int $defaultTax): self
     {
         $this->defaultTax = $defaultTax;
+
+        return $this;
     }
 
     /**
@@ -484,10 +624,13 @@ class Store extends StoreBase
 
     /**
      * @param int $defaultInvoiceNo
+     * @return Store
      */
-    public function setDefaultInvoiceNo(int $defaultInvoiceNo): void
+    public function setDefaultInvoiceNo(int $defaultInvoiceNo): self
     {
         $this->defaultInvoiceNo = $defaultInvoiceNo;
+
+        return $this;
     }
 
     /**
@@ -510,11 +653,22 @@ class Store extends StoreBase
     }
 
     /**
-     * @param mixed|string $siteUrl
+     * @return int
      */
-    public function setSiteUrl($siteUrl): void
+    public function getDefaultZoneId(): int
     {
-        $this->siteUrl = $siteUrl;
+        return $this->defaultZoneId;
+    }
+
+    /**
+     * @param int $defaultZoneId
+     * @return Store
+     */
+    public function setDefaultZoneId(int $defaultZoneId): self
+    {
+        $this->defaultZoneId = $defaultZoneId;
+
+        return $this;
     }
 
     /**
@@ -527,10 +681,13 @@ class Store extends StoreBase
 
     /**
      * @param mixed|string $sitePath
+     * @return Store
      */
-    public function setSitePath($sitePath): void
+    public function setSitePath($sitePath): self
     {
         $this->sitePath = $sitePath;
+
+        return $this;
     }
 
     /**
@@ -538,7 +695,7 @@ class Store extends StoreBase
      * @param string $salt
      * @return string
      */
-    public static function hashPassword(string $value, string $salt)
+    public static function hashPassword(string $value, string $salt): string
     {
         return sha1($salt . sha1($salt . sha1($value)));
     }
@@ -547,7 +704,7 @@ class Store extends StoreBase
      * @param string $value
      * @return string
      */
-    public static function hashPasswordOld(string $value)
+    public static function hashPasswordOld(string $value): string
     {
         return md5($value);
     }

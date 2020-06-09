@@ -7,20 +7,50 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store extends StoreBase
 {
+    /** @var array|mixed $rootCategories */
     protected $rootCategories = [0, 1];
+
+    /** @var int $defaultSiteId */
     protected $defaultSiteId = 0;
+
+    /** @var int $defaultMoneyReal */
     protected $defaultMoneyReal = 0;
+
+    /** @var int $defaultMoneyVirtual */
     protected $defaultMoneyVirtual = 0;
+
+    /** @var int $defaultMoneyBox */
     protected $defaultMoneyBox = 0;
+
+    /** @var int $defaultReferer */
     protected $defaultReferer = 0;
+
+    /** @var int $defaultGroupId */
     protected $defaultGroupId = 0;
+
+    /** @var int $defaultGroupExtraId */
     protected $defaultGroupExtraId = 0;
+
+    /** @var int $defaultDelivery */
     protected $defaultDelivery = 0;
+
+    /** @var int $defaultPayment */
     protected $defaultPayment = 0;
+
+    /** @var int $defaultShopId */
     protected $defaultShopId = 0;
+
+    /** @var mixed|string $siteUrl */
     protected $siteUrl = 'http://172.17.0.3';
+
+    /** @var mixed|string $sitePath */
     protected $sitePath = '/home/user/PhpstormProjects/isat.com.ua';
+
+    /** @var string $defaultChatNameColor */
     protected $defaultChatNameColor = '006084';
+
+    /** @var array $imagesPaths */
+    protected $imagesPaths = ['/images_big/', '/products_pictures/'];
 
     /**
      * Store constructor.

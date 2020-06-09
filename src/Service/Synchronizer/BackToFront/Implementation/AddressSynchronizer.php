@@ -113,9 +113,7 @@ class AddressSynchronizer
         $addressFront->setCity(trim($customerBack->getCity()));
         $addressFront->setPostCode(Filler::securityString(null));
         $addressFront->setCountryId($this->storeFront->getDefaultCountryId());
-
-        $zoneId = 0;
-        $addressFront->setZoneId($zoneId);
+        $addressFront->setZoneId($this->storeFront->getDefaultZoneId());
         $addressFront->setCustomField(Filler::securityString(null));
         $this->addressFrontRepository->persistAndFlush($addressFront);
 

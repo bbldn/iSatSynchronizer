@@ -27,12 +27,12 @@ use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Repository\Front\OrderSimpleFieldsRepository as OrderSimpleFieldsFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
+use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
-use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 
 class OrderSynchronizer
 {

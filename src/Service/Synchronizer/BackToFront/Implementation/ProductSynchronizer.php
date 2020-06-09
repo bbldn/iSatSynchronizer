@@ -342,7 +342,7 @@ class ProductSynchronizer
         $productFront->setQuantity($quantity);
         $productFront->setStockStatusId($stockAvailableStatusId);
 
-        if (null ===  $productFront->getImage()) {
+        if (null === $productFront->getImage()) {
             $productFront->setImage(Filler::securityString(null));
         }
 
@@ -366,13 +366,14 @@ class ProductSynchronizer
         $productFront->setViewed(0);
 
         $this->productFrontRepository->persistAndFlush($productFront);
+        $productFrontId = $productFront->getProductId();
 
         $productDescriptionFront = $this->productDescriptionFrontRepository->find($productFront->getProductId());
         if (null === $productDescriptionFront) {
             $productDescriptionFront = new ProductDescriptionFront();
         }
 
-        $productDescriptionFront->setProductId($productFront->getProductId());
+        $productDescriptionFront->setProductId($productFrontId);
         $productDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $productDescriptionFront->setName(Filler::securityString(Store::encodingConvert($productBack->getName())));
         $productDescriptionFront->setDescription(
@@ -394,38 +395,37 @@ class ProductSynchronizer
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 
-        $productLayoutFront = $this->productLayoutFrontRepository->find($productFront->getProductId());
+        $productLayoutFront = $this->productLayoutFrontRepository->find($productFrontId);
         if (null === $productLayoutFront) {
             $productLayoutFront = new ProductLayoutFront();
         }
 
-        $productLayoutFront->setProductId($productFront->getProductId());
+        $productLayoutFront->setProductId($productFrontId);
         $productLayoutFront->setStoreId($this->storeFront->getDefaultStoreId());
         $productLayoutFront->setLayoutId($this->storeFront->getDefaultLayoutId());
         $this->productLayoutFrontRepository->persistAndFlush($productLayoutFront);
 
-        $productStoreFront = $this->productStoreFrontRepository->find($productFront->getProductId());
+        $productStoreFront = $this->productStoreFrontRepository->find($productFrontId);
         if (null === $productStoreFront) {
             $productStoreFront = new ProductStoreFront();
         }
 
-        $productStoreFront->setProductId($productFront->getProductId());
+        $productStoreFront->setProductId($productFrontId);
         $productStoreFront->setStoreId($this->storeFront->getDefaultStoreId());
 
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
         $categoryFrontId = $this->getCategoryFrontIdByBack($productBack->getCategoryId());
-        $productCategoryFront = $this->productCategoryFrontRepository->find($productFront->getProductId());
+        $productCategoryFront = $this->productCategoryFrontRepository->find($productFrontId);
         if (null === $productCategoryFront) {
             $productCategoryFront = new ProductCategoryFront();
         }
 
-        $productCategoryFront->setProductId($productFront->getProductId());
+        $productCategoryFront->setProductId($productFrontId);
         $productCategoryFront->setCategoryId($categoryFrontId);
 
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
-        $productFrontId = $productFront->getProductId();
         $this->synchronizeAttributes($productBack, $productFrontId);
 
         if (false === $this->seoUrlFrontRepository->tableExists()) {
@@ -485,19 +485,23 @@ class ProductSynchronizer
         foreach ($productAttributesBack as $productAttributeBack) {
             $attribute = $this->attributeRepository->findOneByBackId($productAttributeBack->getOptionId());
             if (null === $attribute) {
-                // @TODO Notify
                 continue;
             }
             $text = trim($productAttributeBack->getOptionValue());
-            if (Str::length($text) > 0) {
-                $this->productAttributeFrontRepository->removeByProductIdAttributeIdLanguageId(
+
+            if (mb_strlen($text) > 0) {
+                $exists = $this->productAttributeFrontRepository->existsByProductIdAttributeIdLanguageIdText(
                     $productFrontId,
                     $attribute->getFrontId(),
-                    $this->storeFront->getDefaultLanguageId()
+                    $this->storeFront->getDefaultLanguageId(),
+                    $text
                 );
 
-                $productAttributeFront = new ProductAttributeFront();
+                if (true === $exists) {
+                    continue;
+                }
 
+                $productAttributeFront = new ProductAttributeFront();
                 $productAttributeFront->setProductId($productFrontId);
                 $productAttributeFront->setAttributeId($attribute->getFrontId());
                 $productAttributeFront->setLanguageId($this->storeFront->getDefaultLanguageId());
