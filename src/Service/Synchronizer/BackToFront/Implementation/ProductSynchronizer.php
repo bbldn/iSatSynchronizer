@@ -7,6 +7,7 @@ use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductAttribute as ProductAttributeFront;
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
 use App\Entity\Front\ProductDescription as ProductDescriptionFront;
+use App\Entity\Front\ProductDiscontinued as ProductDiscontinuedFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
 use App\Entity\Front\SeoUrl as SeoUrlFront;
@@ -26,6 +27,7 @@ use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
+use App\Repository\Front\ProductDiscontinuedRepository as ProductDiscontinuedFrontRepository;
 use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
 use App\Repository\Front\ProductDownloadRepository as ProductDownloadFrontRepository;
 use App\Repository\Front\ProductFilterRepository as ProductFilterFrontRepository;
@@ -42,7 +44,6 @@ use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
 use DateTime;
-use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
 class ProductSynchronizer
@@ -134,6 +135,9 @@ class ProductSynchronizer
     /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
     protected $seoUrlFrontRepository;
 
+    /** @var ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository */
+    protected $productDiscontinuedFrontRepository;
+
     /** @var string $defaultImagePath */
     protected $defaultImagePath = 'catalog/products/white.jpg';
 
@@ -168,6 +172,7 @@ class ProductSynchronizer
      * @param ProductPicturesBackRepository $productPicturesBackRepository
      * @param ProductImageSynchronizer $productImageSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
+     * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
      */
     public function __construct(
         LoggerInterface $logger,
@@ -198,7 +203,8 @@ class ProductSynchronizer
         ProductBackRepository $productBackRepository,
         ProductPicturesBackRepository $productPicturesBackRepository,
         ProductImageSynchronizer $productImageSynchronizer,
-        SeoUrlFrontRepository $seoUrlFrontRepository
+        SeoUrlFrontRepository $seoUrlFrontRepository,
+        ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
     )
     {
         $this->logger = $logger;
@@ -230,6 +236,7 @@ class ProductSynchronizer
         $this->productPicturesBackRepository = $productPicturesBackRepository;
         $this->seoUrlFrontRepository = $seoUrlFrontRepository;
         $this->productImageSynchronizer = $productImageSynchronizer;
+        $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
     }
 
     /**
@@ -264,6 +271,11 @@ class ProductSynchronizer
         $this->productOptionValueFrontRepository->resetAutoIncrements();
         $this->productRewardFrontRepository->resetAutoIncrements();
         $this->productSpecialFrontRepository->resetAutoIncrements();
+
+        if (true === $this->productDiscontinuedFrontRepository->tableExists()) {
+            $this->productDiscontinuedFrontRepository->removeAll();
+            $this->productDiscontinuedFrontRepository->resetAutoIncrements();
+        }
 
         if (true === $this->seoUrlFrontRepository->tableExists()) {
             $this->seoUrlFrontRepository->removeAllByQuery('product_id');
@@ -428,15 +440,27 @@ class ProductSynchronizer
 
         $this->synchronizeAttributes($productBack, $productFrontId);
 
-        if (false === $this->seoUrlFrontRepository->tableExists()) {
-            return $productFront;
+        if (true === $this->productDiscontinuedFrontRepository->tableExists()) {
+            if (true === $productBack->getDiscontinued()) {
+                $exists = $this->productDiscontinuedFrontRepository->exists($productFrontId);
+                if (false === $exists) {
+                    $productFrontDiscontinued = new ProductDiscontinuedFront();
+                    $productFrontDiscontinued->setProductId($productFrontId);
+
+                    $this->productDiscontinuedFrontRepository->persistAndFlush($productFrontDiscontinued);
+                }
+            } else {
+                $this->productDiscontinuedFrontRepository->removeById($productFrontId);
+            }
         }
 
-        $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
-            'product_id=' . $productFrontId,
-            $this->storeFront->getDefaultLanguageId()
-        );
-        $this->synchronizeSeoUrl($seoUrl, $productFrontId, $productBack);
+        if (true === $this->seoUrlFrontRepository->tableExists()) {
+            $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
+                "product_id={$productFrontId}",
+                $this->storeFront->getDefaultLanguageId()
+            );
+            $this->synchronizeSeoUrl($seoUrl, $productFrontId, $productBack);
+        }
 
         return $productFront;
     }
@@ -525,7 +549,7 @@ class ProductSynchronizer
 
         $seoUrl->setStoreId($this->storeFront->getDefaultStoreId());
         $seoUrl->setLanguageId($this->storeFront->getDefaultLanguageId());
-        $seoUrl->setQuery('product_id=' . $productFrontId);
+        $seoUrl->setQuery("product_id={$productFrontId}");
 
         $slug = trim(Filler::securityString($productBack->getSlug()));
 
