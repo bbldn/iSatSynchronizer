@@ -127,10 +127,10 @@ class ReviewSynchronizer
     protected function updateReviewFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ReviewFront
     {
         $product = $this->productRepository->findOneByBackId($reviewBack->getProductId());
-        if (null !== $product) {
-            $productFrontId = $product->getFrontId();
-        } else {
+        if (null === $product) {
             $productFrontId = 0;
+        } else {
+            $productFrontId = $product->getFrontId();
         }
 
         $reviewFront->setProductId($productFrontId);
