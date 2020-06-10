@@ -142,7 +142,7 @@ class ReviewSynchronizer
 
         $this->reviewFrontRepository->persistAndFlush($reviewFront);
 
-        $text = trim($reviewBack->getAnswer());
+        $text = trim(Store::encodingConvert($reviewBack->getAnswer()));
         if (true === $this->reviewAnswerTableExists && mb_strlen($text) > 0) {
             $reviewAnswerFront = new ReviewAnswerFront();
             $reviewAnswerFront->setReviewId($reviewFront->getReviewId());
