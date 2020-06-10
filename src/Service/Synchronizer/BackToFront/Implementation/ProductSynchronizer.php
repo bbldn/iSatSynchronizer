@@ -145,6 +145,12 @@ class ProductSynchronizer
     /** @var string $defaultImagePath */
     protected $defaultImagePath = 'catalog/products/white.jpg';
 
+    /** @var bool $seoUrlTableExists */
+    protected $seoUrlTableExists = false;
+
+    /** @var bool $seoUrlTableExists */
+    protected $productDiscontinuedTableExists = false;
+
     /**
      * ProductSynchronizer constructor.
      * @param LoggerInterface $logger
@@ -244,6 +250,9 @@ class ProductSynchronizer
         $this->productImageSynchronizer = $productImageSynchronizer;
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
         $this->manufacturerFrontRepository = $manufacturerFrontRepository;
+
+        $this->seoUrlTableExists = $seoUrlFrontRepository->tableExists();
+        $this->productDiscontinuedTableExists = $productDiscontinuedFrontRepository->tableExists();
     }
 
     /**
@@ -279,12 +288,12 @@ class ProductSynchronizer
         $this->productRewardFrontRepository->resetAutoIncrements();
         $this->productSpecialFrontRepository->resetAutoIncrements();
 
-        if (true === $this->productDiscontinuedFrontRepository->tableExists()) {
+        if (true === $this->productDiscontinuedTableExists) {
             $this->productDiscontinuedFrontRepository->removeAll();
             $this->productDiscontinuedFrontRepository->resetAutoIncrements();
         }
 
-        if (true === $this->seoUrlFrontRepository->tableExists()) {
+        if (true === $this->seoUrlTableExists) {
             $this->seoUrlFrontRepository->removeAllByQuery('product_id');
         }
 
@@ -448,7 +457,7 @@ class ProductSynchronizer
 
         $this->synchronizeAttributes($productBack, $productFrontId);
 
-        if (true === $this->productDiscontinuedFrontRepository->tableExists()) {
+        if (true === $this->productDiscontinuedTableExists) {
             if (true === $productBack->getDiscontinued()) {
                 $exists = $this->productDiscontinuedFrontRepository->exists($productFrontId);
                 if (false === $exists) {
@@ -462,7 +471,7 @@ class ProductSynchronizer
             }
         }
 
-        if (true === $this->seoUrlFrontRepository->tableExists()) {
+        if (true === $this->seoUrlTableExists) {
             $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
                 "product_id={$productFrontId}",
                 $this->storeFront->getDefaultLanguageId()
