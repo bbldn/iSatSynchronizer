@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="`oc_review`")
  * @ORM\Entity(repositoryClass="App\Repository\Front\ReviewRepository")
- * @ORM\HasLifecycleCallbacks()
  */
 class Review
 {
@@ -208,19 +207,6 @@ class Review
         $this->dateModified = $dateModified;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDateModified(new DateTime('now'));
-
-        if (null === $this->getDateAdded()) {
-            $this->setDateAdded(new DateTime('now'));
-        }
     }
 
     /**

@@ -139,6 +139,8 @@ class ReviewSynchronizer
         $reviewFront->setText(Store::encodingConvert($reviewBack->getBody()));
         $reviewFront->setRating($reviewBack->getStars());
         $reviewFront->setStatus($reviewBack->getEnabled());
+        $reviewFront->setDateAdded($reviewBack->getAddTime());
+        $reviewFront->setDateModified($reviewBack->getAddTime());
 
         $this->reviewFrontRepository->persistAndFlush($reviewFront);
 
