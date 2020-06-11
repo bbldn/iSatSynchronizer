@@ -44,10 +44,11 @@ use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontReposito
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
+use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 
-class ProductSynchronizer
+class ProductSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

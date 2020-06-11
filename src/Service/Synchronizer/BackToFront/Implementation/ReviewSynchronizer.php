@@ -13,9 +13,10 @@ use App\Repository\Front\ReviewAnswerRepository as ReviewAnswerFrontRepository;
 use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ReviewRepository;
+use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Psr\Log\LoggerInterface;
 
-class ReviewSynchronizer
+class ReviewSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

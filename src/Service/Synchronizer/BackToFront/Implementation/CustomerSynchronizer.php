@@ -13,10 +13,11 @@ use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Service\Synchronizer\BackToFront\AddressSynchronizer;
+use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
-class CustomerSynchronizer
+class CustomerSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

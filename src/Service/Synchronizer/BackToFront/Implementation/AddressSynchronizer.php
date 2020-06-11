@@ -11,8 +11,9 @@ use App\Repository\AddressRepository;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
+use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
-class AddressSynchronizer
+class AddressSynchronizer extends BackToFrontSynchronizer
 {
     /** @var CustomerBackRepository $customerBackRepository */
     protected $customerBackRepository;

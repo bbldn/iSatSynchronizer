@@ -13,11 +13,12 @@ use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use App\Service\Synchronizer\FrontToBack\FrontToBackSynchronizer;
 use DateTime;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
-class CustomerSynchronizer
+class CustomerSynchronizer extends FrontToBackSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

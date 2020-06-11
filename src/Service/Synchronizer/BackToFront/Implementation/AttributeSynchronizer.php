@@ -12,8 +12,9 @@ use App\Repository\AttributeRepository;
 use App\Repository\Back\ProductOptionsRepository as AttributeBackRepository;
 use App\Repository\Front\AttributeDescriptionRepository as AttributeDescriptionFrontRepository;
 use App\Repository\Front\AttributeRepository as AttributeFrontRepository;
+use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
-class AttributeSynchronizer
+class AttributeSynchronizer extends BackToFrontSynchronizer
 {
     /** @var StoreFront $storeFront */
     protected $storeFront;
