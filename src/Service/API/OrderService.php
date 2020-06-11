@@ -81,7 +81,7 @@ class OrderService extends Service
         foreach ($orders as $order) {
             $data[] = [
                 'name' => $order->getProductName(),
-                'price' => $order->getPrice(),
+                'price' => round($order->getPrice(), 2),
                 'amount' => $order->getAmount(),
                 'currency_name' => $order->getCurrencyName(),
                 'rate' => $order->getCurrencyValue(),
@@ -99,8 +99,8 @@ class OrderService extends Service
     protected function getDeliveryName(int $id): string
     {
         $shippingMethod = $this->shippingMethodBackRepository->find($id);
-        if (null === $shippingMethod) {
-            return $shippingMethod->getName();
+        if (null !== $shippingMethod) {
+            return trim($shippingMethod->getName());
         }
 
         return 'Неизвестно';
@@ -113,8 +113,8 @@ class OrderService extends Service
     protected function getPaymentName(int $id): string
     {
         $paymentMethod = $this->paymentMethodBackRepository->find($id);
-        if (null === $paymentMethod) {
-            return $paymentMethod->getName();
+        if (null !== $paymentMethod) {
+            return trim($paymentMethod->getName());
         }
 
         return 'Неизвестно';
