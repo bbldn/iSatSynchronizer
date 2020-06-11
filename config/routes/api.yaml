@@ -18,3 +18,10 @@ get_products:
     controller: App\Controller\API\ProductController::getProductsByNameAction
     methods:    POST
 
+get_order_information:
+    path:       /order/back/information/{id}
+    controller: App\Controller\API\OrderBackController::orderInformationAction
+    methods:    GET
+    requirements:
+        id: '\d+'
+
