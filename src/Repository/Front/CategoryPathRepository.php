@@ -36,7 +36,7 @@ class CategoryPathRepository extends FrontRepository
     public function findByCategoryFrontIdAndPathId(int $categoryId, int $pathId): ?CategoryPath
     {
         try {
-            $result = $this->createQueryBuilder('cp')
+            return $this->createQueryBuilder('cp')
                 ->andWhere('cp.categoryId = :categoryId')
                 ->andWhere('cp.pathId = :pathId')
                 ->setParameter('categoryId', $categoryId)
@@ -45,9 +45,7 @@ class CategoryPathRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

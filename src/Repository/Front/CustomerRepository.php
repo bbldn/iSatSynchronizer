@@ -35,16 +35,14 @@ class CustomerRepository extends FrontRepository
     public function findOneByEmail(string $email): ?Customer
     {
         try {
-            $result = $this->createQueryBuilder('c')
+            return $this->createQueryBuilder('c')
                 ->andWhere('c.email = :email')
                 ->setParameter('email', $email)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

@@ -35,7 +35,7 @@ class OrderRepository extends FrontRepository
     public function findOneLastByCustomerId(int $customerId): ?Order
     {
         try {
-            $result = $this->createQueryBuilder('o')
+            return $this->createQueryBuilder('o')
                 ->andWhere('o.customerId = :customerId')
                 ->setParameter('customerId', $customerId)
                 ->orderBy('o.orderId', 'ASC')
@@ -43,9 +43,7 @@ class OrderRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

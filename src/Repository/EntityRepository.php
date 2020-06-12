@@ -16,17 +16,15 @@ abstract class EntityRepository extends Repository
     public function findOneByBackId(int $value)
     {
         try {
-            $result = $this->createQueryBuilder('c')
+            return $this->createQueryBuilder('c')
                 ->andWhere('c.backId = :val')
                 ->setParameter('val', $value)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 
     /**
@@ -36,16 +34,14 @@ abstract class EntityRepository extends Repository
     public function findOneByFrontId(int $value)
     {
         try {
-            $result = $this->createQueryBuilder('c')
+            return $this->createQueryBuilder('c')
                 ->andWhere('c.frontId = :val')
                 ->setParameter('val', $value)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

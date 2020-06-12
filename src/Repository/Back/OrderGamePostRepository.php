@@ -37,7 +37,7 @@ class OrderGamePostRepository extends BackRepository
     public function findOneByOrderNumAndProductBackId(int $orderNum, int $productId): ?OrderGamePost
     {
         try {
-            $result = $this->createQueryBuilder('o')
+            return $this->createQueryBuilder('o')
                 ->andWhere('o.orderNum = :orderNum')
                 ->andWhere('o.productId = :productId')
                 ->setParameter('orderNum', $orderNum)
@@ -46,10 +46,8 @@ class OrderGamePostRepository extends BackRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 
     /**
@@ -87,18 +85,16 @@ class OrderGamePostRepository extends BackRepository
     public function getTotalPrice(int $orderNum): ?int
     {
         try {
-            $result = $this->createQueryBuilder('o')
+            return $this->createQueryBuilder('o')
                 ->andWhere('o.orderNum = :val')
                 ->setParameter('val', $orderNum)
                 ->select('SUM(o.price * o.amount) as total')
                 ->getQuery()
                 ->getSingleScalarResult();
         } catch (NoResultException $e) {
-            $result = null;
+            return null;
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

@@ -104,6 +104,12 @@ class Store extends StoreBase
     /** @var string $frontCategoryPath */
     protected $frontCategoryPath = '/date/categories/';
 
+    /** @var int $defaultQuantity */
+    protected $defaultQuantity = 1;
+
+    /** @var int $defaultPriority */
+    protected $defaultPriority = 999;
+
     /**
      * Store constructor.
      * @param ContainerBagInterface $params
@@ -708,6 +714,43 @@ class Store extends StoreBase
     public function setDefaultManufacturerId(int $defaultManufacturerId): self
     {
         $this->defaultManufacturerId = $defaultManufacturerId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultQuantity(): int
+    {
+        return $this->defaultQuantity;
+    }
+
+    /**
+     * @param int $defaultQuantity
+     * @return Store
+     */
+    public function setDefaultQuantity(int $defaultQuantity): self
+    {
+        $this->defaultQuantity = $defaultQuantity;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultPriority(): int
+    {
+        return $this->defaultPriority;
+    }
+
+    /**
+     * @param int $defaultPriority
+     * @return Store
+     */
+    public function setDefaultPriority(int $defaultPriority): self
+    {
+        $this->defaultPriority = $defaultPriority;
 
         return $this;
     }

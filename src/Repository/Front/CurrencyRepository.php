@@ -36,7 +36,7 @@ class CurrencyRepository extends FrontRepository
     public function getCurrentCurrency(int $currencyId): ?float
     {
         try {
-            $result = $this->createQueryBuilder('c')
+            return $this->createQueryBuilder('c')
                 ->select('SUM(c.value) as total')
                 ->andWhere('c.currencyId = :val')
                 ->setParameter('val', $currencyId)
@@ -44,12 +44,10 @@ class CurrencyRepository extends FrontRepository
                 ->getQuery()
                 ->getSingleScalarResult();
         } catch (NoResultException $e) {
-            $result = null;
+            return null;
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 
     /**
@@ -59,15 +57,13 @@ class CurrencyRepository extends FrontRepository
     public function findOneByCode(string $code): ?Currency
     {
         try {
-            $result = $this->createQueryBuilder('c')
+            return $this->createQueryBuilder('c')
                 ->andWhere('c.code = :val')
                 ->setParameter('val', $code)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

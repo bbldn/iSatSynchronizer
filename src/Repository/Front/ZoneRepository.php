@@ -31,7 +31,7 @@ class ZoneRepository extends FrontRepository
     public function findOneByCountryIdAndName(int $countryId, string $name): ?Zone
     {
         try {
-            $result = $this->createQueryBuilder('z')
+            return $this->createQueryBuilder('z')
                 ->andWhere('z.countryId = :countryId')
                 ->andWhere('z.name = :name')
                 ->setParameter('countryId', $countryId)
@@ -40,9 +40,7 @@ class ZoneRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = false;
+            return null;
         }
-
-        return $result;
     }
 }

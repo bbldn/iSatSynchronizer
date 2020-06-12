@@ -35,16 +35,14 @@ class BuyersGamePostRepository extends BackRepository
     public function findOneByTelephone($value): ?BuyersGamePost
     {
         try {
-            $result = $this->createQueryBuilder('bgp')
+            return $this->createQueryBuilder('bgp')
                 ->andWhere('bgp.phone = :val')
                 ->setParameter('val', $value)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

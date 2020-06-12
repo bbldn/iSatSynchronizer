@@ -45,16 +45,14 @@ class AddressRepository extends EntityRepository
     public function findOneByOrderBackId(int $value): ?Address
     {
         try {
-            $result = $this->createQueryBuilder('c')
+            return $this->createQueryBuilder('c')
                 ->andWhere('c.customerBackId = :val')
                 ->setParameter('val', $value)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

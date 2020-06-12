@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\ProductDiscount;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method ProductDiscount|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,26 @@ class ProductDiscountRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductDiscount::class);
+    }
+
+    /**
+     * @param int $groupId
+     * @param int $productId
+     * @return ProductDiscount|null
+     */
+    public function findOneByGroupIdAndProductId(int $groupId, int $productId): ?ProductDiscount
+    {
+        try {
+            return $this->createQueryBuilder('ps')
+                ->andWhere('ps.groupId = :groupId')
+                ->andWhere('ps.productId = :productId')
+                ->setParameter('groupId', $groupId)
+                ->setParameter('productId', $productId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }

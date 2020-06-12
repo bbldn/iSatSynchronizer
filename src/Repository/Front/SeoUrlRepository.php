@@ -36,7 +36,7 @@ class SeoUrlRepository extends FrontRepository
     public function findOneByQueryAndLanguageId(string $query, int $languageId): ?SeoUrl
     {
         try {
-            $result = $this->createQueryBuilder('su')
+            return $this->createQueryBuilder('su')
                 ->andWhere('su.query = :query')
                 ->andWhere('su.languageId = :languageId')
                 ->setParameter('query', $query)
@@ -45,10 +45,8 @@ class SeoUrlRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = false;
+            return null;
         }
-
-        return $result;
     }
 
     /**

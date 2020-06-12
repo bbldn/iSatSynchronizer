@@ -36,7 +36,7 @@ class ProductImageRepository extends FrontRepository
     public function findOneByProductIdAndImagePath(int $productId, string $imagePath): ?ProductImage
     {
         try {
-            $result = $this->createQueryBuilder('c')
+            return $this->createQueryBuilder('c')
                 ->andWhere('c.productId = :productId')
                 ->setParameter('productId', $productId)
                 ->andWhere('c.image = :imagePath')
@@ -45,9 +45,7 @@ class ProductImageRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

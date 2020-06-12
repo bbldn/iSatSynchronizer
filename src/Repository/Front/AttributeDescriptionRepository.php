@@ -32,19 +32,17 @@ class AttributeDescriptionRepository extends FrontRepository
      * @param string $value
      * @return AttributeDescription|null
      */
-    public function findByName(string $value): ?AttributeDescription
+    public function findOneByName(string $value): ?AttributeDescription
     {
         try {
-            $result = $this->createQueryBuilder('a')
+            return $this->createQueryBuilder('a')
                 ->andWhere('a.name = :val')
                 ->setParameter('val', $value)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

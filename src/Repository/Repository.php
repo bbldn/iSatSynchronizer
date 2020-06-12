@@ -148,16 +148,14 @@ abstract class Repository extends ServiceEntityRepository
         }
 
         try {
-            $result = $this->createQueryBuilder('a')
+            return $this->createQueryBuilder('a')
                 ->orderBy("a.{$identifier}", 'ASC')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 
     /**
@@ -172,15 +170,13 @@ abstract class Repository extends ServiceEntityRepository
         }
 
         try {
-            $result = $this->createQueryBuilder('a')
+            return $this->createQueryBuilder('a')
                 ->orderBy("a.{$identifier}", 'DESC')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $result = null;
+            return null;
         }
-
-        return $result;
     }
 }

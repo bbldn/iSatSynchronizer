@@ -26,4 +26,17 @@ class BuyersGroupsPricesRepository extends BackRepository
     {
         parent::__construct($registry, BuyersGroupsPrices::class);
     }
+
+    /**
+     * @param int $productBackId
+     * @return BuyersGroupsPrices[]
+     */
+    public function findByProductBackId(int $productBackId): array
+    {
+        return $this->createQueryBuilder('bgp')
+            ->where('bgp.productId = :val')
+            ->setParameter('val', $productBackId)
+            ->getQuery()
+            ->getResult();
+    }
 }
