@@ -45,6 +45,7 @@ use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
+use App\Service\Synchronizer\BackToFront\ProductDiscountSynchronizer as ProductDiscountBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 
@@ -143,6 +144,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ManufacturerFrontRepository $manufacturerFrontRepository */
     protected $manufacturerFrontRepository;
 
+    /** @var ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer */
+    protected $productDiscountBackToFrontSynchronizer;
+
     /** @var string $defaultImagePath */
     protected $defaultImagePath = 'catalog/products/white.jpg';
 
@@ -185,6 +189,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
      * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
      * @param ManufacturerFrontRepository $manufacturerFrontRepository
+     * @param ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
@@ -217,7 +222,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductImageSynchronizer $productImageSynchronizer,
         SeoUrlFrontRepository $seoUrlFrontRepository,
         ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository,
-        ManufacturerFrontRepository $manufacturerFrontRepository
+        ManufacturerFrontRepository $manufacturerFrontRepository,
+        ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
     )
     {
         $this->logger = $logger;
@@ -251,6 +257,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productImageSynchronizer = $productImageSynchronizer;
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
         $this->manufacturerFrontRepository = $manufacturerFrontRepository;
+        $this->productDiscountBackToFrontSynchronizer = $productDiscountBackToFrontSynchronizer;
 
         $this->seoUrlTableExists = $seoUrlFrontRepository->tableExists();
         $this->productDiscontinuedTableExists = $productDiscontinuedFrontRepository->tableExists();
@@ -457,6 +464,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
         $this->synchronizeAttributes($productBack, $productFrontId);
+
+        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productBack->getProductId());
 
         if (true === $this->productDiscontinuedTableExists) {
             if (true === $productBack->getDiscontinued()) {
