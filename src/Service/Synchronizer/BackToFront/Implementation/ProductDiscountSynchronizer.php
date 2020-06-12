@@ -75,7 +75,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
             return new ProductDiscountFront();
         }
 
-        $productDiscountFront = $this->productDiscountFrontRepository->findOneByGroupIdAndProductId(
+        $productDiscountFront = $this->productDiscountFrontRepository->findOneByCustomerGroupIdAndProductId(
             $productDiscountBack->getGroupId(),
             $product->getFrontId()
         );
@@ -109,6 +109,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         $productDiscountFront->setCustomerGroupId($productDiscountBack->getGroupId());
         $productDiscountFront->setQuantity($this->storeFront->getDefaultQuantity());
         $productDiscountFront->setPriority($this->storeFront->getDefaultPriority());
+        $productDiscountFront->setPrice($productDiscountBack->getPrice());
         $productDiscountFront->setDateStart(new DateTime('0000-00-00 00:00:00'));
         $productDiscountFront->setDateEnd(new DateTime('0000-00-00 00:00:00'));
 

@@ -14,6 +14,7 @@ class ProductDiscount
     /**
      * @var int|null $productDiscountId
      * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`product_discount_id`")
      */
     protected $productDiscountId;

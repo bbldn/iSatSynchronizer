@@ -29,17 +29,17 @@ class ProductDiscountRepository extends FrontRepository
     }
 
     /**
-     * @param int $groupId
+     * @param int $customerGroupId
      * @param int $productId
      * @return ProductDiscount|null
      */
-    public function findOneByGroupIdAndProductId(int $groupId, int $productId): ?ProductDiscount
+    public function findOneByCustomerGroupIdAndProductId(int $customerGroupId, int $productId): ?ProductDiscount
     {
         try {
             return $this->createQueryBuilder('ps')
-                ->andWhere('ps.groupId = :groupId')
+                ->andWhere('ps.customerGroupId = :customerGroupId')
                 ->andWhere('ps.productId = :productId')
-                ->setParameter('groupId', $groupId)
+                ->setParameter('customerGroupId', $customerGroupId)
                 ->setParameter('productId', $productId)
                 ->setMaxResults(1)
                 ->getQuery()
