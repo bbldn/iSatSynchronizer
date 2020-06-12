@@ -245,10 +245,10 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         $currency = Store::convertBackToFrontCurrency($mainOrderBack->getCurrencyName());
 
         $orderFront->setInvoiceNo($this->storeFront->getDefaultInvoiceNo());
-        $orderFront->setInvoicePrefix($this->storeFront->getInvoicePrefix());
+        $orderFront->setInvoicePrefix($this->storeFront->getDefaultInvoicePrefix());
         $orderFront->setStoreId($this->storeFront->getDefaultShopId());
         $orderFront->setStoreName($this->storeFront->getStoreName());
-        $orderFront->setStoreUrl($this->storeFront->getSiteUrl());
+        $orderFront->setStoreUrl($this->storeFront->getDefaultSiteUrl());
         $orderFront->setCustomerId($customerFrontId);
         $orderFront->setCustomerGroupId($this->storeFront->getDefaultCustomerGroupId());
         $orderFront->setFirstName($fullName['firstName']);

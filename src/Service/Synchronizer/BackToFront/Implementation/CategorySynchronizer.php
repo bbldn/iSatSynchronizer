@@ -201,7 +201,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
     {
         $parentBackId = $categoryBack->getParent();
         $parentId = $this->storeFront->getDefaultCategoryFrontId();
-        if (false === in_array($parentBackId, $this->storeBack->getRootCategories())) {
+        if (false === in_array($parentBackId, $this->storeBack->getDefaultRootCategories())) {
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
 

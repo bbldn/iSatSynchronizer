@@ -7,8 +7,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store extends StoreBase
 {
-    /** @var array|mixed $rootCategories */
-    protected $rootCategories = [0, 1];
+    /** @var array|mixed $defaultRootCategories */
+    protected $defaultRootCategories = [0, 1];
 
     /** @var int $defaultSiteId */
     protected $defaultSiteId = 0;
@@ -40,17 +40,17 @@ class Store extends StoreBase
     /** @var int $defaultShopId */
     protected $defaultShopId = 0;
 
-    /** @var mixed|string $siteUrl */
-    protected $siteUrl = 'http://172.17.0.3';
+    /** @var mixed|string $defaultSiteUrl */
+    protected $defaultSiteUrl = 'http://172.17.0.3';
 
-    /** @var mixed|string $sitePath */
-    protected $sitePath = '/home/user/PhpstormProjects/isat.com.ua';
+    /** @var mixed|string $defaultSitePath */
+    protected $defaultSitePath = '/home/user/PhpstormProjects/isat.com.ua';
 
     /** @var string $defaultChatNameColor */
     protected $defaultChatNameColor = '006084';
 
-    /** @var array $imagesPaths */
-    protected $imagesPaths = ['/images_big/', '/products_pictures/'];
+    /** @var array $defaultImagesPaths */
+    protected $defaultImagesPaths = ['/images_big/', '/products_pictures/'];
 
     /**
      * Store constructor.
@@ -58,25 +58,25 @@ class Store extends StoreBase
      */
     public function __construct(ContainerBagInterface $params)
     {
-        $this->rootCategories = $params->get('front.root_categories');
-        $this->sitePath = $params->get('back.site_path');
-        $this->siteUrl = $params->get('back.site_url');
+        $this->defaultRootCategories = $params->get('front.root_categories');
+        $this->defaultSitePath = $params->get('back.site_path');
+        $this->defaultSiteUrl = $params->get('back.site_url');
     }
 
     /**
      * @return array|mixed
      */
-    public function getRootCategories(): array
+    public function getDefaultRootCategories(): array
     {
-        return $this->rootCategories;
+        return $this->defaultRootCategories;
     }
 
     /**
-     * @param array|mixed $rootCategories
+     * @param array|mixed $defaultRootCategories
      */
-    public function setRootCategories($rootCategories): void
+    public function setDefaultRootCategories($defaultRootCategories): void
     {
-        $this->rootCategories = $rootCategories;
+        $this->defaultRootCategories = $defaultRootCategories;
     }
 
     /**
@@ -242,33 +242,33 @@ class Store extends StoreBase
     /**
      * @return mixed|string
      */
-    public function getSiteUrl(): string
+    public function getDefaultSiteUrl(): string
     {
-        return $this->siteUrl;
+        return $this->defaultSiteUrl;
     }
 
     /**
-     * @param mixed|string $siteUrl
+     * @param mixed|string $defaultSiteUrl
      */
-    public function setSiteUrl($siteUrl): void
+    public function setDefaultSiteUrl($defaultSiteUrl): void
     {
-        $this->siteUrl = $siteUrl;
+        $this->defaultSiteUrl = $defaultSiteUrl;
     }
 
     /**
      * @return mixed|string
      */
-    public function getSitePath(): string
+    public function getDefaultSitePath(): string
     {
-        return $this->sitePath;
+        return $this->defaultSitePath;
     }
 
     /**
-     * @param mixed|string $sitePath
+     * @param mixed|string $defaultSitePath
      */
-    public function setSitePath($sitePath): void
+    public function setDefaultSitePath($defaultSitePath): void
     {
-        $this->sitePath = $sitePath;
+        $this->defaultSitePath = $defaultSitePath;
     }
 
     /**
@@ -293,19 +293,23 @@ class Store extends StoreBase
      */
     public static function parseFirstLastName(string $fio): array
     {
-        $result = [
+        $fullName = explode(' ', $fio);
+
+        if (count($fullName) > 1) {
+            return [
+                'firstName' => trim($fullName[1]),
+                'lastName' => trim($fullName[0]),
+            ];
+        } elseif (count($fullName) == 1) {
+            return [
+                'firstName' => ' ',
+                'lastName' => trim($fullName[0]),
+            ];
+        }
+
+        return [
             'firstName' => ' ',
             'lastName' => ' ',
         ];
-
-        $fullName = explode(' ', $fio);
-        if (count($fullName) > 1) {
-            $result['lastName'] = trim($fullName[0]);
-            $result['firstName'] = trim($fullName[1]);
-        } elseif (count($fullName) == 1) {
-            $result['lastName'] = trim($fullName[0]);
-        }
-
-        return $result;
     }
 }

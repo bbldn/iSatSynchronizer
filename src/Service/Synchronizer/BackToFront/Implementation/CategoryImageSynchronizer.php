@@ -70,7 +70,7 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
      */
     public function clearFolder(): void
     {
-        $path = $this->storeFront->getSitePath() . $this->frontPath;
+        $path = $this->storeFront->getDefaultSitePath() . $this->frontPath;
         $this->fileWriter->clearFolder($path);
     }
 
@@ -92,7 +92,7 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
             return;
         }
 
-        $path = $this->storeBack->getSitePath() . $path;
+        $path = $this->storeBack->getDefaultSitePath() . $path;
         $content = $this->fileReader->getFile($path . $picture);
         if (null === $content) {
             return;
@@ -104,7 +104,7 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
         $path = $this->frontPath . $name;
 
         try {
-            $this->fileWriter->saveFile($this->storeFront->getSitePath() . $path, $content);
+            $this->fileWriter->saveFile($this->storeFront->getDefaultSitePath() . $path, $content);
         } catch (UploadException $exception) {
             $this->logger->error(ExceptionFormatter::f('Failed to save image'));
 

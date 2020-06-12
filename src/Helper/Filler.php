@@ -6,7 +6,7 @@ class Filler
 {
     /**
      * @param string|null $value
-     * @return string|null
+     * @return string
      */
     public static function securityString(?string $value)
     {

@@ -8,11 +8,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store extends StoreBase
 {
-    /** @var int|mixed $productAvailableStatusId */
-    protected $productAvailableStatusId = 7;
+    /** @var int|mixed $defaultProductAvailableStatusId */
+    protected $defaultProductAvailableStatusId = 7;
 
-    /** @var int|mixed $productNotAvailableStatusId */
-    protected $productNotAvailableStatusId = 5;
+    /** @var int|mixed $defaultProductNotAvailableStatusId */
+    protected $defaultProductNotAvailableStatusId = 5;
 
     /** @var int|mixed $defaultLanguageId */
     protected $defaultLanguageId = 1;
@@ -56,8 +56,8 @@ class Store extends StoreBase
     /** @var string $defaultCustomField */
     protected $defaultCustomField = '[]';
 
-    /** @var string $invoicePrefix */
-    protected $invoicePrefix = 'INV-2020-00';
+    /** @var string $defaultInvoicePrefix */
+    protected $defaultInvoicePrefix = 'INV-2020-00';
 
     /** @var int $defaultCustomerGroupId */
     protected $defaultCustomerGroupId = 1;
@@ -95,14 +95,14 @@ class Store extends StoreBase
     /** @var int $defaultManufacturerId */
     protected $defaultManufacturerId = 1;
 
-    /** @var mixed|string $siteUrl */
-    protected $siteUrl = 'http://172.17.0.2';
+    /** @var mixed|string $defaultSiteUrl */
+    protected $defaultSiteUrl = 'http://172.17.0.2';
 
-    /** @var mixed|string $sitePath */
-    protected $sitePath = '/home/user/PhpstormProjects/uclan.com.ua';
+    /** @var mixed|string $defaultSitePath */
+    protected $defaultSitePath = '/home/user/PhpstormProjects/uclan.com.ua';
 
-    /** @var string $frontCategoryPath */
-    protected $frontCategoryPath = '/date/categories/';
+    /** @var string $defaultCategoryPath */
+    protected $defaultCategoryPath = '/date/categories/';
 
     /** @var int $defaultQuantity */
     protected $defaultQuantity = 1;
@@ -116,8 +116,8 @@ class Store extends StoreBase
      */
     public function __construct(ContainerBagInterface $params)
     {
-        $this->productAvailableStatusId = $params->get('front.available_status_id');
-        $this->productNotAvailableStatusId = $params->get('front.not_available_status_id');
+        $this->defaultProductAvailableStatusId = $params->get('front.available_status_id');
+        $this->defaultProductNotAvailableStatusId = $params->get('front.not_available_status_id');
         $this->defaultLanguageId = $params->get('front.default_language_id');
         $this->defaultStoreId = $params->get('front.default_store_id');
         $this->defaultLayoutId = $params->get('front.default_layout_id');
@@ -125,25 +125,25 @@ class Store extends StoreBase
         $this->defaultSortOrder = $params->get('front.default_sort_order');
         $this->defaultAttributeGroupId = $params->get('front.default_attribute_group_id');
         $this->defaultOrderStatus = $params->get('back.default_order_status');
-        $this->sitePath = $params->get('front.site_path');
-        $this->siteUrl = $params->get('front.site_url');
+        $this->defaultSitePath = $params->get('front.site_path');
+        $this->defaultSiteUrl = $params->get('front.site_url');
     }
 
     /**
      * @return int|mixed
      */
-    public function getProductAvailableStatusId()
+    public function getDefaultProductAvailableStatusId()
     {
-        return $this->productAvailableStatusId;
+        return $this->defaultProductAvailableStatusId;
     }
 
     /**
-     * @param int|mixed $productAvailableStatusId
+     * @param int|mixed $defaultProductAvailableStatusId
      * @return Store
      */
-    public function setProductAvailableStatusId($productAvailableStatusId): self
+    public function setDefaultProductAvailableStatusId($defaultProductAvailableStatusId): self
     {
-        $this->productAvailableStatusId = $productAvailableStatusId;
+        $this->defaultProductAvailableStatusId = $defaultProductAvailableStatusId;
 
         return $this;
     }
@@ -151,18 +151,18 @@ class Store extends StoreBase
     /**
      * @return int|mixed
      */
-    public function getProductNotAvailableStatusId()
+    public function getDefaultProductNotAvailableStatusId()
     {
-        return $this->productNotAvailableStatusId;
+        return $this->defaultProductNotAvailableStatusId;
     }
 
     /**
-     * @param int|mixed $productNotAvailableStatusId
+     * @param int|mixed $defaultProductNotAvailableStatusId
      * @return Store
      */
-    public function setProductNotAvailableStatusId($productNotAvailableStatusId): self
+    public function setDefaultProductNotAvailableStatusId($defaultProductNotAvailableStatusId): self
     {
-        $this->productNotAvailableStatusId = $productNotAvailableStatusId;
+        $this->defaultProductNotAvailableStatusId = $defaultProductNotAvailableStatusId;
 
         return $this;
     }
@@ -360,18 +360,18 @@ class Store extends StoreBase
     /**
      * @return mixed|string
      */
-    public function getSiteUrl()
+    public function getDefaultSiteUrl()
     {
-        return $this->siteUrl;
+        return $this->defaultSiteUrl;
     }
 
     /**
-     * @param mixed|string $siteUrl
+     * @param mixed|string $defaultSiteUrl
      * @return Store
      */
-    public function setSiteUrl($siteUrl): self
+    public function setDefaultSiteUrl($defaultSiteUrl): self
     {
-        $this->siteUrl = $siteUrl;
+        $this->defaultSiteUrl = $defaultSiteUrl;
 
         return $this;
     }
@@ -444,18 +444,18 @@ class Store extends StoreBase
     /**
      * @return string
      */
-    public function getInvoicePrefix(): string
+    public function getDefaultInvoicePrefix(): string
     {
-        return $this->invoicePrefix;
+        return $this->defaultInvoicePrefix;
     }
 
     /**
-     * @param string $invoicePrefix
+     * @param string $defaultInvoicePrefix
      * @return Store
      */
-    public function setInvoicePrefix(string $invoicePrefix): self
+    public function setDefaultInvoicePrefix(string $defaultInvoicePrefix): self
     {
-        $this->invoicePrefix = $invoicePrefix;
+        $this->defaultInvoicePrefix = $defaultInvoicePrefix;
 
         return $this;
     }
@@ -683,18 +683,18 @@ class Store extends StoreBase
     /**
      * @return mixed|string
      */
-    public function getSitePath()
+    public function getDefaultSitePath()
     {
-        return $this->sitePath;
+        return $this->defaultSitePath;
     }
 
     /**
-     * @param mixed|string $sitePath
+     * @param mixed|string $defaultSitePath
      * @return Store
      */
-    public function setSitePath($sitePath): self
+    public function setDefaultSitePath($defaultSitePath): self
     {
-        $this->sitePath = $sitePath;
+        $this->defaultSitePath = $defaultSitePath;
 
         return $this;
     }

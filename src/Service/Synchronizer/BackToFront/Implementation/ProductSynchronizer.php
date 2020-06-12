@@ -362,9 +362,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $quantity = $productBack->getInStock();
 
         if ($quantity > 0) {
-            $stockAvailableStatusId = $this->storeFront->getProductAvailableStatusId();
+            $stockAvailableStatusId = $this->storeFront->getDefaultProductAvailableStatusId();
         } else {
-            $stockAvailableStatusId = $this->storeFront->getProductNotAvailableStatusId();
+            $stockAvailableStatusId = $this->storeFront->getDefaultProductNotAvailableStatusId();
         }
 
         $productFront->setModel('art' . $productBack->getProductId());
