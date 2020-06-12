@@ -52,6 +52,7 @@ class OrderService extends Service
         $orderBack = $ordersBack[0];
 
         $data = [
+            'id' => $orderBack->getOrderNum(),
             'type' => $orderBack->getType(),
             'FIO' => $orderBack->getFio(),
             'phone' => $orderBack->getPhone(),
@@ -78,8 +79,9 @@ class OrderService extends Service
     {
         $data = [];
 
-        foreach ($orders as $order) {
+        foreach ($orders as $key => $order) {
             $data[] = [
+                'number' => $key + 1,
                 'name' => $order->getProductName(),
                 'price' => round($order->getPrice(), 2),
                 'amount' => $order->getAmount(),
