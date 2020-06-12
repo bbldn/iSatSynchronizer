@@ -34,9 +34,9 @@ class BuyersGroupsPricesRepository extends BackRepository
     public function findByProductBackId(int $productBackId): array
     {
         return $this->createQueryBuilder('bgp')
-            ->where('bgp.productId = :productBackId')
+            ->andWhere('bgp.productId = :productBackId')
             ->setParameter('productBackId', $productBackId)
-            ->where('bgp.groupId < :groupId')
+            ->andWhere('bgp.groupId < :groupId')
             ->setParameter('groupId', 5)
             ->getQuery()
             ->getResult();
