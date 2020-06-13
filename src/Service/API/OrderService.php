@@ -65,6 +65,7 @@ class OrderService extends Service
             'delivery' => $this->getDeliveryName($orderBack->getDelivery()),
             'payment' => $this->getPaymentName($orderBack->getPayment()),
             'comment' => $orderBack->getComments(),
+            'total' => $this->getOrderTotal($ordersBack) . ' ' . $orderBack->getCurrencyName(),
             'products' => $this->getProducts($ordersBack),
         ];
 
@@ -80,10 +81,11 @@ class OrderService extends Service
         $data = [];
 
         foreach ($orders as $key => $order) {
+            $price = round($order->getPrice() * $order->getCurrencyValue(), 2) . ' ' . $order->getCurrencyName();
             $data[] = [
                 'number' => $key + 1,
                 'name' => $order->getProductName(),
-                'price' => round($order->getPrice(), 2),
+                'price' => $price,
                 'amount' => $order->getAmount(),
                 'currency_name' => $order->getCurrencyName(),
                 'rate' => $order->getCurrencyValue(),
@@ -119,5 +121,19 @@ class OrderService extends Service
         }
 
         return 'Неизвестно';
+    }
+
+    /**
+     * @param array $orders
+     * @return float
+     */
+    protected function getOrderTotal(array $orders): float
+    {
+        $total = 0;
+        foreach ($orders as $key => $order) {
+            $total += round($order->getPrice() * $order->getCurrencyValue(), 2);
+        }
+
+        return $total;
     }
 }
