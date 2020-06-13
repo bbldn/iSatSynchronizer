@@ -5,18 +5,22 @@ namespace App\Service\Synchronizer\BackToFront\Implementation;
 use App\Entity\Back\BuyersGroupsPrices as ProductDiscountBack;
 use App\Entity\Front\ProductDiscount as ProductDiscountFront;
 use App\Helper\ExceptionFormatter;
+use App\Helper\Front\Store as StoreFront;
 use App\Repository\Back\BuyersGroupsPricesRepository as ProductDiscountBackRepository;
 use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
+use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
-use App\Helper\Front\Store as StoreFront;
 
 class ProductDiscountSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;
+
+    /** @var ProductBackRepository $productBackRepository */
+    protected $productBackRepository;
 
     /** @var ProductDiscountFrontRepository $productDiscountFrontRepository */
     protected $productDiscountFrontRepository;
@@ -33,6 +37,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     /**
      * ProductDiscountSynchronizer constructor.
      * @param LoggerInterface $logger
+     * @param ProductBackRepository $productBackRepository
      * @param ProductDiscountFrontRepository $productDiscountFrontRepository
      * @param ProductRepository $productRepository
      * @param ProductDiscountBackRepository $productDiscountBackRepository
@@ -40,6 +45,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
+        ProductBackRepository $productBackRepository,
         ProductDiscountFrontRepository $productDiscountFrontRepository,
         ProductRepository $productRepository,
         ProductDiscountBackRepository $productDiscountBackRepository,
@@ -47,6 +53,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     )
     {
         $this->logger = $logger;
+        $this->productBackRepository = $productBackRepository;
         $this->productDiscountFrontRepository = $productDiscountFrontRepository;
         $this->productRepository = $productRepository;
         $this->productDiscountBackRepository = $productDiscountBackRepository;
@@ -116,5 +123,24 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         $this->productDiscountFrontRepository->persistAndFlush($productDiscountFront);
 
         return $productDiscountFront;
+    }
+
+    /**
+     * @param int $productBackId
+     * @return ProductDiscountBack|null
+     */
+    protected function getProductDiscountBack(int $productBackId): ?ProductDiscountBack
+    {
+        $productBack = $this->productBackRepository->find($productBackId);
+        if (null === $productBack) {
+            return null;
+        }
+
+        $productDiscountBack = new ProductDiscountBack();
+        $productDiscountBack->setPrice($productBack->getPrice());
+        $productDiscountBack->setGroupId(1);
+        $productDiscountBack->setProductId($productBack->getProductId());
+
+        return $productDiscountBack;
     }
 }

@@ -12,6 +12,12 @@ class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
     public function synchronizeByProductBackId(int $productBackId): void
     {
         $productDiscountsBack = $this->productDiscountBackRepository->findByProductBackId($productBackId);
+        $productDiscountBack = $this->getProductDiscountBack($productBackId);
+
+        if (null !== $productDiscountBack) {
+            $productDiscountsBack[] = $productDiscountBack;
+        }
+
         foreach ($productDiscountsBack as $productDiscountBack) {
             $this->synchronizeProductDiscount($productDiscountBack);
         }
