@@ -75,6 +75,6 @@ class BuyersGamePostRepository extends BackRepository
                 cash.`income`;";
         $result = $connection->fetchAll($sql);
 
-        return $result[0]['balance'];
+        return round($result[0]['balance'], 2);
     }
 }
