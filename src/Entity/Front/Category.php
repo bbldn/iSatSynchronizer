@@ -86,10 +86,10 @@ class Category
     }
 
     /**
-     * @param string $image
+     * @param string|null $image
      * @return Category
      */
-    public function setImage(string $image): self
+    public function setImage(?string $image): self
     {
         $this->image = $image;
 
