@@ -2,11 +2,11 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
+use App\Helper\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Psr\Log\LoggerInterface;
-use App\Helper\Front\Store as StoreFront;
 
 class DescriptionSynchronizer extends BackToFrontSynchronizer
 {
@@ -101,8 +101,8 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
      */
     protected function replace(string &$text, string $oldPath, ?string $newPath): string
     {
-        if (null === $newPath) {
-            $text = str_replace($oldPath, $newPath, $text);
+        if (null !== $newPath) {
+            return str_replace($oldPath, $newPath, $text);
         }
 
         return $text;

@@ -173,6 +173,6 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
     {
         $pathInfo = pathinfo($photoBack->getBig());
 
-        return $this->synchronize(md5($photoBack->getBig()). '.' . $pathInfo['extension'], $productFront, $number);
+        return $this->synchronize(md5($photoBack->getBig()) . '.' . $pathInfo['extension'], $productFront, $number);
     }
 }
