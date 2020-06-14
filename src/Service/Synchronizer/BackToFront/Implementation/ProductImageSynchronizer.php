@@ -80,8 +80,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      */
     public function clearFolder(): void
     {
-        $path = $this->storeFront->getDefaultSitePath() . $this->frontPath;
-        $this->fileWriter->clearFolder($path);
+        $this->fileWriter->clearFolder($this->storeFront->getDefaultSitePath() . $this->frontPath);
     }
 
     /**

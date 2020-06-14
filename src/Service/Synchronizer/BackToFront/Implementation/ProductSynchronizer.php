@@ -45,6 +45,7 @@ use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
+use App\Service\Synchronizer\BackToFront\DescriptionSynchronizer;
 use App\Service\Synchronizer\BackToFront\ProductDiscountSynchronizer as ProductDiscountBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
@@ -147,6 +148,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer */
     protected $productDiscountBackToFrontSynchronizer;
 
+    /** @var DescriptionSynchronizer $descriptionSynchronizer */
+    protected $descriptionSynchronizer;
+
     /** @var string $defaultImagePath */
     protected $defaultImagePath = null;
 
@@ -155,6 +159,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
     /** @var bool $seoUrlTableExists */
     protected $productDiscontinuedTableExists = false;
+
+    /** @var bool $synchronizeImage */
+    protected $synchronizeImage = false;
 
     /**
      * ProductSynchronizer constructor.
@@ -190,6 +197,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
      * @param ManufacturerFrontRepository $manufacturerFrontRepository
      * @param ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
+     * @param DescriptionSynchronizer $descriptionSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
@@ -223,7 +231,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         SeoUrlFrontRepository $seoUrlFrontRepository,
         ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository,
         ManufacturerFrontRepository $manufacturerFrontRepository,
-        ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
+        ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer,
+        DescriptionSynchronizer $descriptionSynchronizer
     )
     {
         $this->logger = $logger;
@@ -258,6 +267,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
         $this->manufacturerFrontRepository = $manufacturerFrontRepository;
         $this->productDiscountBackToFrontSynchronizer = $productDiscountBackToFrontSynchronizer;
+        $this->descriptionSynchronizer = $descriptionSynchronizer;
 
         $this->seoUrlTableExists = $seoUrlFrontRepository->tableExists();
         $this->productDiscontinuedTableExists = $productDiscontinuedFrontRepository->tableExists();
@@ -268,6 +278,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function clear($clearImage = false): void
     {
+        $this->synchronizeImage = $clearImage;
         $this->productRepository->removeAll();
 
         $this->productFrontRepository->removeAll();
@@ -305,8 +316,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $this->seoUrlFrontRepository->removeAllByQuery('product_id');
         }
 
-        if (true === $clearImage) {
+        if (true === $this->synchronizeImage) {
             $this->productImageSynchronizer->clearFolder();
+            $this->descriptionSynchronizer->clearFolder();
         }
     }
 
@@ -316,6 +328,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function synchronizeProduct(ProductBack $productBack, $synchronizeImage = false): void
     {
+        $this->synchronizeImage = $synchronizeImage;
+
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         $productFront = $this->getProductFrontFromProduct($product);
         $this->updateProductFrontFromProductBack($productBack, $productFront);
@@ -324,10 +338,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $productBack->getProductId(),
             $productFront->getProductId()
         );
-
-        if (true === $synchronizeImage && null !== $productFront) {
-            $this->synchronizeImage($productBack, $productFront);
-        }
     }
 
     /**
@@ -395,7 +405,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         if (null === $productFront->getStatus() || true === $productFront->getStatus()) {
             $productFront->setStatus($productBack->getEnabled() !== 0);
         }
-        $productFront->setViewed(0);
+
+        if (null === $productFront->getViewed()) {
+            $productFront->setViewed(0);
+        }
 
         $this->productFrontRepository->persistAndFlush($productFront);
         $productFrontId = $productFront->getProductId();
@@ -408,10 +421,20 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productDescriptionFront->setProductId($productFrontId);
         $productDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $productDescriptionFront->setName($productName);
-        $productDescriptionFront->setDescription(
-            Filler::securityString(Store::encodingConvert($productBack->getDescription()))
-        );
-        $productDescriptionFront->setTag(Filler::securityString(null));
+
+        if (true === $this->synchronizeImage) {
+            $description = $this->descriptionSynchronizer->synchronize(
+                trim(Store::encodingConvert($productBack->getDescription()))
+            );
+        } else {
+            $description = trim(Store::encodingConvert($productBack->getDescription()));
+        }
+
+        $productDescriptionFront->setDescription(Filler::securityString($description));
+
+        if (null === $productDescriptionFront->getTag()) {
+            $productDescriptionFront->setTag(Filler::securityString(null));
+        }
 
         if (null === $productDescriptionFront->getMetaTitle()) {
             $productDescriptionFront->setMetaTitle(Store::encodingConvert($productBack->getName()));
@@ -484,6 +507,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $this->synchronizeSeoUrl($seoUrl, $productFrontId, $productBack);
         }
 
+        if (true === $this->synchronizeImage) {
+            $this->synchronizeImage($productBack, $productFront);
+        }
+
         return $productFront;
     }
 
@@ -499,21 +526,24 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $category = $this->categoryRepository->findOneByBackId($categoryBackId);
         if (null === $category) {
-            $this->logger->error(ExceptionFormatter::f("Category with backId {$categoryBackId} not found"));
+            $message = "Category with backId {$categoryBackId} not found";
+            $this->logger->error(ExceptionFormatter::f($message));
 
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $frontId = $category->getFrontId();
         if (null === $frontId) {
-            $this->logger->error(ExceptionFormatter::f("Category front id is null"));
+            $message = "Category front id is null";
+            $this->logger->error(ExceptionFormatter::f($message));
 
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
         $categoryFront = $this->categoryFrontRepository->find($frontId);
         if (null === $categoryFront) {
-            $this->logger->error(ExceptionFormatter::f("Category front is null"));
+            $message = "Category front is null";
+            $this->logger->error(ExceptionFormatter::f($message));
 
             return $this->storeFront->getDefaultCategoryFrontId();
         }
@@ -575,17 +605,17 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $slug = trim(Filler::securityString($productBack->getSlug()));
 
-        if (0 === mb_strlen($slug)) {
-            $seoUrl->setKeyword(
-                StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
-            );
-        } else {
+        if (mb_strlen($slug) > 0) {
             $slugs = explode('/', $slug);
             if (count($slugs) > 1) {
                 $seoUrl->setKeyword($slugs[1]);
             } else {
                 $seoUrl->setKeyword($slug);
             }
+        } else {
+            $seoUrl->setKeyword(
+                StoreFront::generateURL($productBack->getProductId(), Store::encodingConvert($productBack->getName()))
+            );
         }
 
         $this->seoUrlFrontRepository->persistAndFlush($seoUrl);
