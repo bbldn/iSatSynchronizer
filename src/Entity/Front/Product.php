@@ -408,10 +408,10 @@ class Product
     }
 
     /**
-     * @param string $image
+     * @param string|null $image
      * @return Product
      */
-    public function setImage(string $image): self
+    public function setImage(?string $image): self
     {
         $this->image = $image;
 
