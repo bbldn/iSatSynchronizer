@@ -216,9 +216,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
             $categoryFront->setColumn(1);
         }
 
-        if (null === $categoryFront->getSortOrder()) {
-            $categoryFront->setSortOrder(0);
-        }
+        $categoryFront->setSortOrder($categoryBack->getSortOrder());
 
         if (null === $categoryFront->getStatus() || true === $categoryFront->getStatus()) {
             $categoryFront->setStatus($categoryBack->getEnabled());

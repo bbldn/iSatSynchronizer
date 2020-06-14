@@ -396,7 +396,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setLengthClassId(0);
         $productFront->setSubtract(false);
         $productFront->setMinimum(true);
-        $productFront->setSortOrder(0);
+        $productFront->setSortOrder($productBack->getSortOrder());
         if (null === $productFront->getStatus() || true === $productFront->getStatus()) {
             $productFront->setStatus($productBack->getEnabled() !== 0);
         }
