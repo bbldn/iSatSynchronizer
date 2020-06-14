@@ -148,7 +148,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     protected $productDiscountBackToFrontSynchronizer;
 
     /** @var string $defaultImagePath */
-    protected $defaultImagePath = 'catalog/products/white.jpg';
+    protected $defaultImagePath = null;
 
     /** @var bool $seoUrlTableExists */
     protected $seoUrlTableExists = false;
@@ -377,11 +377,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setLocation(Filler::securityString(null));
         $productFront->setQuantity($quantity);
         $productFront->setStockStatusId($stockAvailableStatusId);
-
-        if (null === $productFront->getImage()) {
-            $productFront->setImage(Filler::securityString(null));
-        }
-
         $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
         $productFront->setManufacturerId($this->getManufacturerId($productName));
         $productFront->setShipping(true);
