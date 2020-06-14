@@ -2,6 +2,6 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
-class FrontToBackSynchronizer
+abstract class FrontToBackSynchronizer
 {
 }

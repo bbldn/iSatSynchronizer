@@ -4,12 +4,12 @@ namespace App\Service\API;
 
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Exception\OrderBackNotFoundException;
+use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
-use App\Repository\Back\ShippingMethodRepository as ShippingMethodBackRepository;
-use App\Service\Service;
 use App\Repository\Back\PaymentTypeRepository as PaymentMethodBackRepository;
+use App\Repository\Back\ShippingMethodRepository as ShippingMethodBackRepository;
 
-class OrderService extends Service
+class OrderService extends ApiService
 {
     /** @var OrderBackRepository $orderBackRepository */
     protected $orderBackRepository;
@@ -20,21 +20,27 @@ class OrderService extends Service
     /** @var PaymentMethodBackRepository $paymentMethodBackRepository */
     protected $paymentMethodBackRepository;
 
+    /** @var CustomerBackRepository $customerBackRepository */
+    protected $customerBackRepository;
+
     /**
      * OrderService constructor.
      * @param OrderBackRepository $orderBackRepository
      * @param ShippingMethodBackRepository $shippingMethodBackRepository
      * @param PaymentMethodBackRepository $paymentMethodBackRepository
+     * @param CustomerBackRepository $customerBackRepository
      */
     public function __construct(
         OrderBackRepository $orderBackRepository,
         ShippingMethodBackRepository $shippingMethodBackRepository,
-        PaymentMethodBackRepository $paymentMethodBackRepository
+        PaymentMethodBackRepository $paymentMethodBackRepository,
+        CustomerBackRepository $customerBackRepository
     )
     {
         $this->orderBackRepository = $orderBackRepository;
         $this->shippingMethodBackRepository = $shippingMethodBackRepository;
         $this->paymentMethodBackRepository = $paymentMethodBackRepository;
+        $this->customerBackRepository = $customerBackRepository;
     }
 
     /**
@@ -50,13 +56,33 @@ class OrderService extends Service
         }
 
         $orderBack = $ordersBack[0];
+        $customer = null;
+
+        $phone = trim($orderBack->getPhone());
+        if (mb_strlen($phone) === 0 && $orderBack->getClientId() > 1) {
+            $customer = $this->customerBackRepository->find($orderBack->getClientId());
+            if (null !== $customer) {
+                $phone = $customer->getPhone();
+            }
+        }
+
+        $mail = trim($orderBack->getMail());
+        if (mb_strlen($mail) === 0 && $orderBack->getClientId() > 1) {
+            if (null === $customer) {
+                $customer = $this->customerBackRepository->find($orderBack->getClientId());
+            }
+
+            if (null !== $customer) {
+                $mail = $customer->getMail();
+            }
+        }
 
         $data = [
             'id' => $orderBack->getOrderNum(),
             'type' => $orderBack->getType(),
             'FIO' => $orderBack->getFio(),
-            'phone' => $orderBack->getPhone(),
-            'mail' => $orderBack->getMail(),
+            'phone' => $phone,
+            'mail' => $mail,
             'region' => $orderBack->getRegion(),
             'city' => $orderBack->getCity(),
             'street' => $orderBack->getStreet(),
@@ -66,6 +92,7 @@ class OrderService extends Service
             'payment' => $this->getPaymentName($orderBack->getPayment()),
             'comment' => $orderBack->getComments(),
             'total' => $this->getOrderTotal($ordersBack) . ' ' . $orderBack->getCurrencyName(),
+            'balance' => $this->customerBackRepository->getBalanceByCustomerId($orderBack->getClientId()) . '$',
             'products' => $this->getProducts($ordersBack),
         ];
 

@@ -45,4 +45,36 @@ class BuyersGamePostRepository extends BackRepository
             return null;
         }
     }
+
+    /**
+     * @param int $customerId
+     * @return float
+     */
+    public function getBalanceByCustomerId(int $customerId): float
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = "
+            SELECT 
+                (IFNULL(cash.`income`, 0) - IFNULL(SUM(orders.`price` * orders.`amount`), 0)) as `balance` 
+            FROM 
+                SS_orders_gamepost orders 
+            LEFT JOIN 
+                (
+                    SELECT 
+                        SUM(`price` / `currency_value`) as `income`, `order_num` 
+                    FROM 
+                        SS_cash 
+                    GROUP BY 
+                        `order_num`
+                ) cash 
+            ON 
+                cash.`order_num` = orders.`order_num`
+            WHERE 
+                orders.`status` != 9 AND orders.`client_id` = {$customerId} 
+            GROUP BY 
+                cash.`income`;";
+        $result = $connection->fetchAll($sql);
+
+        return $result[0]['balance'];
+    }
 }

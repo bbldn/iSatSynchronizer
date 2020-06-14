@@ -9,7 +9,7 @@ use App\Service\Service;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class ProductService extends Service
+class ProductService extends ApiService
 {
     /** @var CategoryBackRepository $categoryBackRepository */
     protected $categoryBackRepository;
