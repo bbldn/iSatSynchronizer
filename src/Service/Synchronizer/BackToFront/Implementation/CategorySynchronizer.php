@@ -76,7 +76,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
     protected $urls = [];
 
     /** @var string $defaultImagePath */
-    protected $defaultImagePath = 'catalog/categories/white.jpg';
+    protected $defaultImagePath = null;
 
     /**
      * CategorySynchronizer constructor.
