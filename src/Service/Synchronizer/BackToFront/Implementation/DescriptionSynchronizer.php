@@ -64,7 +64,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
 
         foreach ($images as $image) {
             $fileName = $this->synchronizeImage($image);
-            $this->replace($text, $image, $fileName);
+            $text = $this->replace($text, $image, $fileName);
         }
 
         return $text;
