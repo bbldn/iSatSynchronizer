@@ -90,7 +90,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
         $path = $this->frontPath . $pathInfo['basename'];
         $this->fileWriter->saveFile($this->storeFront->getDefaultSitePath() . $path, $content);
 
-        return str_replace('/image/', '', $path);
+        return $path;
     }
 
     /**
