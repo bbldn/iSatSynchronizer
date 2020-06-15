@@ -205,7 +205,10 @@ class CategorySynchronizer extends BackToFrontSynchronizer
             $parentId = $this->getParentFrontIdByBackId($parentBackId);
         }
 
-        $categoryFront->setImage($this->defaultImagePath);
+        if (null === $categoryFront->getImage()) {
+            $categoryFront->setImage($this->defaultImagePath);
+        }
+
         $categoryFront->setParentId($parentId);
 
         if (null === $categoryFront->getTop()) {
