@@ -18,6 +18,7 @@ use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
 use App\Repository\AttributeRepository;
+use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Back\PhotoRepository as PhotoBackRepository;
 use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
 use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
@@ -145,6 +146,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ManufacturerFrontRepository $manufacturerFrontRepository */
     protected $manufacturerFrontRepository;
 
+    /** @var CurrencyBackRepository $currencyBackRepository */
+    protected $currencyBackRepository;
+
     /** @var ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer */
     protected $productDiscountBackToFrontSynchronizer;
 
@@ -196,6 +200,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
      * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
      * @param ManufacturerFrontRepository $manufacturerFrontRepository
+     * @param CurrencyBackRepository $currencyBackRepository
      * @param ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
      * @param DescriptionSynchronizer $descriptionSynchronizer
      */
@@ -231,6 +236,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         SeoUrlFrontRepository $seoUrlFrontRepository,
         ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository,
         ManufacturerFrontRepository $manufacturerFrontRepository,
+        CurrencyBackRepository $currencyBackRepository,
         ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer,
         DescriptionSynchronizer $descriptionSynchronizer
     )
@@ -266,6 +272,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productImageSynchronizer = $productImageSynchronizer;
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
         $this->manufacturerFrontRepository = $manufacturerFrontRepository;
+        $this->currencyBackRepository = $currencyBackRepository;
         $this->productDiscountBackToFrontSynchronizer = $productDiscountBackToFrontSynchronizer;
         $this->descriptionSynchronizer = $descriptionSynchronizer;
 
@@ -423,30 +430,23 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productDescriptionFront->setName($productName);
 
         if (true === $this->synchronizeImage) {
-            $description = $this->descriptionSynchronizer->synchronize(
-                trim(Store::encodingConvert($productBack->getDescription()))
+            $productDescriptionFront->setDescription(
+                $this->descriptionSynchronizer->synchronize(trim(Store::encodingConvert($productBack->getDescription())))
             );
         } else {
-            $description = trim(Store::encodingConvert($productBack->getDescription()));
+            $productDescriptionFront->setDescription(trim(Store::encodingConvert($productBack->getDescription())));
         }
 
-        $productDescriptionFront->setDescription(Filler::securityString($description));
+        $productDescriptionFront->setTag(Filler::securityString($productBack->getTags()));
 
-        if (null === $productDescriptionFront->getTag()) {
-            $productDescriptionFront->setTag(Filler::securityString(null));
-        }
-
-        if (null === $productDescriptionFront->getMetaTitle()) {
-            $productDescriptionFront->setMetaTitle(Store::encodingConvert($productBack->getName()));
-        }
-
-        if (null === $productDescriptionFront->getMetaDescription()) {
-            $productDescriptionFront->setMetaDescription(Filler::securityString(null));
-        }
-
-        if (null === $productDescriptionFront->getMetaKeyword()) {
-            $productDescriptionFront->setMetaKeyword(Filler::securityString(null));
-        }
+        $rate = $this->currencyBackRepository->getCurrentCourse();
+        $price = $productBack->getPrice() * $rate['грн'];
+        $metaTitle = Store::encodingConvert($productBack->getName());
+        $metaTitle = "{$metaTitle} купить за {$price} грн: {$metaTitle} по низкой цене в Киеве с доставкой по Украине. "
+            . "{$metaTitle}: цена, отзывы, описание, характеристики.";
+        $productDescriptionFront->setMetaTitle($metaTitle);
+        $productDescriptionFront->setMetaDescription(Filler::securityString($productBack->getMetaDescription()));
+        $productDescriptionFront->setMetaKeyword(Filler::securityString($productBack->getMetaKeywords()));
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 

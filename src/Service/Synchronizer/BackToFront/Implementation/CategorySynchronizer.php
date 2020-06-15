@@ -274,7 +274,8 @@ class CategorySynchronizer extends BackToFrontSynchronizer
         );
 
         $metaTitle = Store::encodingConvert($categoryBack->getName());
-        $metaTitle = "{$metaTitle} купить в Киеве с доставкой по Украине по самым выгодным ценам. Как выбрать {$metaTitle}: цены, отзывы, характеристики.";
+        $metaTitle = "{$metaTitle} купить в Киеве с доставкой по Украине по самым выгодным ценам. "
+            . " Как выбрать {$metaTitle}: цены, отзывы, характеристики.";
         $categoryDescription->setMetaTitle($metaTitle);
         $categoryDescription->setMetaDescription(Filler::securityString($categoryBack->getMetaDescription()));
         $categoryDescription->setMetaKeyword(Filler::securityString($categoryBack->getMetaKeywords()));
