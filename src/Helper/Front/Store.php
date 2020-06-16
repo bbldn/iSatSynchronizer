@@ -110,6 +110,12 @@ class Store extends StoreBase
     /** @var int $defaultPriority */
     protected $defaultPriority = 999;
 
+    /** @var int $defaultProductLayoutId */
+    protected $defaultProductLayoutId = 2;
+
+    /** @var int $defaultCategoryLayoutId */
+    protected $defaultCategoryLayoutId = 3;
+
     /**
      * Store constructor.
      * @param ContainerBagInterface $params
@@ -751,6 +757,44 @@ class Store extends StoreBase
     public function setDefaultPriority(int $defaultPriority): self
     {
         $this->defaultPriority = $defaultPriority;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultProductLayoutId(): int
+    {
+        return $this->defaultProductLayoutId;
+    }
+
+    /**
+     * @param int $defaultProductLayoutId
+     * @return Store
+     */
+    public function setDefaultProductLayoutId(int $defaultProductLayoutId): self
+    {
+        $this->defaultProductLayoutId = $defaultProductLayoutId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultCategoryLayoutId(): int
+    {
+        return $this->defaultCategoryLayoutId;
+    }
+
+    /**
+     * @param int $defaultCategoryLayoutId
+     * @return Store
+     */
+    public function setDefaultCategoryLayoutId(int $defaultCategoryLayoutId): self
+    {
+        $this->defaultCategoryLayoutId = $defaultCategoryLayoutId;
 
         return $this;
     }

@@ -289,7 +289,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
 
         $categoryLayout->setCategoryId($categoryFrontId);
         $categoryLayout->setStoreId($this->storeFront->getDefaultStoreId());
-        $categoryLayout->setLayoutId(3);
+        $categoryLayout->setLayoutId($this->storeFront->getDefaultCategoryLayoutId());
 
         $this->categoryLayoutFrontRepository->persistAndFlush($categoryLayout);
 
