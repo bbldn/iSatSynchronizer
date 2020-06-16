@@ -457,7 +457,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $productLayoutFront->setProductId($productFrontId);
         $productLayoutFront->setStoreId($this->storeFront->getDefaultStoreId());
-        $productLayoutFront->setLayoutId($this->storeFront->getDefaultLayoutId());
+        $productLayoutFront->setLayoutId(2);
+
         $this->productLayoutFrontRepository->persistAndFlush($productLayoutFront);
 
         $productStoreFront = $this->productStoreFrontRepository->find($productFrontId);
