@@ -7,9 +7,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AttributeSynchronizeCommand extends Command
+class AttributeSynchronizeAllCommand extends Command
 {
-    protected static $defaultName = 'attribute:synchronize';
+    protected static $defaultName = 'attribute:synchronize:all';
 
     /** @var AttributeSynchronizer $attributeSynchronize */
     protected $attributeSynchronize;
@@ -29,7 +29,7 @@ class AttributeSynchronizeCommand extends Command
      */
     protected function configure()
     {
-        $this->setDescription('Synchronize products');
+        $this->setDescription('Synchronize attribute');
     }
 
     /**
