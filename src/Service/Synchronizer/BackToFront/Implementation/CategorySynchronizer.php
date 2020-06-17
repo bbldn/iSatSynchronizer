@@ -72,7 +72,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
     /** @var CategoryImageSynchronizer $categoryImageSynchronizer */
     protected $categoryImageSynchronizer;
 
-    /** @var array $urls */
+    /** @var string[] $urls */
     protected $urls = [];
 
     /** @var string $defaultImagePath */

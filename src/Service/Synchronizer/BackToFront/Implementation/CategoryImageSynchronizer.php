@@ -30,7 +30,7 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
     /** @var SaveFrontFileInterface $fileWriter */
     protected $fileWriter;
 
-    /** @var array $backPath */
+    /** @var string[] $backPath */
     protected $backPath = ['/images_big/', '/products_pictures/'];
 
     /** @var string $frontPath */

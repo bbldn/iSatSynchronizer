@@ -91,13 +91,8 @@ class OrderSynchronizer extends BackToFrontSynchronizer
     /** @var CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer */
     protected $customerBackToFrontSynchronizer;
 
-    /** @var array $excludeCustomerIds */
-    protected $excludeCustomerIds = [
-        3233, 4835, 7436, 7439, 12012,
-        12669, 12956, 13110, 14127,
-        14128, 14129, 14466, 14665,
-        15328, 16383, 0,
-    ];
+    /** @var int[] $excludeCustomerIds */
+    protected $excludeCustomerIds = [];
 
     /**
      * OrderSynchronizer constructor.

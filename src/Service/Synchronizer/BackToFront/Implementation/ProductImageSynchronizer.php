@@ -37,7 +37,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
     /** @var SaveFrontFileInterface $fileWriter */
     protected $fileWriter;
 
-    /** @var array $backPath */
+    /** @var string[] $backPath */
     protected $backPath = ['/products_pictures/', '/gal/files/'];
 
     /** @var string $frontPath */

@@ -42,7 +42,6 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
     /** @var bool $reviewAnswerTableExists */
     protected $reviewAnswerTableExists = false;
 
-
     /**
      * ReviewSynchronizer constructor.
      * @param LoggerInterface $logger

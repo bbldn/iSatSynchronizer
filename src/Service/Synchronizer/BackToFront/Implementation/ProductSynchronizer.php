@@ -564,6 +564,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             if (null === $attribute) {
                 continue;
             }
+
             $text = trim($productAttributeBack->getOptionValue());
 
             if (mb_strlen($text) > 0) {

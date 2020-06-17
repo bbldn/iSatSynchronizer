@@ -5,7 +5,6 @@ namespace App\Service\API;
 use App\Helper\Back\CategoryTreeGenerator;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
-use App\Service\Service;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
