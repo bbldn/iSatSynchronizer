@@ -2,7 +2,8 @@
 
 namespace App\EventListener;
 
-use  Doctrine\DBAL\Event\ConnectionEventArgs;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Event\ConnectionEventArgs;
 
 class OnConnect
 {
@@ -13,7 +14,7 @@ class OnConnect
 
     /**
      * @param ConnectionEventArgs $event
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function postConnect(ConnectionEventArgs $event)
     {
