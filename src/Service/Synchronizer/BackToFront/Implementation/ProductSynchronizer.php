@@ -566,27 +566,23 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             }
 
             $text = trim($productAttributeBack->getOptionValue());
-
-            if (mb_strlen($text) > 0) {
-                $exists = $this->productAttributeFrontRepository->existsByProductIdAttributeIdLanguageIdText(
-                    $productFrontId,
-                    $attribute->getFrontId(),
-                    $this->storeFront->getDefaultLanguageId(),
-                    $text
-                );
-
-                if (true === $exists) {
-                    continue;
-                }
-
-                $productAttributeFront = new ProductAttributeFront();
-                $productAttributeFront->setProductId($productFrontId);
-                $productAttributeFront->setAttributeId($attribute->getFrontId());
-                $productAttributeFront->setLanguageId($this->storeFront->getDefaultLanguageId());
-                $productAttributeFront->setText($text);
-
-                $this->productAttributeFrontRepository->persistAndFlush($productAttributeFront);
+            $exists = $this->productAttributeFrontRepository->existsByProductIdAttributeIdLanguageIdText(
+                $productFrontId,
+                $attribute->getFrontId(),
+                $this->storeFront->getDefaultLanguageId(),
+                $text
+            );
+            if (true === $exists) {
+                continue;
             }
+
+            $productAttributeFront = new ProductAttributeFront();
+            $productAttributeFront->setProductId($productFrontId);
+            $productAttributeFront->setAttributeId($attribute->getFrontId());
+            $productAttributeFront->setLanguageId($this->storeFront->getDefaultLanguageId());
+            $productAttributeFront->setText($text);
+
+            $this->productAttributeFrontRepository->persistAndFlush($productAttributeFront);
         }
     }
 

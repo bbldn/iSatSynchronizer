@@ -36,6 +36,7 @@ class ProductOptionsValuesRepository extends BackRepository
         return $this->createQueryBuilder('po')
             ->andWhere('po.productId = :val')
             ->setParameter('val', $value)
+            ->andWhere('LENGTH(po.optionValue) > 0')
             ->getQuery()
             ->getResult();
     }
