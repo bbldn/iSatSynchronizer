@@ -47,4 +47,16 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
             $this->synchronizeCategory($categoryBack, $synchronizeImage);
         }
     }
+
+    /**
+     * @param string $name
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeByName(string $name, bool $synchronizeImage = false): void
+    {
+        $categoriesBack = $this->categoryBackRepository->findByName($name);
+        foreach ($categoriesBack as $categoryBack) {
+            $this->synchronizeCategory($categoryBack, $synchronizeImage);
+        }
+    }
 }

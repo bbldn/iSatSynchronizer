@@ -31,6 +31,18 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     }
 
     /**
+     * @param string $name
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeByName(string $name, $synchronizeImage = false): void
+    {
+        $productsBack = $this->productBackRepository->findByName($name);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+    }
+
+    /**
      *
      */
     public function updatePriceAll()

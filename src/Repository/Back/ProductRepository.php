@@ -34,8 +34,8 @@ class ProductRepository extends BackRepository
      */
     public function findByCategoryId(int $categoryId): array
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.categoryId = :val')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.categoryId = :val')
             ->setParameter('val', $categoryId)
             ->getQuery()
             ->getResult();
@@ -43,21 +43,34 @@ class ProductRepository extends BackRepository
 
     /**
      * @param string $name
-     * @param int $max
-     * @return mixed
+     * @param int|null $max
+     * @return array
      */
-    public function findByName(string $name, int $max): array
+    public function findByNameWithMax(string $name, ?int $max): array
     {
         $name = mb_strtolower($name);
-        $query = $this->createQueryBuilder('c')
-            ->andWhere('LOWER(c.name) LIKE :name')
+        $query = $this->createQueryBuilder('p')
+            ->andWhere('LOWER(p.name) LIKE :name')
             ->setParameter('name', "{$name}%");
 
-        if ($max > 0) {
+        if (null !== $max && $max > 0) {
             $query->setMaxResults($max);
         }
 
-        return $query->select('c.id, c.name')->getQuery()->getResult();
+        return $query->select('p.id, p.name')->getQuery()->getResult();
+    }
+
+    /**
+     * @param string $name
+     * @return Product[]
+     */
+    public function findByName(string $name): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.name LIKE :val')
+            ->setParameter('val', "%$name%")
+            ->getQuery()
+            ->getResult();
     }
 
     /**

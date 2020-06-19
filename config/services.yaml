@@ -76,3 +76,6 @@ services:
         - '@App\Repository\ProductRepository'
         - '%database_name%'
         - '%front.database_name%'
+    App\Command\DebugServerCommand:
+        arguments:
+        - '8088'

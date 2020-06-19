@@ -90,7 +90,7 @@ class ProductService extends ApiService
         $result = [
             'ok' => true,
             'data' => [
-                'categories' => CategoryTreeGenerator::generate($this->categoryBackRepository->findAllSortByParent()),
+                'categories' => CategoryTreeGenerator::generate($this->categoryBackRepository->findSortByParent()),
             ]
         ];
 
@@ -107,7 +107,7 @@ class ProductService extends ApiService
         $result = [
             'ok' => true,
             'data' => [
-                'products' => $this->productBackRepository->findByName($name, $max),
+                'products' => $this->productBackRepository->findByNameWithMax($name, $max),
             ]
         ];
 
