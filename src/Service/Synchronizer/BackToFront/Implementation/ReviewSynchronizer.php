@@ -14,6 +14,7 @@ use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ReviewRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
+use DateTime;
 use Psr\Log\LoggerInterface;
 
 class ReviewSynchronizer extends BackToFrontSynchronizer
@@ -139,8 +140,15 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
         $reviewFront->setText(Store::encodingConvert($reviewBack->getBody()));
         $reviewFront->setRating($reviewBack->getStars());
         $reviewFront->setStatus($reviewBack->getEnabled());
-        $reviewFront->setDateAdded($reviewBack->getAddTime());
-        $reviewFront->setDateModified($reviewBack->getAddTime());
+
+        if (null === $reviewBack->getAddTime()) {
+            $date = new DateTime();
+        } else {
+            $date = $reviewBack->getAddTime();
+        }
+
+        $reviewFront->setDateAdded($date);
+        $reviewFront->setDateModified($date);
 
         $this->reviewFrontRepository->persistAndFlush($reviewFront);
 
