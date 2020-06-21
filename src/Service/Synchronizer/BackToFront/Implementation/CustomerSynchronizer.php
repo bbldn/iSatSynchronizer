@@ -232,7 +232,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
     {
         $parsedFio = explode(' ', $fio);
         if (0 === count($parsedFio)) {
-            $data =  [
+            $data = [
                 'lastName' => ' ',
                 'firstName' => ' ',
             ];
