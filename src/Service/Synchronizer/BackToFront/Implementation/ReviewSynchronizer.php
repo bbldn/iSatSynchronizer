@@ -154,7 +154,7 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
 
         $text = trim(Store::encodingConvert($reviewBack->getAnswer()));
         if (true === $this->reviewAnswerTableExists && mb_strlen($text) > 0) {
-            $reviewAnswerFront = new ReviewAnswerFront();
+            $reviewAnswerFront = $this->getReviewAnswerFrontByReviewFrontId($reviewFront->getReviewId());
             $reviewAnswerFront->setReviewId($reviewFront->getReviewId());
             $reviewAnswerFront->setText($text);
 
@@ -162,6 +162,20 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
         }
 
         return $reviewFront;
+    }
+
+    /**
+     * @param int $id
+     * @return ReviewAnswerFront
+     */
+    public function getReviewAnswerFrontByReviewFrontId(int $id): ReviewAnswerFront
+    {
+        $reviewAnswerFront = $this->reviewAnswerFrontRepository->find($id);
+        if (null !== $reviewAnswerFront) {
+            return $reviewAnswerFront;
+        }
+
+        return new ReviewAnswerFront();
     }
 
     /**
