@@ -7,6 +7,7 @@ use App\Entity\Front\Category as CategoryFront;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
+use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
@@ -24,14 +25,17 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
     /** @var StoreBack $storeBack */
     protected $storeBack;
 
+    /** @var CategoryFrontRepository $categoryFrontRepository */
+    protected $categoryFrontRepository;
+
     /** @var GetBackFileInterface $fileReader */
     protected $fileReader;
 
     /** @var SaveFrontFileInterface $fileWriter */
     protected $fileWriter;
 
-    /** @var string[] $backPath */
-    protected $backPath = ['/images_big/', '/products_pictures/'];
+    /** @var string $backPath */
+    protected $backPath = '/products_pictures/';
 
     /** @var string $frontPath */
     protected $frontPath = '/date/categories/';
@@ -41,24 +45,27 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
      * @param LoggerInterface $logger
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
+     * @param CategoryFrontRepository $categoryFrontRepository
      * @param GetBackFileInterface $fileReader
      * @param SaveFrontFileInterface $fileWriter
-     * @param array $categoryImageBackPath
+     * @param string $categoryImageBackPath
      * @param string $categoryImageFrontPath
      */
     public function __construct(
         LoggerInterface $logger,
         StoreFront $storeFront,
         StoreBack $storeBack,
+        CategoryFrontRepository $categoryFrontRepository,
         GetBackFileInterface $fileReader,
         SaveFrontFileInterface $fileWriter,
-        array $categoryImageBackPath,
+        string $categoryImageBackPath,
         string $categoryImageFrontPath
     )
     {
         $this->logger = $logger;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
+        $this->categoryFrontRepository = $categoryFrontRepository;
         $this->fileReader = $fileReader;
         $this->fileWriter = $fileWriter;
         $this->backPath = $categoryImageBackPath;
@@ -80,37 +87,32 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
      */
     public function synchronizeImage(CategoryBack $categoryBack, CategoryFront $categoryFront): void
     {
-        $picture = $categoryBack->getBigImage();
-        $path = $this->backPath[0];
-
-        if (null === $picture) {
-            $picture = $categoryBack->getPicture();
-            $path = $this->backPath[1];
-        }
-
-        if (null === $picture) {
+        $picture = $categoryBack->getPicture();
+        if (0 === mb_strlen($picture)) {
             return;
         }
 
-        $path = $this->storeBack->getDefaultSitePath() . $path;
+        $path = $this->storeBack->getDefaultSitePath() . $this->backPath;
         $content = $this->fileReader->getFile($path . $picture);
         if (null === $content) {
             return;
         }
 
         $pathInfo = pathinfo($picture);
-
         $name = $categoryFront->getCategoryId() . '.' . mb_strtolower($pathInfo['extension']);
         $path = $this->frontPath . $name;
 
         try {
             $this->fileWriter->saveFile($this->storeFront->getDefaultSitePath() . $path, $content);
         } catch (UploadException $exception) {
-            $this->logger->error(ExceptionFormatter::f('Failed to save image'));
+            $message = 'Failed to save image';
+            $this->logger->error(ExceptionFormatter::f($message));
 
             return;
         }
 
         $categoryFront->setImage(str_replace('/image/', '', $path));
+
+        $this->categoryFrontRepository->persistAndFlush($categoryFront);
     }
 }

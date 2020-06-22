@@ -75,6 +75,9 @@ class CategorySynchronizer extends BackToFrontSynchronizer
     /** @var string[] $urls */
     protected $urls = [];
 
+    /** @var bool $synchronizeImage */
+    protected $synchronizeImage = false;
+
     /** @var string $defaultImagePath */
     protected $defaultImagePath = null;
 
@@ -129,9 +132,9 @@ class CategorySynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     * @param bool $synchronizeImage
+     * @param bool $clearImage
      */
-    protected function clear(bool $synchronizeImage = false): void
+    protected function clear(bool $clearImage = false): void
     {
         $this->categoryRepository->removeAll();
 
@@ -149,7 +152,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
             $this->seoUrlFrontRepository->removeAllByQuery('category_id');
         }
 
-        if (true === $synchronizeImage) {
+        if (true === $clearImage) {
             $this->categoryImageSynchronizer->clearFolder();
         }
     }
@@ -160,14 +163,11 @@ class CategorySynchronizer extends BackToFrontSynchronizer
      */
     protected function synchronizeCategory(CategoryBack $categoryBack, bool $synchronizeImage = false): void
     {
+        $this->synchronizeImage = $synchronizeImage;
         $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
         $categoryFront = $this->getCategoryFrontFromCategory($category);
         $this->updateCategoryFrontFromCategoryBack($categoryBack, $categoryFront);
         $this->createOrUpdateCategory($category, $categoryBack->getCategoryId(), $categoryFront->getCategoryId());
-
-        if (true === $synchronizeImage) {
-            $this->synchronizeImage($categoryBack, $categoryFront);
-        }
     }
 
     /**
@@ -302,16 +302,18 @@ class CategorySynchronizer extends BackToFrontSynchronizer
         $categoryStore->setStoreId($this->storeFront->getDefaultStoreId());
         $this->categoryStoreFrontRepository->persistAndFlush($categoryStore);
 
-        if (false === $this->seoUrlFrontRepository->tableExists()) {
-            return $categoryFront;
+        if (true === $this->seoUrlFrontRepository->tableExists()) {
+            $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
+                "category_id={$categoryFrontId}",
+                $this->storeFront->getDefaultLanguageId()
+            );
+
+            $this->synchronizeSeoUrl($seoUrl, $categoryFrontId, $categoryBack);
         }
 
-        $categoryFrontId = $categoryFront->getCategoryId();
-        $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
-            'category_id=' . $categoryFrontId,
-            $this->storeFront->getDefaultLanguageId()
-        );
-        $this->synchronizeSeoUrl($seoUrl, $categoryFrontId, $categoryBack);
+        if (true === $this->synchronizeImage) {
+            $this->categoryImageSynchronizer->synchronizeImage($categoryBack, $categoryFront);
+        }
 
         return $categoryFront;
     }
@@ -396,16 +398,6 @@ class CategorySynchronizer extends BackToFrontSynchronizer
         $category->setFrontId($frontId);
 
         $this->categoryRepository->persistAndFlush($category);
-    }
-
-    /**
-     * @param CategoryBack $categoryBack
-     * @param CategoryFront $categoryFront
-     */
-    protected function synchronizeImage(CategoryBack $categoryBack, CategoryFront $categoryFront): void
-    {
-        $this->categoryImageSynchronizer->synchronizeImage($categoryBack, $categoryFront);
-        $this->categoryFrontRepository->persistAndFlush($categoryFront);
     }
 
     /**

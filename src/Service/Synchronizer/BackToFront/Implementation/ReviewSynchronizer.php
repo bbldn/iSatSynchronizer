@@ -165,12 +165,12 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     * @param int $id
+     * @param int $reviewFrontId
      * @return ReviewAnswerFront
      */
-    public function getReviewAnswerFrontByReviewFrontId(int $id): ReviewAnswerFront
+    public function getReviewAnswerFrontByReviewFrontId(int $reviewFrontId): ReviewAnswerFront
     {
-        $reviewAnswerFront = $this->reviewAnswerFrontRepository->find($id);
+        $reviewAnswerFront = $this->reviewAnswerFrontRepository->find($reviewFrontId);
         if (null !== $reviewAnswerFront) {
             return $reviewAnswerFront;
         }

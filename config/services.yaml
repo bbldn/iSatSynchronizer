@@ -30,8 +30,8 @@ services:
         bind:
             $productImageBackPath: '%env(json:PRODUCT_IMAGE_BACK_PATH)%'
             $productImageFrontPath: '%env(PRODUCT_IMAGE_FRONT_PATH)%'
-            $categoryImageBackPath: '%env(json:CATEGORY_IMAGE_BACK_PATH)%'
-            $categoryImageFrontPath: '%env(CATEGORY_IMAGE_FRONT_PATH)%'
+            $categoryImageBackPath: '%env(string:CATEGORY_IMAGE_BACK_PATH)%'
+            $categoryImageFrontPath: '%env(string:CATEGORY_IMAGE_FRONT_PATH)%'
             $seoProEnabled: '%env(bool:SEO_PRO_ENABLED)%'
             $handlerPort: '%env(int:HANDLER_PORT)%'
             $consolePath: '%env(string:CONSOLE_PORT)%'
