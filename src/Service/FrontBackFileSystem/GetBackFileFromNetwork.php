@@ -84,7 +84,7 @@ class GetBackFileFromNetwork implements GetBackFileInterface
             return null;
         }
 
-        if (false === $content || 0 === strlen($content)) {
+        if (false === $content || 0 === mb_strlen($content)) {
             return null;
         }
 
