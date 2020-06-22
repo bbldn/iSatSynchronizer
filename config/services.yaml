@@ -29,7 +29,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $productImageBackPath: '%env(json:PRODUCT_IMAGE_BACK_PATH)%'
-            $productImageFrontPath: '%env(PRODUCT_IMAGE_FRONT_PATH)%'
+            $productImageFrontPath: '%env(string:PRODUCT_IMAGE_FRONT_PATH)%'
             $categoryImageBackPath: '%env(string:CATEGORY_IMAGE_BACK_PATH)%'
             $categoryImageFrontPath: '%env(string:CATEGORY_IMAGE_FRONT_PATH)%'
             $seoProEnabled: '%env(bool:SEO_PRO_ENABLED)%'
