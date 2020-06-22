@@ -3,6 +3,8 @@
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Product as ProductBack;
+use App\Entity\Front\CategoryDescription;
+use App\Entity\Front\CategoryDescription as CategoryDescriptionFront;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductAttribute as ProductAttributeFront;
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
@@ -24,7 +26,7 @@ use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepositor
 use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
+use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
 use App\Repository\Front\ManufacturerRepository as ManufacturerFrontRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
@@ -74,8 +76,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductRepository $productRepository */
     protected $productRepository;
 
-    /** @var CategoryFrontRepository $categoryFrontRepository */
-    protected $categoryFrontRepository;
+    /** @var CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository */
+    protected $categoryDescriptionFrontRepository;
 
     /** @var ProductFrontRepository $productFrontRepository */
     protected $productFrontRepository;
@@ -175,7 +177,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param AttributeRepository $attributeRepository
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
-     * @param CategoryFrontRepository $categoryFrontRepository
+     * @param CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository
      * @param PhotoBackRepository $photoBackRepository
      * @param ProductFrontRepository $productFrontRepository
      * @param ProductAttributeFrontRepository $productAttributeFrontRepository
@@ -211,7 +213,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         AttributeRepository $attributeRepository,
         CategoryRepository $categoryRepository,
         ProductRepository $productRepository,
-        CategoryFrontRepository $categoryFrontRepository,
+        CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
         PhotoBackRepository $photoBackRepository,
         ProductFrontRepository $productFrontRepository,
         ProductAttributeFrontRepository $productAttributeFrontRepository,
@@ -247,7 +249,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->attributeRepository = $attributeRepository;
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
-        $this->categoryFrontRepository = $categoryFrontRepository;
+        $this->categoryDescriptionFrontRepository = $categoryDescriptionFrontRepository;
         $this->photoBackRepository = $photoBackRepository;
         $this->productFrontRepository = $productFrontRepository;
         $this->productAttributeFrontRepository = $productAttributeFrontRepository;
@@ -431,19 +433,34 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         if (true === $this->synchronizeImage) {
             $productDescriptionFront->setDescription(
-                $this->descriptionSynchronizer->synchronize(trim(Store::encodingConvert($productBack->getDescription())))
+                $this->descriptionSynchronizer->synchronize(
+                    trim(Store::encodingConvert($productBack->getDescription()))
+                )
             );
         } else {
             $productDescriptionFront->setDescription(trim(Store::encodingConvert($productBack->getDescription())));
         }
 
         $productDescriptionFront->setTag(Filler::securityString($productBack->getTags()));
+        $categoryDescriptionFront = $this->getCategoryDescriptionFrontByCategoryBackId($productBack->getCategoryId());
+
+        if (null !== $categoryDescriptionFront) {
+            $categoryFrontId = $categoryDescriptionFront->getCategoryId();
+            $categoryName = trim(Store::encodingConvert($categoryDescriptionFront->getName()));
+            $metaTitlePart = " {$categoryName} по низкой цене в Киеве с доставкой по Украине. ";
+        } else {
+            $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
+            $metaTitlePart = '';
+        }
 
         $rate = $this->currencyBackRepository->getCurrentCourse();
-        $price = $productBack->getPrice() * $rate['грн'];
-        $metaTitle = Store::encodingConvert($productBack->getName());
-        $metaTitle = "{$metaTitle} купить за {$price} грн: {$metaTitle} по низкой цене в Киеве с доставкой по Украине. "
-            . "{$metaTitle}: цена, отзывы, описание, характеристики.";
+        $price = round($productBack->getPrice() * (float)$rate['грн']);
+        $productName = Store::encodingConvert($productBack->getName());
+        $metaTitle = implode('', [
+            "{$productName} купить за {$price} грн:{$metaTitlePart}",
+            "{$productName}: цена, отзывы, описание, характеристики.",
+        ]);
+
         $productDescriptionFront->setMetaTitle($metaTitle);
         $productDescriptionFront->setMetaDescription(Filler::securityString($productBack->getMetaDescription()));
         $productDescriptionFront->setMetaKeyword(Filler::securityString($productBack->getMetaKeywords()));
@@ -471,7 +488,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
-        $categoryFrontId = $this->getCategoryFrontIdByBack($productBack->getCategoryId());
         $productCategoryFront = $this->productCategoryFrontRepository->find($productFrontId);
         if (null === $productCategoryFront) {
             $productCategoryFront = new ProductCategoryFront();
@@ -517,12 +533,12 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
     /**
      * @param int|null $categoryBackId
-     * @return int
+     * @return CategoryDescriptionFront|null
      */
-    protected function getCategoryFrontIdByBack(?int $categoryBackId): int
+    protected function getCategoryDescriptionFrontByCategoryBackId(?int $categoryBackId): ?CategoryDescriptionFront
     {
         if (null === $categoryBackId) {
-            return $this->storeFront->getDefaultCategoryFrontId();
+            return null;
         }
 
         $category = $this->categoryRepository->findOneByBackId($categoryBackId);
@@ -530,26 +546,26 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $message = "Category with backId {$categoryBackId} not found";
             $this->logger->error(ExceptionFormatter::f($message));
 
-            return $this->storeFront->getDefaultCategoryFrontId();
+            return null;
         }
 
         $frontId = $category->getFrontId();
         if (null === $frontId) {
-            $message = "Category front id is null";
+            $message = "Category description front id is null";
             $this->logger->error(ExceptionFormatter::f($message));
 
-            return $this->storeFront->getDefaultCategoryFrontId();
+            return null;
         }
 
-        $categoryFront = $this->categoryFrontRepository->find($frontId);
-        if (null === $categoryFront) {
-            $message = "Category front is null";
+        $categoryDescriptionFront = $this->categoryDescriptionFrontRepository->find($frontId);
+        if (null === $categoryDescriptionFront) {
+            $message = "Category description front is null";
             $this->logger->error(ExceptionFormatter::f($message));
 
-            return $this->storeFront->getDefaultCategoryFrontId();
+            return null;
         }
 
-        return $categoryFront->getCategoryId();
+        return $categoryDescriptionFront;
     }
 
     /**
