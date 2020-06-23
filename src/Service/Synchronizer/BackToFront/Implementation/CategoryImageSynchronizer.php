@@ -11,6 +11,7 @@ use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
@@ -93,7 +94,7 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
         }
 
         $path = $this->storeBack->getDefaultSitePath() . $this->backPath;
-        $content = $this->fileReader->getFile($path . $picture);
+        $content = $this->getFile($path . $picture);
         if (null === $content) {
             return;
         }
@@ -114,5 +115,21 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
         $categoryFront->setImage(str_replace('/image/', '', $path));
 
         $this->categoryFrontRepository->persistAndFlush($categoryFront);
+    }
+
+    /**
+     * @param string $path
+     * @return string|null
+     */
+    protected function getFile(string $path): ?string
+    {
+        try {
+            return $this->fileReader->getFile($path);
+        } catch (Exception $e) {
+            $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($error));
+
+            return null;
+        }
     }
 }

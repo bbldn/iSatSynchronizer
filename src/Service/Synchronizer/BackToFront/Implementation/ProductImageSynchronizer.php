@@ -14,6 +14,7 @@ use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
@@ -127,10 +128,10 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
         }
 
         $path = $this->storeBack->getDefaultSitePath() . $this->backPath[0];
-        $content = $this->fileReader->getFile($path . $picture);
+        $content = $this->getFile($path . $picture);
         if (null === $content) {
             $path = $this->storeBack->getDefaultSitePath() . $this->backPath[1];
-            $content = $this->fileReader->getFile($path . $picture);
+            $content = $this->getFile($path . $picture);
             if (null === $content) {
                 return null;
             }
@@ -179,5 +180,21 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
         $picture = md5($photoBack->getBig()) . '.' . $pathInfo['extension'];
 
         return $this->synchronize($picture, $productFront, $number);
+    }
+
+    /**
+     * @param string $path
+     * @return string|null
+     */
+    protected function getFile(string $path): ?string
+    {
+        try {
+            return $this->fileReader->getFile($path);
+        } catch (Exception $e) {
+            $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($error));
+
+            return null;
+        }
     }
 }

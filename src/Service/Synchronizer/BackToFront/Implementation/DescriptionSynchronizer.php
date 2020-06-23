@@ -2,10 +2,12 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
+use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 class DescriptionSynchronizer extends BackToFrontSynchronizer
@@ -76,7 +78,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
      */
     protected function synchronizeImage(string $src): ?string
     {
-        $content = $this->fileReader->getFile($src);
+        $content = $this->getFile($src);
         if (null === $content) {
             return null;
         }
@@ -114,5 +116,21 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
     protected function clearFolder(): void
     {
         $this->fileWriter->clearFolder($this->storeFront->getDefaultSitePath() . $this->frontPath);
+    }
+
+    /**
+     * @param string $path
+     * @return string|null
+     */
+    protected function getFile(string $path): ?string
+    {
+        try {
+            return $this->fileReader->getFile($path);
+        } catch (Exception $e) {
+            $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($error));
+
+            return null;
+        }
     }
 }
