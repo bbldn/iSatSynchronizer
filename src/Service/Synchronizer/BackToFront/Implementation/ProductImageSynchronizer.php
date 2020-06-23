@@ -120,7 +120,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param int $number
      * @return ProductImageFront|null
      */
-    protected function synchronize(string $picture, ProductFront $productFront, $number = 1): ?ProductImageFront
+    protected function synchronize(string $picture, ProductFront $productFront, int $number = 1): ?ProductImageFront
     {
         if (null === $picture) {
             return null;
@@ -169,10 +169,15 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param int $number
      * @return ProductImageFront|null
      */
-    public function synchronizePhoto(PhotoBack $photoBack, ProductFront $productFront, $number = 1): ?ProductImageFront
+    public function synchronizePhoto(
+        PhotoBack $photoBack,
+        ProductFront $productFront,
+        int $number = 1
+    ): ?ProductImageFront
     {
         $pathInfo = pathinfo($photoBack->getBig());
+        $picture = md5($photoBack->getBig()) . '.' . $pathInfo['extension'];
 
-        return $this->synchronize(md5($photoBack->getBig()) . '.' . $pathInfo['extension'], $productFront, $number);
+        return $this->synchronize($picture, $productFront, $number);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Repository\Front;
 use App\Entity\Front\ProductAttribute;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 
 /**
  * @method ProductAttribute|null find($id, $lockMode = null, $lockVersion = null)
@@ -33,33 +32,27 @@ class ProductAttributeRepository extends FrontRepository
      * @param int $productId
      * @param int $attributeId
      * @param int $languageId
-     * @param string $text
-     * @return bool
+     * @return ProductAttribute|null
      */
-    public function existsByProductIdAttributeIdLanguageIdText(
+    public function findOneByProductIdAttributeIdLanguageId(
         int $productId,
         int $attributeId,
-        int $languageId,
-        string $text
-    ): bool
+        int $languageId
+    ): ?ProductAttribute
     {
         try {
             return $this->createQueryBuilder('par')
-                    ->select('count(par.productId)')
-                    ->andWhere('par.productId = :productId')
-                    ->andWhere('par.attributeId = :attributeId')
-                    ->andWhere('par.languageId = :languageId')
-                    ->andWhere('par.text = :text')
-                    ->setParameter('productId', $productId)
-                    ->setParameter('attributeId', $attributeId)
-                    ->setParameter('languageId', $languageId)
-                    ->setParameter('text', $text)
-                    ->getQuery()
-                    ->getSingleScalarResult() > 0;
+                ->andWhere('par.productId = :productId')
+                ->andWhere('par.attributeId = :attributeId')
+                ->andWhere('par.languageId = :languageId')
+                ->setParameter('productId', $productId)
+                ->setParameter('attributeId', $attributeId)
+                ->setParameter('languageId', $languageId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            return false;
-        } catch (NoResultException $e) {
-            return false;
+            return null;
         }
     }
 

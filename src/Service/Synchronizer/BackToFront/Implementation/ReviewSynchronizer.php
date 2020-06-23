@@ -76,7 +76,7 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
     /**
      *
      */
-    protected function clear()
+    protected function clear(): void
     {
         $this->reviewRepository->clear();
         $this->reviewFrontRepository->clear();

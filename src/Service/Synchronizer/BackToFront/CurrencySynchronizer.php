@@ -31,7 +31,7 @@ class CurrencySynchronizer
     /**
      *
      */
-    public function synchronizeAll()
+    public function synchronizeAll(): void
     {
         $currenciesFront = $this->currencyFrontRepository->findAll();
 

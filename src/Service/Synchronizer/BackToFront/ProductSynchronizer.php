@@ -45,7 +45,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     /**
      * @param bool $reloadImage
      */
-    public function reload($reloadImage = false)
+    public function reload($reloadImage = false): void
     {
         $this->clear($reloadImage);
         $this->synchronizeAll($reloadImage);

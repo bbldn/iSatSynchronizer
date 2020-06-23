@@ -57,7 +57,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
      * @param Address|null $address
      * @return AddressFront|null
      */
-    protected function getAddressFrontFromAddress(?Address $address)
+    protected function getAddressFrontFromAddress(?Address $address): ?AddressFront
     {
         if (null === $address) {
             return new AddressFront();
@@ -76,7 +76,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
      * @param int $customerBackId
      * @param int $frontId
      */
-    protected function createOrUpdateAddress(?Address $address, int $customerBackId, int $frontId)
+    protected function createOrUpdateAddress(?Address $address, int $customerBackId, int $frontId): void
     {
         if (null === $address) {
             $address = new Address();

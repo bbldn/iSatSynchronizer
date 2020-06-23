@@ -644,7 +644,10 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         if ($orderFront->getCustomerId() > 0) {
             try {
                 $password = rand(10000000, 99999999);
-                $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOne($orderFront->getCustomerId(), $password);
+                $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOne(
+                    $orderFront->getCustomerId(),
+                    $password
+                );
             } catch (CustomerFrontNotFoundException $e) {
                 $customerBack = null;
             }

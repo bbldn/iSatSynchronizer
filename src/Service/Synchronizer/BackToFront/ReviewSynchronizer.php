@@ -29,7 +29,7 @@ class ReviewSynchronizer extends ReviewBackSynchronizer
     /**
      *
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
     }

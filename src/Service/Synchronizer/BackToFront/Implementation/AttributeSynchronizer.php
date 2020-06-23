@@ -70,7 +70,7 @@ class AttributeSynchronizer extends BackToFrontSynchronizer
     /**
      * @param AttributeBack $attributeBack
      */
-    protected function synchronizeAttribute(AttributeBack $attributeBack)
+    protected function synchronizeAttribute(AttributeBack $attributeBack): void
     {
         $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getOptionId());
         $attributeFront = $this->getAttributeFrontFromAttribute($attribute);
@@ -78,6 +78,10 @@ class AttributeSynchronizer extends BackToFrontSynchronizer
         $this->createOrUpdateAttribute($attribute, $attributeBack->getOptionId(), $attributeFront->getAttributeId());
     }
 
+    /**
+     * @param Attribute|null $attribute
+     * @return AttributeFront
+     */
     protected function getAttributeFrontFromAttribute(?Attribute $attribute): AttributeFront
     {
         if (null === $attribute) {

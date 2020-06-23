@@ -572,7 +572,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductBack $productBack
      * @param int $productFrontId
      */
-    protected function synchronizeAttributes(ProductBack $productBack, int $productFrontId)
+    protected function synchronizeAttributes(ProductBack $productBack, int $productFrontId): void
     {
         $productAttributesBack = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
         foreach ($productAttributesBack as $productAttributeBack) {
@@ -581,22 +581,22 @@ class ProductSynchronizer extends BackToFrontSynchronizer
                 continue;
             }
 
-            $text = trim($productAttributeBack->getOptionValue());
-            $exists = $this->productAttributeFrontRepository->existsByProductIdAttributeIdLanguageIdText(
+            $productAttributeFront = $this->productAttributeFrontRepository->findOneByProductIdAttributeIdLanguageId(
                 $productFrontId,
                 $attribute->getFrontId(),
-                $this->storeFront->getDefaultLanguageId(),
-                $text
+                $this->storeFront->getDefaultLanguageId()
             );
-            if (true === $exists) {
-                continue;
+
+            if (null === $productAttributeFront) {
+                $productAttributeFront = new ProductAttributeFront();
             }
 
-            $productAttributeFront = new ProductAttributeFront();
             $productAttributeFront->setProductId($productFrontId);
             $productAttributeFront->setAttributeId($attribute->getFrontId());
             $productAttributeFront->setLanguageId($this->storeFront->getDefaultLanguageId());
-            $productAttributeFront->setText($text);
+            $productAttributeFront->setText(
+                trim($productAttributeBack->getOptionValue())
+            );
 
             $this->productAttributeFrontRepository->persistAndFlush($productAttributeFront);
         }

@@ -18,7 +18,7 @@ class FrontBackFileSystemFactory
         Filesystem $fileSystem,
         HttpClientInterface $httpClient,
         string $type = 'filesystem'
-    )
+    ): GetBackFileInterface
     {
         switch ($type) {
             case 'filesystem':
@@ -40,7 +40,7 @@ class FrontBackFileSystemFactory
         Filesystem $fileSystem,
         HttpClientInterface $httpClient,
         string $type = 'filesystem'
-    )
+    ): SaveFrontFileInterface
     {
         switch ($type) {
             case 'filesystem':

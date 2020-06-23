@@ -208,7 +208,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
      * @param int $backId
      * @param int $frontId
      */
-    protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId)
+    protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId): void
     {
         if (null === $customer) {
             $customer = new Customer();

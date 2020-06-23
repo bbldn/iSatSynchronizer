@@ -9,7 +9,7 @@ class OrderSynchronizer extends OrderBackSynchronizer
     /**
      * @param string $ids
      */
-    public function synchronizeByIds(string $ids)
+    public function synchronizeByIds(string $ids): void
     {
         $ordersBack = $this->orderBackRepository->findByIds($ids);
         foreach ($ordersBack as $orderBack) {
@@ -37,7 +37,7 @@ class OrderSynchronizer extends OrderBackSynchronizer
     /**
      *
      */
-    public function synchronizeAll()
+    public function synchronizeAll(): void
     {
         $ordersBack = $this->orderBackRepository->findWithoutIds($this->excludeCustomerIds);
         foreach ($ordersBack as $orderBack) {
