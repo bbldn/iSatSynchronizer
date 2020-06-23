@@ -139,8 +139,6 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
         CustomerFront $customerFront
     ): CustomerFront
     {
-        $addressFront = $this->addressSynchronizer->synchronizeByCustomerBack($customerBack);
-
         $saul = $customerFront->getSalt();
         if (null === $saul) {
             $saul = Str::random($this->saulLength);
@@ -174,7 +172,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
             $customerFront->setNewsletter(false);
         }
 
-        $customerFront->setAddressId($addressFront->getAddressId());
+        $customerFront->setAddressId(0);
         $customerFront->setCustomField(Filler::securityString(null));
 
         if (null === $customerFront->getIp()) {
@@ -201,8 +199,6 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
         }
 
         $this->customerFrontRepository->persistAndFlush($customerFront);
-        $addressFront->setCustomerId($customerFront->getCustomerId());
-        $this->addressFrontRepository->persistAndFlush($addressFront);
 
         return $customerFront;
     }
