@@ -19,12 +19,14 @@ class ProductAttribute
 
     /**
      * @var int|null $attributeId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`attribute_id`")
      */
     protected $attributeId;
 
     /**
      * @var int|null $languageId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`language_id`")
      */
     protected $languageId;
