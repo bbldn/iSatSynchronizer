@@ -43,33 +43,6 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     }
 
     /**
-     *
-     */
-    public function updatePriceAll()
-    {
-        $data = $this->productBackRepository->getBackPrices();
-        $this->productFrontRepository->updatePriceByData($data);
-    }
-
-    /**
-     * @param string $ids
-     */
-    public function updatePriceByIds(string $ids)
-    {
-        $data = $this->productBackRepository->getBackPricesByIds($ids);
-        $this->productFrontRepository->updatePriceByData($data);
-    }
-
-    /**
-     * @param string $ids
-     */
-    public function updatePriceByCategoryIds(string $ids)
-    {
-        $data = $this->productBackRepository->getBackPricesByCategoryIds($ids);
-        $this->productFrontRepository->updatePriceByData($data);
-    }
-
-    /**
      * @param bool $reloadImage
      */
     public function reload($reloadImage = false)
@@ -95,5 +68,29 @@ class ProductSynchronizer extends ProductBaseSynchronizer
         foreach ($productsBack as $productBack) {
             $this->synchronizeProduct($productBack, $synchronizeImage);
         }
+    }
+
+    /**
+     *
+     */
+    public function updatePriceAll(): void
+    {
+        parent::updatePriceAll();
+    }
+
+    /**
+     * @param string $ids
+     */
+    public function updatePriceByIds(string $ids): void
+    {
+        parent::updatePriceByIds($ids);
+    }
+
+    /**
+     * @param string $ids
+     */
+    public function updatePriceByCategoryIds(string $ids): void
+    {
+        parent::updatePriceByCategoryIds($ids);
     }
 }

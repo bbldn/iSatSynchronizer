@@ -721,4 +721,40 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         return $this->storeFront->getDefaultManufacturerId();
     }
+
+    /**
+     *
+     */
+    protected function updatePriceAll(): void
+    {
+        $products = $this->productBackRepository->getBackPrices();
+        $this->productFrontRepository->updatePriceByData($products);
+        foreach ($products as $value) {
+            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['product_id']);
+        }
+    }
+
+    /**
+     * @param string $ids
+     */
+    protected function updatePriceByIds(string $ids): void
+    {
+        $products = $this->productBackRepository->getBackPricesByIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+        foreach ($products as $value) {
+            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['product_id']);
+        }
+    }
+
+    /**
+     * @param string $ids
+     */
+    protected function updatePriceByCategoryIds(string $ids): void
+    {
+        $products = $this->productBackRepository->getBackPricesByCategoryIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+        foreach ($products as $value) {
+            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['product_id']);
+        }
+    }
 }
