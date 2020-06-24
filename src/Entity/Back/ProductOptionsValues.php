@@ -13,13 +13,13 @@ class ProductOptionsValues
     /**
      * @var int|null $optionId
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`optionID`")
      */
     protected $optionId;
 
     /**
      * @var int|null $productId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`productID`")
      */
     protected $productId;
