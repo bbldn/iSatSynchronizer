@@ -338,7 +338,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     protected function synchronizeProduct(ProductBack $productBack, $synchronizeImage = false): void
     {
         $this->synchronizeImage = $synchronizeImage;
-
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         $productFront = $this->getProductFrontFromProduct($product);
         $this->updateProductFrontFromProductBack($productBack, $productFront);
@@ -347,6 +346,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $productBack->getProductId(),
             $productFront->getProductId()
         );
+        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productBack->getProductId());
     }
 
     /**
@@ -499,8 +499,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
         $this->synchronizeAttributes($productBack, $productFrontId);
-
-        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productBack->getProductId());
 
         if (true === $this->productDiscontinuedTableExists) {
             if (true === $productBack->getDiscontinued()) {

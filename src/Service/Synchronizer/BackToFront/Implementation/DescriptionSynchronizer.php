@@ -57,7 +57,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
             return $text;
         }
 
-        preg_match_all('/src=\"(.+?)\"/', $text, $marches);
+        preg_match_all('/src=\"(https?:\/\/isat\.com\.ua.+?)\"/', $text, $marches);
         if (2 !== count($marches)) {
             return $text;
         }
