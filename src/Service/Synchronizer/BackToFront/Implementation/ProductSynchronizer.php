@@ -420,14 +420,13 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         }
 
         $this->productFrontRepository->persistAndFlush($productFront);
-        $productFrontId = $productFront->getProductId();
 
         $productDescriptionFront = $this->productDescriptionFrontRepository->find($productFront->getProductId());
         if (null === $productDescriptionFront) {
             $productDescriptionFront = new ProductDescriptionFront();
         }
 
-        $productDescriptionFront->setProductId($productFrontId);
+        $productDescriptionFront->setProductId($productFront->getProductId());
         $productDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $productDescriptionFront->setName($productName);
 
@@ -467,59 +466,59 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 
-        $productLayoutFront = $this->productLayoutFrontRepository->find($productFrontId);
+        $productLayoutFront = $this->productLayoutFrontRepository->find($productFront->getProductId());
         if (null === $productLayoutFront) {
             $productLayoutFront = new ProductLayoutFront();
         }
 
-        $productLayoutFront->setProductId($productFrontId);
+        $productLayoutFront->setProductId($productFront->getProductId());
         $productLayoutFront->setStoreId($this->storeFront->getDefaultStoreId());
         $productLayoutFront->setLayoutId($this->storeFront->getDefaultProductLayoutId());
 
         $this->productLayoutFrontRepository->persistAndFlush($productLayoutFront);
 
-        $productStoreFront = $this->productStoreFrontRepository->find($productFrontId);
+        $productStoreFront = $this->productStoreFrontRepository->find($productFront->getProductId());
         if (null === $productStoreFront) {
             $productStoreFront = new ProductStoreFront();
         }
 
-        $productStoreFront->setProductId($productFrontId);
+        $productStoreFront->setProductId($productFront->getProductId());
         $productStoreFront->setStoreId($this->storeFront->getDefaultStoreId());
 
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
-        $productCategoryFront = $this->productCategoryFrontRepository->find($productFrontId);
+        $productCategoryFront = $this->productCategoryFrontRepository->find($productFront->getProductId());
         if (null === $productCategoryFront) {
             $productCategoryFront = new ProductCategoryFront();
         }
 
-        $productCategoryFront->setProductId($productFrontId);
+        $productCategoryFront->setProductId($productFront->getProductId());
         $productCategoryFront->setCategoryId($categoryFrontId);
 
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
-        $this->synchronizeAttributes($productBack, $productFrontId);
+        $this->synchronizeAttributes($productBack, $productFront->getProductId());
 
         if (true === $this->productDiscontinuedTableExists) {
             if (true === $productBack->getDiscontinued()) {
-                $exists = $this->productDiscontinuedFrontRepository->exists($productFrontId);
+                $exists = $this->productDiscontinuedFrontRepository->exists($productFront->getProductId());
                 if (false === $exists) {
                     $productFrontDiscontinued = new ProductDiscontinuedFront();
-                    $productFrontDiscontinued->setProductId($productFrontId);
+                    $productFrontDiscontinued->setProductId($productFront->getProductId());
 
                     $this->productDiscontinuedFrontRepository->persistAndFlush($productFrontDiscontinued);
                 }
             } else {
-                $this->productDiscontinuedFrontRepository->removeById($productFrontId);
+                $this->productDiscontinuedFrontRepository->removeById($productFront->getProductId());
             }
         }
 
         if (true === $this->seoUrlTableExists) {
             $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
-                "product_id={$productFrontId}",
+                "product_id={$productFront->getProductId()}",
                 $this->storeFront->getDefaultLanguageId()
             );
-            $this->synchronizeSeoUrl($seoUrl, $productFrontId, $productBack);
+            $this->synchronizeSeoUrl($seoUrl, $productFront->getProductId(), $productBack);
         }
 
         if (true === $this->synchronizeImage) {
