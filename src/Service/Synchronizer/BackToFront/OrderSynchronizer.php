@@ -7,6 +7,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\OrderSynchronizer as Ord
 class OrderSynchronizer extends OrderBackSynchronizer
 {
     /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $ordersBack = $this->orderBackRepository->findWithoutIds($this->excludeCustomerIds);
+        foreach ($ordersBack as $orderBack) {
+            $this->synchronizeOrder($orderBack);
+        }
+    }
+
+    /**
      * @param string $ids
      */
     public function synchronizeByIds(string $ids): void
@@ -20,15 +31,6 @@ class OrderSynchronizer extends OrderBackSynchronizer
     /**
      *
      */
-    public function reload(): void
-    {
-        $this->clear();
-        $this->synchronizeAll();
-    }
-
-    /**
-     *
-     */
     public function clear(): void
     {
         parent::clear();
@@ -37,11 +39,9 @@ class OrderSynchronizer extends OrderBackSynchronizer
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function reload(): void
     {
-        $ordersBack = $this->orderBackRepository->findWithoutIds($this->excludeCustomerIds);
-        foreach ($ordersBack as $orderBack) {
-            $this->synchronizeOrder($orderBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 }

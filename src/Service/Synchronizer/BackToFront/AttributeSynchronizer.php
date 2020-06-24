@@ -7,6 +7,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\AttributeSynchronizer as
 class AttributeSynchronizer extends AttributeBaseSynchronizer
 {
     /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $attributesBack = $this->attributeBackRepository->findAll();
+        foreach ($attributesBack as $attributeBack) {
+            $this->synchronizeAttribute($attributeBack);
+        }
+    }
+
+    /**
      * @param string $ids
      */
     public function synchronizeById(string $ids): void
@@ -20,15 +31,6 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer
     /**
      *
      */
-    public function reload(): void
-    {
-        $this->clear();
-        $this->synchronizeAll();
-    }
-
-    /**
-     *
-     */
     public function clear(): void
     {
         parent::clear();
@@ -37,11 +39,9 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function reload(): void
     {
-        $attributesBack = $this->attributeBackRepository->findAll();
-        foreach ($attributesBack as $attributeBack) {
-            $this->synchronizeAttribute($attributeBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 }

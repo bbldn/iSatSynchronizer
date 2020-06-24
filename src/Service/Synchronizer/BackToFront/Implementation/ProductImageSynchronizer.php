@@ -93,7 +93,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
     public function synchronizeProductImage(
         ProductPicturesBack $productPicturesBack,
         ProductFront $productFront,
-        $number = 1
+        int $number = 1
     ): ?ProductImageFront
     {
         return $this->synchronize($productPicturesBack->getEnlargedVm(), $productFront, $number);

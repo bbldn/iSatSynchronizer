@@ -285,7 +285,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /**
      * @param bool $clearImage
      */
-    protected function clear($clearImage = false): void
+    protected function clear(bool $clearImage = false): void
     {
         $this->synchronizeImage = $clearImage;
         $this->productRepository->removeAll();
@@ -335,7 +335,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductBack $productBack
      * @param bool $synchronizeImage
      */
-    protected function synchronizeProduct(ProductBack $productBack, $synchronizeImage = false): void
+    protected function synchronizeProduct(ProductBack $productBack, bool $synchronizeImage = false): void
     {
         $this->synchronizeImage = $synchronizeImage;
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());

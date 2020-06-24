@@ -9,6 +9,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\AddressSynchronizer as A
 class AddressSynchronizer extends AddressBaseSynchronizer
 {
     /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $customersBack = $this->customerBackRepository->findAll();
+        foreach ($customersBack as $customerBack) {
+            $this->synchronizeByCustomerBack($customerBack);
+        }
+    }
+
+    /**
      * @param CustomerBack $customerBack
      * @return AddressFront
      */
@@ -20,17 +31,6 @@ class AddressSynchronizer extends AddressBaseSynchronizer
         $this->createOrUpdateAddress($address, $customerBack->getId(), $addressFront->getAddressId());
 
         return $addressFront;
-    }
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void
-    {
-        $customersBack = $this->customerBackRepository->findAll();
-        foreach ($customersBack as $customerBack) {
-            $this->synchronizeByCustomerBack($customerBack);
-        }
     }
 
     /**

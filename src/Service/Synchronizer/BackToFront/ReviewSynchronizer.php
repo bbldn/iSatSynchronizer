@@ -7,6 +7,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\ReviewSynchronizer as Re
 class ReviewSynchronizer extends ReviewBackSynchronizer
 {
     /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $reviewsBack = $this->reviewBackRepository->findAll();
+        foreach ($reviewsBack as $reviewBack) {
+            $this->synchronizeReviewBack($reviewBack);
+        }
+    }
+
+    /**
      * @param string $ids
      */
     public function synchronizeByIds(string $ids): void
@@ -20,15 +31,6 @@ class ReviewSynchronizer extends ReviewBackSynchronizer
     /**
      *
      */
-    public function reload(): void
-    {
-        $this->clear();
-        $this->synchronizeAll();
-    }
-
-    /**
-     *
-     */
     public function clear(): void
     {
         parent::clear();
@@ -37,11 +39,9 @@ class ReviewSynchronizer extends ReviewBackSynchronizer
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function reload(): void
     {
-        $reviewsBack = $this->reviewBackRepository->findAll();
-        foreach ($reviewsBack as $reviewBack) {
-            $this->synchronizeReviewBack($reviewBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 }

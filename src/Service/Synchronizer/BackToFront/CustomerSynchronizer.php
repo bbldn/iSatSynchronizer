@@ -8,6 +8,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\CustomerSynchronizer as 
 class CustomerSynchronizer extends CustomerBaseSynchronizer
 {
     /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $customersBack = $this->customerBackRepository->findAll();
+        foreach ($customersBack as $customerBack) {
+            $this->synchronizeCustomer($customerBack);
+        }
+    }
+
+    /**
      * @param string $ids
      */
     public function synchronizeByIds(string $ids): void
@@ -21,15 +32,6 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer
     /**
      *
      */
-    public function reload(): void
-    {
-        $this->clear();
-        $this->synchronizeAll();
-    }
-
-    /**
-     *
-     */
     public function clear(): void
     {
         parent::clear();
@@ -38,12 +40,10 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function reload(): void
     {
-        $customersBack = $this->customerBackRepository->findAll();
-        foreach ($customersBack as $customerBack) {
-            $this->synchronizeCustomer($customerBack);
-        }
+        $this->clear();
+        $this->synchronizeAll();
     }
 
     /**

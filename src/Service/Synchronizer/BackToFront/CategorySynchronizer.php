@@ -7,6 +7,18 @@ use App\Service\Synchronizer\BackToFront\Implementation\CategorySynchronizer as 
 class CategorySynchronizer extends CategoryBaseSynchronizer
 {
     /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeAll(bool $synchronizeImage = false): void
+    {
+        $this->urls = $this->getSeoUrlFromProducts();
+        $categoriesBack = $this->categoryBackRepository->findAll();
+        foreach ($categoriesBack as $categoryBack) {
+            $this->synchronizeCategory($categoryBack, $synchronizeImage);
+        }
+    }
+
+    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */
@@ -14,35 +26,6 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
     {
         $this->urls = $this->getSeoUrlFromProducts();
         $categoriesBack = $this->categoryBackRepository->findByIds($ids);
-        foreach ($categoriesBack as $categoryBack) {
-            $this->synchronizeCategory($categoryBack, $synchronizeImage);
-        }
-    }
-
-    /**
-     * @param bool $synchronizeImage
-     */
-    public function reload(bool $synchronizeImage = false): void
-    {
-        $this->clear($synchronizeImage);
-        $this->synchronizeAll($synchronizeImage);
-    }
-
-    /**
-     * @param bool $clearImage
-     */
-    public function clear(bool $clearImage = false): void
-    {
-        parent::clear($clearImage);
-    }
-
-    /**
-     * @param bool $synchronizeImage
-     */
-    public function synchronizeAll(bool $synchronizeImage = false): void
-    {
-        $this->urls = $this->getSeoUrlFromProducts();
-        $categoriesBack = $this->categoryBackRepository->findAll();
         foreach ($categoriesBack as $categoryBack) {
             $this->synchronizeCategory($categoryBack, $synchronizeImage);
         }
@@ -58,5 +41,22 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
         foreach ($categoriesBack as $categoryBack) {
             $this->synchronizeCategory($categoryBack, $synchronizeImage);
         }
+    }
+
+    /**
+     * @param bool $clearImage
+     */
+    public function clear(bool $clearImage = false): void
+    {
+        parent::clear($clearImage);
+    }
+
+    /**
+     * @param bool $synchronizeImage
+     */
+    public function reload(bool $synchronizeImage = false): void
+    {
+        $this->clear($synchronizeImage);
+        $this->synchronizeAll($synchronizeImage);
     }
 }

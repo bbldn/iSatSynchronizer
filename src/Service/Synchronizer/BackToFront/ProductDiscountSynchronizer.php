@@ -7,6 +7,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductDiscountSynchroni
 class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
 {
     /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $productDiscountsBack = $this->productDiscountBackRepository->findAll();
+        foreach ($productDiscountsBack as $productDiscountBack) {
+            $this->synchronizeProductDiscount($productDiscountBack);
+        }
+    }
+
+    /**
      * @param int $productBackId
      */
     public function synchronizeByProductBackId(int $productBackId): void
@@ -18,17 +29,6 @@ class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
             $productDiscountsBack[] = $productDiscountBack;
         }
 
-        foreach ($productDiscountsBack as $productDiscountBack) {
-            $this->synchronizeProductDiscount($productDiscountBack);
-        }
-    }
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void
-    {
-        $productDiscountsBack = $this->productDiscountBackRepository->findAll();
         foreach ($productDiscountsBack as $productDiscountBack) {
             $this->synchronizeProductDiscount($productDiscountBack);
         }
