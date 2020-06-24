@@ -146,7 +146,12 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
 
         $parsedFIO = $this->parseFIO($customerBack->getFio());
 
-        $customerFront->setCustomerGroupId($customerBack->getGroupId());
+        if (0 === $customerBack->getGroupId()) {
+            $customerFront->setCustomerGroupId($this->storeFront->getDefaultCustomerGroupId());
+        } else {
+            $customerFront->setCustomerGroupId($customerBack->getGroupId());
+        }
+
         $customerFront->setStoreId($this->storeFront->getDefaultStoreId());
         $customerFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $customerFront->setFirstName($parsedFIO['firstName']);
