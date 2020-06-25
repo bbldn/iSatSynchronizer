@@ -414,9 +414,10 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $courses = $this->getCurrentCourse();
             $currentCourse = $courses[Store::convertFrontToBackCurrency($currencyCode)];
 
-            $orderNum = 0;
             if (null !== $orderBack->getId()) {
                 $orderNum = $orderBack->getId();
+            } else {
+                $orderNum = 0;
             }
 
             $currentOrderBack->setType('Покупка');
