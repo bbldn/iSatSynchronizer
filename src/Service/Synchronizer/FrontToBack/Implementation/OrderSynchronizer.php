@@ -438,13 +438,22 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $currentOrderBack->setVipNum(Filler::securityString(null));
 
             if (null === $orderFront->getDateAdded()) {
-                $time = time();
+                $currentOrderBack->setTime(
+                    time()
+                );
+                $message = "Date added is null: {$orderFront->getOrderId()}";
+                $this->logger->error(ExceptionFormatter::f($message));
             } else {
-                $time = $orderFront->getDateAdded()->getTimestamp();
+                $currentOrderBack->setTime(
+                    $orderFront->getDateAdded()->getTimestamp()
+                );
             }
 
-            $currentOrderBack->setTime($time);
-            $currentOrderBack->setStatus($orderFront->getOrderStatusId());
+            if (null === $orderFront->getOrderStatusId() || 0 === $orderFront->getOrderStatusId()) {
+                $currentOrderBack->setStatus(1);
+            } else {
+                $currentOrderBack->setStatus($orderFront->getOrderStatusId());
+            }
 
             if (null === $currentOrderBack->getComments()) {
                 $currentOrderBack->setComments(Filler::securityString(null));
