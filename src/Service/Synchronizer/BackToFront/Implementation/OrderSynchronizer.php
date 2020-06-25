@@ -397,7 +397,10 @@ class OrderSynchronizer extends BackToFrontSynchronizer
                 return $orderFront;
             }
 
-            $productDescriptionFront = $this->productDescriptionFrontRepository->find($product->getFrontId());
+            $productDescriptionFront = $this->productDescriptionFrontRepository->findOneByProductFrontIdAndLanguageId(
+                $product->getFrontId(),
+                $this->storeFront->getDefaultLanguageId()
+            );
 
             if (null === $productDescriptionFront) {
                 $message = "Product Description front with id: {$product->getFrontId()} not found";
