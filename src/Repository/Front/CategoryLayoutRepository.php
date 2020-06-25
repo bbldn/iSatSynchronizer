@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\CategoryLayout;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method CategoryLayout|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,26 @@ class CategoryLayoutRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CategoryLayout::class);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $storeId
+     * @return CategoryLayout|null
+     */
+    public function findOneByCategoryFrontIdAndStoreId(int $categoryId, int $storeId): ?CategoryLayout
+    {
+        try {
+            return $this->createQueryBuilder('cl')
+                ->andWhere('cl.categoryId = :categoryId')
+                ->andWhere('cl.storeId = :storeId')
+                ->setParameter('categoryId', $categoryId)
+                ->setParameter('storeId', $storeId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }

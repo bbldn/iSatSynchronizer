@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\ProductLayout;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method ProductLayout|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,26 @@ class ProductLayoutRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductLayout::class);
+    }
+
+    /**
+     * @param int $productId
+     * @param int $storeId
+     * @return ProductLayout|null
+     */
+    public function findOneByProductFrontIdAndStoreId(int $productId, int $storeId): ?ProductLayout
+    {
+        try {
+            return $this->createQueryBuilder('pl')
+                ->andWhere('pl.productId = :productId')
+                ->setParameter('productId', $productId)
+                ->andWhere('pl.storeId = :storeId')
+                ->setParameter('storeId', $storeId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }

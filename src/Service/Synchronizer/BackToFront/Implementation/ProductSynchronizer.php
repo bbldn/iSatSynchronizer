@@ -421,7 +421,11 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productFrontRepository->persistAndFlush($productFront);
 
-        $productDescriptionFront = $this->productDescriptionFrontRepository->find($productFront->getProductId());
+        $productDescriptionFront = $this->productDescriptionFrontRepository->findOneByProductFrontIdAndLanguageId(
+            $productFront->getProductId(),
+            $this->storeFront->getDefaultLanguageId()
+        );
+
         if (null === $productDescriptionFront) {
             $productDescriptionFront = new ProductDescriptionFront();
         }
@@ -466,7 +470,11 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 
-        $productLayoutFront = $this->productLayoutFrontRepository->find($productFront->getProductId());
+        $productLayoutFront = $this->productLayoutFrontRepository->findOneByProductFrontIdAndStoreId(
+            $productFront->getProductId(),
+            $this->storeFront->getDefaultStoreId()
+        );
+
         if (null === $productLayoutFront) {
             $productLayoutFront = new ProductLayoutFront();
         }
@@ -477,7 +485,11 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productLayoutFrontRepository->persistAndFlush($productLayoutFront);
 
-        $productStoreFront = $this->productStoreFrontRepository->find($productFront->getProductId());
+        $productStoreFront = $this->productStoreFrontRepository->findOneByProductFrontIdAndStoreId(
+            $productFront->getProductId(),
+            $this->storeFront->getDefaultStoreId()
+        );
+
         if (null === $productStoreFront) {
             $productStoreFront = new ProductStoreFront();
         }
@@ -487,7 +499,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
-        $productCategoryFront = $this->productCategoryFrontRepository->find($productFront->getProductId());
+        $productCategoryFront = $this->productCategoryFrontRepository->findOneByProductFrontIdAndCategoryId(
+            $productFront->getProductId(),
+            $categoryFrontId
+        );
         if (null === $productCategoryFront) {
             $productCategoryFront = new ProductCategoryFront();
         }
@@ -554,7 +569,11 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             return null;
         }
 
-        $categoryDescriptionFront = $this->categoryDescriptionFrontRepository->find($frontId);
+        $categoryDescriptionFront = $this->categoryDescriptionFrontRepository->findOneByCategoryFrontIdAndLanguageId(
+            $frontId,
+            $this->storeFront->getDefaultLanguageId()
+        );
+
         if (null === $categoryDescriptionFront) {
             $message = "Category description front is null";
             $this->logger->error(ExceptionFormatter::f($message));

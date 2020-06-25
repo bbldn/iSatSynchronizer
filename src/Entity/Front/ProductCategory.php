@@ -19,6 +19,7 @@ class ProductCategory
 
     /**
      * @var int|null $categoryId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="category_id")
      */
     protected $categoryId;

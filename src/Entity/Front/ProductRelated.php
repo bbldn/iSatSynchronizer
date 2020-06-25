@@ -19,6 +19,7 @@ class ProductRelated
 
     /**
      * @var int|null $relatedId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`related_id`")
      */
     protected $relatedId;

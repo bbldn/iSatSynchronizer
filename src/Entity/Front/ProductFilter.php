@@ -19,6 +19,7 @@ class ProductFilter
 
     /**
      * @var int|null $productId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`filter_id`")
      */
     protected $filterId;

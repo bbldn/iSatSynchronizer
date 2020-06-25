@@ -29,6 +29,27 @@ class AttributeDescriptionRepository extends FrontRepository
     }
 
     /**
+     * @param int $attributeId
+     * @param int $languageId
+     * @return AttributeDescription|null
+     */
+    public function findOneByAttributeIdAndLanguageId(int $attributeId, int $languageId): ?AttributeDescription
+    {
+        try {
+            return $this->createQueryBuilder('ad')
+                ->andWhere('ad.attributeId = :attributeId')
+                ->setParameter('attributeId', $attributeId)
+                ->andWhere('ad.languageId = :languageId')
+                ->setParameter('languageId', $languageId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
+    }
+
+    /**
      * @param string $value
      * @return AttributeDescription|null
      */

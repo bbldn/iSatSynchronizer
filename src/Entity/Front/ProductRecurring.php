@@ -19,12 +19,14 @@ class ProductRecurring
 
     /**
      * @var int|null $recurringId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`recurring_id`")
      */
     protected $recurringId;
 
     /**
      * @var int|null $customerGroupId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`customer_group_id`")
      */
     protected $customerGroupId;

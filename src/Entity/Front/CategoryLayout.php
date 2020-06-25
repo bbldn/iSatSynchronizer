@@ -19,6 +19,7 @@ class CategoryLayout
 
     /**
      * @var int|null $storeId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`store_id`")
      */
     protected $storeId;

@@ -20,6 +20,7 @@ class CustomerWishList
 
     /**
      * @var int|null $productId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`product_id`")
      */
     protected $productId;

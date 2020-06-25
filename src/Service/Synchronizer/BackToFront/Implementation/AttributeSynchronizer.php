@@ -112,7 +112,10 @@ class AttributeSynchronizer extends BackToFrontSynchronizer
 
         $this->attributeFrontRepository->persistAndFlush($attributeFront);
 
-        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->find($attributeFront->getAttributeId());
+        $attributeDescriptionFront = $this->attributeDescriptionFrontRepository->findOneByAttributeIdAndLanguageId(
+            $attributeFront->getAttributeId(),
+            $this->storeFront->getDefaultLanguageId()
+        );
         if (null === $attributeDescriptionFront) {
             $attributeDescriptionFront = new AttributeDescriptionFront();
         }

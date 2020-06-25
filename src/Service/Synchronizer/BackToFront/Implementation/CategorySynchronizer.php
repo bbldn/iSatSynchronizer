@@ -230,7 +230,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
         $categoryFrontId = $categoryFront->getCategoryId();
 
         if ($this->storeFront->getDefaultCategoryFrontId() !== $parentId) {
-            $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId(
+            $categoryPath = $this->categoryPathFrontRepository->findOneByCategoryFrontIdAndPathId(
                 $categoryFrontId,
                 $parentId
             );
@@ -246,7 +246,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
             $this->categoryPathFrontRepository->persistAndFlush($categoryPath);
         }
 
-        $categoryPath = $this->categoryPathFrontRepository->findByCategoryFrontIdAndPathId(
+        $categoryPath = $this->categoryPathFrontRepository->findOneByCategoryFrontIdAndPathId(
             $categoryFrontId,
             $categoryFrontId
         );
@@ -261,7 +261,11 @@ class CategorySynchronizer extends BackToFrontSynchronizer
         $categoryPath->setLevel(1);
         $this->categoryPathFrontRepository->persistAndFlush($categoryPath);
 
-        $categoryDescription = $this->categoryDescriptionFrontRepository->find($categoryFrontId);
+        $categoryDescription = $this->categoryDescriptionFrontRepository->findOneByCategoryFrontIdAndLanguageId(
+            $categoryFrontId,
+            $this->storeFront->getDefaultLanguageId()
+        );
+
         if (null === $categoryDescription) {
             $categoryDescription = new CategoryDescription();
         }
@@ -282,7 +286,11 @@ class CategorySynchronizer extends BackToFrontSynchronizer
 
         $this->categoryDescriptionFrontRepository->persistAndFlush($categoryDescription);
 
-        $categoryLayout = $this->categoryLayoutFrontRepository->find($categoryFrontId);
+        $categoryLayout = $this->categoryLayoutFrontRepository->findOneByCategoryFrontIdAndStoreId(
+            $categoryFrontId,
+            $this->storeFront->getDefaultStoreId()
+        );
+
         if (null === $categoryLayout) {
             $categoryLayout = new CategoryLayout();
         }
@@ -293,7 +301,11 @@ class CategorySynchronizer extends BackToFrontSynchronizer
 
         $this->categoryLayoutFrontRepository->persistAndFlush($categoryLayout);
 
-        $categoryStore = $this->categoryStoreFrontRepository->find($categoryFrontId);
+        $categoryStore = $this->categoryStoreFrontRepository->findOneByCategoryFrontIdAndStoreId(
+            $categoryFrontId,
+            $this->storeFront->getDefaultStoreId()
+        );
+
         if (null === $categoryStore) {
             $categoryStore = new CategoryStore();
         }

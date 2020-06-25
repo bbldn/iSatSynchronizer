@@ -19,6 +19,7 @@ class CategoryPath
 
     /**
      * @var int|null $pathId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`path_id`")
      */
     protected $pathId;

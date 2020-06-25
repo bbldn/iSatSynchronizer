@@ -13,13 +13,13 @@ class OrderStatus
     /**
      * @var int|null $orderStatusId
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", name="`order_status_id`")
      */
     protected $orderStatusId;
 
     /**
      * @var int|null $languageId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`language_id`")
      */
     protected $languageId;

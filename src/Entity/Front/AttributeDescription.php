@@ -19,6 +19,7 @@ class AttributeDescription
 
     /**
      * @var int|null $languageId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`language_id`")
      */
     protected $languageId;

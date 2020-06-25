@@ -19,6 +19,7 @@ class BuyersGroupsShowPrices
 
     /**
      * @var int|null $groupIdShowPrice
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`group_id_show_price`")
      */
     protected $groupIdShowPrice;

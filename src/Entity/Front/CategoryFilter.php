@@ -19,6 +19,7 @@ class CategoryFilter
 
     /**
      * @var int|null $filterId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`filter_id`")
      */
     protected $filterId;

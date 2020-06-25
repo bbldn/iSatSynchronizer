@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\CategoryStore;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method CategoryStore|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,26 @@ class CategoryStoreRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CategoryStore::class);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $storeId
+     * @return CategoryStore|null
+     */
+    public function findOneByCategoryFrontIdAndStoreId(int $categoryId, int $storeId): ?CategoryStore
+    {
+        try {
+            return $this->createQueryBuilder('cs')
+                ->andWhere('cs.categoryId = :categoryId')
+                ->andWhere('cs.storeId = :storeId')
+                ->setParameter('categoryId', $categoryId)
+                ->setParameter('storeId', $storeId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }

@@ -19,6 +19,7 @@ class ProductDownload
 
     /**
      * @var int|null $downloadId
+     * @ORM\Id()
      * @ORM\Column(type="integer", name="`download_id`")
      */
     protected $downloadId;

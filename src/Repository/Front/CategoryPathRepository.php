@@ -33,7 +33,7 @@ class CategoryPathRepository extends FrontRepository
      * @param int $pathId
      * @return CategoryPath|null
      */
-    public function findByCategoryFrontIdAndPathId(int $categoryId, int $pathId): ?CategoryPath
+    public function findOneByCategoryFrontIdAndPathId(int $categoryId, int $pathId): ?CategoryPath
     {
         try {
             return $this->createQueryBuilder('cp')

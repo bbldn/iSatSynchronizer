@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\CategoryDescription;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method CategoryDescription|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,5 +26,26 @@ class CategoryDescriptionRepository extends FrontRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CategoryDescription::class);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $languageId
+     * @return CategoryDescription|null
+     */
+    public function findOneByCategoryFrontIdAndLanguageId(int $categoryId, int $languageId): ?CategoryDescription
+    {
+        try {
+            return $this->createQueryBuilder('cd')
+                ->andWhere('cd.categoryId = :categoryId')
+                ->andWhere('cd.languageId = :languageId')
+                ->setParameter('categoryId', $categoryId)
+                ->setParameter('languageId', $languageId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }
