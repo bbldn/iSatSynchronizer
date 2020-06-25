@@ -58,8 +58,11 @@ class OrderGamePostRepository extends BackRepository
     {
         $queryBuilder = $this->createQueryBuilder('o');
 
-        return $queryBuilder->where($queryBuilder->expr()->notIn('o.clientId', $ids))
-            ->andWhere('o.documentType = 2')
+        if (count($ids) > 0) {
+            $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->notIn('o.clientId', $ids));
+        }
+
+        return $queryBuilder->andWhere('o.documentType = 2')
             ->andWhere('o.id = o.orderNum')
             ->getQuery()
             ->getResult();
