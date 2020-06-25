@@ -90,7 +90,7 @@ class ProductService extends ApiService
         $result = [
             'ok' => true,
             'data' => [
-                'categories' => CategoryTreeGenerator::generate($this->categoryBackRepository->findSortByParent()),
+                'categories' => CategoryTreeGenerator::generate($this->categoryBackRepository->findSortedByParent()),
             ]
         ];
 

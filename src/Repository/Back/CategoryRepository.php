@@ -30,7 +30,7 @@ class CategoryRepository extends BackRepository
     /**
      * @return Category[]
      */
-    public function findSortByParent(): array
+    public function findSortedByParent(): array
     {
         return $this->createQueryBuilder('c')
             ->orderBy('c.parent', 'ASC')
