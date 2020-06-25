@@ -618,7 +618,10 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         }
 
         $categoryProduct = $productCategories[0];
-        $categoryDescription = $this->categoryDescriptionFrontRepository->find($categoryProduct->getCategoryId());
+        $categoryDescription = $this->categoryDescriptionFrontRepository->findOneByCategoryFrontIdAndLanguageId(
+            $categoryProduct->getCategoryId(),
+            $this->storeFront->getDefaultLanguageId()
+        );
 
         if (null === $categoryDescription) {
             $error = "Category Description with id: {$categoryProduct->getCategoryId()} does not found";
