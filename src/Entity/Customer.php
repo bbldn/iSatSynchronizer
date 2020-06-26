@@ -27,6 +27,13 @@ class Customer
      */
     protected $frontId;
 
+
+    /**
+     * @var bool|null $isOrder
+     * @ORM\Column(type="boolean", name="`is_order`")
+     */
+    protected $isOrder = false;
+
     /**
      * @var int|null $backId
      * @ORM\Column(type="integer", name="`back_id`")
@@ -87,6 +94,25 @@ class Customer
     public function setBackId(int $backId): self
     {
         $this->backId = $backId;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsOrder(): ?bool
+    {
+        return $this->isOrder;
+    }
+
+    /**
+     * @param bool|null $isOrder
+     * @return Customer
+     */
+    public function setIsOrder(?bool $isOrder): self
+    {
+        $this->isOrder = $isOrder;
 
         return $this;
     }

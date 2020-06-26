@@ -13,6 +13,7 @@ use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Service\Synchronizer\FrontToBack\FrontToBackSynchronizer;
 use DateTime;
 use Illuminate\Support\Str;
@@ -25,6 +26,9 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
 
     /** @var StoreBack $storeBack */
     protected $storeBack;
+
+    /** @var OrderFrontRepository $orderFrontRepository */
+    protected $orderFrontRepository;
 
     /** @var AddressRepositoryFront $addressRepositoryFront */
     protected $addressRepositoryFront;
@@ -42,6 +46,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
      * CustomerSynchronizer constructor.
      * @param LoggerInterface $logger
      * @param StoreBack $storeBack
+     * @param OrderFrontRepository $orderFrontRepository
      * @param AddressRepositoryFront $addressRepositoryFront
      * @param CustomerFrontRepository $customerFrontRepository
      * @param CustomerBackRepository $customerBackRepository
@@ -50,6 +55,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
     public function __construct(
         LoggerInterface $logger,
         StoreBack $storeBack,
+        OrderFrontRepository $orderFrontRepository,
         AddressRepositoryFront $addressRepositoryFront,
         CustomerFrontRepository $customerFrontRepository,
         CustomerBackRepository $customerBackRepository,
@@ -58,6 +64,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
     {
         $this->logger = $logger;
         $this->storeBack = $storeBack;
+        $this->orderFrontRepository = $orderFrontRepository;
         $this->addressRepositoryFront = $addressRepositoryFront;
         $this->customerFrontRepository = $customerFrontRepository;
         $this->customerBackRepository = $customerBackRepository;
@@ -231,11 +238,31 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
     }
 
     /**
+     * @param OrderFront $orderFront
+     * @return CustomerBack
+     */
+    protected function synchronizeOneByOrderFront(OrderFront $orderFront): CustomerBack
+    {
+        $customer = $this->customerRepository->findOneByFrontIdAndOrder($orderFront->getOrderId());
+        $customerBack = $this->getCustomerBackFromCustomer($customer);
+        $this->updateCustomerBackFromOrderFront($orderFront, $customerBack);
+        $this->createOrUpdateCustomer($customer, $customerBack->getId(), $orderFront->getOrderId(), true);
+
+        return $customerBack;
+    }
+
+    /**
      * @param Customer|null $customer
      * @param int $backId
      * @param int $frontId
+     * @param bool $isOrder
      */
-    protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId): void
+    protected function createOrUpdateCustomer(
+        ?Customer $customer,
+        int $backId,
+        int $frontId,
+        bool $isOrder = false
+    ): void
     {
         if (null === $customer) {
             $customer = new Customer();
@@ -243,6 +270,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
 
         $customer->setBackId($backId);
         $customer->setFrontId($frontId);
+        $customer->setIsOrder($isOrder);
 
         $this->customerRepository->persistAndFlush($customer);
     }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Customer;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Customer|null find($id, $lockMode = null, $lockVersion = null)
@@ -27,5 +28,24 @@ class CustomerRepository extends EntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Customer::class);
+    }
+
+    /**
+     * @param int $value
+     * @return Customer|null
+     */
+    public function findOneByFrontIdAndOrder(int $value): ?Customer
+    {
+        try {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.frontId = :val')
+                ->setParameter('val', $value)
+                ->andWhere('c.isOrder = true')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }

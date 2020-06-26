@@ -2,11 +2,11 @@
 
 namespace App\Service\Synchronizer\FrontToBack\Implementation;
 
-use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Exception\CustomerFrontNotFoundException;
+use App\Exception\OrderFrontNotFoundException;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
@@ -287,7 +287,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     /**
      *
      */
-    public function clear(): void
+    protected function clear(): void
     {
         $this->orderRepository->removeAll();
         $this->orderFrontRepository->removeAll();
@@ -342,6 +342,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
 
     /**
      * @param OrderFront $orderFront
+     * @throws OrderFrontNotFoundException
      */
     protected function synchronizeOrder(OrderFront $orderFront): void
     {
@@ -374,6 +375,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
      * @param OrderFront $orderFront
      * @param OrderBack $orderBack
      * @return OrderBack
+     * @throws OrderFrontNotFoundException
      */
     protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
@@ -661,6 +663,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     /**
      * @param OrderFront $orderFront
      * @return int
+     * @throws OrderFrontNotFoundException
      */
     protected function getClientIdByFrontCustomerPhone(OrderFront $orderFront): int
     {
@@ -672,10 +675,9 @@ class OrderSynchronizer extends FrontToBackSynchronizer
 
         if ($orderFront->getCustomerId() > 0) {
             try {
-                $password = rand(10000000, 99999999);
                 $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOne(
                     $orderFront->getCustomerId(),
-                    $password
+                    $this->storeBack->generatePassword()
                 );
             } catch (CustomerFrontNotFoundException $e) {
                 $customerBack = null;
@@ -686,8 +688,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             }
         }
 
-        $customerBack = new CustomerBack();
-        $this->customerFrontToBackSynchronizer->updateCustomerBackFromOrderFront($orderFront, $customerBack);
+        $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOneByOrderFrontId($orderFront->getOrderId());
 
         return $customerBack->getId();
     }
