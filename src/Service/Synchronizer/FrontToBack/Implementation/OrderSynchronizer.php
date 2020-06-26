@@ -518,8 +518,20 @@ class OrderSynchronizer extends FrontToBackSynchronizer
                 $currentOrderBack->setStreet(Filler::securityString(null));
                 $currentOrderBack->setHouse(Filler::securityString(null));
             } else {
-                $currentOrderBack->setRegion($orderFront->getPaymentCountry());
-                $currentOrderBack->setCity($orderFront->getPaymentZone());
+                $region = trim($orderFront->getPaymentCountry());
+                if (0 === mb_strlen($region)) {
+                    $currentOrderBack->setRegion($this->storeBack->getDefaultRegion());
+                } else {
+                    $currentOrderBack->setRegion($region);
+                }
+
+                $city = trim($orderFront->getPaymentZone());
+                if (0 === mb_strlen($city)) {
+                    $currentOrderBack->setCity($this->storeBack->getDefaultCity());
+                } else {
+                    $currentOrderBack->setCity($city);
+                }
+
                 $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
             }
 

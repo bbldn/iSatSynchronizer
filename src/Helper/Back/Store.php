@@ -52,6 +52,12 @@ class Store extends StoreBase
     /** @var array $defaultImagesPaths */
     protected $defaultImagesPaths = ['/images_big/', '/products_pictures/'];
 
+    /** @var string $defaultRegion */
+    protected $defaultRegion = 'Киевская область';
+
+    /** @var string $defaultRegion */
+    protected $defaultCity = 'Киев';
+
     /**
      * Store constructor.
      * @param ContainerBagInterface $params
@@ -285,6 +291,43 @@ class Store extends StoreBase
     public function setDefaultChatNameColor(string $defaultChatNameColor): void
     {
         $this->defaultChatNameColor = $defaultChatNameColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultRegion(): string
+    {
+        return $this->defaultRegion;
+    }
+
+    /**
+     * @param string $defaultRegion
+     * @return Store
+     */
+    public function setDefaultRegion(string $defaultRegion): Store
+    {
+        $this->defaultRegion = $defaultRegion;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultCity(): string
+    {
+        return $this->defaultCity;
+    }
+
+    /**
+     * @param string $defaultCity
+     * @return Store
+     */
+    public function setDefaultCity(string $defaultCity): self
+    {
+        $this->defaultCity = $defaultCity;
+
+        return $this;
     }
 
     /**
