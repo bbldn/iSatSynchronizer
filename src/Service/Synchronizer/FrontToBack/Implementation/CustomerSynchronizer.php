@@ -76,14 +76,21 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
     {
         $time = time();
 
-        $customerBack->setLogin(Filler::securityString(Store::parseLogin($orderFront->getEmail())));
+        $fio = Filler::trim($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
+        $customerBack->setLogin(Filler::trim(Store::parseLogin($orderFront->getEmail())));
         $customerBack->setPassword(rand(100000, 999999));
-        $customerBack->setFio($orderFront->getLastName() . ' ' . $orderFront->getFirstName());
+
+        if (null === $customerBack->getFio()) {
+            $customerBack->setFio($fio);
+        } else if (mb_strlen($fio) > 0) {
+            $customerBack->setFio($fio);
+        }
+
         $customerBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
-        $customerBack->setRegion(Filler::securityString(null));
-        $customerBack->setCity($orderFront->getShippingCity());
-        $customerBack->setStreet($orderFront->getShippingAddress1());
-        $customerBack->setHouse(Filler::securityString(null));
+        $customerBack->setRegion(Filler::trim(null));
+        $customerBack->setCity(Filler::trim($orderFront->getShippingCity()));
+        $customerBack->setStreet(Filler::trim($orderFront->getShippingAddress1()));
+        $customerBack->setHouse(Filler::trim(null));
         $customerBack->setMail($orderFront->getEmail());
         $customerBack->setCode(Str::lower(Str::random(32)));
         $customerBack->setActive(true);
@@ -92,12 +99,12 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setDateAccBegin($time);
         $customerBack->setDateAccEnd($time);
         $customerBack->setVip('0');
-        $customerBack->setImageSmall(Filler::securityString(null));
-        $customerBack->setImageBig(Filler::securityString(null));
-        $customerBack->setInfo(Filler::securityString(null));
-        $customerBack->setIp(Filler::securityString(null));
-        $customerBack->setTimestampOnline(Filler::securityString(null));
-        $customerBack->setTimestampActive(Filler::securityString(null));
+        $customerBack->setImageSmall(Filler::trim(null));
+        $customerBack->setImageBig(Filler::trim(null));
+        $customerBack->setInfo(Filler::trim(null));
+        $customerBack->setIp(Filler::trim(null));
+        $customerBack->setTimestampOnline(Filler::trim(null));
+        $customerBack->setTimestampActive(Filler::trim(null));
         $customerBack->setChatNameColor('006084');
         $customerBack->setMoneyReal($this->storeBack->getDefaultMoneyReal());
         $customerBack->setMoneyVirtual($this->storeBack->getDefaultMoneyVirtual());
@@ -107,10 +114,10 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setGroupId($this->storeBack->getDefaultGroupId());
         $customerBack->setGroupExtraId($this->storeBack->getDefaultGroupExtraId());
         $customerBack->setShopId($this->storeBack->getDefaultShopId());
-        $customerBack->setComment('');
+        $customerBack->setComment(Filler::trim(null));
         $customerBack->setDelivery($this->storeBack->getDefaultDelivery());
         $customerBack->setPayment($this->storeBack->getDefaultPayment());
-        $customerBack->setWarehouse(Filler::securityString(null));
+        $customerBack->setWarehouse(Filler::trim(null));
 
         $this->customerBackRepository->persistAndFlush($customerBack);
 
@@ -166,29 +173,30 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $addressFront = $this->addressRepositoryFront->find($customerFront->getAddressId());
 
         if (null !== $addressFront) {
-            $city = $addressFront->getCity();
-            $street = $addressFront->getAddress1();
+            $city = Filler::trim($addressFront->getCity());
+            $street = Filler::trim($addressFront->getAddress1());
         } else {
-            $city = Filler::securityString(null);
-            $street = Filler::securityString(null);
+            $city = Filler::trim(null);
+            $street = Filler::trim(null);
         }
 
         $time = time();
         if (null === $customerBack->getLogin()) {
-            $customerBack->setLogin(Filler::securityString(Store::parseLogin($customerFront->getEmail())));
+            $customerBack->setLogin(Filler::trim(Store::parseLogin($customerFront->getEmail())));
         }
 
         $customerBack->setPassword($password);
 
         if (null === $customerBack->getFio()) {
-            $customerBack->setFio($customerFront->getLastName() . ' ' . $customerFront->getFirstName());
+            $fio = Filler::trim("{$customerFront->getLastName()} {$customerFront->getFirstName()}");
+            $customerBack->setFio($fio);
         }
 
         $customerBack->setPhone(Store::normalizePhone($customerFront->getTelephone()));
         $customerBack->setRegion(Filler::securityString(null));
         $customerBack->setCity($city);
         $customerBack->setStreet($street);
-        $customerBack->setHouse(Filler::securityString(null));
+        $customerBack->setHouse(Filler::trim(null));
         $customerBack->setMail($customerFront->getEmail());
         $customerBack->setCode(Str::lower(Str::random(32)));
         $customerBack->setActive(true);
@@ -197,12 +205,12 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setDateAccBegin($time);
         $customerBack->setDateAccEnd($time);
         $customerBack->setVip('0');
-        $customerBack->setImageSmall(Filler::securityString(null));
-        $customerBack->setImageBig(Filler::securityString(null));
-        $customerBack->setInfo(Filler::securityString(null));
-        $customerBack->setIp(Filler::securityString(null));
-        $customerBack->setTimestampOnline(Filler::securityString(null));
-        $customerBack->setTimestampActive(Filler::securityString(null));
+        $customerBack->setImageSmall(Filler::trim(null));
+        $customerBack->setImageBig(Filler::trim(null));
+        $customerBack->setInfo(Filler::trim(null));
+        $customerBack->setIp(Filler::trim(null));
+        $customerBack->setTimestampOnline(Filler::trim(null));
+        $customerBack->setTimestampActive(Filler::trim(null));
         $customerBack->setChatNameColor('006084');
         $customerBack->setMoneyReal($this->storeBack->getDefaultMoneyReal());
         $customerBack->setMoneyVirtual($this->storeBack->getDefaultMoneyVirtual());
@@ -215,7 +223,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setComment('');
         $customerBack->setDelivery($this->storeBack->getDefaultDelivery());
         $customerBack->setPayment($this->storeBack->getDefaultPayment());
-        $customerBack->setWarehouse(Filler::securityString(null));
+        $customerBack->setWarehouse(Filler::trim(null));
 
         $this->customerBackRepository->persistAndFlush($customerBack);
 
