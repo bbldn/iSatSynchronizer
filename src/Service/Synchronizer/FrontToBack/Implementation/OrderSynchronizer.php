@@ -420,7 +420,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
                 $orderNum = 0;
             }
 
-            $price = round($orderProductFront->getPrice() * $currentCourse);
+            $price = round($orderProductFront->getPrice() * $currentCourse) / $currentCourse;
 
             $currentOrderBack->setType('Покупка');
             $currentOrderBack->setProductName($orderProductFront->getName());
@@ -593,7 +593,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
                 $currentOrderBack->setInvoiceSent(new DateTime('0000-00-00 00:00:00'));
             }
 
-            $currentOrderBack->setCurrencyValue(1);
+            $currentOrderBack->setCurrencyValue($currentCourse);
             $currentOrderBack->setCurrencyValueWhenPurchasing(json_encode($courses));
             $currentOrderBack->setShippingPrice(0);
             $currentOrderBack->setShippingPriceOld(0);
