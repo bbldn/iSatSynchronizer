@@ -26,4 +26,18 @@ class OrderHistoryRepository extends FrontRepository
     {
         parent::__construct($registry, OrderHistory::class);
     }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function removeAllByOrderFrontId(int $id)
+    {
+        return $this->createQueryBuilder('oh')
+            ->andWhere('oh.orderId = :val')
+            ->setParameter('val', $id)
+            ->delete()
+            ->getQuery()
+            ->execute();
+    }
 }

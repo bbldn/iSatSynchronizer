@@ -7,6 +7,7 @@ use App\Entity\Front\Customer as CustomerFront;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
 use App\Entity\Front\OrderSimpleFields as OrderSimpleFieldsFront;
+use App\Entity\Front\OrderHistory as OrderHistoryFront;
 use App\Entity\Order;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
@@ -22,6 +23,7 @@ use App\Repository\CustomerRepository;
 use App\Repository\Front\CountryRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use App\Repository\Front\OrderHistoryRepository as OrderHistoryFrontRepository;
 use App\Repository\Front\OrderProductRepository as OrderProductFrontRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Repository\Front\OrderSimpleFieldsRepository as OrderSimpleFieldsFrontRepository;
@@ -85,6 +87,9 @@ class OrderSynchronizer extends BackToFrontSynchronizer
     /** @var OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository */
     protected $orderSimpleFieldsFrontRepository;
 
+    /** @var OrderHistoryFrontRepository $orderHistoryFrontRepository */
+    protected $orderHistoryFrontRepository;
+
     /** @var ZoneFrontRepository $zoneFrontRepository */
     protected $zoneFrontRepository;
 
@@ -113,6 +118,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
      * @param CountryRepository $countryRepository
      * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
      * @param ZoneFrontRepository $zoneFrontRepository
+     * @param OrderHistoryFrontRepository $orderHistoryFrontRepository
      * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      */
     public function __construct(
@@ -133,6 +139,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         CountryRepository $countryRepository,
         OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
         ZoneFrontRepository $zoneFrontRepository,
+        OrderHistoryFrontRepository $orderHistoryFrontRepository,
         CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
     )
     {
@@ -153,6 +160,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         $this->countryRepository = $countryRepository;
         $this->orderSimpleFieldsFrontRepository = $orderSimpleFieldsFrontRepository;
         $this->zoneFrontRepository = $zoneFrontRepository;
+        $this->orderHistoryFrontRepository = $orderHistoryFrontRepository;
         $this->customerBackToFrontSynchronizer = $customerBackToFrontSynchronizer;
     }
 
@@ -375,6 +383,17 @@ class OrderSynchronizer extends BackToFrontSynchronizer
                 $this->orderSimpleFieldsFrontRepository->persistAndFlush($orderSimpleFieldsFront);
             }
         }
+
+        $this->orderHistoryFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
+
+        $orderHistoryFront = new OrderHistoryFront();
+        $orderHistoryFront->setOrderId($orderFront->getOrderId());
+        $orderHistoryFront->setOrderStatusId($orderFront->getOrderStatusId());
+        $orderHistoryFront->setNotify(false);
+        $orderHistoryFront->setComment(Filler::securityString(null));
+        $orderHistoryFront->setDateAdded(new DateTime());
+
+        $this->orderHistoryFrontRepository->persistAndFlush($orderHistoryFront);
 
         $ordersBack = $this->orderBackRepository->findByOrderNum($mainOrderBack->getId());
 
