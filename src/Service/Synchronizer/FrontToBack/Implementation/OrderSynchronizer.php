@@ -423,7 +423,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $currentOrderBack->setType('Покупка');
             $currentOrderBack->setProductName($orderProductFront->getName());
             $currentOrderBack->setProductId($product->getBackId());
-            $currentOrderBack->setPrice($orderProductFront->getPrice());
+            $currentOrderBack->setPrice(round($orderProductFront->getPrice()));
             $currentOrderBack->setAmount($orderProductFront->getQuantity());
             $currentOrderBack->setCurrencyName(Store::convertFrontToBackCurrency($currencyCode));
             $currentOrderBack->setParentName(
