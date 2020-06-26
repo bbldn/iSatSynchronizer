@@ -107,7 +107,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setGroupId($this->storeBack->getDefaultGroupId());
         $customerBack->setGroupExtraId($this->storeBack->getDefaultGroupExtraId());
         $customerBack->setShopId($this->storeBack->getDefaultShopId());
-        $customerBack->setComment(Filler::securityString(null));
+        $customerBack->setComment('');
         $customerBack->setDelivery($this->storeBack->getDefaultDelivery());
         $customerBack->setPayment($this->storeBack->getDefaultPayment());
         $customerBack->setWarehouse(Filler::securityString(null));
