@@ -410,9 +410,14 @@ class OrderSynchronizer extends FrontToBackSynchronizer
                 $currentOrderBack = new OrderBack();
             }
 
-            $currencyCode = $orderFront->getCurrencyCode();
             $courses = $this->getCurrentCourse();
-            $currentCourse = $courses[Store::convertFrontToBackCurrency($currencyCode)];
+            $currencyName = Store::convertFrontToBackCurrency($orderFront->getCurrencyCode());
+
+            if (true === key_exists($currencyName, $courses)) {
+                $currentCourse = $courses[$currencyName];
+            } else {
+                $currentCourse = 1.0;
+            }
 
             if (null !== $orderBack->getId()) {
                 $orderNum = $orderBack->getId();
@@ -423,28 +428,26 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $price = round($orderProductFront->getPrice() * $currentCourse) / $currentCourse;
 
             $currentOrderBack->setType('Покупка');
-            $currentOrderBack->setProductName($orderProductFront->getName());
+            $currentOrderBack->setProductName(Filler::trim($orderProductFront->getName()));
             $currentOrderBack->setProductId($product->getBackId());
             $currentOrderBack->setPrice($price);
             $currentOrderBack->setAmount($orderProductFront->getQuantity());
-            $currentOrderBack->setCurrencyName(Store::convertFrontToBackCurrency($currencyCode));
+            $currentOrderBack->setCurrencyName($currencyName);
             $currentOrderBack->setParentName(
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId())
             );
             $currentOrderBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
             $currentOrderBack->setFio("{$orderFront->getLastName()} {$orderFront->getFirstName()}");
-            $currentOrderBack->setStreet($orderFront->getShippingAddress1());
-            $currentOrderBack->setHouse(Filler::securityString(null));
+            $currentOrderBack->setStreet(Filler::trim($orderFront->getShippingAddress1()));
+            $currentOrderBack->setHouse(Filler::trim(null));
             $currentOrderBack->setMail($orderFront->getEmail());
-            $currentOrderBack->setWhant(Filler::securityString($orderFront->getComment()));
-            $currentOrderBack->setVipNum(Filler::securityString(null));
+            $currentOrderBack->setWhant(Filler::trim($orderFront->getComment()));
+            $currentOrderBack->setVipNum(Filler::trim(null));
 
             if (null === $orderFront->getDateAdded()) {
                 $currentOrderBack->setTime(
                     time()
                 );
-                $message = "Date added is null: {$orderFront->getOrderId()}";
-                $this->logger->error(ExceptionFormatter::f($message));
             } else {
                 $currentOrderBack->setTime(
                     $orderFront->getDateAdded()->getTimestamp()
@@ -452,13 +455,13 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             }
 
             if (null === $orderFront->getOrderStatusId() || 0 === $orderFront->getOrderStatusId()) {
-                $currentOrderBack->setStatus(1);
+                $currentOrderBack->setStatus($this->storeBack->getDefaultOrderStatusid());
             } else {
                 $currentOrderBack->setStatus($orderFront->getOrderStatusId());
             }
 
             if (null === $currentOrderBack->getComments()) {
-                $currentOrderBack->setComments(Filler::securityString(null));
+                $currentOrderBack->setComments(Filler::trim(null));
             }
 
             if (null === $currentOrderBack->getArchive()) {
@@ -474,9 +477,8 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $paymentId = PaymentConverter::frontToBack(Filler::securityString($orderFront->getPaymentCode()));
             $currentOrderBack->setPayment($paymentId);
 
-            $shippingCode = Filler::securityString($orderFront->getShippingCode());
-            $shippingId = ShippingConverter::frontToBack(Filler::securityString($orderFront->getShippingCode()));
-            $currentOrderBack->setDelivery($shippingId);
+            $shippingCode = Filler::trim($orderFront->getShippingCode());
+            $currentOrderBack->setDelivery(ShippingConverter::frontToBack($shippingCode));
 
             if ('novaposhta.novaposhta' === $shippingCode) {
                 if (true === $this->orderSimpleFieldsFrontRepository->tableExists()) {
@@ -490,56 +492,56 @@ class OrderSynchronizer extends FrontToBackSynchronizer
 
             if (null !== $orderSimpleFields) {
                 if (null === $orderSimpleFields->getOblast()) {
-                    $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                    $currentOrderBack->setRegion(Filler::trim($orderFront->getPaymentCountry()));
                 } else {
-                    $country = $this->countryFrontRepository->find($orderSimpleFields->getOblast());
+                    $country = $this->countryFrontRepository->find(Filler::trim($orderSimpleFields->getOblast()));
                     if (null === $country) {
-                        $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                        $currentOrderBack->setRegion(Filler::trim($orderFront->getPaymentCountry()));
                     } else {
-                        $currentOrderBack->setRegion($country->getName());
+                        $currentOrderBack->setRegion(Filler::trim($country->getName()));
                     }
                 }
 
                 if (null === $orderSimpleFields->getGorod()) {
-                    $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                    $currentOrderBack->setRegion(Filler::trim($orderFront->getPaymentCountry()));
                 } else {
                     $zone = $this->zoneFrontRepository->find($orderSimpleFields->getGorod());
                     if (null === $zone) {
-                        $currentOrderBack->setRegion($orderFront->getPaymentCountry());
+                        $currentOrderBack->setRegion(Filler::trim($orderFront->getPaymentCountry()));
                     } else {
-                        $currentOrderBack->setCity($zone->getName());
+                        $currentOrderBack->setCity(Filler::trim($zone->getName()));
                     }
                 }
 
                 if (null === $orderSimpleFields->getOtdelenie()) {
-                    $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
+                    $currentOrderBack->setWarehouse(Filler::trim($orderFront->getShippingCity()));
                 } else {
-                    $currentOrderBack->setWarehouse((string)$orderSimpleFields->getOtdelenie());
+                    $currentOrderBack->setWarehouse(Filler::trim($orderSimpleFields->getOtdelenie()));
                 }
 
-                $currentOrderBack->setStreet(Filler::securityString(null));
-                $currentOrderBack->setHouse(Filler::securityString(null));
+                $currentOrderBack->setStreet(Filler::trim(null));
+                $currentOrderBack->setHouse(Filler::trim(null));
             } else {
-                $region = trim($orderFront->getPaymentCountry());
+                $region = Filler::trim($orderFront->getPaymentCountry());
                 if (0 === mb_strlen($region)) {
                     $currentOrderBack->setRegion($this->storeBack->getDefaultRegion());
                 } else {
                     $currentOrderBack->setRegion($region);
                 }
 
-                $city = trim($orderFront->getPaymentZone());
+                $city = Filler::trim($orderFront->getPaymentZone());
                 if (0 === mb_strlen($city)) {
                     $currentOrderBack->setCity($this->storeBack->getDefaultCity());
                 } else {
                     $currentOrderBack->setCity($city);
                 }
 
-                $currentOrderBack->setWarehouse(Filler::securityString($orderFront->getShippingCity()));
+                $currentOrderBack->setWarehouse(Filler::trim($orderFront->getShippingCity()));
             }
 
             $currentOrderBack->setOrderNum($orderNum);
 
-            $tracking = Filler::securityString($orderFront->getTracking());
+            $tracking = Filler::trim($orderFront->getTracking());
 
             if (0 === mb_strlen($tracking)) {
                 $currentOrderBack->setTrackNumber($tracking);
@@ -560,7 +562,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             }
 
             if (null === $currentOrderBack->getSerialNum()) {
-                $currentOrderBack->setSerialNum('');
+                $currentOrderBack->setSerialNum(Filler::trim(null));
             }
 
             if (null === $currentOrderBack->getShopId()) {
@@ -599,7 +601,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $currentOrderBack->setShippingPriceOld(0);
 
             if (null === $currentOrderBack->getShippingCurrencyName()) {
-                $currentOrderBack->setShippingCurrencyName(Filler::securityString(null));
+                $currentOrderBack->setShippingCurrencyName(Filler::trim(null));
             }
 
             if (null === $currentOrderBack->getShippingCurrencyValue()) {

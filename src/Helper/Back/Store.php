@@ -58,6 +58,9 @@ class Store extends StoreBase
     /** @var string $defaultRegion */
     protected $defaultCity = 'Киев';
 
+    /** @var int $defaultOrderStatusid */
+    protected $defaultOrderStatusid = 1;
+
     /**
      * Store constructor.
      * @param ContainerBagInterface $params
@@ -326,6 +329,25 @@ class Store extends StoreBase
     public function setDefaultCity(string $defaultCity): self
     {
         $this->defaultCity = $defaultCity;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultOrderStatusid(): int
+    {
+        return $this->defaultOrderStatusid;
+    }
+
+    /**
+     * @param int $defaultOrderStatusid
+     * @return Store
+     */
+    public function setDefaultOrderStatusid(int $defaultOrderStatusid): self
+    {
+        $this->defaultOrderStatusid = $defaultOrderStatusid;
 
         return $this;
     }
