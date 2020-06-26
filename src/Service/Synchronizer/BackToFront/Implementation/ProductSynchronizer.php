@@ -378,13 +378,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductFront $productFront
     ): ProductFront
     {
-        $quantity = $productBack->getInStock();
-
-        if ($quantity > 0) {
-            $stockAvailableStatusId = $this->storeFront->getDefaultProductAvailableStatusId();
-        } else {
-            $stockAvailableStatusId = $this->storeFront->getDefaultProductNotAvailableStatusId();
-        }
+        $stockAvailableStatusId = $this->storeFront->getDefaultProductAvailableStatusId();
 
         $productFront->setModel('art' . $productBack->getProductId());
         $productFront->setSku($productBack->getProductId());
@@ -394,7 +388,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setIsbn(Filler::securityString(null));
         $productFront->setMpn(Filler::securityString(null));
         $productFront->setLocation(Filler::securityString(null));
-        $productFront->setQuantity($quantity);
+        $productFront->setQuantity(999999);
         $productFront->setStockStatusId($stockAvailableStatusId);
         $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
         $productFront->setManufacturerId($this->getManufacturerId($productName));
