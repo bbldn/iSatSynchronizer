@@ -439,7 +439,9 @@ class OrderSynchronizer extends FrontToBackSynchronizer
                 $this->getMainCategoryNameByProductFrontId($orderProductFront->getProductId())
             );
             $currentOrderBack->setPhone(Store::normalizePhone($orderFront->getTelephone()));
-            $currentOrderBack->setFio("{$orderFront->getLastName()} {$orderFront->getFirstName()}");
+            $currentOrderBack->setFio(
+                Filler::trim("{$orderFront->getLastName()} {$orderFront->getFirstName()}")
+            );
             $currentOrderBack->setStreet(Filler::trim($orderFront->getShippingAddress1()));
             $currentOrderBack->setHouse(Filler::trim(null));
             $currentOrderBack->setMail($orderFront->getEmail());
