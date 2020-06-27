@@ -98,7 +98,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setCity(Filler::trim($orderFront->getShippingCity()));
         $customerBack->setStreet(Filler::trim($orderFront->getShippingAddress1()));
         $customerBack->setHouse(Filler::trim(null));
-        $customerBack->setMail($orderFront->getEmail());
+        $customerBack->setMail(Filler::trim($orderFront->getEmail()));
         $customerBack->setCode(Str::lower(Str::random(32)));
         $customerBack->setActive(true);
         $customerBack->setAccount(false);
@@ -204,7 +204,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setCity($city);
         $customerBack->setStreet($street);
         $customerBack->setHouse(Filler::trim(null));
-        $customerBack->setMail($customerFront->getEmail());
+        $customerBack->setMail(Filler::trim($customerFront->getEmail()));
         $customerBack->setCode(Str::lower(Str::random(32)));
         $customerBack->setActive(true);
         $customerBack->setAccount(false);
