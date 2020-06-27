@@ -38,6 +38,6 @@ class CustomerSynchronizer extends CustomerBackSynchronizer
             throw new OrderFrontNotFoundException($message);
         }
 
-        $this->synchronizeOneByOrderFront($orderFront);
+        return $this->synchronizeOneByOrderFront($orderFront);
     }
 }

@@ -445,16 +445,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $currentOrderBack->setMail($orderFront->getEmail());
             $currentOrderBack->setWhant(Filler::trim($orderFront->getComment()));
             $currentOrderBack->setVipNum(Filler::trim(null));
-
-            if (null === $orderFront->getDateAdded()) {
-                $currentOrderBack->setTime(
-                    time()
-                );
-            } else {
-                $currentOrderBack->setTime(
-                    $orderFront->getDateAdded()->getTimestamp()
-                );
-            }
+            $currentOrderBack->setTime(time());
 
             if (null === $orderFront->getOrderStatusId() || 0 === $orderFront->getOrderStatusId()) {
                 $currentOrderBack->setStatus($this->storeBack->getDefaultOrderStatusid());
@@ -667,8 +658,10 @@ class OrderSynchronizer extends FrontToBackSynchronizer
      */
     protected function getClientIdByFrontCustomerPhone(OrderFront $orderFront): int
     {
-        $phone = Store::normalizePhone($orderFront->getTelephone());
-        $customerBack = $this->customerBackRepository->findOneByTelephone($phone);
+        $customerBack = $this->customerBackRepository->findOneByTelephone(
+            Store::normalizePhone($orderFront->getTelephone())
+        );
+
         if (null !== $customerBack) {
             return $customerBack->getId();
         }
