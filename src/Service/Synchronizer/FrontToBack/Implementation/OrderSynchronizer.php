@@ -469,7 +469,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             }
             $currentOrderBack->setClientId($this->getClientIdByFrontCustomerPhone($orderFront));
 
-            $paymentId = PaymentConverter::frontToBack(Filler::securityString($orderFront->getPaymentCode()));
+            $paymentId = PaymentConverter::frontToBack(Filler::trim($orderFront->getPaymentCode()));
             $currentOrderBack->setPayment($paymentId);
 
             $shippingCode = Filler::trim($orderFront->getShippingCode());

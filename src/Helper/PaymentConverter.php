@@ -16,7 +16,7 @@ class PaymentConverter
             case 5: //Оплата через LiqPay
                 return 'liqpay';
             case 7: //Оплата при получении
-                return 'cod';
+                return 'cheque';
             case 11: //Оплата на карту Приватбанка
                 return 'privatbank';
             case 13: //Оплата курьеру наличными
@@ -50,6 +50,8 @@ class PaymentConverter
                 return 14;
             case 'pumb': //Оплата на карту ПУМБ
                 return 15;
+            case 'cheque':
+                return 7;
             case 'cod': //Оплата при получении
             default:
                 return 4;
