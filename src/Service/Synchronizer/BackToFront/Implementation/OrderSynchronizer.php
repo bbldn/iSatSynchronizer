@@ -273,7 +273,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
 
         $countryName = Filler::securityString($mainOrderBack->getRegion());
 
-        $countryFront = $this->countryRepository->findOneByCountry($countryName);
+        $countryFront = $this->countryRepository->findOneByName($countryName);
         if (null === $countryFront) {
             $countryId = $this->storeFront->getDefaultCountryId();
         } else {

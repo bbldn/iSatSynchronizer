@@ -27,7 +27,7 @@ class CountryRepository extends FrontRepository
      * @param string $name
      * @return Country|null
      */
-    public function findOneByCountry(string $name): ?Country
+    public function findOneByName(string $name): ?Country
     {
         try {
             return $this->createQueryBuilder('c')
@@ -39,5 +39,16 @@ class CountryRepository extends FrontRepository
         } catch (NonUniqueResultException $e) {
             return null;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCountries(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.countryId, c.name')
+            ->getQuery()
+            ->getArrayResult();
     }
 }

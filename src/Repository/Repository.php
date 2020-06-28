@@ -83,7 +83,16 @@ abstract class Repository extends ServiceEntityRepository
      */
     public function resetAutoIncrements(): bool
     {
-        $sql = "ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = 1;";
+        return $this->setAutoIncrements(1);
+    }
+
+    /**
+     * @param int $value
+     * @return bool
+     */
+    public function setAutoIncrements(int $value): bool
+    {
+        $sql = "ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = {$value};";
 
         try {
             return $this->getEntityManager()->getConnection()->prepare($sql)->execute();

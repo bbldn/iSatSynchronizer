@@ -43,4 +43,15 @@ class ZoneRepository extends FrontRepository
             return null;
         }
     }
+
+    /**
+     * @return array
+     */
+    public function getZones(): array
+    {
+        return $this->createQueryBuilder('z')
+            ->select('z.zoneId, z.name')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
