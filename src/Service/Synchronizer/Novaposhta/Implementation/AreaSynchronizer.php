@@ -12,9 +12,6 @@ use Psr\Log\LoggerInterface;
 
 class AreaSynchronizer extends NovaposhtaSynchronizer
 {
-    /** @var LoggerInterface $logger */
-    protected $logger;
-
     /** @var CountryFrontRepository $countryFrontRepository */
     protected $countryFrontRepository;
 
@@ -33,7 +30,7 @@ class AreaSynchronizer extends NovaposhtaSynchronizer
         NovaPoshtaApi2 $novaPoshtaApi2
     )
     {
-        $this->logger = $logger;
+        parent::__construct($logger);
         $this->countryFrontRepository = $countryFrontRepository;
         $this->novaPoshtaApi2 = $novaPoshtaApi2;
     }
@@ -51,43 +48,30 @@ class AreaSynchronizer extends NovaposhtaSynchronizer
             return;
         }
 
-        if (false === key_exists('success', $response)) {
-            $message = 'Response does not include the key `success`';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
-        }
-
-        if ($response['success'] !== true) {
-            $this->handleError($response);
-
-            return;
-        }
-
-        if (false === is_array($response['data'])) {
-            $message = '`data` is not array';
-            $this->logger->error(ExceptionFormatter::f($message));
-
+        if (false === $this->validateResponse($response)) {
             return;
         }
 
 
         foreach ($response['data'] as $key => $item) {
-            if (false === is_array($response['data'])) {
-                $message = "Item with number: {$key} is not null";
-                $this->logger->error(ExceptionFormatter::f($message));
-                continue;
-            }
-
-            $this->createCountry($item, $key);
+            $this->createOrUpdateCountry($item, $key);
         }
+    }
+
+    /**
+     *
+     */
+    protected function clear(): void
+    {
+        $this->countryFrontRepository->removeAll();
+        $this->countryFrontRepository->setAutoIncrements(300001);
     }
 
     /**
      * @param array $item
      * @param int $key
      */
-    protected function createCountry(array $item, int $key): void
+    protected function createOrUpdateCountry(array $item, int $key): void
     {
         if (false === key_exists('DescriptionRu', $item)) {
             $message = "Item with number: {$key} is not include `DescriptionRu`";
@@ -115,42 +99,5 @@ class AreaSynchronizer extends NovaposhtaSynchronizer
         $countryFront->setStatus(true);
 
         $this->countryFrontRepository->persistAndFlush($countryFront);
-    }
-
-    /**
-     * @param array $response
-     */
-    protected function handleError(array $response): void
-    {
-        if (false === key_exists('errors', $response)) {
-            $this->logger->error(ExceptionFormatter::f('Response does not include the key `errors`'));
-
-            return;
-        }
-
-        if (false === key_exists('errorCodes', $response)) {
-            $this->logger->error(ExceptionFormatter::f('Response does not include the key `errorCodes`'));
-
-            return;
-        }
-
-        $errors = $response['errors'];
-        $errorCodes = $response['errorCodes'];
-
-        if (count($errors) === count($errorCodes)) {
-            $message = 'The number of errors is not equal to the number of error codes';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
-        }
-    }
-
-    /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->countryFrontRepository->removeAll();
-        $this->countryFrontRepository->setAutoIncrements(300001);
     }
 }

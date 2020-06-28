@@ -2,9 +2,9 @@
 
 namespace App\Service\Synchronizer\Novaposhta;
 
-use App\Service\Synchronizer\Novaposhta\Implementation\WarehousesSynchronizer as WarehousesBaseSynchronizer;
+use App\Service\Synchronizer\Novaposhta\Implementation\WarehouseSynchronizer as WarehouseBaseSynchronizer;
 
-class WarehousesSynchronizer extends WarehousesBaseSynchronizer
+class WarehouseSynchronizer extends WarehouseBaseSynchronizer
 {
     /**
      *
@@ -12,6 +12,14 @@ class WarehousesSynchronizer extends WarehousesBaseSynchronizer
     public function synchronizeAll(): void
     {
         parent::synchronizeAll();
+    }
+
+    /**
+     *
+     */
+    public function clear(): void
+    {
+        parent::clear();
     }
 
     /**

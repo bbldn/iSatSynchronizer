@@ -85,5 +85,5 @@ services:
         arguments:
         - '%env(string:NOVAPOSHTA_API_KEY)%'
         - 'ru'
-        - true
+        - false
         - 'curl'

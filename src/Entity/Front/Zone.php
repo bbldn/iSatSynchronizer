@@ -43,10 +43,10 @@ class Zone
     protected $status;
 
     /**
-     * @var string|null $cityRef
-     * @ORM\Column(type="string", name="`city_ref`", length=36)
+     * @var string|null $ref
+     * @ORM\Column(type="string", name="`ref`", length=36)
      */
-    protected $cityRef;
+    protected $ref;
 
     /**
      * @return int|null
@@ -135,18 +135,18 @@ class Zone
     /**
      * @return string|null
      */
-    public function getCityRef(): ?string
+    public function getRef(): ?string
     {
-        return $this->cityRef;
+        return $this->ref;
     }
 
     /**
-     * @param string|null $cityRef
+     * @param string|null $ref
      * @return Zone
      */
-    public function setCityRef(?string $cityRef): self
+    public function setRef(?string $ref): self
     {
-        $this->cityRef = $cityRef;
+        $this->ref = $ref;
 
         return $this;
     }

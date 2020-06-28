@@ -14,9 +14,6 @@ use Psr\Log\LoggerInterface;
 
 class CitySynchronizer extends NovaposhtaSynchronizer
 {
-    /** @var LoggerInterface $logger */
-    protected $logger;
-
     /** @var ZoneFrontRepository $zoneFrontRepository */
     protected $zoneFrontRepository;
 
@@ -43,7 +40,7 @@ class CitySynchronizer extends NovaposhtaSynchronizer
         NovaPoshtaApi2 $novaPoshtaApi2
     )
     {
-        $this->logger = $logger;
+        parent::__construct($logger);
         $this->zoneFrontRepository = $zoneFrontRepository;
         $this->countryFrontRepository = $countryFrontRepository;
         $this->novaPoshtaApi2 = $novaPoshtaApi2;
@@ -62,55 +59,34 @@ class CitySynchronizer extends NovaposhtaSynchronizer
             return;
         }
 
-        if (false === key_exists('success', $response)) {
-            $message = 'Response does not include the key `success`';
-            $this->logger->error(ExceptionFormatter::f($message));
-
+        if (false === $this->validateResponse($response)) {
             return;
         }
 
-        if ($response['success'] !== true) {
-            $this->handleError($response);
-
-            return;
+        $countries = $this->countryFrontRepository->getCountries();
+        foreach ($countries as $country) {
+            $this->countryNamesById[$country['name']] = $country['countryId'];
         }
-
-        if (false === is_array($response['data'])) {
-            $message = '`data` is not array';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
-        }
-
-        $this->loadCountries();
 
         foreach ($response['data'] as $key => $item) {
-            if (false === is_array($response['data'])) {
-                $message = "Item with number: {$key} is not null";
-                $this->logger->error(ExceptionFormatter::f($message));
-                continue;
-            }
-
-            $this->createZone($item, $key);
+            $this->createOrUpdateZone($item, $key);
         }
     }
 
     /**
      *
      */
-    protected function loadCountries(): void
+    protected function clear(): void
     {
-        $countries = $this->countryFrontRepository->getCountries();
-        foreach ($countries as $country) {
-            $this->countryNamesById[$country['name']] = $country['countryId'];
-        }
+        $this->zoneFrontRepository->removeAll();
+        $this->zoneFrontRepository->setAutoIncrements(200000);
     }
 
     /**
      * @param array $item
      * @param int $key
      */
-    protected function createZone(array $item, int $key): void
+    protected function createOrUpdateZone(array $item, int $key): void
     {
         foreach (['Ref', 'DescriptionRu', 'CityID', 'AreaDescriptionRu'] as $value) {
             if (false === key_exists($value, $item)) {
@@ -144,47 +120,8 @@ class CitySynchronizer extends NovaposhtaSynchronizer
         $zoneFront->setName($item['DescriptionRu']);
         $zoneFront->setCode($item['CityID']);
         $zoneFront->setStatus(true);
-        $zoneFront->setCityRef($item['Ref']);
+        $zoneFront->setRef($item['Ref']);
 
         $this->zoneFrontRepository->persistAndFlush($zoneFront);
-    }
-
-    /**
-     * @param array $response
-     */
-    protected function handleError(array $response): void
-    {
-        if (false === key_exists('errors', $response)) {
-            $message = 'Response does not include the key `errors`';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
-        }
-
-        if (false === key_exists('errorCodes', $response)) {
-            $message = 'Response does not include the key `errorCodes`';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
-        }
-
-        $errors = $response['errors'];
-        $errorCodes = $response['errorCodes'];
-
-        if (count($errors) === count($errorCodes)) {
-            $message = 'The number of errors is not equal to the number of error codes';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
-        }
-    }
-
-    /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->zoneFrontRepository->removeAll();
-        $this->zoneFrontRepository->setAutoIncrements(200000);
     }
 }
