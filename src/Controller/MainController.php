@@ -48,4 +48,12 @@ class MainController extends Controller
 
         return $this->json(['ok' => true]);
     }
+
+    /**
+     * @return Response
+     */
+    public function indexAction(): Response
+    {
+        return $this->json(['ok' => true]);
+    }
 }
