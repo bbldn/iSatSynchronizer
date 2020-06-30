@@ -9,7 +9,6 @@ parameters:
     front.site_url: '%env(FRONT_SITE_URL)%'
     back.site_path: '%env(BACK_SITE_PATH)%'
     back.site_url: '%env(BACK_SITE_URL)%'
-    back.default_order_status: '%env(BACK_DEFAULT_ORDER_STATUS)%'
     back.database_name: '%env(DATABASE_BACK_NAME)%'
     database_name: '%env(DATABASE_NAME)%'
 
