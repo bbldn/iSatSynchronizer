@@ -21,7 +21,7 @@ class Store extends StoreBase
     protected $defaultStoreId = 0;
 
     /** @var int|mixed $defaultLayoutId */
-    protected $defaultLayoutId = 0;
+    protected $defaultLayoutId = 1;
 
     /** @var int|mixed $defaultCategoryFrontId */
     protected $defaultCategoryFrontId = 0;
@@ -118,21 +118,12 @@ class Store extends StoreBase
 
     /**
      * Store constructor.
-     * @param ContainerBagInterface $params
+     * @param ContainerBagInterface $bag
      */
-    public function __construct(ContainerBagInterface $params)
+    public function __construct(ContainerBagInterface $bag)
     {
-        $this->defaultProductAvailableStatusId = $params->get('front.available_status_id');
-        $this->defaultProductNotAvailableStatusId = $params->get('front.not_available_status_id');
-        $this->defaultLanguageId = $params->get('front.default_language_id');
-        $this->defaultStoreId = $params->get('front.default_store_id');
-        $this->defaultLayoutId = $params->get('front.default_layout_id');
-        $this->defaultCategoryFrontId = $params->get('front.default_category_front_id');
-        $this->defaultSortOrder = $params->get('front.default_sort_order');
-        $this->defaultAttributeGroupId = $params->get('front.default_attribute_group_id');
-        $this->defaultOrderStatus = $params->get('back.default_order_status');
-        $this->defaultSitePath = $params->get('front.site_path');
-        $this->defaultSiteUrl = $params->get('front.site_url');
+        $this->defaultSitePath = (string)$bag->get('front.site_path');
+        $this->defaultSiteUrl = (string)$bag->get('front.site_url');
     }
 
     /**

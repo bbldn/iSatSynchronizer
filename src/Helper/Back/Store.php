@@ -67,13 +67,12 @@ class Store extends StoreBase
      */
     public function __construct(ContainerBagInterface $params)
     {
-        $this->defaultRootCategories = $params->get('front.root_categories');
-        $this->defaultSitePath = $params->get('back.site_path');
-        $this->defaultSiteUrl = $params->get('back.site_url');
+        $this->defaultSitePath = (string)$params->get('back.site_path');
+        $this->defaultSiteUrl = (string)$params->get('back.site_url');
     }
 
     /**
-     * @return array|mixed
+     * @return array
      */
     public function getDefaultRootCategories(): array
     {
