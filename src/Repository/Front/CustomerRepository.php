@@ -29,15 +29,33 @@ class CustomerRepository extends FrontRepository
     }
 
     /**
-     * @param string $email
+     * @param string $val
      * @return Customer|null
      */
-    public function findOneByEmail(string $email): ?Customer
+    public function findOneByEmail(string $val): ?Customer
     {
         try {
             return $this->createQueryBuilder('c')
-                ->andWhere('c.email = :email')
-                ->setParameter('email', $email)
+                ->andWhere('c.email = :val')
+                ->setParameter('val', $val)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $val
+     * @return Customer|null
+     */
+    public function findOneByPhone(string $val): ?Customer
+    {
+        try {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.phone = :val')
+                ->setParameter('val', $val)
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
