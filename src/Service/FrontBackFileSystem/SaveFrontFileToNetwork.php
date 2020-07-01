@@ -47,8 +47,8 @@ class SaveFrontFileToNetwork implements SaveFrontFileInterface
     {
         $formData = new FormDataPart([
             'action' => 'save',
-            'destination' => $path,
-            'data' => $content,
+            'destination' => preg_replace('/^\/image\//', '', $path),
+            'data' => base64_encode($content),
             'auth' => $this->token
         ]);
 
@@ -68,7 +68,7 @@ class SaveFrontFileToNetwork implements SaveFrontFileInterface
     {
         $formData = new FormDataPart([
             'action' => 'clear-folder',
-            'destination' => $path,
+            'destination' => preg_replace('/^\/image\//', '', $path),
             'auth' => $this->token
         ]);
 
