@@ -129,8 +129,6 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
         } catch (Throwable $e) {
             $message = "Error clear folder: {$e->getMessage()}";
             $this->logger->error(ExceptionFormatter::f($message));
-
-            return null;
         }
     }
 
