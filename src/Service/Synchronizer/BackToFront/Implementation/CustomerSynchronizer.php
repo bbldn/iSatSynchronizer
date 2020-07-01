@@ -99,7 +99,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
     {
         $email = Filler::trim($customerBack->getMail());
         $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
-        $customerFront = $this->getCustomerFrontFromCustomer($customer, 0 === mb_strlen($email) ? null : $email);
+        $customerFront = $this->getCustomerFrontFromCustomer($customer, mb_strlen($email) > 0 ? $email: null);
         $this->updateCustomerFrontFromCustomerBack($customerBack, $customerFront);
         $this->createOrUpdateCustomer($customer, $customerBack->getId(), $customerFront->getCustomerId());
 
