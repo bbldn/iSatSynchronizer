@@ -78,8 +78,7 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
      */
     public function clearFolder(): void
     {
-        $path = $this->storeFront->getDefaultSitePath() . $this->frontPath;
-        $this->fileWriter->clearFolder($path);
+        $this->fileWriter->clearFolder($this->frontPath);
     }
 
     /**
@@ -104,7 +103,7 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
         $path = $this->frontPath . $name;
 
         try {
-            $this->fileWriter->saveFile($this->storeFront->getDefaultSitePath() . $path, $content);
+            $this->fileWriter->saveFile($path, $content);
         } catch (UploadException $exception) {
             $message = 'Failed to save image';
             $this->logger->error(ExceptionFormatter::f($message));

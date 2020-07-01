@@ -81,7 +81,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      */
     public function clearFolder(): void
     {
-        $this->fileWriter->clearFolder($this->storeFront->getDefaultSitePath() . $this->frontPath);
+        $this->fileWriter->clearFolder($this->frontPath);
     }
 
     /**
@@ -151,9 +151,9 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
         $productPicturesFront->setSortOrder($this->storeFront->getDefaultSortOrder());
 
         try {
-            $this->fileWriter->saveFile($this->storeFront->getDefaultSitePath() . $path, $content);
-        } catch (UploadException $exception) {
-            $this->logger->error(ExceptionFormatter::f('Error image save'));
+            $this->fileWriter->saveFile($path, $content);
+        } catch (UploadException $e) {
+            $this->logger->error(ExceptionFormatter::f("Error image save: {$e->getMessage()}"));
 
             return null;
         }

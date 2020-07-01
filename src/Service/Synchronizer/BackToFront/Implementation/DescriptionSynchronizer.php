@@ -90,7 +90,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
         }
 
         $path = $this->frontPath . $pathInfo['basename'];
-        $this->fileWriter->saveFile($this->storeFront->getDefaultSitePath() . $path, $content);
+        $this->fileWriter->saveFile($path, $content);
 
         return $path;
     }
@@ -115,7 +115,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
      */
     protected function clearFolder(): void
     {
-        $this->fileWriter->clearFolder($this->storeFront->getDefaultSitePath() . $this->frontPath);
+        $this->fileWriter->clearFolder($this->frontPath);
     }
 
     /**

@@ -46,27 +46,31 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\FrontBackFileSystem\GetBackFileInterface:
         factory:   ['@App\Service\FrontBackFileSystem\FrontBackFileSystemFactory', createGetBackFileInstance]
-        arguments: [
-            '@Symfony\Component\Filesystem\Filesystem',
-            '@Symfony\Contracts\HttpClient\HttpClientInterface',
-            '%env(BACK_READER)%'
-        ]
+        arguments:
+        - '@Symfony\Component\Filesystem\Filesystem'
+        - '@Symfony\Contracts\HttpClient\HttpClientInterface'
+        - '%env(BACK_READER)%'
+
     App\Service\FrontBackFileSystem\SaveFrontFileInterface:
         factory:   ['@App\Service\FrontBackFileSystem\FrontBackFileSystemFactory', createSaveFrontFileInstance]
-        arguments: [
-            '@Symfony\Component\Filesystem\Filesystem',
-            '@Symfony\Contracts\HttpClient\HttpClientInterface',
-            '%env(FRONT_WRITER)%'
-        ]
+        arguments:
+        - '@Symfony\Component\Filesystem\Filesystem'
+        - '@Symfony\Contracts\HttpClient\HttpClientInterface'
+        - '@App\Helper\Front\Store'
+        - '%env(string:FRONT_SITE_TOKEN)%'
+        - '%env(string:FRONT_WRITER)%'
+
     App\EventListener\OnConnect:
         tags:
         - { name: doctrine.event_listener, event: postConnect }
+
     App\Repository\Front\ProductRepository:
         arguments:
         - '@Doctrine\Common\Persistence\ManagerRegistry'
         - '@App\Repository\ProductRepository'
         - '%database_name%'
         - '%front.database_name%'
+
     App\Command\DebugServerCommand:
         arguments:
         - '8088'
