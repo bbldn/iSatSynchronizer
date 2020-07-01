@@ -16,8 +16,6 @@ use Doctrine\ORM\NonUniqueResultException;
  * @method void    persistAndFlush(Customer $instance)
  * @method void    remove(Customer $instance)
  * @method void    removeAndFlush(Customer $instance)
- * @method Customer|null    findOneByBackId(int $value)
- * @method Customer|null    findOneByFrontId(int $value)
  */
 class CustomerRepository extends EntityRepository
 {
@@ -28,6 +26,44 @@ class CustomerRepository extends EntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Customer::class);
+    }
+
+    /**
+     * @param int $value
+     * @return Customer|null
+     */
+    public function findOneByBackId(int $value): ?Customer
+    {
+        try {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.backId = :val')
+                ->setParameter('val', $value)
+                ->andWhere('c.isOrder = false')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param int $value
+     * @return Customer|null
+     */
+    public function findOneByFrontId(int $value): ?Customer
+    {
+        try {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.frontId = :val')
+                ->setParameter('val', $value)
+                ->andWhere('c.isOrder = false')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
     /**
