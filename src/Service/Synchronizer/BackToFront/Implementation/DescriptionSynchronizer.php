@@ -9,6 +9,7 @@ use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 class DescriptionSynchronizer extends BackToFrontSynchronizer
 {
@@ -90,7 +91,15 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
         }
 
         $path = $this->frontPath . $pathInfo['basename'];
-        $this->fileWriter->saveFile($path, $content);
+
+        try {
+            $this->fileWriter->saveFile($path, $content);
+        } catch (Throwable $e) {
+            $message = "Error image save: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($message));
+
+            return null;
+        }
 
         return $path;
     }
@@ -115,7 +124,14 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
      */
     protected function clearFolder(): void
     {
-        $this->fileWriter->clearFolder($this->frontPath);
+        try {
+            $this->fileWriter->clearFolder($this->frontPath);
+        } catch (Throwable $e) {
+            $message = "Error clear folder: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($message));
+
+            return null;
+        }
     }
 
     /**
@@ -126,7 +142,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
     {
         try {
             return $this->fileReader->getFile($path);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
             $this->logger->error(ExceptionFormatter::f($error));
 

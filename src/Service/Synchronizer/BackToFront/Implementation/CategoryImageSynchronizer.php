@@ -13,7 +13,7 @@ use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Throwable;
 
 class CategoryImageSynchronizer extends BackToFrontSynchronizer
 {
@@ -78,7 +78,12 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
      */
     public function clearFolder(): void
     {
-        $this->fileWriter->clearFolder($this->frontPath);
+        try {
+            $this->fileWriter->clearFolder($this->frontPath);
+        } catch (Throwable $e) {
+            $error = "Error cleaning: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($error));
+        }
     }
 
     /**
@@ -104,8 +109,8 @@ class CategoryImageSynchronizer extends BackToFrontSynchronizer
 
         try {
             $this->fileWriter->saveFile($path, $content);
-        } catch (UploadException $exception) {
-            $message = 'Failed to save image';
+        } catch (Throwable $e) {
+            $message = "Error image save: {$e->getMessage()}";
             $this->logger->error(ExceptionFormatter::f($message));
 
             return;

@@ -14,9 +14,8 @@ use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
-use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Throwable;
 
 class ProductImageSynchronizer extends BackToFrontSynchronizer
 {
@@ -81,7 +80,12 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      */
     public function clearFolder(): void
     {
-        $this->fileWriter->clearFolder($this->frontPath);
+        try {
+            $this->fileWriter->clearFolder($this->frontPath);
+        } catch (Throwable $e) {
+            $error = "Error clear folder: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($error));
+        }
     }
 
     /**
@@ -152,8 +156,9 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
 
         try {
             $this->fileWriter->saveFile($path, $content);
-        } catch (UploadException $e) {
-            $this->logger->error(ExceptionFormatter::f("Error image save: {$e->getMessage()}"));
+        } catch (Throwable $e) {
+            $message = "Error image save: {$e->getMessage()}";
+            $this->logger->error(ExceptionFormatter::f($message));
 
             return null;
         }
@@ -190,7 +195,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
     {
         try {
             return $this->fileReader->getFile($path);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
             $this->logger->error(ExceptionFormatter::f($error));
 
