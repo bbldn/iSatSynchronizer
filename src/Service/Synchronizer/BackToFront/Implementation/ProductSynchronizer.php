@@ -390,7 +390,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setQuantity(999999);
         $productFront->setStockStatusId($stockAvailableStatusId);
         $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
-        $productFront->setManufacturerId($this->manufacturerSynchronizer->getManufacturerId($productName));
+        if (null === $productFront->getManufacturerId()) {
+            $productFront->setManufacturerId($this->manufacturerSynchronizer->getManufacturerId($productName));
+        }
         $productFront->setShipping(true);
         $productFront->setPrice($productBack->getPrice());
         $productFront->setPoints(0);
