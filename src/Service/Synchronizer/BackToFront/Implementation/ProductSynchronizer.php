@@ -27,7 +27,6 @@ use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackReposito
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
-use App\Repository\Front\ManufacturerRepository as ManufacturerFrontRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
@@ -145,9 +144,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository */
     protected $productDiscontinuedFrontRepository;
 
-    /** @var ManufacturerFrontRepository $manufacturerFrontRepository */
-    protected $manufacturerFrontRepository;
-
     /** @var CurrencyBackRepository $currencyBackRepository */
     protected $currencyBackRepository;
 
@@ -156,6 +152,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
     /** @var DescriptionSynchronizer $descriptionSynchronizer */
     protected $descriptionSynchronizer;
+
+    /** @var ManufacturerSynchronizer $manufacturerSynchronizer */
+    protected $manufacturerSynchronizer;
 
     /** @var string $defaultImagePath */
     protected $defaultImagePath = null;
@@ -201,10 +200,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductImageSynchronizer $productImageSynchronizer
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
      * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
-     * @param ManufacturerFrontRepository $manufacturerFrontRepository
      * @param CurrencyBackRepository $currencyBackRepository
      * @param ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
      * @param DescriptionSynchronizer $descriptionSynchronizer
+     * @param ManufacturerSynchronizer $manufacturerSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
@@ -237,10 +236,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductImageSynchronizer $productImageSynchronizer,
         SeoUrlFrontRepository $seoUrlFrontRepository,
         ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository,
-        ManufacturerFrontRepository $manufacturerFrontRepository,
         CurrencyBackRepository $currencyBackRepository,
         ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer,
-        DescriptionSynchronizer $descriptionSynchronizer
+        DescriptionSynchronizer $descriptionSynchronizer,
+        ManufacturerSynchronizer $manufacturerSynchronizer
     )
     {
         $this->logger = $logger;
@@ -273,10 +272,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->seoUrlFrontRepository = $seoUrlFrontRepository;
         $this->productImageSynchronizer = $productImageSynchronizer;
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
-        $this->manufacturerFrontRepository = $manufacturerFrontRepository;
         $this->currencyBackRepository = $currencyBackRepository;
         $this->productDiscountBackToFrontSynchronizer = $productDiscountBackToFrontSynchronizer;
         $this->descriptionSynchronizer = $descriptionSynchronizer;
+        $this->manufacturerSynchronizer = $manufacturerSynchronizer;
 
         $this->seoUrlTableExists = $seoUrlFrontRepository->tableExists();
         $this->productDiscontinuedTableExists = $productDiscontinuedFrontRepository->tableExists();
@@ -391,7 +390,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setQuantity(999999);
         $productFront->setStockStatusId($stockAvailableStatusId);
         $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
-        $productFront->setManufacturerId($this->getManufacturerId($productName));
+        $productFront->setManufacturerId($this->manufacturerSynchronizer->getManufacturerId($productName));
         $productFront->setShipping(true);
         $productFront->setPrice($productBack->getPrice());
         $productFront->setPoints(0);
@@ -711,23 +710,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         }
 
         $this->productFrontRepository->persistAndFlush($productFront);
-    }
-
-    /**
-     * @param string $productName
-     * @return int
-     */
-    public function getManufacturerId(string $productName): int
-    {
-        $values = explode(' ', $productName);
-        foreach ($values as $value) {
-            $manufacturer = $this->manufacturerFrontRepository->findOneByName($value);
-            if (null !== $manufacturer) {
-                return $manufacturer->getManufacturerId();
-            }
-        }
-
-        return $this->storeFront->getDefaultManufacturerId();
     }
 
     /**
