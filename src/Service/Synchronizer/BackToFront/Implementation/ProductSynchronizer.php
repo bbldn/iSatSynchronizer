@@ -507,6 +507,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->synchronizeAttributes($productBack, $productFront->getProductId());
 
+        $this->synchronizeDiscount($productFront->getProductId());
+
         if (true === $this->productDiscontinuedTableExists) {
             if (true === $productBack->getDiscontinued()) {
                 $exists = $this->productDiscontinuedFrontRepository->exists($productFront->getProductId());
@@ -534,6 +536,15 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         }
 
         return $productFront;
+    }
+
+    /**
+     * @param int $productId
+     */
+    protected function synchronizeDiscount(int $productId): void
+    {
+        $this->productDiscountBackToFrontSynchronizer->createOrUpdateDiscountItems($productId);
+//        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productId);
     }
 
     /**

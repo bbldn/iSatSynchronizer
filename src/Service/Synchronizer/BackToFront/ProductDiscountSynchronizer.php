@@ -11,10 +11,7 @@ class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
      */
     public function synchronizeAll(): void
     {
-        $productDiscountsBack = $this->productDiscountBackRepository->findAll();
-        foreach ($productDiscountsBack as $productDiscountBack) {
-            $this->synchronizeProductDiscount($productDiscountBack);
-        }
+        parent::synchronizeAll();
     }
 
     /**
@@ -22,15 +19,14 @@ class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
      */
     public function synchronizeByProductBackId(int $productBackId): void
     {
-        $productDiscountsBack = $this->productDiscountBackRepository->findByProductBackId($productBackId);
-        $productDiscountBack = $this->getProductDiscountBack($productBackId);
+        parent::synchronizeByProductBackId($productBackId);
+    }
 
-        if (null !== $productDiscountBack) {
-            $productDiscountsBack[] = $productDiscountBack;
-        }
-
-        foreach ($productDiscountsBack as $productDiscountBack) {
-            $this->synchronizeProductDiscount($productDiscountBack);
-        }
+    /**
+     * @param int $productId
+     */
+    public function createOrUpdateDiscountItems(int $productId): void
+    {
+        parent::createOrUpdateDiscountItems($productId);
     }
 }

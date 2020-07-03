@@ -7,9 +7,9 @@ use App\Entity\Front\ProductDiscount as ProductDiscountFront;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\Back\BuyersGroupsPricesRepository as ProductDiscountBackRepository;
-use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
-use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
+use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use DateTime;
@@ -32,6 +32,9 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     /** @var ProductDiscountBackRepository */
     protected $productDiscountBackRepository;
 
+    /** @var CustomerFrontRepository $customerGroupRepository */
+    protected $customerGroupRepository;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -42,6 +45,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param ProductDiscountFrontRepository $productDiscountFrontRepository
      * @param ProductRepository $productRepository
      * @param ProductDiscountBackRepository $productDiscountBackRepository
+     * @param CustomerFrontRepository $customerGroupRepository
      * @param StoreFront $storeFront
      */
     public function __construct(
@@ -50,6 +54,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         ProductDiscountFrontRepository $productDiscountFrontRepository,
         ProductRepository $productRepository,
         ProductDiscountBackRepository $productDiscountBackRepository,
+        CustomerFrontRepository $customerGroupRepository,
         StoreFront $storeFront
     )
     {
@@ -58,7 +63,36 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         $this->productDiscountFrontRepository = $productDiscountFrontRepository;
         $this->productRepository = $productRepository;
         $this->productDiscountBackRepository = $productDiscountBackRepository;
+        $this->customerGroupRepository = $customerGroupRepository;
         $this->storeFront = $storeFront;
+    }
+
+    /**
+     *
+     */
+    protected function synchronizeAll(): void
+    {
+        $productDiscountsBack = $this->productDiscountBackRepository->findAll();
+        foreach ($productDiscountsBack as $productDiscountBack) {
+            $this->synchronizeProductDiscount($productDiscountBack);
+        }
+    }
+
+    /**
+     * @param int $productBackId
+     */
+    protected function synchronizeByProductBackId(int $productBackId): void
+    {
+        $productDiscountsBack = $this->productDiscountBackRepository->findByProductBackId($productBackId);
+        $productDiscountBack = $this->getProductDiscountBack($productBackId);
+
+        if (null !== $productDiscountBack) {
+            $productDiscountsBack[] = $productDiscountBack;
+        }
+
+        foreach ($productDiscountsBack as $productDiscountBack) {
+            $this->synchronizeProductDiscount($productDiscountBack);
+        }
     }
 
     /**
@@ -113,13 +147,12 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
             return $productDiscountFront;
         }
 
-        $productDiscountFront->setProductId($product->getFrontId());
-        $productDiscountFront->setCustomerGroupId($productDiscountBack->getGroupId());
-        $productDiscountFront->setQuantity($this->storeFront->getDefaultQuantity());
-        $productDiscountFront->setPriority($this->storeFront->getDefaultPriority());
-        $productDiscountFront->setPrice($productDiscountBack->getPrice());
-        $productDiscountFront->setDateStart(new DateTime('0000-00-00 00:00:00'));
-        $productDiscountFront->setDateEnd(new DateTime('0000-00-00 00:00:00'));
+        $this->createProductDiscountFront(
+            $productDiscountFront,
+            $product->getFrontId(),
+            $productDiscountBack->getGroupId(),
+            $productDiscountBack->getPrice()
+        );
 
         $this->productDiscountFrontRepository->persistAndFlush($productDiscountFront);
 
@@ -143,5 +176,58 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         $productDiscountBack->setProductId($productBack->getProductId());
 
         return $productDiscountBack;
+    }
+
+    /**
+     * @param ProductDiscountFront $productDiscountFront
+     * @param int $productId
+     * @param int $customerGroupId
+     * @param float $price
+     * @return ProductDiscountFront
+     */
+    protected function createProductDiscountFront(
+        ProductDiscountFront $productDiscountFront,
+        int $productId,
+        int $customerGroupId,
+        float $price
+    ): ProductDiscountFront
+    {
+        $productDiscountFront->setProductId($productId);
+        $productDiscountFront->setCustomerGroupId($customerGroupId);
+        $productDiscountFront->setQuantity($this->storeFront->getDefaultQuantity());
+        $productDiscountFront->setPriority($this->storeFront->getDefaultPriority());
+        $productDiscountFront->setPrice($price);
+        $productDiscountFront->setDateStart(new DateTime('0000-00-00 00:00:00'));
+        $productDiscountFront->setDateEnd(new DateTime('0000-00-00 00:00:00'));
+
+        return $productDiscountFront;
+    }
+
+    /**
+     * @param int $productId
+     */
+    protected function createOrUpdateDiscountItems(int $productId): void
+    {
+        $customersGroupFront = $this->customerGroupRepository->findAll();
+        foreach ($customersGroupFront as $customerGroupFront) {
+            $productDiscountFront = $this->productDiscountFrontRepository->findOneByCustomerGroupIdAndProductId(
+                $customerGroupFront->getCustomerId(),
+                $productId
+            );
+
+            if (null !== $productDiscountFront) {
+                continue;
+            }
+
+            $productDiscountFront = new ProductDiscountFront();
+            $this->createProductDiscountFront(
+                $productDiscountFront,
+                $productId,
+                $customerGroupFront->getCustomerId(),
+                0
+            );
+
+            $this->productDiscountFrontRepository->persistAndFlush($productDiscountFront);
+        }
     }
 }
