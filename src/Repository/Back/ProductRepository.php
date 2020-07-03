@@ -76,6 +76,17 @@ class ProductRepository extends BackRepository
     /**
      * @return array
      */
+    public function getAllIds(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.productId')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @return array
+     */
     public function getBackPrices(): array
     {
         $tableName = $this->getClassMetadata()->getTableName();

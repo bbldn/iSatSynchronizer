@@ -8,6 +8,7 @@ use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\Back\BuyersGroupsPricesRepository as ProductDiscountBackRepository;
 use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
+use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
@@ -31,6 +32,8 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     /** @var ProductDiscountBackRepository */
     protected $productDiscountBackRepository;
 
+    protected $productFrontRepository;
+
     /** @var StoreFront $storeFront */
     protected $storeFront;
 
@@ -41,6 +44,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param ProductDiscountFrontRepository $productDiscountFrontRepository
      * @param ProductRepository $productRepository
      * @param ProductDiscountBackRepository $productDiscountBackRepository
+     * @param ProductFrontRepository $productFrontRepository
      * @param StoreFront $storeFront
      */
     public function __construct(
@@ -49,6 +53,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         ProductDiscountFrontRepository $productDiscountFrontRepository,
         ProductRepository $productRepository,
         ProductDiscountBackRepository $productDiscountBackRepository,
+        ProductFrontRepository $productFrontRepository,
         StoreFront $storeFront
     )
     {
@@ -57,6 +62,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         $this->productDiscountFrontRepository = $productDiscountFrontRepository;
         $this->productRepository = $productRepository;
         $this->productDiscountBackRepository = $productDiscountBackRepository;
+        $this->productFrontRepository = $productFrontRepository;
         $this->storeFront = $storeFront;
     }
 
@@ -110,6 +116,14 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
             $this->logger->error(ExceptionFormatter::f($error));
 
             return $productDiscountFront;
+        }
+
+        if ($this->storeFront->getDefaultCustomerGroupId() === $productDiscountBack->getGroupId()) {
+            $productFront = $this->productFrontRepository->find($product->getFrontId());
+            if (null !== $productFront) {
+                $productFront->setPrice($productDiscountBack->getPrice());
+                $this->productFrontRepository->persistAndFlush($productFront);
+            }
         }
 
         $productDiscountFront->setProductId($product->getFrontId());
