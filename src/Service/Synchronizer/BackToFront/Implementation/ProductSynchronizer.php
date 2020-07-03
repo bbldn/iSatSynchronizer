@@ -719,9 +719,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function updatePriceAll(): void
     {
-        $ids = $this->productBackRepository->getAllIds();
-        foreach ($ids as $value) {
-            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['productId']);
+        $products = $this->productBackRepository->getBackPrices();
+        $this->productFrontRepository->updatePriceByData($products);
+        foreach ($products as $value) {
+            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['product_id']);
         }
     }
 
@@ -730,9 +731,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function updatePriceByIds(string $ids): void
     {
-        $ids = explode(',', $ids);
-        foreach ($ids as $id) {
-            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($id);
+        $products = $this->productBackRepository->getBackPricesByIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+        foreach ($products as $value) {
+            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['product_id']);
         }
     }
 
