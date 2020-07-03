@@ -48,4 +48,31 @@ class ProductDiscountRepository extends FrontRepository
             return null;
         }
     }
+
+//    public function updatePriceByData(array $data): bool
+//    {
+//        $tableName = $this->productRepository->getClassMetadata()->getTableName();
+//        $tableNameFront = $this->getClassMetadata()->getTableName();
+//
+//        $sql = '';
+//        foreach ($data as $value) {
+//            $sql .= "
+//              UPDATE
+//                  {$this->dataBaseNameFront}.{$tableNameFront} pf
+//              INNER JOIN {$this->dataBaseName}.{$tableName} p ON pf.product_id = p.front_id
+//              SET
+//                  pf.price = {$value['price']}
+//              WHERE
+//                  p.back_id = {$value['product_id']};
+//            ";
+//        }
+//
+//        try {
+//            $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
+//        } catch (DBALException $e) {
+//            $result = false;
+//        }
+//
+//        return $result;
+//    }
 }

@@ -41,4 +41,15 @@ class BuyersGroupsPricesRepository extends BackRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return array
+     */
+    public function getAllPrices(): array
+    {
+        return $this->createQueryBuilder('bgp')
+            ->select('bgp.productId, bgp.price')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
