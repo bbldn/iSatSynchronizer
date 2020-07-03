@@ -219,9 +219,8 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
                 continue;
             }
 
-            $productDiscountFront = new ProductDiscountFront();
-            $this->createProductDiscountFront(
-                $productDiscountFront,
+            $productDiscountFront = $this->createProductDiscountFront(
+                new ProductDiscountFront(),
                 $productId,
                 $customerGroupFront->getCustomerGroupId(),
                 0
