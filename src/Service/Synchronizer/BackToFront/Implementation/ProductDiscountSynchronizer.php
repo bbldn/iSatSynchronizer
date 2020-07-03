@@ -8,7 +8,7 @@ use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\Back\BuyersGroupsPricesRepository as ProductDiscountBackRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
-use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
+use App\Repository\Front\CustomerGroupRepository as CustomerGroupFrontRepository;
 use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
@@ -32,7 +32,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     /** @var ProductDiscountBackRepository */
     protected $productDiscountBackRepository;
 
-    /** @var CustomerFrontRepository $customerGroupRepository */
+    /** @var CustomerGroupFrontRepository $customerGroupRepository */
     protected $customerGroupRepository;
 
     /** @var StoreFront $storeFront */
@@ -45,7 +45,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param ProductDiscountFrontRepository $productDiscountFrontRepository
      * @param ProductRepository $productRepository
      * @param ProductDiscountBackRepository $productDiscountBackRepository
-     * @param CustomerFrontRepository $customerGroupRepository
+     * @param CustomerGroupFrontRepository $customerGroupRepository
      * @param StoreFront $storeFront
      */
     public function __construct(
@@ -54,7 +54,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         ProductDiscountFrontRepository $productDiscountFrontRepository,
         ProductRepository $productRepository,
         ProductDiscountBackRepository $productDiscountBackRepository,
-        CustomerFrontRepository $customerGroupRepository,
+        CustomerGroupFrontRepository $customerGroupRepository,
         StoreFront $storeFront
     )
     {
@@ -211,7 +211,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         $customersGroupFront = $this->customerGroupRepository->findAll();
         foreach ($customersGroupFront as $customerGroupFront) {
             $productDiscountFront = $this->productDiscountFrontRepository->findOneByCustomerGroupIdAndProductId(
-                $customerGroupFront->getCustomerId(),
+                $customerGroupFront->getCustomerGroupId(),
                 $productId
             );
 
@@ -223,7 +223,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
             $this->createProductDiscountFront(
                 $productDiscountFront,
                 $productId,
-                $customerGroupFront->getCustomerId(),
+                $customerGroupFront->getCustomerGroupId(),
                 0
             );
 
