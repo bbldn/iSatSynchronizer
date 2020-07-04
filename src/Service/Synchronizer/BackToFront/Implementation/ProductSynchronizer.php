@@ -3,8 +3,7 @@
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Product as ProductBack;
-use App\Entity\Front\CategoryDescription;
-use App\Entity\Front\CategoryDescription as CategoryDescriptionFront;
+use App\Entity\Front\Category as CategoryFront;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductAttribute as ProductAttributeFront;
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
@@ -26,7 +25,7 @@ use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepositor
 use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\CategoryRepository;
-use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
+use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
@@ -75,8 +74,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductRepository $productRepository */
     protected $productRepository;
 
-    /** @var CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository */
-    protected $categoryDescriptionFrontRepository;
+    /** @var CategoryFrontRepository $categoryFrontRepository */
+    protected $categoryFrontRepository;
 
     /** @var ProductFrontRepository $productFrontRepository */
     protected $productFrontRepository;
@@ -176,7 +175,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param AttributeRepository $attributeRepository
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
-     * @param CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository
+     * @param CategoryFrontRepository $categoryFrontRepository
      * @param PhotoBackRepository $photoBackRepository
      * @param ProductFrontRepository $productFrontRepository
      * @param ProductAttributeFrontRepository $productAttributeFrontRepository
@@ -212,7 +211,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         AttributeRepository $attributeRepository,
         CategoryRepository $categoryRepository,
         ProductRepository $productRepository,
-        CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
+        CategoryFrontRepository $categoryFrontRepository,
         PhotoBackRepository $photoBackRepository,
         ProductFrontRepository $productFrontRepository,
         ProductAttributeFrontRepository $productAttributeFrontRepository,
@@ -248,7 +247,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->attributeRepository = $attributeRepository;
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
-        $this->categoryDescriptionFrontRepository = $categoryDescriptionFrontRepository;
+        $this->categoryFrontRepository = $categoryFrontRepository;
         $this->photoBackRepository = $photoBackRepository;
         $this->productFrontRepository = $productFrontRepository;
         $this->productAttributeFrontRepository = $productAttributeFrontRepository;
@@ -406,7 +405,15 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setSubtract(false);
         $productFront->setMinimum(true);
         $productFront->setSortOrder($productBack->getSortOrder());
-        $productFront->setStatus($productBack->getEnabled() !== 0);
+
+        $categoryFront = $this->getCategoryFrontByCategoryBackId($productBack->getCategoryId());
+        if (null !== $categoryFront) {
+            $categoryFrontId = $categoryFront->getCategoryId();
+        } else {
+            $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
+        }
+
+        $productFront->setStatus($productBack->getEnabled() !== 0 && $categoryFront->getStatus() !== false);
 
         if (null === $productFront->getViewed()) {
             $productFront->setViewed(0);
@@ -473,13 +480,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
-        $categoryDescriptionFront = $this->getCategoryDescriptionFrontByCategoryBackId($productBack->getCategoryId());
-        if (null !== $categoryDescriptionFront) {
-            $categoryFrontId = $categoryDescriptionFront->getCategoryId();
-        } else {
-            $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
-        }
-
         $productCategoryFront = $this->productCategoryFrontRepository->findOneByProductFrontIdAndCategoryId(
             $productFront->getProductId(),
             $categoryFrontId
@@ -538,9 +538,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
     /**
      * @param int|null $categoryBackId
-     * @return CategoryDescriptionFront|null
+     * @return CategoryFront|null
      */
-    protected function getCategoryDescriptionFrontByCategoryBackId(?int $categoryBackId): ?CategoryDescriptionFront
+    protected function getCategoryFrontByCategoryBackId(?int $categoryBackId): ?CategoryFront
     {
         if (null === $categoryBackId) {
             return null;
@@ -556,25 +556,22 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $frontId = $category->getFrontId();
         if (null === $frontId) {
-            $message = "Category description front id is null";
+            $message = "Category front id is null";
             $this->logger->error(ExceptionFormatter::f($message));
 
             return null;
         }
 
-        $categoryDescriptionFront = $this->categoryDescriptionFrontRepository->findOneByCategoryFrontIdAndLanguageId(
-            $frontId,
-            $this->storeFront->getDefaultLanguageId()
-        );
+        $categoryFront = $this->categoryFrontRepository->find($frontId);
 
-        if (null === $categoryDescriptionFront) {
+        if (null === $categoryFront) {
             $message = "Category description front is null";
             $this->logger->error(ExceptionFormatter::f($message));
 
             return null;
         }
 
-        return $categoryDescriptionFront;
+        return $categoryFront;
     }
 
     /**
