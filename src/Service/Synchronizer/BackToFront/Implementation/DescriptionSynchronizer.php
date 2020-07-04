@@ -139,7 +139,9 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
     protected function getFile(string $path): ?string
     {
         try {
-            return $this->fileReader->getFile($path);
+            return $this->fileReader->getFile(
+                preg_replace('/https?:\/\/isat\.com\.ua/', 'https://admin.isat.com.ua', $path)
+            );
         } catch (Throwable $e) {
             $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
             $this->logger->error(ExceptionFormatter::f($error));
