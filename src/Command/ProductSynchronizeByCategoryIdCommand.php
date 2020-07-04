@@ -44,6 +44,7 @@ class ProductSynchronizeByCategoryIdCommand extends Command
         $ids = $this->parseIdArray($input);
         $loadImage = $input->getArgument('loadImage') !== null;
 
+        $this->productSynchronize->load();
         foreach ($ids as $id) {
             $this->productSynchronize->synchronizeByCategoryId($id, $loadImage);
         }

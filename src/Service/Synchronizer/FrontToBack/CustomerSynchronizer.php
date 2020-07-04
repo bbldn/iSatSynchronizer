@@ -10,6 +10,16 @@ use App\Service\Synchronizer\FrontToBack\Implementation\CustomerSynchronizer as 
 class CustomerSynchronizer extends CustomerBackSynchronizer
 {
     /**
+     * @return CustomerSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      * @param int $id
      * @param string $password
      * @return CustomerBack

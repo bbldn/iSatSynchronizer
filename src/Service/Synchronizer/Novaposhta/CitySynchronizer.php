@@ -7,6 +7,14 @@ use App\Service\Synchronizer\Novaposhta\Implementation\CitySynchronizer as CityB
 class CitySynchronizer extends CityBaseSynchronizer
 {
     /**
+     * @return CitySynchronizer
+     */
+    public function load(): self
+    {
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

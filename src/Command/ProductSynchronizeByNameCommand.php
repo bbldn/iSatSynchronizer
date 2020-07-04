@@ -44,7 +44,7 @@ class ProductSynchronizeByNameCommand extends Command
     {
         $name = $input->getArgument('name');
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->productSynchronize->synchronizeByName($name, $loadImage);
+        $this->productSynchronize->load()->synchronizeByName($name, $loadImage);
 
         return 0;
     }

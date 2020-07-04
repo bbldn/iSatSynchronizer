@@ -41,7 +41,7 @@ class ProductPriceUpdateByCategoryIdCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $ids = $this->testIds($input);
-        $this->productSynchronize->updatePriceByCategoryIds($ids);
+        $this->productSynchronize->load()->updatePriceByCategoryIds($ids);
 
         return 0;
     }

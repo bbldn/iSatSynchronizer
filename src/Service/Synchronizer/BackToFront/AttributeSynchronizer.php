@@ -7,6 +7,16 @@ use App\Service\Synchronizer\BackToFront\Implementation\AttributeSynchronizer as
 class AttributeSynchronizer extends AttributeBaseSynchronizer
 {
     /**
+     * @return AttributeSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

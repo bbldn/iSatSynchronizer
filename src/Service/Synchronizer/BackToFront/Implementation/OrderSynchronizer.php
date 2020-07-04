@@ -170,11 +170,12 @@ class OrderSynchronizer extends BackToFrontSynchronizer
     protected function clear(): void
     {
         $this->orderProductFrontRepository->clear();
-        $this->orderFrontRepository->clear();
-        $this->orderRepository->clear();
-
         $this->orderProductFrontRepository->resetAutoIncrements();
+
+        $this->orderFrontRepository->clear();
         $this->orderFrontRepository->resetAutoIncrements();
+
+        $this->orderRepository->clear();
         $this->orderRepository->resetAutoIncrements();
     }
 

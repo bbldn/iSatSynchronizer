@@ -43,7 +43,7 @@ class CategorySynchronizeByIdsCommand extends Command
     {
         $ids = $this->testIds($input);
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->categorySynchronize->synchronizeByIds($ids, $loadImage);
+        $this->categorySynchronize->load()->synchronizeByIds($ids, $loadImage);
 
         return 0;
     }

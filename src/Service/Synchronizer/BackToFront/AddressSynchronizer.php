@@ -9,6 +9,16 @@ use App\Service\Synchronizer\BackToFront\Implementation\AddressSynchronizer as A
 class AddressSynchronizer extends AddressBaseSynchronizer
 {
     /**
+     * @return AddressSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

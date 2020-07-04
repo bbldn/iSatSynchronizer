@@ -42,7 +42,7 @@ class CategorySynchronizeAllCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->categorySynchronize->synchronizeAll($loadImage);
+        $this->categorySynchronize->load()->synchronizeAll($loadImage);
 
         return 0;
     }

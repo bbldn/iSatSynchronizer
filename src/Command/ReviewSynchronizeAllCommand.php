@@ -54,9 +54,9 @@ class ReviewSynchronizeAllCommand extends Command
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $this->reviewFrontToBackSynchronizer->synchronizeAll();
+            $this->reviewFrontToBackSynchronizer->load()->synchronizeAll();
         } elseif ('backToFront' === $direction) {
-            $this->reviewBackToFrontSynchronizer->synchronizeAll();
+            $this->reviewBackToFrontSynchronizer->load()->synchronizeAll();
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }

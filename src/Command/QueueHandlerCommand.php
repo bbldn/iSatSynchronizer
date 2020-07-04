@@ -40,7 +40,7 @@ class QueueHandlerCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Queue handle');
     }
@@ -69,7 +69,7 @@ class QueueHandlerCommand extends Command
     /**
      *
      */
-    protected function startServer()
+    protected function startServer(): void
     {
         $path = $this->consolePath;
         $server = new HttpServer(function (ServerRequestInterface $request) use ($path) {
@@ -88,7 +88,7 @@ class QueueHandlerCommand extends Command
      * @param array $parameters
      * @return array
      */
-    protected function handle(array $parameters)
+    protected function handle(array $parameters): array
     {
         $command = trim($parameters['command']);
         if ('stat' === $command) {
@@ -109,7 +109,7 @@ class QueueHandlerCommand extends Command
     /**
      *
      */
-    protected function sortProcess()
+    protected function sortProcess(): void
     {
         foreach ($this->processes as $key => $process) {
             /** @var Process $process */

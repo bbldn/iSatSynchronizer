@@ -41,7 +41,7 @@ class ProductPriceUpdateByIdsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $ids = $this->testIds($input);
-        $this->productSynchronize->updatePriceByIds($ids);
+        $this->productSynchronize->load()->updatePriceByIds($ids);
 
         return 0;
     }

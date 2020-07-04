@@ -30,7 +30,7 @@ class NovaposhtaCitySynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->citySynchronizer->synchronizeAll();
+        $this->citySynchronizer->load()->synchronizeAll();
 
         return 0;
     }

@@ -39,7 +39,7 @@ class CustomerClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->customerSynchronize->clear();
+        $this->customerSynchronize->load()->clear();
 
         return 0;
     }

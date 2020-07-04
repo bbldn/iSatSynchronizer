@@ -7,6 +7,16 @@ use App\Service\Synchronizer\BackToFront\Implementation\CategorySynchronizer as 
 class CategorySynchronizer extends CategoryBaseSynchronizer
 {
     /**
+     * @return CategorySynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      * @param bool $synchronizeImage
      */
     public function synchronizeAll(bool $synchronizeImage = false): void

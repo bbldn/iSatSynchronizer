@@ -7,6 +7,16 @@ use App\Service\Synchronizer\BackToFront\Implementation\DescriptionSynchronizer 
 class DescriptionSynchronizer extends DescriptionBaseSynchronizer
 {
     /**
+     * @return DescriptionSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      * @param string|null $text
      * @return string
      */

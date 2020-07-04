@@ -8,6 +8,16 @@ use App\Service\Synchronizer\BackToFront\Implementation\CustomerSynchronizer as 
 class CustomerSynchronizer extends CustomerBaseSynchronizer
 {
     /**
+     * @return CustomerSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

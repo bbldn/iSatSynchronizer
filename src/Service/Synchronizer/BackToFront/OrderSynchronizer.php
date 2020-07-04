@@ -7,6 +7,16 @@ use App\Service\Synchronizer\BackToFront\Implementation\OrderSynchronizer as Ord
 class OrderSynchronizer extends OrderBackSynchronizer
 {
     /**
+     * @return OrderSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

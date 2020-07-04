@@ -45,7 +45,7 @@ class CustomerSynchronizeOneCommand extends Command
     {
         $id = $this->parseId($input);
         $password = $input->getArgument('password');
-        $this->customerFrontToBackSynchronize->synchronizeOne((int)$id, $password);
+        $this->customerFrontToBackSynchronize->load()->synchronizeOne((int)$id, $password);
 
         return 0;
     }

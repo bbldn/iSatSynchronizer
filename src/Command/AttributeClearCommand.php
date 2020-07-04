@@ -39,7 +39,7 @@ class AttributeClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->attributeSynchronize->clear();
+        $this->attributeSynchronize->load()->clear();
 
         return 0;
     }

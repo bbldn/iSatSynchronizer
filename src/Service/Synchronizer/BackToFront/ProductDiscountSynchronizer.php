@@ -7,6 +7,16 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductDiscountSynchroni
 class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
 {
     /**
+     * @return ProductDiscountSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

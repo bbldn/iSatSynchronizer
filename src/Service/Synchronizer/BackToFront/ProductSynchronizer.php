@@ -7,6 +7,17 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductSynchronizer as P
 class ProductSynchronizer extends ProductBaseSynchronizer
 {
     /**
+     * @return ProductSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+        $this->_load();
+
+        return $this;
+    }
+
+    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */
@@ -51,6 +62,11 @@ class ProductSynchronizer extends ProductBaseSynchronizer
         foreach ($productsBack as $productBack) {
             $this->synchronizeProduct($productBack, $synchronizeImage);
         }
+    }
+
+    public function synchronizeAllSeoUrl(): void
+    {
+
     }
 
     /**

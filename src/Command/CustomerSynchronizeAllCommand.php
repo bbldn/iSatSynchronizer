@@ -38,7 +38,7 @@ class CustomerSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->customerBackToFrontSynchronize->synchronizeAll();
+        $this->customerBackToFrontSynchronize->load()->synchronizeAll();
 
         return 0;
     }

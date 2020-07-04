@@ -55,10 +55,10 @@ class ReviewSynchronizeByIdsCommand extends Command
 
         if ('frontToBack' === $direction) {
             $ids = $this->testIds($input);
-            $this->reviewFrontToBackSynchronizer->synchronizeByIds($ids);
+            $this->reviewFrontToBackSynchronizer->load()->synchronizeByIds($ids);
         } elseif ('backToFront' === $direction) {
             $ids = $this->testIds($input);
-            $this->reviewBackToFrontSynchronizer->synchronizeByIds($ids);
+            $this->reviewBackToFrontSynchronizer->load()->synchronizeByIds($ids);
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }

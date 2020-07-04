@@ -41,7 +41,7 @@ class CustomerSynchronizeByIdsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $ids = $this->testIds($input);
-        $this->customerBackToFrontSynchronize->synchronizeByIds($ids);
+        $this->customerBackToFrontSynchronize->load()->synchronizeByIds($ids);
 
         return 0;
     }

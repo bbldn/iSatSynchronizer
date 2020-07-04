@@ -9,6 +9,16 @@ use App\Service\Synchronizer\FrontToBack\Implementation\OrderSynchronizer as Ord
 class OrderSynchronizer extends OrderBaseSynchronizer
 {
     /**
+     * @return OrderSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

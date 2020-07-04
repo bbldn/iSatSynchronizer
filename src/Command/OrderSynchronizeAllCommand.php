@@ -54,9 +54,9 @@ class OrderSynchronizeAllCommand extends Command
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $this->orderFrontToBackSynchronizer->synchronizeAll();
+            $this->orderFrontToBackSynchronizer->load()->synchronizeAll();
         } elseif ('backToFront' === $direction) {
-            $this->orderBackToFrontSynchronizer->synchronizeAll();
+            $this->orderBackToFrontSynchronizer->load()->synchronizeAll();
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }

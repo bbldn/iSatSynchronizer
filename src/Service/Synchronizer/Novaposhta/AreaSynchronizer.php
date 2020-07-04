@@ -7,6 +7,14 @@ use App\Service\Synchronizer\Novaposhta\Implementation\AreaSynchronizer as AreaB
 class AreaSynchronizer extends AreaBaseSynchronizer
 {
     /**
+     * @return AreaSynchronizer
+     */
+    public function load(): self
+    {
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

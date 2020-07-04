@@ -43,7 +43,7 @@ class CategorySynchronizeByNameCommand extends Command
     {
         $loadImage = $input->getArgument('loadImage') !== null;
         $name = $input->getArgument('name');
-        $this->categorySynchronize->synchronizeByName($name, $loadImage);
+        $this->categorySynchronize->load()->synchronizeByName($name, $loadImage);
 
         return 0;
     }

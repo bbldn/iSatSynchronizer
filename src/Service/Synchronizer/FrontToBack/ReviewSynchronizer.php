@@ -7,6 +7,16 @@ use App\Service\Synchronizer\FrontToBack\Implementation\ReviewSynchronizer as Re
 class ReviewSynchronizer extends ReviewBaseSynchronizer
 {
     /**
+     * @return ReviewSynchronizer
+     */
+    public function load(): self
+    {
+        parent::load();
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function synchronizeAll(): void

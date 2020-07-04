@@ -58,9 +58,9 @@ class AllClearCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $resetImage = $input->getArgument('resetImage') !== null;
-        $this->productSynchronize->clear($resetImage);
-        $this->attributeSynchronize->clear();
-        $this->categorySynchronize->clear($resetImage);
+        $this->productSynchronize->load()->clear($resetImage);
+        $this->attributeSynchronize->load()->clear();
+        $this->categorySynchronize->load()->clear($resetImage);
 
         return 0;
     }

@@ -39,7 +39,7 @@ class OrderClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->orderSynchronize->clear();
+        $this->orderSynchronize->load()->clear();
 
         return 0;
     }

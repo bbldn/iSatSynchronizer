@@ -13,6 +13,10 @@ class NovaposhtaWarehouseSynchronizeAllCommand extends Command
     /** @var WarehouseSynchronizer $warehousesSynchronizer */
     protected $warehousesSynchronizer;
 
+    /**
+     * NovaposhtaWarehouseSynchronizeAllCommand constructor.
+     * @param WarehouseSynchronizer $warehousesSynchronizer
+     */
     public function __construct(WarehouseSynchronizer $warehousesSynchronizer)
     {
         parent::__construct();
@@ -26,7 +30,7 @@ class NovaposhtaWarehouseSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->warehousesSynchronizer->synchronizeAll();
+        $this->warehousesSynchronizer->load()->synchronizeAll();
 
         return 0;
     }

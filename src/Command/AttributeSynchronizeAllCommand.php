@@ -39,7 +39,7 @@ class AttributeSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->attributeSynchronize->synchronizeAll();
+        $this->attributeSynchronize->load()->synchronizeAll();
 
         return 0;
     }

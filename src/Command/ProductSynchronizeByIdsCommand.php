@@ -43,7 +43,7 @@ class ProductSynchronizeByIdsCommand extends Command
     {
         $ids = $this->testIds($input);
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->productSynchronize->synchronizeByIds($ids, $loadImage);
+        $this->productSynchronize->load()->synchronizeByIds($ids, $loadImage);
 
         return 0;
     }

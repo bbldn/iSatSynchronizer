@@ -42,7 +42,7 @@ class CategoryClearCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $removeImage = $input->getArgument('removeImage') !== null;
-        $this->categorySynchronize->clear($removeImage);
+        $this->categorySynchronize->load()->clear($removeImage);
 
         return 0;
     }
