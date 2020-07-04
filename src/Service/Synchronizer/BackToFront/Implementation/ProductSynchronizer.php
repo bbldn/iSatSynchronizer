@@ -443,7 +443,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
                 )
             );
         } else {
-            $productDescriptionFront->setDescription(trim(Store::encodingConvert($productBack->getDescription())));
+            if (null === $productDescriptionFront->getDescription()) {
+                $productDescriptionFront->setDescription(trim(Store::encodingConvert($productBack->getDescription())));
+            }
         }
 
         $productDescriptionFront->setTag(Filler::securityString($productBack->getTags()));
