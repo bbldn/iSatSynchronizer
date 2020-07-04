@@ -623,7 +623,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $seoUrl->setLanguageId($this->storeFront->getDefaultLanguageId());
         $seoUrl->setQuery("product_id={$productFrontId}");
 
-        $slug = trim(Filler::securityString($productBack->getSlug()));
+        $slug = trim(Filler::trim($productBack->getSlug()));
 
         if (mb_strlen($slug) > 0) {
             $slugs = explode('/', $slug);
