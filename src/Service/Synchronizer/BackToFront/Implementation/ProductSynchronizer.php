@@ -438,26 +438,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         }
 
         $productDescriptionFront->setTag(Filler::securityString($productBack->getTags()));
-        $categoryDescriptionFront = $this->getCategoryDescriptionFrontByCategoryBackId($productBack->getCategoryId());
-
-        if (null !== $categoryDescriptionFront) {
-            $categoryFrontId = $categoryDescriptionFront->getCategoryId();
-            $categoryName = trim(Store::encodingConvert($categoryDescriptionFront->getName()));
-            $metaTitlePart = " {$categoryName} по низкой цене в Киеве с доставкой по Украине. ";
-        } else {
-            $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
-            $metaTitlePart = '';
-        }
-
-        $rate = $this->currencyBackRepository->getCurrentCourse();
-        $price = round($productBack->getPrice() * (float)$rate['грн']);
-        $productName = Store::encodingConvert($productBack->getName());
-        $metaTitle = implode('', [
-            "{$productName} купить за {$price} грн:{$metaTitlePart}",
-            "{$productName}: цена, отзывы, описание, характеристики.",
-        ]);
-
-        $productDescriptionFront->setMetaTitle($metaTitle);
+        $productDescriptionFront->setMetaTitle($productName);
         $productDescriptionFront->setMetaDescription(Filler::securityString($productBack->getMetaDescription()));
         $productDescriptionFront->setMetaKeyword(Filler::securityString($productBack->getMetaKeywords()));
 
@@ -492,10 +473,18 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
 
+        $categoryDescriptionFront = $this->getCategoryDescriptionFrontByCategoryBackId($productBack->getCategoryId());
+        if (null !== $categoryDescriptionFront) {
+            $categoryFrontId = $categoryDescriptionFront->getCategoryId();
+        } else {
+            $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
+        }
+
         $productCategoryFront = $this->productCategoryFrontRepository->findOneByProductFrontIdAndCategoryId(
             $productFront->getProductId(),
             $categoryFrontId
         );
+
         if (null === $productCategoryFront) {
             $productCategoryFront = new ProductCategoryFront();
         }
