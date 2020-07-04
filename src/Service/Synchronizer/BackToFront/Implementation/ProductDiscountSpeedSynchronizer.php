@@ -9,7 +9,9 @@ class ProductDiscountSpeedSynchronizer extends ProductDiscountSynchronizer
      */
     protected function synchronizeAll(): void
     {
-        $values = $this->productDiscountBackRepository->getPricesAll();
+        $discountPrices = $this->productDiscountBackRepository->getPricesAll();
+        $productPrices = $this->productBackRepository->getPricesAll();
+        $values = array_merge($discountPrices, $productPrices);
         $this->productDiscountFrontRepository->updatePriceByValues($values);
     }
 
@@ -18,7 +20,9 @@ class ProductDiscountSpeedSynchronizer extends ProductDiscountSynchronizer
      */
     protected function synchronizeByIds(string $ids): void
     {
-        $values = $this->productDiscountBackRepository->getPricesByIds($ids);
+        $discountPrices = $this->productDiscountBackRepository->getPricesByIds($ids);
+        $productPrices = $this->productBackRepository->getPricesByIds($ids);
+        $values = array_merge($discountPrices, $productPrices);
         $this->productDiscountFrontRepository->updatePriceByValues($values);
     }
 }

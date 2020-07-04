@@ -87,45 +87,26 @@ class ProductRepository extends BackRepository
     /**
      * @return array
      */
-    public function getBackPrices(): array
+    public function getPricesAll(): array
     {
-        $tableName = $this->getClassMetadata()->getTableName();
-        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $queryBuilder->select('p.`productID` as `product_id`, p.`Price` as `price`');
-        $queryBuilder->from($tableName, 'p');
-
-        try {
-            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
-        } catch (DBALException $e) {
-            return [];
-        }
-
-        $result->execute();
-
-        return $result->fetchAll();
+        return $this->createQueryBuilder('p')
+            ->select('p.productId, p.price, 1 as groupId')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
      * @param string $ids
      * @return array
      */
-    public function getBackPricesByIds(string $ids): array
+    public function getPricesByIds(string $ids): array
     {
-        $tableName = $this->getClassMetadata()->getTableName();
-        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $queryBuilder->select('p.`productID` as `product_id`, p.`Price` as `price`');
-        $queryBuilder->from($tableName, 'p');
-        $queryBuilder->where("p.`productID` IN ({$ids})");
-
-        try {
-            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
-        } catch (DBALException $e) {
-            return [];
-        }
-
-        $result->execute();
-
-        return $result->fetchAll();
+        return $this->createQueryBuilder('p')
+            ->select('p.productId, p.price, 1 as groupId')
+            ->andWhere('p.productId IN (:ids})')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
