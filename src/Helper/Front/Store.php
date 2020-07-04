@@ -824,7 +824,7 @@ class Store extends StoreBase
         $name = str_replace(['.', ',', ' ', '(', ')'], $separator, $name);
         $name = str_replace($separator . $separator, $separator, $name);
         $name = mb_substr($name, 0, 55);
-        $name = str_ireplace('%2f', '/', urlencode($name));
+//        $name = str_ireplace('%2f', '/', urlencode($name));
 
         return "{$id}{$separator}{$name}";
     }
