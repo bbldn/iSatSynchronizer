@@ -817,8 +817,9 @@ class Store extends StoreBase
      */
     public static function generateURL(int $id, string $name, string $separator = '-'): string
     {
+        $name = static::encodingConvert($name);
         $name = trim(mb_substr($name, 0, 70));
-        $name = Str::lower(static::encodingConvert($name));
+        $name = Str::lower($name);
         $name = str_replace(['\\', '\'', '/', '+', '%', '?'], '', $name);
         $name = str_replace(['.', ',', ' ', '(', ')'], $separator, $name);
         $name = str_replace($separator . $separator, $separator, $name);

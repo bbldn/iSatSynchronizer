@@ -14,6 +14,11 @@ class ProductDiscountSpeedSynchronizer extends BackToFrontSynchronizer
     /** @var ProductDiscountFrontRepository $productDiscountFrontRepository */
     protected $productDiscountFrontRepository;
 
+    /**
+     * ProductDiscountSpeedSynchronizer constructor.
+     * @param ProductDiscountBackRepository $productDiscountBackRepository
+     * @param ProductDiscountFrontRepository $productDiscountFrontRepository
+     */
     public function __construct(
         ProductDiscountBackRepository $productDiscountBackRepository,
         ProductDiscountFrontRepository $productDiscountFrontRepository
@@ -23,6 +28,9 @@ class ProductDiscountSpeedSynchronizer extends BackToFrontSynchronizer
         $this->productDiscountFrontRepository = $productDiscountFrontRepository;
     }
 
+    /**
+     *
+     */
     public function synchronizeAll(): void
     {
         $prices = $this->productDiscountBackRepository->getAllPrices();
