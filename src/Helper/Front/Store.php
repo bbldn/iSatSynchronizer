@@ -812,17 +812,19 @@ class Store extends StoreBase
     /**
      * @param int $id
      * @param string $name
+     * @param string $separator
      * @return string
      */
-    public static function generateURL(int $id, string $name): string
+    public static function generateURL(int $id, string $name, string $separator = '-'): string
     {
-        $full = $id . '-' . Str::lower(static::encodingConvert($name));
+        $name = trim(mb_substr($name, 0, 70));
+        $name = Str::lower(static::encodingConvert($name));
+        $name = str_replace(['\\', '\'', '/', '+', '%', '?'], '', $name);
+        $name = str_replace(['.', ',', ' ', '(', ')'], $separator, $name);
+        $name = str_replace($separator . $separator, $separator, $name);
+        $name = mb_substr($name, 0, 55);
+        $name = str_ireplace('%2f', '/', urlencode($name));
 
-        $full = preg_replace('/[+,() ]/i', '-', $full);
-        $full = preg_replace('/-{1,}/i', '-', $full);
-        $full = preg_replace('/\//i', '', $full);
-        $full = trim($full, '-');
-
-        return $full;
+        return "{$id}{$separator}{$name}";
     }
 }
