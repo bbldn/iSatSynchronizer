@@ -409,11 +409,13 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $categoryFront = $this->getCategoryFrontByCategoryBackId($productBack->getCategoryId());
         if (null !== $categoryFront) {
             $categoryFrontId = $categoryFront->getCategoryId();
+            $categoryStatus = $categoryFront->getStatus();
         } else {
             $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
+            $categoryStatus = true;
         }
 
-        $productFront->setStatus($productBack->getEnabled() !== 0 && $categoryFront->getStatus() !== false);
+        $productFront->setStatus($productBack->getEnabled() !== 0 && $categoryStatus === true);
 
         if (null === $productFront->getViewed()) {
             $productFront->setViewed(0);
