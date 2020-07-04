@@ -20,7 +20,7 @@ use Doctrine\DBAL\DBALException;
  */
 class ProductRepository extends FrontRepository
 {
-    /** @var \App\Repository\ProductRepository $productRepository */
+    /** @var ProductRepository $productRepository */
     protected $productRepository;
 
     /** @var string $dataBaseName */

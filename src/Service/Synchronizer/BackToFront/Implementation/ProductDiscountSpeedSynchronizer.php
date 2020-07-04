@@ -2,37 +2,23 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
-use App\Repository\Back\BuyersGroupsPricesRepository as ProductDiscountBackRepository;
-use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
-
-class ProductDiscountSpeedSynchronizer extends BackToFrontSynchronizer
+class ProductDiscountSpeedSynchronizer extends ProductDiscountSynchronizer
 {
-    /** @var ProductDiscountBackRepository $productDiscountBackRepository */
-    protected $productDiscountBackRepository;
-
-    /** @var ProductDiscountFrontRepository $productDiscountFrontRepository */
-    protected $productDiscountFrontRepository;
-
-    /**
-     * ProductDiscountSpeedSynchronizer constructor.
-     * @param ProductDiscountBackRepository $productDiscountBackRepository
-     * @param ProductDiscountFrontRepository $productDiscountFrontRepository
-     */
-    public function __construct(
-        ProductDiscountBackRepository $productDiscountBackRepository,
-        ProductDiscountFrontRepository $productDiscountFrontRepository
-    )
-    {
-        $this->productDiscountBackRepository = $productDiscountBackRepository;
-        $this->productDiscountFrontRepository = $productDiscountFrontRepository;
-    }
-
     /**
      *
      */
-    public function synchronizeAll(): void
+    protected function synchronizeAll(): void
     {
-        $prices = $this->productDiscountBackRepository->getAllPrices();
+        $values = $this->productDiscountBackRepository->getPricesAll();
+        $this->productDiscountFrontRepository->updatePriceByValues($values);
+    }
+
+    /**
+     * @param string $ids
+     */
+    protected function synchronizeByIds(string $ids): void
+    {
+        $values = $this->productDiscountBackRepository->getPricesByIds($ids);
+        $this->productDiscountFrontRepository->updatePriceByValues($values);
     }
 }

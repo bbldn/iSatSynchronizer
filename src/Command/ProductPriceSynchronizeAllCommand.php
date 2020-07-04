@@ -6,7 +6,7 @@ use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProductPriceUpdateCommand extends Command
+class ProductPriceSynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'product:price:update:all';
 

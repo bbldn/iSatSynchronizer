@@ -64,11 +64,6 @@ class ProductSynchronizer extends ProductBaseSynchronizer
         }
     }
 
-    public function synchronizeAllSeoUrl(): void
-    {
-
-    }
-
     /**
      * @param bool $reloadImage
      */
@@ -108,5 +103,21 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     public function updatePriceByCategoryIds(string $ids): void
     {
         parent::updatePriceByCategoryIds($ids);
+    }
+
+    /**
+     * @param string $ids
+     */
+    public function updatePriceByIdsFast(string $ids): void
+    {
+        parent::updatePriceByIdsFast($ids);
+    }
+
+    /**
+     *
+     */
+    public function updatePriceAllFast(): void
+    {
+        parent::updatePriceAllFast();
     }
 }

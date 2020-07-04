@@ -114,7 +114,7 @@ abstract class Repository extends ServiceEntityRepository
         }
 
         return $this->createQueryBuilder('c')
-            ->where("c.{$identifier} IN(:ids)")
+            ->where("c.{$identifier} IN (:ids)")
             ->setParameter('ids', $ids)
             ->getQuery()
             ->getResult();

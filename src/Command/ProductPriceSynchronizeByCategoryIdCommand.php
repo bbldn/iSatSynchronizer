@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProductPriceUpdateByCategoryIdCommand extends Command
+class ProductPriceSynchronizeByCategoryIdCommand extends Command
 {
     protected static $defaultName = 'product:price:update:by-category-id';
 

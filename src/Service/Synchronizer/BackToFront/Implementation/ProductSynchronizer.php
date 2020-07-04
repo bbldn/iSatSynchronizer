@@ -45,7 +45,7 @@ use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use App\Service\Synchronizer\BackToFront\DescriptionSynchronizer;
-use App\Service\Synchronizer\BackToFront\ProductDiscountSynchronizer as ProductDiscountBackToFrontSynchronizer;
+use App\Service\Synchronizer\BackToFront\ProductDiscountSpeedSynchronizer as ProductDiscountBackToFrontSynchronizer;
 use App\Service\Synchronizer\BackToFront\ProductSeoUrlSynchronizer as ProductSeoUrlBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
@@ -495,7 +495,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
         $this->synchronizeAttributes($productBack, $productFront->getProductId());
-        $this->synchronizeDiscount($productFront->getProductId());
+        $this->synchronizeDiscount($productBack);
 
         if (true === $this->productDiscontinuedTableExists) {
             if (true === $productBack->getDiscontinued()) {
@@ -525,12 +525,12 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     * @param int $productId
+     * @param ProductBack $productBack
      */
-    protected function synchronizeDiscount(int $productId): void
+    protected function synchronizeDiscount(ProductBack $productBack): void
     {
-        $this->productDiscountBackToFrontSynchronizer->createOrUpdateDiscountItems($productId);
-//        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productId);
+        $this->productDiscountBackToFrontSynchronizer->createOrUpdateDiscountItems($productBack->getProductId());
+        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productBack->getProductId());
     }
 
     /**
@@ -688,6 +688,16 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
+     *
+     */
+    protected function updatePriceAllFast(): void
+    {
+        $products = $this->productBackRepository->getBackPrices();
+        $this->productFrontRepository->updatePriceByData($products);
+        $this->productDiscountBackToFrontSynchronizer->synchronizeAll();
+    }
+
+    /**
      * @param string $ids
      */
     protected function updatePriceByIds(string $ids): void
@@ -697,6 +707,16 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         foreach ($products as $value) {
             $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['product_id']);
         }
+    }
+
+    /**
+     * @param string $ids
+     */
+    protected function updatePriceByIdsFast(string $ids): void
+    {
+        $products = $this->productBackRepository->getBackPricesByIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+        $this->productDiscountBackToFrontSynchronizer->synchronizeByIds($ids);
     }
 
     /**

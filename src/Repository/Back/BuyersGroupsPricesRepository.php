@@ -45,10 +45,24 @@ class BuyersGroupsPricesRepository extends BackRepository
     /**
      * @return array
      */
-    public function getAllPrices(): array
+    public function getPricesAll(): array
     {
         return $this->createQueryBuilder('bgp')
-            ->select('bgp.productId, bgp.price')
+            ->select('bgp.productId, bgp.price, bgp.groupId')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @param string $ids
+     * @return array
+     */
+    public function getPricesByIds(string $ids): array
+    {
+        return $this->createQueryBuilder('bgp')
+            ->select('bgp.productId, bgp.price, bgp.groupId')
+            ->andWhere('bgp.productId IN (:ids)')
+            ->setParameter('ids', $ids)
             ->getQuery()
             ->getArrayResult();
     }
