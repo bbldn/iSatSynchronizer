@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Event\BackToFront\ProductsClearEvent;
 use App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -27,7 +28,7 @@ class ClearProductsAttributes implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductAttributeSynchronizer::class => 'action',
+            ProductsClearEvent::class => 'action',
         ];
     }
 

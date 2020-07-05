@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Event\ProductsClearBackToFrontEvent;
+use App\Event\BackToFront\ProductsClearEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use App\Service\Synchronizer\BackToFront\ProductSeoUrlSynchronizer as ProductSeoUrlBackToFrontSynchronizer;
 
@@ -28,7 +28,7 @@ class ClearProductsSeoPro implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductsClearBackToFrontEvent::class => 'action',
+            ProductsClearEvent::class => 'action',
         ];
     }
 

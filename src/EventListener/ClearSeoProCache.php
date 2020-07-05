@@ -2,8 +2,8 @@
 
 namespace App\EventListener;
 
-use App\Event\ProductsAllSynchronizedBackToFrontEvent;
-use App\Event\ProductsSynchronizedBackToFrontEvent;
+use App\Event\BackToFront\ProductsAllSynchronizedEvent;
+use App\Event\BackToFront\ProductsSynchronizedEvent;
 use App\Service\Other\SeoProCacheCleaner;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -18,8 +18,8 @@ class ClearSeoProCache implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductsAllSynchronizedBackToFrontEvent::class => 'action',
-            ProductsSynchronizedBackToFrontEvent::class => 'action',
+            ProductsAllSynchronizedEvent::class => 'action',
+            ProductsSynchronizedEvent::class => 'action',
         ];
     }
 

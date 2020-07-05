@@ -2,10 +2,10 @@
 
 namespace App\EventListener;
 
-use App\Event\PriceSynchronizeAllFastEvent;
-use App\Event\PriceSynchronizeEvent;
-use App\Event\PriceSynchronizeFastEvent;
-use App\Event\ProductSynchronizedBackToFrontEvent;
+use App\Event\BackToFront\PriceSynchronizeAllFastEvent;
+use App\Event\BackToFront\PriceSynchronizeEvent;
+use App\Event\BackToFront\PriceSynchronizeFastEvent;
+use App\Event\BackToFront\ProductSynchronizedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use App\Service\Synchronizer\BackToFront\ProductDiscountSpeedSynchronizer as ProductDiscountBackToFrontSynchronizer;
 
@@ -29,7 +29,7 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductSynchronizedBackToFrontEvent::class => 'action',
+            ProductSynchronizedEvent::class => 'action',
             PriceSynchronizeEvent::class => 'actionData',
             PriceSynchronizeFastEvent::class => 'actionDataFast',
             PriceSynchronizeAllFastEvent::class => 'actionDataAllFast',
@@ -37,9 +37,9 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
     }
 
     /**
-     * @param ProductSynchronizedBackToFrontEvent $event
+     * @param ProductSynchronizedEvent $event
      */
-    public function action(ProductSynchronizedBackToFrontEvent $event): void
+    public function action(ProductSynchronizedEvent $event): void
     {
         $this->productDiscountBackToFrontSynchronizer->load();
 

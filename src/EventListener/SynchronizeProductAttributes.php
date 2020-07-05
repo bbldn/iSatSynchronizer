@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Event\ProductSynchronizedBackToFrontEvent;
+use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer;
@@ -43,14 +43,14 @@ class SynchronizeProductAttributes implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductSynchronizedBackToFrontEvent::class => 'action',
+            ProductSynchronizedEvent::class => 'action',
         ];
     }
 
     /**
-     * @param ProductSynchronizedBackToFrontEvent $event
+     * @param ProductSynchronizedEvent $event
      */
-    public function action(ProductSynchronizedBackToFrontEvent $event): void
+    public function action(ProductSynchronizedEvent $event): void
     {
         $product = $event->getProduct();
         $productBack = $this->productBackRepository->find($product->getBackId());

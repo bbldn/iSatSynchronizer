@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Event;
+namespace App\Event\BackToFront;
 
 use Symfony\Contracts\EventDispatcher\Event;
 

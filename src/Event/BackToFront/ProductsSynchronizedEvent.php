@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Event;
+namespace App\Event\BackToFront;
 
 use App\Entity\Product;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class ProductsSynchronizedBackToFrontEvent extends Event
+class ProductsSynchronizedEvent extends Event
 {
     /** @var Product[] $products */
     protected $products;
@@ -29,7 +29,7 @@ class ProductsSynchronizedBackToFrontEvent extends Event
 
     /**
      * @param Product[] $products
-     * @return ProductsSynchronizedBackToFrontEvent
+     * @return ProductsSynchronizedEvent
      */
     public function setProducts(array $products): self
     {
