@@ -738,7 +738,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $products = $this->productBackRepository->getBackPricesByCategoryIds($ids);
         $this->productFrontRepository->updatePriceByData($products);
         foreach ($products as $value) {
-            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['product_id']);
+            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['productId']);
         }
     }
 }
