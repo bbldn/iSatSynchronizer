@@ -56,10 +56,10 @@ class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase
     /**
      *
      */
-    public function clearRemove(): void
+    public function clear(): void
     {
         if (true === $this->seoUrlTableExists) {
-            parent::clearRemove();
+            parent::clear();
         }
     }
 }

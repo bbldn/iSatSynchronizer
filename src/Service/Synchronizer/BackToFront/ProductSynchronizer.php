@@ -72,40 +72,40 @@ class ProductSynchronizer extends ProductBaseSynchronizer
     /**
      *
      */
-    public function updatePriceAll(): void
+    public function synchronizePriceAll(): void
     {
-        parent::updatePriceAll();
+        parent::synchronizePriceAll();
     }
 
     /**
      * @param string $ids
      */
-    public function updatePriceByIds(string $ids): void
+    public function synchronizePriceByIds(string $ids): void
     {
-        parent::updatePriceByIds($ids);
+        parent::synchronizePriceByIds($ids);
     }
 
     /**
      * @param string $ids
      */
-    public function updatePriceByCategoryIds(string $ids): void
+    public function synchronizePriceByCategoryIds(string $ids): void
     {
-        parent::updatePriceByCategoryIds($ids);
+        parent::synchronizePriceByCategoryIds($ids);
     }
 
     /**
      * @param string $ids
      */
-    public function updatePriceByIdsFast(string $ids): void
+    public function synchronizePriceByIdsFast(string $ids): void
     {
-        parent::updatePriceByIdsFast($ids);
+        parent::synchronizePriceByIdsFast($ids);
     }
 
     /**
      *
      */
-    public function updatePriceAllFast(): void
+    public function synchronizePriceAllFast(): void
     {
-        parent::updatePriceAllFast();
+        parent::synchronizePriceAllFast();
     }
 }

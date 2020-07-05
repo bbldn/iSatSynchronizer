@@ -162,7 +162,7 @@ class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
     /**
      *
      */
-    protected function clearRemove(): void
+    protected function clear(): void
     {
         $this->seoUrlFrontRepository->removeAllByQuery('product_id');
     }

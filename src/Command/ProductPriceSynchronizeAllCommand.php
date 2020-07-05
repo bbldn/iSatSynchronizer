@@ -38,7 +38,7 @@ class ProductPriceSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSynchronize->load()->updatePriceAll();
+        $this->productSynchronize->load()->synchronizePriceAll();
 
         return 0;
     }

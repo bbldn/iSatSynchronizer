@@ -11,10 +11,13 @@ use App\Entity\Front\ProductDiscontinued as ProductDiscontinuedFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
 use App\Entity\Product;
+use App\Event\PriceSynchronizeAllFastEvent;
 use App\Event\ProductsAllSynchronizedBackToFrontEvent;
 use App\Event\ProductsClearBackToFrontEvent;
 use App\Event\ProductsSynchronizedBackToFrontEvent;
 use App\Event\ProductSynchronizedBackToFrontEvent;
+use App\Event\PriceSynchronizeEvent;
+use App\Event\PriceSynchronizeFastEvent;;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
@@ -44,8 +47,6 @@ use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use App\Service\Synchronizer\BackToFront\DescriptionSynchronizer;
-use App\Service\Synchronizer\BackToFront\ProductDiscountSpeedSynchronizer as ProductDiscountBackToFrontSynchronizer;
-use App\Service\Synchronizer\BackToFront\ProductSeoUrlSynchronizer as ProductSeoUrlBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -133,12 +134,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var CurrencyBackRepository $currencyBackRepository */
     protected $currencyBackRepository;
 
-    /** @var ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer */
-    protected $productDiscountBackToFrontSynchronizer;
-
-    /** @var ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer */
-    protected $productSeoUrlBackToFrontSynchronizer;
-
     /** @var DescriptionSynchronizer $descriptionSynchronizer */
     protected $descriptionSynchronizer;
 
@@ -160,6 +155,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductsAllSynchronizedBackToFrontEvent::class => 0,
         ProductsSynchronizedBackToFrontEvent::class => 0,
         ProductsClearBackToFrontEvent::class => 0,
+        PriceSynchronizeEvent::class => 0,
+        PriceSynchronizeFastEvent::class => 0,
+        PriceSynchronizeAllFastEvent::class => 0,
     ];
 
     /** @var Product[] $synchronizedProducts */
@@ -194,8 +192,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductImageSynchronizer $productImageSynchronizer
      * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
      * @param CurrencyBackRepository $currencyBackRepository
-     * @param ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer
-     * @param ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
      * @param DescriptionSynchronizer $descriptionSynchronizer
      * @param ManufacturerSynchronizer $manufacturerSynchronizer
      */
@@ -227,8 +223,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductImageSynchronizer $productImageSynchronizer,
         ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository,
         CurrencyBackRepository $currencyBackRepository,
-        ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer,
-        ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer,
         DescriptionSynchronizer $descriptionSynchronizer,
         ManufacturerSynchronizer $manufacturerSynchronizer
     )
@@ -260,8 +254,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productImageSynchronizer = $productImageSynchronizer;
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
         $this->currencyBackRepository = $currencyBackRepository;
-        $this->productSeoUrlBackToFrontSynchronizer = $productSeoUrlBackToFrontSynchronizer;
-        $this->productDiscountBackToFrontSynchronizer = $productDiscountBackToFrontSynchronizer;
         $this->descriptionSynchronizer = $descriptionSynchronizer;
         $this->manufacturerSynchronizer = $manufacturerSynchronizer;
     }
@@ -297,14 +289,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productRewardFrontRepository->resetAutoIncrements();
         $this->productSpecialFrontRepository->resetAutoIncrements();
 
-        $this->productDiscountBackToFrontSynchronizer->clear();
-
         if (true === $this->productDiscontinuedTableExists) {
             $this->productDiscontinuedFrontRepository->removeAll();
             $this->productDiscontinuedFrontRepository->resetAutoIncrements();
         }
-
-        $this->productSeoUrlBackToFrontSynchronizer->clearRemove();
 
         if (true === $this->synchronizeImage) {
             $this->productImageSynchronizer->clearFolder();
@@ -322,7 +310,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     protected function _load(): void
     {
         $this->productDiscontinuedTableExists = $this->productDiscontinuedFrontRepository->tableExists();
-        $this->productSeoUrlBackToFrontSynchronizer->load();
     }
 
     /**
@@ -340,7 +327,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $productBack->getProductId(),
             $productFront->getProductId()
         );
-        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productBack->getProductId());
 
         if (1 === $this->events[ProductSynchronizedBackToFrontEvent::class]) {
             $this->eventDispatcher->dispatch(new ProductSynchronizedBackToFrontEvent($product));
@@ -509,8 +495,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
-        $this->synchronizeDiscount($productBack);
-
         if (true === $this->productDiscontinuedTableExists) {
             if (true === $productBack->getDiscontinued()) {
                 $exists = $this->productDiscontinuedFrontRepository->exists($productFront->getProductId());
@@ -525,26 +509,11 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             }
         }
 
-        $this->productSeoUrlBackToFrontSynchronizer->synchronizeByProductBackAndProductFront(
-            $productBack,
-            $productFront
-        );
-
-
         if (true === $this->synchronizeImage) {
             $this->synchronizeImage($productBack, $productFront);
         }
 
         return $productFront;
-    }
-
-    /**
-     * @param ProductBack $productBack
-     */
-    protected function synchronizeDiscount(ProductBack $productBack): void
-    {
-        $this->productDiscountBackToFrontSynchronizer->createOrUpdateDiscountItems($productBack->getProductId());
-        $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productBack->getProductId());
     }
 
     /**
@@ -661,9 +630,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function synchronizeByCategoryId(int $id, bool $synchronizeImage = false): void
     {
-        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
         $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
-        $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 0;
 
         $productsBack = $this->productBackRepository->findByCategoryId($id);
         foreach ($productsBack as $productBack) {
@@ -683,7 +650,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     {
         $this->events[ProductSynchronizedBackToFrontEvent::class] = 1;
         $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
-        $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 0;
 
         $productsBack = $this->productBackRepository->findByIds($ids);
         foreach ($productsBack as $productBack) {
@@ -703,7 +669,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     {
         $this->events[ProductSynchronizedBackToFrontEvent::class] = 1;
         $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
-        $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 0;
 
         $productsBack = $this->productBackRepository->findByName($name);
         foreach ($productsBack as $productBack) {
@@ -721,7 +686,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     protected function synchronizeAll(bool $synchronizeImage = false): void
     {
         $this->events[ProductSynchronizedBackToFrontEvent::class] = 1;
-        $this->events[ProductsSynchronizedBackToFrontEvent::class] = 0;
         $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 1;
 
         $productsBack = $this->productBackRepository->findAll();
@@ -737,56 +701,75 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /**
      *
      */
-    protected function updatePriceAll(): void
+    protected function synchronizePriceAll(): void
     {
+        $this->events[PriceSynchronizeEvent::class] = 1;
+
         $products = $this->productBackRepository->getPricesAll();
         $this->productFrontRepository->updatePriceByData($products);
-        foreach ($products as $value) {
-            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['productId']);
+
+        if (1 === $this->events[PriceSynchronizeEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
         }
     }
 
     /**
      *
      */
-    protected function updatePriceAllFast(): void
+    protected function synchronizePriceAllFast(): void
     {
+        $this->events[PriceSynchronizeAllFastEvent::class] = 1;
+
         $products = $this->productBackRepository->getPricesAll();
         $this->productFrontRepository->updatePriceByData($products);
-        $this->productDiscountBackToFrontSynchronizer->synchronizeAll();
-    }
 
-    /**
-     * @param string $ids
-     */
-    protected function updatePriceByIds(string $ids): void
-    {
-        $products = $this->productBackRepository->getPricesByIds($ids);
-        $this->productFrontRepository->updatePriceByData($products);
-        foreach ($products as $value) {
-            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['productId']);
+        if (1 === $this->events[PriceSynchronizeAllFastEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeAllFastEvent());
         }
     }
 
     /**
      * @param string $ids
      */
-    protected function updatePriceByIdsFast(string $ids): void
+    protected function synchronizePriceByIds(string $ids): void
     {
+        $this->events[PriceSynchronizeEvent::class] = 1;
+
         $products = $this->productBackRepository->getPricesByIds($ids);
         $this->productFrontRepository->updatePriceByData($products);
-        $this->productDiscountBackToFrontSynchronizer->synchronizeByIds($ids);
+
+        if (1 === $this->events[PriceSynchronizeEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
+        }
     }
 
     /**
      * @param string $ids
      */
-    protected function updatePriceByCategoryIds(string $ids): void
+    protected function synchronizePriceByIdsFast(string $ids): void
     {
+        $this->events[PriceSynchronizeFastEvent::class] = 1;
+
+        $products = $this->productBackRepository->getPricesByIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+
+        if (1 === $this->events[PriceSynchronizeFastEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeFastEvent($ids));
+        }
+    }
+
+    /**
+     * @param string $ids
+     */
+    protected function synchronizePriceByCategoryIds(string $ids): void
+    {
+        $this->events[PriceSynchronizeEvent::class] = 1;
+
         $products = $this->productBackRepository->getBackPricesByCategoryIds($ids);
         $this->productFrontRepository->updatePriceByData($products);
-        foreach ($products as $value) {
-            $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['productId']);
+
+        if (1 === $this->events[PriceSynchronizeEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
         }
     }
 }

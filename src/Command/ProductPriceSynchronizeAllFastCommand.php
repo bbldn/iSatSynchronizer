@@ -31,7 +31,7 @@ class ProductPriceSynchronizeAllFastCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSynchronizer->load()->updatePriceAllFast();
+        $this->productSynchronizer->load()->synchronizePriceAllFast();
 
         return 0;
     }
