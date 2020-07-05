@@ -48,7 +48,6 @@ use App\Service\Synchronizer\BackToFront\ProductDiscountSpeedSynchronizer as Pro
 use App\Service\Synchronizer\BackToFront\ProductSeoUrlSynchronizer as ProductSeoUrlBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
-use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ProductSynchronizer extends BackToFrontSynchronizer
