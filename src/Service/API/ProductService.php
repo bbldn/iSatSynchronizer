@@ -107,7 +107,7 @@ class ProductService extends ApiService
         $result = [
             'ok' => true,
             'data' => [
-                'products' => $this->productBackRepository->findByNameWithMax($name, $max),
+                'products' => $this->productBackRepository->getByNameWithMax($name, $max),
             ]
         ];
 

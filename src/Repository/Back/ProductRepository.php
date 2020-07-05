@@ -49,10 +49,11 @@ class ProductRepository extends BackRepository
      * @param int|null $max
      * @return array
      */
-    public function findByNameWithMax(string $name, ?int $max): array
+    public function getByNameWithMax(string $name, ?int $max): array
     {
         $name = mb_strtolower($name);
         $query = $this->createQueryBuilder('p')
+            ->select('p.id, p.name')
             ->andWhere('LOWER(p.name) LIKE :name')
             ->setParameter('name', "{$name}%");
 
@@ -60,7 +61,7 @@ class ProductRepository extends BackRepository
             $query->setMaxResults($max);
         }
 
-        return $query->select('p.id, p.name')->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
     }
 
     /**
@@ -79,7 +80,7 @@ class ProductRepository extends BackRepository
     /**
      * @return array
      */
-    public function getAllIds(): array
+    public function getIdsAll(): array
     {
         return $this->createQueryBuilder('p')
             ->select('p.productId')
@@ -106,7 +107,7 @@ class ProductRepository extends BackRepository
     {
         return $this->createQueryBuilder('p')
             ->select('p.productId, p.price, 1 as groupId')
-            ->andWhere('p.productId IN (:ids})')
+            ->andWhere('p.productId IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()
             ->getArrayResult();
@@ -116,25 +117,14 @@ class ProductRepository extends BackRepository
      * @param string $ids
      * @return array
      */
-    public function getBackPricesByCategoryIds(string $ids): array
+    public function getPricesByCategoryIds(string $ids): array
     {
-        $tableName = $this->getClassMetadata()->getTableName();
-        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $queryBuilder->select('p.`productID` as `product_id`, p.`Price` as `price`');
-        $queryBuilder->from($tableName, 'p');
-        $queryBuilder->where("p.`categoryID` IN ({$ids})");
-
-        try {
-            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
-        } catch (DBALException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
-
-            return [];
-        }
-
-        $result->execute();
-
-        return $result->fetchAll();
+        return $this->createQueryBuilder('p')
+            ->select('p.productId, p.price')
+            ->andWhere('p.categoryId IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -142,22 +132,10 @@ class ProductRepository extends BackRepository
      */
     public function getAllSlugs(): array
     {
-        $tableName = $this->getClassMetadata()->getTableName();
-        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $queryBuilder->select('p.`slug` as `slug`');
-        $queryBuilder->from($tableName, 'p');
-        $queryBuilder->where('CHAR_LENGTH(p.`slug`) > 0');
-
-        try {
-            $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
-        } catch (DBALException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
-
-            return [];
-        }
-
-        $result->execute();
-
-        return $result->fetchAll();
+        return $this->createQueryBuilder('p')
+            ->select('p.slug')
+            ->andWhere('LENGTH(p.slug) > 0')
+            ->getQuery()
+            ->getArrayResult();
     }
 }

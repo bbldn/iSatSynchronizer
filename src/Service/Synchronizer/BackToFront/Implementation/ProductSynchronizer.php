@@ -300,6 +300,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     protected function _load(): void
     {
         $this->productDiscontinuedTableExists = $this->productDiscontinuedFrontRepository->tableExists();
+        $this->descriptionSynchronizer->load();
+        $this->manufacturerSynchronizer->load();
     }
 
     /**
@@ -318,12 +320,12 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $productFront->getProductId()
         );
 
-        if (1 === $this->events[ProductSynchronizedEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductSynchronizedEvent($product, $this->synchronizeImage));
-        }
-
         if (1 === $this->events[ProductsSynchronizedEvent::class]) {
             $this->synchronizedProducts[] = $product;
+        }
+
+        if (1 === $this->events[ProductSynchronizedEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductSynchronizedEvent($product, $this->synchronizeImage));
         }
     }
 
@@ -698,7 +700,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     {
         $this->events[PriceSynchronizeEvent::class] = 1;
 
-        $products = $this->productBackRepository->getBackPricesByCategoryIds($ids);
+        $products = $this->productBackRepository->getPricesByCategoryIds($ids);
         $this->productFrontRepository->updatePriceByData($products);
 
         if (1 === $this->events[PriceSynchronizeEvent::class]) {
