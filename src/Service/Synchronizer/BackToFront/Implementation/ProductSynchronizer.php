@@ -449,8 +449,15 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         }
 
         $productDescriptionFront->setTag(Filler::securityString($productBack->getTags()));
-        $productDescriptionFront->setMetaTitle($productName);
-        $productDescriptionFront->setMetaDescription(Filler::securityString($productBack->getMetaDescription()));
+
+        if (null === $productDescriptionFront->getMetaTitle()) {
+            $productDescriptionFront->setMetaTitle('');
+        }
+
+        if (null === $productDescriptionFront->getMetaDescription()) {
+            $productDescriptionFront->setMetaDescription('');
+        }
+
         $productDescriptionFront->setMetaKeyword(Filler::securityString($productBack->getMetaKeywords()));
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);

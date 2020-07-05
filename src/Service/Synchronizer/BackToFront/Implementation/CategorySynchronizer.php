@@ -277,11 +277,14 @@ class CategorySynchronizer extends BackToFrontSynchronizer
             Filler::securityString(Store::encodingConvert($categoryBack->getDescription()))
         );
 
-        $metaTitle = Store::encodingConvert($categoryBack->getName());
-        $metaTitle = "{$metaTitle} купить в Киеве с доставкой по Украине по самым выгодным ценам. "
-            . " Как выбрать {$metaTitle}: цены, отзывы, характеристики.";
-        $categoryDescription->setMetaTitle($metaTitle);
-        $categoryDescription->setMetaDescription(Filler::securityString($categoryBack->getMetaDescription()));
+        if (null === $categoryDescription->getMetaTitle()) {
+            $categoryDescription->setMetaTitle('');
+        }
+
+        if (null === $categoryDescription->getMetaDescription()) {
+            $categoryDescription->setMetaDescription('');
+        }
+
         $categoryDescription->setMetaKeyword(Filler::securityString($categoryBack->getMetaKeywords()));
 
         $this->categoryDescriptionFrontRepository->persistAndFlush($categoryDescription);
