@@ -51,6 +51,8 @@ use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontTo
 use App\Service\Synchronizer\FrontToBack\FrontToBackSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
+use App\Repository\Back\OrderHistoryRepository as OrderHistoryBackRepository;
+use App\Entity\Back\OrderHistory as OrderHistoryBack;
 
 class OrderSynchronizer extends FrontToBackSynchronizer
 {
@@ -162,6 +164,9 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     /** @var ZoneFrontRepository $zoneFrontRepository */
     protected $zoneFrontRepository;
 
+    /** @var OrderHistoryBackRepository $orderHistoryBackRepository */
+    protected $orderHistoryBackRepository;
+
     /** @var CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer */
     protected $customerFrontToBackSynchronizer;
 
@@ -203,6 +208,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
      * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
      * @param CountryFrontRepository $countryFrontRepository
      * @param ZoneFrontRepository $zoneFrontRepository
+     * @param OrderHistoryBackRepository $orderHistoryBackRepository
      * @param CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
      */
     public function __construct(
@@ -242,6 +248,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
         CountryFrontRepository $countryFrontRepository,
         ZoneFrontRepository $zoneFrontRepository,
+        OrderHistoryBackRepository $orderHistoryBackRepository,
         CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer
     )
     {
@@ -281,6 +288,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         $this->orderSimpleFieldsFrontRepository = $orderSimpleFieldsFrontRepository;
         $this->countryFrontRepository = $countryFrontRepository;
         $this->zoneFrontRepository = $zoneFrontRepository;
+        $this->orderHistoryBackRepository = $orderHistoryBackRepository;
         $this->customerFrontToBackSynchronizer = $customerFrontToBackSynchronizer;
     }
 
@@ -608,10 +616,32 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             if (0 === $orderNum) {
                 $currentOrderBack->setOrderNum($orderBack->getId());
                 $this->orderBackRepository->persistAndFlush($currentOrderBack);
+                $this->createOrderHistory($currentOrderBack);
             }
         }
 
         return $orderBack;
+    }
+
+    /**
+     * @param OrderBack $orderBack
+     */
+    protected function createOrderHistory(OrderBack $orderBack): void
+    {
+        if (true === $this->orderHistoryBackRepository->existsByOrderNum($orderBack->getId())) {
+            return;
+        }
+
+        $orderHistoryBack = new OrderHistoryBack();
+        $orderHistoryBack->setOrderNum($orderBack->getOrderNum());
+        $orderHistoryBack->setCustomerId(0);
+
+        $date = new DateTime();
+        $date->setTimestamp($orderBack->getTime());
+
+        $orderHistoryBack->setDate($date);
+
+        $this->orderHistoryBackRepository->persistAndFlush($orderHistoryBack);
     }
 
     /**

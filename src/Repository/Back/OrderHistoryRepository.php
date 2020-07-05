@@ -28,4 +28,18 @@ class OrderHistoryRepository extends BackRepository
     {
         parent::__construct($logger, $registry, OrderHistory::class);
     }
+
+    /**
+     * @param int $value
+     * @return bool
+     */
+    public function existsByOrderNum(int $value): bool
+    {
+        return $this->createQueryBuilder('oh')
+                ->select('count(oh.id)')
+                ->andWhere('c.customerId = :val')
+                ->setParameter('val', $value)
+                ->getQuery()
+                ->getScalarResult() > 0;
+    }
 }

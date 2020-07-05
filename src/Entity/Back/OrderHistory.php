@@ -2,14 +2,12 @@
 
 namespace App\Entity\Back;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="`SS_order_history`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\OrderHistoryRepository")
- * @ORM\HasLifecycleCallbacks()
  */
 class OrderHistory
 {
@@ -102,13 +100,5 @@ class OrderHistory
         $this->date = $date;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function updatedTimestamps()
-    {
-        $this->setDate(new DateTime());
     }
 }
