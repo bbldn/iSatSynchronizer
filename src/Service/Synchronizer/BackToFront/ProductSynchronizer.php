@@ -23,10 +23,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeByIds(string $ids, bool $synchronizeImage = false): void
     {
-        $productsBack = $this->productBackRepository->findByIds($ids);
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
+        parent::synchronizeByIds($ids, $synchronizeImage);
     }
 
     /**
@@ -35,10 +32,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeByCategoryId(int $id, bool $synchronizeImage = false): void
     {
-        $productsBack = $this->productBackRepository->findByCategoryId($id);
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
+        parent::synchronizeByCategoryId($id, $synchronizeImage);
     }
 
     /**
@@ -47,10 +41,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeByName(string $name, bool $synchronizeImage = false): void
     {
-        $productsBack = $this->productBackRepository->findByName($name);
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
+        parent::synchronizeByName($name, $synchronizeImage);
     }
 
     /**
@@ -58,10 +49,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeAll(bool $synchronizeImage = false): void
     {
-        $productsBack = $this->productBackRepository->findAll();
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
+        parent::synchronizeAll($synchronizeImage);
     }
 
     /**

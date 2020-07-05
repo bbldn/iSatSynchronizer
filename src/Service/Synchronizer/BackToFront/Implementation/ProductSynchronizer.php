@@ -12,6 +12,9 @@ use App\Entity\Front\ProductDiscontinued as ProductDiscontinuedFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
 use App\Entity\Product;
+use App\Event\ProductAllSynchronizedBackToFrontEvent;
+use App\Event\ProductsSynchronizedBackToFrontEvent;
+use App\Event\ProductSynchronizedBackToFrontEvent;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
@@ -49,11 +52,16 @@ use App\Service\Synchronizer\BackToFront\ProductDiscountSpeedSynchronizer as Pro
 use App\Service\Synchronizer\BackToFront\ProductSeoUrlSynchronizer as ProductSeoUrlBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ProductSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;
+
+    /** @var EventDispatcherInterface $eventDispatcher */
+    protected $eventDispatcher;
 
     /** @var StoreFront $storeFront */
     protected $storeFront;
@@ -163,9 +171,20 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var bool $synchronizeImage */
     protected $synchronizeImage = false;
 
+    /** @var Event $events */
+    protected $events = [
+        ProductSynchronizedBackToFrontEvent::class => 0,
+        ProductAllSynchronizedBackToFrontEvent::class => 0,
+        ProductsSynchronizedBackToFrontEvent::class => 0,
+    ];
+
+    /** @var Product[] $synchronizedProducts */
+    protected $synchronizedProducts = [];
+
     /**
      * ProductSynchronizer constructor.
      * @param LoggerInterface $logger
+     * @param EventDispatcherInterface $eventDispatcher
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param AttributeRepository $attributeRepository
@@ -202,6 +221,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
+        EventDispatcherInterface $eventDispatcher,
         StoreFront $storeFront,
         StoreBack $storeBack,
         AttributeRepository $attributeRepository,
@@ -238,6 +258,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     )
     {
         $this->logger = $logger;
+        $this->eventDispatcher = $eventDispatcher;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->attributeRepository = $attributeRepository;
@@ -345,6 +366,14 @@ class ProductSynchronizer extends BackToFrontSynchronizer
             $productFront->getProductId()
         );
         $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($productBack->getProductId());
+
+        if (1 === $this->events[ProductSynchronizedBackToFrontEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductSynchronizedBackToFrontEvent($product));
+        }
+
+        if (1 === $this->events[ProductsSynchronizedBackToFrontEvent::class]) {
+            $this->synchronizedProducts[] = $product;
+        }
     }
 
     /**
@@ -684,6 +713,85 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         }
 
         $this->productFrontRepository->persistAndFlush($productFront);
+    }
+
+    /**
+     * @param int $id
+     * @param bool $synchronizeImage
+     */
+    protected function synchronizeByCategoryId(int $id, bool $synchronizeImage = false): void
+    {
+        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
+        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 0;
+
+        $productsBack = $this->productBackRepository->findByCategoryId($id);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductSynchronizedBackToFrontEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsSynchronizedBackToFrontEvent($this->synchronizedProducts));
+        }
+    }
+
+    /**
+     * @param string $ids
+     * @param bool $synchronizeImage
+     */
+    protected function synchronizeByIds(string $ids, bool $synchronizeImage = false): void
+    {
+        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
+        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 0;
+
+        $productsBack = $this->productBackRepository->findByIds($ids);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductsSynchronizedBackToFrontEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsSynchronizedBackToFrontEvent($this->synchronizedProducts));
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param bool $synchronizeImage
+     */
+    protected function synchronizeByName(string $name, bool $synchronizeImage = false): void
+    {
+        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
+        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 0;
+
+        $productsBack = $this->productBackRepository->findByName($name);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductsSynchronizedBackToFrontEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsSynchronizedBackToFrontEvent($this->synchronizedProducts));
+        }
+    }
+
+    /**
+     * @param bool $synchronizeImage
+     */
+    protected function synchronizeAll(bool $synchronizeImage = false): void
+    {
+        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductsSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 1;
+
+        $productsBack = $this->productBackRepository->findAll();
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductAllSynchronizedBackToFrontEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductAllSynchronizedBackToFrontEvent());
+        }
     }
 
     /**
