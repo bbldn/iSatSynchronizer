@@ -4,6 +4,7 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\OrderPriceDiscount;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method OrderPriceDiscount|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class OrderPriceDiscountRepository extends BackRepository
 {
     /**
      * OrderPriceDiscountRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, OrderPriceDiscount::class);
+        parent::__construct($logger, $registry, OrderPriceDiscount::class);
     }
 }

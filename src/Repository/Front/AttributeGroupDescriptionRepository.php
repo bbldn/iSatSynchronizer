@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\AttributeGroupDescription;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method AttributeGroupDescription|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class AttributeGroupDescriptionRepository extends FrontRepository
 {
     /**
      * AttributeGroupDescriptionRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, AttributeGroupDescription::class);
+        parent::__construct($logger, $registry, AttributeGroupDescription::class);
     }
 }

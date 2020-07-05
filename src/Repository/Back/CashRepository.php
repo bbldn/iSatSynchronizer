@@ -4,6 +4,7 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\Cash;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Cash|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class CashRepository extends BackRepository
 {
     /**
      * CashRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Cash::class);
+        parent::__construct($logger, $registry, Cash::class);
     }
 }

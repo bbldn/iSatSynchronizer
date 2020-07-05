@@ -3,8 +3,10 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\Product;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,11 +23,12 @@ class ProductRepository extends BackRepository
 {
     /**
      * ProductRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Product::class);
+        parent::__construct($logger, $registry, Product::class);
     }
 
     /**
@@ -124,6 +127,8 @@ class ProductRepository extends BackRepository
         try {
             $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
         } catch (DBALException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return [];
         }
 
@@ -146,6 +151,8 @@ class ProductRepository extends BackRepository
         try {
             $result = $this->getEntityManager()->getConnection()->prepare($queryBuilder->getSQL());
         } catch (DBALException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return [];
         }
 

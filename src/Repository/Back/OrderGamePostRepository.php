@@ -3,9 +3,11 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\OrderGamePost;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method OrderGamePost|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,11 +24,12 @@ class OrderGamePostRepository extends BackRepository
 {
     /**
      * OrderGamePostRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, OrderGamePost::class);
+        parent::__construct($logger, $registry, OrderGamePost::class);
     }
 
     /**
@@ -46,6 +49,8 @@ class OrderGamePostRepository extends BackRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }
@@ -95,8 +100,12 @@ class OrderGamePostRepository extends BackRepository
                 ->getQuery()
                 ->getSingleScalarResult();
         } catch (NoResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

@@ -4,6 +4,7 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGroups;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method BuyersGroups|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class BuyersGroupsRepository extends BackRepository
 {
     /**
      * BuyersGroupsRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, BuyersGroups::class);
+        parent::__construct($logger, $registry, BuyersGroups::class);
     }
 }

@@ -35,6 +35,6 @@ class ClearProductImage implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $this->productImageSynchronizer->clearFolder();
+        $this->productImageSynchronizer->load()->clearFolder();
     }
 }

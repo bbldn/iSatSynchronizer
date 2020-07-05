@@ -5,6 +5,7 @@ namespace App\Repository\Front;
 use App\Entity\Front\CategoryStore;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method CategoryStore|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,11 +22,12 @@ class CategoryStoreRepository extends FrontRepository
 {
     /**
      * CategoryStoreRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, CategoryStore::class);
+        parent::__construct($logger, $registry, CategoryStore::class);
     }
 
     /**
@@ -45,6 +47,8 @@ class CategoryStoreRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

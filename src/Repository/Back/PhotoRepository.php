@@ -4,6 +4,7 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\Photo;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Photo|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,11 +21,12 @@ class PhotoRepository extends BackRepository
 {
     /**
      * PhotoRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Photo::class);
+        parent::__construct($logger, $registry, Photo::class);
     }
 
     /**

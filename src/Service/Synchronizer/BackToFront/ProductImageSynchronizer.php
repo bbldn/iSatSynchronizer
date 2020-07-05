@@ -9,6 +9,14 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductImageSynchronizer
 class ProductImageSynchronizer extends ProductImageSynchronizerBase
 {
     /**
+     * @return ProductImageSynchronizer
+     */
+    public function load(): self
+    {
+        return $this;
+    }
+
+    /**
      *
      */
     public function clearFolder(): void

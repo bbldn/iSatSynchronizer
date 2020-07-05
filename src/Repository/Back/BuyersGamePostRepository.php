@@ -3,8 +3,10 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGamePost;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method BuyersGamePost|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,11 +23,12 @@ class BuyersGamePostRepository extends BackRepository
 {
     /**
      * BuyersGamePostRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, BuyersGamePost::class);
+        parent::__construct($logger, $registry, BuyersGamePost::class);
     }
 
     /**
@@ -42,6 +45,8 @@ class BuyersGamePostRepository extends BackRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Helper\ExceptionFormatter;
 use Doctrine\ORM\NonUniqueResultException;
 
 abstract class EntityRepository extends Repository
@@ -23,6 +24,8 @@ abstract class EntityRepository extends Repository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }
@@ -41,6 +44,8 @@ abstract class EntityRepository extends Repository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

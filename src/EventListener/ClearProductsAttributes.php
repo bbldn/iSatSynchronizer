@@ -37,6 +37,6 @@ class ClearProductsAttributes implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $this->productAttributeSynchronizer->clear();
+        $this->productAttributeSynchronizer->load()->clear();
     }
 }

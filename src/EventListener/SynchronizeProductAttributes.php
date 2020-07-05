@@ -61,6 +61,6 @@ class SynchronizeProductAttributes implements EventSubscriberInterface
             return;
         }
 
-        $this->productAttributeSynchronizer->synchronizeAttributes($productBack, $product->getFrontId());
+        $this->productAttributeSynchronizer->load()->synchronizeAttributes($productBack, $product->getFrontId());
     }
 }

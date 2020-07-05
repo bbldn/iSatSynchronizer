@@ -5,6 +5,7 @@ namespace App\Repository\Front;
 use App\Entity\Front\City;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method City|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,9 +22,10 @@ class CityRepository extends FrontRepository
 {
     /**
      * AddressRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
         parent::__construct($registry, City::class);
     }

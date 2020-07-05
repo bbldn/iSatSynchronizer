@@ -4,6 +4,7 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\Discussions;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Discussions|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class DiscussionsRepository extends BackRepository
 {
     /**
      * DiscussionsRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Discussions::class);
+        parent::__construct($logger, $registry, Discussions::class);
     }
 }

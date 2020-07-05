@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Review;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Review|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,10 +23,11 @@ class ReviewRepository extends EntityRepository
 {
     /**
      * ReviewRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Review::class);
+        parent::__construct($logger, $registry, Review::class);
     }
 }

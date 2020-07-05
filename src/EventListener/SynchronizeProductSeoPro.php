@@ -59,8 +59,6 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
      */
     public function action(ProductSynchronizedEvent $event): void
     {
-        $this->productSeoUrlBackToFrontSynchronizer->load();
-
         $product = $event->getProduct();
         $productBack = $this->productBackRepository->find($product->getBackId());
         if (null === $productBack) {
@@ -78,7 +76,7 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
             return;
         }
 
-        $this->productSeoUrlBackToFrontSynchronizer->synchronizeByProductBackAndProductFront(
+        $this->productSeoUrlBackToFrontSynchronizer->load()->synchronizeByProductBackAndProductFront(
             $productBack,
             $productFront
         );

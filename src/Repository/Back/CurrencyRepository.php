@@ -3,8 +3,10 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\Currency;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Currency|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,11 +23,12 @@ class CurrencyRepository extends BackRepository
 {
     /**
      * CurrencyRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Currency::class);
+        parent::__construct($logger, $registry, Currency::class);
     }
 
     /**
@@ -46,6 +49,8 @@ class CurrencyRepository extends BackRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

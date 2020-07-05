@@ -2,14 +2,19 @@
 
 namespace App\Repository;
 
+use App\Helper\ExceptionFormatter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\Mapping\MappingException;
-use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 abstract class Repository extends ServiceEntityRepository
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var string $entityManagerName */
     protected $entityManagerName = 'default';
 
@@ -18,12 +23,14 @@ abstract class Repository extends ServiceEntityRepository
 
     /**
      * EntityRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      * @param string $entityClass
      */
-    public function __construct(ManagerRegistry $registry, $entityClass = '')
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry, $entityClass = '')
     {
         parent::__construct($registry, $entityClass);
+        $this->logger = $logger;
         $this->_em = $registry->getManager($this->entityManagerName);
         $this->tableName = $this->getEntityManager()->getClassMetadata($this->getEntityName())->getTableName();
     }
@@ -97,6 +104,8 @@ abstract class Repository extends ServiceEntityRepository
         try {
             return $this->getEntityManager()->getConnection()->prepare($sql)->execute();
         } catch (DBALException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return false;
         }
     }
@@ -110,6 +119,8 @@ abstract class Repository extends ServiceEntityRepository
         try {
             $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
         } catch (MappingException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return [];
         }
 
@@ -138,9 +149,11 @@ abstract class Repository extends ServiceEntityRepository
         try {
             $query = $connection->prepare($queryBuilder->getSQL());
             $query->execute();
-            
+
             return $query->rowCount() > 0;
         } catch (DBALException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return false;
         }
     }
@@ -152,17 +165,15 @@ abstract class Repository extends ServiceEntityRepository
     {
         try {
             $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
-        } catch (MappingException $e) {
-            return null;
-        }
 
-        try {
             return $this->createQueryBuilder('a')
                 ->orderBy("a.{$identifier}", 'ASC')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
-        } catch (NonUniqueResultException $e) {
+        } catch (ORMException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }
@@ -174,17 +185,15 @@ abstract class Repository extends ServiceEntityRepository
     {
         try {
             $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
-        } catch (MappingException $e) {
-            return null;
-        }
 
-        try {
             return $this->createQueryBuilder('a')
                 ->orderBy("a.{$identifier}", 'DESC')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
-        } catch (NonUniqueResultException $e) {
+        } catch (ORMException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

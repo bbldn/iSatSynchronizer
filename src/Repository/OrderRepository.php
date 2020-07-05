@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Order|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,10 +23,11 @@ class OrderRepository extends EntityRepository
 {
     /**
      * OrderRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Order::class);
+        parent::__construct($logger, $registry, Order::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\CategoryFilter;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method CategoryFilter|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class CategoryFilterRepository extends FrontRepository
 {
     /**
      * CategoryFilterRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, CategoryFilter::class);
+        parent::__construct($logger, $registry, CategoryFilter::class);
     }
 }

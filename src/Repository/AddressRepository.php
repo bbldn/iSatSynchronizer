@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Address;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Address|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,11 +24,12 @@ class AddressRepository extends EntityRepository
 {
     /**
      * AddressRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Address::class);
+        parent::__construct($logger, $registry, Address::class);
     }
 
     /**
@@ -52,6 +55,8 @@ class AddressRepository extends EntityRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

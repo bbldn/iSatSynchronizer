@@ -37,6 +37,6 @@ class ClearProductsSeoPro implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $this->productSeoUrlBackToFrontSynchronizer->clear();
+        $this->productSeoUrlBackToFrontSynchronizer->load()->clear();
     }
 }

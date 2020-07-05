@@ -137,9 +137,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ManufacturerSynchronizer $manufacturerSynchronizer */
     protected $manufacturerSynchronizer;
 
-    /** @var string $defaultImagePath */
-    protected $defaultImagePath = null;
-
     /** @var bool $seoUrlTableExists */
     protected $productDiscontinuedTableExists = false;
 
