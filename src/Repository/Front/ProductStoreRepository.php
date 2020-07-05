@@ -3,8 +3,10 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductStore;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method ProductStore|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,11 +23,12 @@ class ProductStoreRepository extends FrontRepository
 {
     /**
      * ProductStoreRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductStore::class);
+        parent::__construct($logger, $registry, ProductStore::class);
     }
 
     /**
@@ -45,6 +48,8 @@ class ProductStoreRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

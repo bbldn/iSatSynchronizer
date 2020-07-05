@@ -3,9 +3,11 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Product;
+use App\Helper\ExceptionFormatter;
 use App\Repository\ProductRepository as ProductRepositoryMain;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -33,12 +35,14 @@ class ProductRepository extends FrontRepository
      * ProductRepository constructor.
      * @param ManagerRegistry $registry
      * @param ProductRepositoryMain $productRepository
+     * @param LoggerInterface $logger
      * @param string $dataBaseName
      * @param string $dataBaseNameFront
      */
     public function __construct(
         ManagerRegistry $registry,
         ProductRepositoryMain $productRepository,
+        LoggerInterface $logger,
         string $dataBaseName,
         string $dataBaseNameFront
     )
@@ -46,7 +50,7 @@ class ProductRepository extends FrontRepository
         $this->productRepository = $productRepository;
         $this->dataBaseName = $dataBaseName;
         $this->dataBaseNameFront = $dataBaseNameFront;
-        parent::__construct($registry, Product::class);
+        parent::__construct($logger, $registry, Product::class);
     }
 
     /**
@@ -74,6 +78,8 @@ class ProductRepository extends FrontRepository
         try {
             $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
         } catch (DBALException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             $result = false;
         }
 

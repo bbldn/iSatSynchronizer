@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\OrderRecurring;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method OrderRecurring|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class OrderRecurringRepository extends FrontRepository
 {
     /**
      * OrderRecurringRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, OrderRecurring::class);
+        parent::__construct($logger, $registry, OrderRecurring::class);
     }
 }

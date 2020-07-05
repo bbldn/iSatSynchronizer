@@ -3,10 +3,12 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductDiscount;
+use App\Helper\ExceptionFormatter;
 use App\Repository\ProductRepository as ProductRepositoryMain;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method ProductDiscount|null find($id, $lockMode = null, $lockVersion = null)
@@ -34,12 +36,14 @@ class ProductDiscountRepository extends FrontRepository
      * ProductDiscountRepository constructor.
      * @param ManagerRegistry $registry
      * @param ProductRepositoryMain $productRepository
+     * @param LoggerInterface $logger
      * @param string $dataBaseName
      * @param string $dataBaseNameFront
      */
     public function __construct(
         ManagerRegistry $registry,
         ProductRepositoryMain $productRepository,
+        LoggerInterface $logger,
         string $dataBaseName,
         string $dataBaseNameFront
     )
@@ -47,7 +51,7 @@ class ProductDiscountRepository extends FrontRepository
         $this->productRepository = $productRepository;
         $this->dataBaseName = $dataBaseName;
         $this->dataBaseNameFront = $dataBaseNameFront;
-        parent::__construct($registry, ProductDiscount::class);
+        parent::__construct($logger, $registry, ProductDiscount::class);
     }
 
     /**
@@ -67,6 +71,8 @@ class ProductDiscountRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }
@@ -99,6 +105,8 @@ class ProductDiscountRepository extends FrontRepository
         try {
             $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
         } catch (DBALException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             $result = false;
         }
 

@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\CustomerReward;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method CustomerReward|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class CustomerRewardRepository extends FrontRepository
 {
     /**
      * CustomerRewardRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, CustomerReward::class);
+        parent::__construct($logger, $registry, CustomerReward::class);
     }
 }

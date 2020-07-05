@@ -3,6 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\City;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Psr\Log\LoggerInterface;
@@ -27,7 +28,7 @@ class CityRepository extends FrontRepository
      */
     public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, City::class);
+        parent::__construct($logger, $registry, City::class);
     }
 
     /**
@@ -44,6 +45,8 @@ class CityRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

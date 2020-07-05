@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\OrderHistory;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method OrderHistory|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,11 +21,12 @@ class OrderHistoryRepository extends FrontRepository
 {
     /**
      * OrderHistoryRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, OrderHistory::class);
+        parent::__construct($logger, $registry, OrderHistory::class);
     }
 
     /**

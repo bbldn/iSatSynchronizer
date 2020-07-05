@@ -3,8 +3,10 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Manufacturer;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Manufacturer|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,11 +18,12 @@ class ManufacturerRepository extends FrontRepository
 {
     /**
      * ManufacturerRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Manufacturer::class);
+        parent::__construct($logger, $registry, Manufacturer::class);
     }
 
     /**
@@ -37,6 +40,8 @@ class ManufacturerRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

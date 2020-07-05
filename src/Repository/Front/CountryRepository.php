@@ -3,8 +3,10 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Country;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Country|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,11 +18,12 @@ class CountryRepository extends FrontRepository
 {
     /**
      * CountryRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Country::class);
+        parent::__construct($logger, $registry, Country::class);
     }
 
     /**
@@ -37,6 +40,8 @@ class CountryRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

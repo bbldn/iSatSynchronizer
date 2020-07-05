@@ -5,6 +5,7 @@ namespace App\Repository\Front;
 use App\Entity\Front\Zone;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Zone|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,11 +17,12 @@ class ZoneRepository extends FrontRepository
 {
     /**
      * ZoneRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Zone::class);
+        parent::__construct($logger, $registry, Zone::class);
     }
 
     /**
@@ -40,6 +42,8 @@ class ZoneRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }

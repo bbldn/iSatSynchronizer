@@ -4,6 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\ProductOptionValue;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method ProductOptionValue|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,10 +21,11 @@ class ProductOptionValueRepository extends FrontRepository
 {
     /**
      * ProductOptionValueRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductOptionValue::class);
+        parent::__construct($logger, $registry, ProductOptionValue::class);
     }
 }

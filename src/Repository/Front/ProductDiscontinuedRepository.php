@@ -3,10 +3,13 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\ProductDiscontinued;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\UnexpectedResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method ProductDiscontinued|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,11 +21,12 @@ class ProductDiscontinuedRepository extends FrontRepository
 {
     /**
      * ProductDiscontinuedRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductDiscontinued::class);
+        parent::__construct($logger, $registry, ProductDiscontinued::class);
     }
 
     /**
@@ -38,9 +42,9 @@ class ProductDiscontinuedRepository extends FrontRepository
                     ->setParameter('val', $id)
                     ->getQuery()
                     ->getSingleScalarResult() > 0;
-        } catch (NonUniqueResultException $e) {
-            return false;
-        } catch (NoResultException $e) {
+        } catch (UnexpectedResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return false;
         }
     }

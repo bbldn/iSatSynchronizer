@@ -3,9 +3,12 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Currency;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\UnexpectedResultException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method Currency|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,11 +25,12 @@ class CurrencyRepository extends FrontRepository
 {
     /**
      * CurrencyRepository constructor.
+     * @param LoggerInterface $logger
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(LoggerInterface $logger, ManagerRegistry $registry)
     {
-        parent::__construct($registry, Currency::class);
+        parent::__construct($logger, $registry, Currency::class);
     }
 
     /**
@@ -43,9 +47,9 @@ class CurrencyRepository extends FrontRepository
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getSingleScalarResult();
-        } catch (NoResultException $e) {
-            return null;
-        } catch (NonUniqueResultException $e) {
+        } catch (UnexpectedResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }
@@ -63,6 +67,8 @@ class CurrencyRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
             return null;
         }
     }
