@@ -90,3 +90,9 @@ services:
         - 'ru'
         - false
         - 'curl'
+    App\Service\Other\SeoProCacheCleaner:
+        arguments:
+        - '@Psr\Log\LoggerInterface'
+        - '@Symfony\Contracts\HttpClient\HttpClientInterface'
+        - '@App\Helper\Front\Store'
+        - '%env(string:FRONT_SITE_TOKEN)%'

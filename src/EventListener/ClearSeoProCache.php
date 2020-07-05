@@ -4,11 +4,17 @@ namespace App\EventListener;
 
 use App\Event\BackToFront\ProductsAllSynchronizedEvent;
 use App\Event\BackToFront\ProductsSynchronizedEvent;
+use App\Helper\ExceptionFormatter;
 use App\Service\Other\SeoProCacheCleaner;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Throwable;
 
 class ClearSeoProCache implements EventSubscriberInterface
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var SeoProCacheCleaner $cacheCleaner */
     protected $cacheCleaner;
 
@@ -26,9 +32,11 @@ class ClearSeoProCache implements EventSubscriberInterface
     /**
      * ClearSeoProCache constructor.
      * @param SeoProCacheCleaner $cacheCleaner
+     * @param LoggerInterface $logger
      */
-    public function __construct(SeoProCacheCleaner $cacheCleaner)
+    public function __construct(LoggerInterface $logger, SeoProCacheCleaner $cacheCleaner)
     {
+        $this->logger = $logger;
         $this->cacheCleaner = $cacheCleaner;
     }
 
@@ -37,6 +45,10 @@ class ClearSeoProCache implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $this->cacheCleaner->clear();
+        try {
+            $this->cacheCleaner->clear();
+        } catch (Throwable $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+        }
     }
 }
