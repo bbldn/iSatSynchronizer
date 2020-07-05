@@ -39,4 +39,12 @@ class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
     {
         parent::createOrUpdateDiscountItems($productId);
     }
+
+    /**
+     *
+     */
+    public function clear(): void
+    {
+        parent::clear();
+    }
 }

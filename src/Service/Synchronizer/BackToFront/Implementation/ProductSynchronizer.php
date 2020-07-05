@@ -5,14 +5,14 @@ namespace App\Service\Synchronizer\BackToFront\Implementation;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Category as CategoryFront;
 use App\Entity\Front\Product as ProductFront;
-use App\Entity\Front\ProductAttribute as ProductAttributeFront;
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
 use App\Entity\Front\ProductDescription as ProductDescriptionFront;
 use App\Entity\Front\ProductDiscontinued as ProductDiscontinuedFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
 use App\Entity\Product;
-use App\Event\ProductAllSynchronizedBackToFrontEvent;
+use App\Event\ProductsAllSynchronizedBackToFrontEvent;
+use App\Event\ProductsClearBackToFrontEvent;
 use App\Event\ProductsSynchronizedBackToFrontEvent;
 use App\Event\ProductSynchronizedBackToFrontEvent;
 use App\Helper\Back\Store as StoreBack;
@@ -20,19 +20,15 @@ use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
-use App\Repository\AttributeRepository;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Back\PhotoRepository as PhotoBackRepository;
-use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
 use App\Repository\Back\ProductPicturesRepository as ProductPicturesBackRepository;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
-use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
 use App\Repository\Front\ProductDiscontinuedRepository as ProductDiscontinuedFrontRepository;
-use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
 use App\Repository\Front\ProductDownloadRepository as ProductDownloadFrontRepository;
 use App\Repository\Front\ProductFilterRepository as ProductFilterFrontRepository;
 use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
@@ -69,9 +65,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var StoreBack $storeBack */
     protected $storeBack;
 
-    /** @var AttributeRepository $attributeRepository */
-    protected $attributeRepository;
-
     /** @var CategoryRepository $categoryRepository */
     protected $categoryRepository;
 
@@ -87,14 +80,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductFrontRepository $productFrontRepository */
     protected $productFrontRepository;
 
-    /** @var ProductAttributeFrontRepository $productAttributeFrontRepository */
-    protected $productAttributeFrontRepository;
-
     /** @var ProductDescriptionFrontRepository $productDescriptionFrontRepository */
     protected $productDescriptionFrontRepository;
-
-    /** @var ProductDiscountFrontRepository $productDiscountFrontRepository */
-    protected $productDiscountFrontRepository;
 
     /** @var ProductFilterFrontRepository $productFilterFrontRepository */
     protected $productFilterFrontRepository;
@@ -132,9 +119,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductStoreFrontRepository $productStoreFrontRepository */
     protected $productStoreFrontRepository;
 
-    /** @var AttributeBackRepository $attributeBackRepository */
-    protected $attributeBackRepository;
-
     /** @var ProductBackRepository $productBackRepository */
     protected $productBackRepository;
 
@@ -171,11 +155,12 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var bool $synchronizeImage */
     protected $synchronizeImage = false;
 
-    /** @var Event $events */
+    /** @var array $events */
     protected $events = [
         ProductSynchronizedBackToFrontEvent::class => 0,
-        ProductAllSynchronizedBackToFrontEvent::class => 0,
+        ProductsAllSynchronizedBackToFrontEvent::class => 0,
         ProductsSynchronizedBackToFrontEvent::class => 0,
+        ProductsClearBackToFrontEvent::class => 0,
     ];
 
     /** @var Product[] $synchronizedProducts */
@@ -187,15 +172,12 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param EventDispatcherInterface $eventDispatcher
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
-     * @param AttributeRepository $attributeRepository
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
      * @param CategoryFrontRepository $categoryFrontRepository
      * @param PhotoBackRepository $photoBackRepository
      * @param ProductFrontRepository $productFrontRepository
-     * @param ProductAttributeFrontRepository $productAttributeFrontRepository
      * @param ProductDescriptionFrontRepository $productDescriptionFrontRepository
-     * @param ProductDiscountFrontRepository $productDiscountFrontRepository
      * @param ProductFilterFrontRepository $productFilterFrontRepository
      * @param ProductImageFrontRepository $productImageFrontRepository
      * @param ProductOptionFrontRepository $productOptionFrontRepository
@@ -208,7 +190,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductDownloadFrontRepository $productDownloadFrontRepository
      * @param ProductLayoutFrontRepository $productLayoutFrontRepository
      * @param ProductStoreFrontRepository $productStoreFrontRepository
-     * @param AttributeBackRepository $attributeBackRepository
      * @param ProductBackRepository $productBackRepository
      * @param ProductPicturesBackRepository $productPicturesBackRepository
      * @param ProductImageSynchronizer $productImageSynchronizer
@@ -224,15 +205,12 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         EventDispatcherInterface $eventDispatcher,
         StoreFront $storeFront,
         StoreBack $storeBack,
-        AttributeRepository $attributeRepository,
         CategoryRepository $categoryRepository,
         ProductRepository $productRepository,
         CategoryFrontRepository $categoryFrontRepository,
         PhotoBackRepository $photoBackRepository,
         ProductFrontRepository $productFrontRepository,
-        ProductAttributeFrontRepository $productAttributeFrontRepository,
         ProductDescriptionFrontRepository $productDescriptionFrontRepository,
-        ProductDiscountFrontRepository $productDiscountFrontRepository,
         ProductFilterFrontRepository $productFilterFrontRepository,
         ProductImageFrontRepository $productImageFrontRepository,
         ProductOptionFrontRepository $productOptionFrontRepository,
@@ -245,7 +223,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductDownloadFrontRepository $productDownloadFrontRepository,
         ProductLayoutFrontRepository $productLayoutFrontRepository,
         ProductStoreFrontRepository $productStoreFrontRepository,
-        AttributeBackRepository $attributeBackRepository,
         ProductBackRepository $productBackRepository,
         ProductPicturesBackRepository $productPicturesBackRepository,
         ProductImageSynchronizer $productImageSynchronizer,
@@ -261,15 +238,12 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->eventDispatcher = $eventDispatcher;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
-        $this->attributeRepository = $attributeRepository;
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
         $this->categoryFrontRepository = $categoryFrontRepository;
         $this->photoBackRepository = $photoBackRepository;
         $this->productFrontRepository = $productFrontRepository;
-        $this->productAttributeFrontRepository = $productAttributeFrontRepository;
         $this->productDescriptionFrontRepository = $productDescriptionFrontRepository;
-        $this->productDiscountFrontRepository = $productDiscountFrontRepository;
         $this->productFilterFrontRepository = $productFilterFrontRepository;
         $this->productImageFrontRepository = $productImageFrontRepository;
         $this->productOptionFrontRepository = $productOptionFrontRepository;
@@ -282,7 +256,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productDownloadFrontRepository = $productDownloadFrontRepository;
         $this->productLayoutFrontRepository = $productLayoutFrontRepository;
         $this->productStoreFrontRepository = $productStoreFrontRepository;
-        $this->attributeBackRepository = $attributeBackRepository;
         $this->productBackRepository = $productBackRepository;
         $this->productPicturesBackRepository = $productPicturesBackRepository;
         $this->productImageSynchronizer = $productImageSynchronizer;
@@ -300,12 +273,11 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     protected function clear(bool $clearImage = false): void
     {
         $this->synchronizeImage = $clearImage;
-        $this->productRepository->removeAll();
+        $this->events[ProductsClearBackToFrontEvent::class] = 1;
 
+        $this->productRepository->removeAll();
         $this->productFrontRepository->removeAll();
-        $this->productAttributeFrontRepository->removeAll();
         $this->productDescriptionFrontRepository->removeAll();
-        $this->productDiscountFrontRepository->removeAll();
         $this->productFilterFrontRepository->removeAll();
         $this->productImageFrontRepository->removeAll();
         $this->productOptionFrontRepository->removeAll();
@@ -320,13 +292,13 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productRepository->resetAutoIncrements();
         $this->productFrontRepository->resetAutoIncrements();
-        $this->productAttributeFrontRepository->resetAutoIncrements();
-        $this->productDiscountFrontRepository->resetAutoIncrements();
         $this->productImageFrontRepository->resetAutoIncrements();
         $this->productOptionFrontRepository->resetAutoIncrements();
         $this->productOptionValueFrontRepository->resetAutoIncrements();
         $this->productRewardFrontRepository->resetAutoIncrements();
         $this->productSpecialFrontRepository->resetAutoIncrements();
+
+        $this->productDiscountBackToFrontSynchronizer->clear();
 
         if (true === $this->productDiscontinuedTableExists) {
             $this->productDiscontinuedFrontRepository->removeAll();
@@ -338,6 +310,10 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         if (true === $this->synchronizeImage) {
             $this->productImageSynchronizer->clearFolder();
             $this->descriptionSynchronizer->clearFolder();
+        }
+
+        if (1 === $this->events[ProductsClearBackToFrontEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsClearBackToFrontEvent());
         }
     }
 
@@ -534,7 +510,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
-        $this->synchronizeAttributes($productBack, $productFront->getProductId());
         $this->synchronizeDiscount($productBack);
 
         if (true === $this->productDiscontinuedTableExists) {
@@ -609,40 +584,6 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         }
 
         return $categoryFront;
-    }
-
-    /**
-     * @param ProductBack $productBack
-     * @param int $productFrontId
-     */
-    protected function synchronizeAttributes(ProductBack $productBack, int $productFrontId): void
-    {
-        $productAttributesBack = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
-        foreach ($productAttributesBack as $productAttributeBack) {
-            $attribute = $this->attributeRepository->findOneByBackId($productAttributeBack->getOptionId());
-            if (null === $attribute) {
-                continue;
-            }
-
-            $productAttributeFront = $this->productAttributeFrontRepository->findOneByProductIdAttributeIdLanguageId(
-                $productFrontId,
-                $attribute->getFrontId(),
-                $this->storeFront->getDefaultLanguageId()
-            );
-
-            if (null === $productAttributeFront) {
-                $productAttributeFront = new ProductAttributeFront();
-            }
-
-            $productAttributeFront->setProductId($productFrontId);
-            $productAttributeFront->setAttributeId($attribute->getFrontId());
-            $productAttributeFront->setLanguageId($this->storeFront->getDefaultLanguageId());
-            $productAttributeFront->setText(
-                trim($productAttributeBack->getOptionValue())
-            );
-
-            $this->productAttributeFrontRepository->persistAndFlush($productAttributeFront);
-        }
     }
 
     /**
@@ -723,7 +664,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     {
         $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
         $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
-        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 0;
 
         $productsBack = $this->productBackRepository->findByCategoryId($id);
         foreach ($productsBack as $productBack) {
@@ -741,9 +682,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function synchronizeByIds(string $ids, bool $synchronizeImage = false): void
     {
-        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductSynchronizedBackToFrontEvent::class] = 1;
         $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
-        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 0;
 
         $productsBack = $this->productBackRepository->findByIds($ids);
         foreach ($productsBack as $productBack) {
@@ -761,9 +702,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function synchronizeByName(string $name, bool $synchronizeImage = false): void
     {
-        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductSynchronizedBackToFrontEvent::class] = 1;
         $this->events[ProductsSynchronizedBackToFrontEvent::class] = 1;
-        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 0;
 
         $productsBack = $this->productBackRepository->findByName($name);
         foreach ($productsBack as $productBack) {
@@ -780,17 +721,17 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      */
     protected function synchronizeAll(bool $synchronizeImage = false): void
     {
-        $this->events[ProductSynchronizedBackToFrontEvent::class] = 0;
+        $this->events[ProductSynchronizedBackToFrontEvent::class] = 1;
         $this->events[ProductsSynchronizedBackToFrontEvent::class] = 0;
-        $this->events[ProductAllSynchronizedBackToFrontEvent::class] = 1;
+        $this->events[ProductsAllSynchronizedBackToFrontEvent::class] = 1;
 
         $productsBack = $this->productBackRepository->findAll();
         foreach ($productsBack as $productBack) {
             $this->synchronizeProduct($productBack, $synchronizeImage);
         }
 
-        if (1 === $this->events[ProductAllSynchronizedBackToFrontEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductAllSynchronizedBackToFrontEvent());
+        if (1 === $this->events[ProductsAllSynchronizedBackToFrontEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsAllSynchronizedBackToFrontEvent());
         }
     }
 

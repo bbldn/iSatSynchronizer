@@ -47,4 +47,12 @@ class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSynchronizerB
     {
         parent::createOrUpdateDiscountItems($productId);
     }
+
+    /**
+     *
+     */
+    public function clear(): void
+    {
+        parent::clear();
+    }
 }

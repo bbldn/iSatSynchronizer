@@ -229,4 +229,13 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
             $this->productDiscountFrontRepository->persistAndFlush($productDiscountFront);
         }
     }
+
+    /**
+     *
+     */
+    protected function clear(): void
+    {
+        $this->productDiscountFrontRepository->clear();
+        $this->productDiscountFrontRepository->resetAutoIncrements();
+    }
 }

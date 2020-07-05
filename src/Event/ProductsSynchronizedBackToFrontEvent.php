@@ -7,8 +7,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ProductsSynchronizedBackToFrontEvent extends Event
 {
-    public const NAME = 'products.synchronized.backToFront';
-
     /** @var Product[] $products */
     protected $products;
 
