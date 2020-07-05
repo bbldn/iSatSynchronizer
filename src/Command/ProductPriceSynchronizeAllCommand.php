@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProductPriceSynchronizeAllCommand extends Command
 {
-    protected static $defaultName = 'product:price:update:all';
+    protected static $defaultName = 'product:price:synchronize:all';
 
     /** @var ProductSynchronizer $productSynchronize */
     protected $productSynchronize;

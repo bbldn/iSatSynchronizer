@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProductPriceSynchronizeByIdsCommand extends Command
 {
-    protected static $defaultName = 'product:price:update:by-ids';
+    protected static $defaultName = 'product:price:synchronize:by-ids';
 
     /** @var ProductSynchronizer $productSynchronize */
     protected $productSynchronize;

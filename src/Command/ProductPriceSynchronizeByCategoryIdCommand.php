@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProductPriceSynchronizeByCategoryIdCommand extends Command
 {
-    protected static $defaultName = 'product:price:update:by-category-id';
+    protected static $defaultName = 'product:price:synchronize:by-category-id';
 
     /** @var ProductSynchronizer $productSynchronize */
     protected $productSynchronize;
