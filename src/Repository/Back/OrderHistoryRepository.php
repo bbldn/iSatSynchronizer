@@ -37,7 +37,7 @@ class OrderHistoryRepository extends BackRepository
     {
         return $this->createQueryBuilder('oh')
                 ->select('count(oh.id)')
-                ->andWhere('oh.customerId = :val')
+                ->andWhere('oh.orderNum = :val')
                 ->setParameter('val', $value)
                 ->getQuery()
                 ->getScalarResult() > 0;
