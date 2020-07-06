@@ -2,9 +2,7 @@
 
 namespace App\Service\FrontBackFileSystem;
 
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -36,13 +34,7 @@ class GetBackFileFromNetwork implements GetBackFileInterface
 
         try {
             $headers = $response->getHeaders();
-        } catch (ClientExceptionInterface $e) {
-            return null;
-        } catch (RedirectionExceptionInterface $e) {
-            return null;
-        } catch (ServerExceptionInterface $e) {
-            return null;
-        } catch (TransportExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
             return null;
         }
 
@@ -74,13 +66,7 @@ class GetBackFileFromNetwork implements GetBackFileInterface
 
         try {
             $content = $response->getContent();
-        } catch (ClientExceptionInterface $e) {
-            return null;
-        } catch (RedirectionExceptionInterface $e) {
-            return null;
-        } catch (ServerExceptionInterface $e) {
-            return null;
-        } catch (TransportExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
             return null;
         }
 

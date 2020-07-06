@@ -61,7 +61,7 @@ class TelegramOrderNew implements EventSubscriberInterface
     /**
      * @param ResponseInterface $response
      */
-    protected function validateResponse(ResponseInterface $response)
+    protected function validateResponse(ResponseInterface $response): void
     {
         try {
             $statusCode = $response->getStatusCode();
