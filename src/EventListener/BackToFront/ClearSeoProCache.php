@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventListener\BackToFront;
 
 use App\Event\BackToFront\ProductsAllSynchronizedEvent;
 use App\Event\BackToFront\ProductsSynchronizedEvent;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventListener\BackToFront;
 
 use App\Event\BackToFront\ProductsClearEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -96,3 +96,8 @@ services:
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
         - '@App\Helper\Front\Store'
         - '%env(string:FRONT_SITE_TOKEN)%'
+
+    App\EventListener\FrontToBack\TelegramOrderNew:
+        arguments:
+        - '@Symfony\Contracts\HttpClient\HttpClientInterface'
+        - 'https://tbot.isat.com.ua/order/new'

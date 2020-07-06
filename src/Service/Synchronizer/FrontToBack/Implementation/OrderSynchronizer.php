@@ -3,8 +3,10 @@
 namespace App\Service\Synchronizer\FrontToBack\Implementation;
 
 use App\Entity\Back\OrderGamePost as OrderBack;
+use App\Entity\Back\OrderHistory as OrderHistoryBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
+use App\Event\FrontToBack\NewOrderEvent;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Exception\OrderFrontNotFoundException;
 use App\Helper\Back\Store as StoreBack;
@@ -17,6 +19,7 @@ use App\Helper\Store;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
+use App\Repository\Back\OrderHistoryRepository as OrderHistoryBackRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CategoryDescriptionRepository as CategoryDescriptionFrontRepository;
 use App\Repository\Front\CountryRepository as CountryFrontRepository;
@@ -51,13 +54,15 @@ use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontTo
 use App\Service\Synchronizer\FrontToBack\FrontToBackSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
-use App\Repository\Back\OrderHistoryRepository as OrderHistoryBackRepository;
-use App\Entity\Back\OrderHistory as OrderHistoryBack;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class OrderSynchronizer extends FrontToBackSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;
+
+    /** @var EventDispatcherInterface $eventDispatcher */
+    protected $eventDispatcher;
 
     /** @var StoreFront $storeFront */
     protected $storeFront;
@@ -170,9 +175,15 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     /** @var CustomerFrontToBackSynchronizer $customerFrontToBackSynchronizer */
     protected $customerFrontToBackSynchronizer;
 
+    /** @var array $events */
+    protected $events = [
+        NewOrderEvent::class => 0,
+    ];
+
     /**
      * OrderSynchronizer constructor.
      * @param LoggerInterface $logger
+     * @param EventDispatcherInterface $eventDispatcher
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
      * @param CustomerBackRepository $customerBackRepository
@@ -213,6 +224,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
+        EventDispatcherInterface $eventDispatcher,
         StoreFront $storeFront,
         StoreBack $storeBack,
         CustomerBackRepository $customerBackRepository,
@@ -253,6 +265,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     )
     {
         $this->logger = $logger;
+        $this->eventDispatcher = $eventDispatcher;
         $this->storeFront = $storeFront;
         $this->storeBack = $storeBack;
         $this->customerBackRepository = $customerBackRepository;
@@ -356,8 +369,17 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
         $orderBack = $this->getOrderBackFromOrder($order);
+
+        if (null === $orderBack->getId()) {
+            $this->events[NewOrderEvent::class] = 1;
+        }
+
         $this->updateOrderBackFromOrderFront($orderFront, $orderBack);
         $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
+
+        if (1 === $this->events[NewOrderEvent::class]) {
+            $this->eventDispatcher->dispatch(new NewOrderEvent($orderBack->getId()));
+        }
     }
 
     /**

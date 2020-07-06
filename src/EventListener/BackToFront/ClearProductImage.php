@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventListener\BackToFront;
 
 use App\Event\BackToFront\ProductsClearEvent;
 use App\Service\Synchronizer\BackToFront\ProductImageSynchronizer;
