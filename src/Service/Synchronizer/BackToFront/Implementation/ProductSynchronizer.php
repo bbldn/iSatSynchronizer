@@ -314,11 +314,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         $productFront = $this->getProductFrontFromProduct($product);
         $this->updateProductFrontFromProductBack($productBack, $productFront);
-        $this->createOrUpdateProduct(
-            $product,
-            $productBack->getProductId(),
-            $productFront->getProductId()
-        );
+        $product = $this->createOrUpdateProduct($product, $productBack->getProductId(), $productFront->getProductId());
 
         if (1 === $this->events[ProductsSynchronizedEvent::class]) {
             $this->synchronizedProducts[] = $product;
@@ -546,8 +542,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param Product $product
      * @param int $backId
      * @param int $frontId
+     * @return Product
      */
-    protected function createOrUpdateProduct(?Product $product, int $backId, int $frontId): void
+    protected function createOrUpdateProduct(?Product $product, int $backId, int $frontId): Product
     {
         if (null === $product) {
             $product = new Product();
@@ -557,6 +554,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $product->setFrontId($frontId);
 
         $this->productRepository->persistAndFlush($product);
+
+        return $product;
     }
 
     /**
