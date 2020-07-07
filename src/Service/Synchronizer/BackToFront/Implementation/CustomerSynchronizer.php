@@ -178,8 +178,11 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
             $customerFront->setNewsletter(false);
         }
 
-        $customerFront->setAddressId(0);
-        $customerFront->setCustomField(Filler::securityString(null));
+        if (null === $customerFront->getAddressId()) {
+            $customerFront->setAddressId(0);
+        }
+
+        $customerFront->setCustomField(Filler::trim(null));
 
         if (null === $customerFront->getIp()) {
             $ip = null;
