@@ -5,13 +5,13 @@ namespace App\Event\FrontToBack;
 use App\Entity\Order;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class NewOrderEvent extends Event
+class UpdateOrderEvent extends Event
 {
     /** @var Order $order */
     protected $order;
 
     /**
-     * NewOrderEvent constructor.
+     * UpdateOrderEvent constructor.
      * @param Order $order
      */
     public function __construct(Order $order)
@@ -29,7 +29,7 @@ class NewOrderEvent extends Event
 
     /**
      * @param Order $order
-     * @return NewOrderEvent
+     * @return UpdateOrderEvent
      */
     public function setOrder(Order $order): self
     {

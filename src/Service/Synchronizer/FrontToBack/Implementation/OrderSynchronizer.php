@@ -7,6 +7,7 @@ use App\Entity\Back\OrderHistory as OrderHistoryBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Event\FrontToBack\NewOrderEvent;
+use App\Event\FrontToBack\UpdateOrderEvent;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Exception\OrderFrontNotFoundException;
 use App\Helper\Back\Store as StoreBack;
@@ -178,6 +179,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     /** @var array $events */
     protected $events = [
         NewOrderEvent::class => 0,
+        UpdateOrderEvent::class => 0,
     ];
 
     /**
@@ -363,13 +365,13 @@ class OrderSynchronizer extends FrontToBackSynchronizer
 
     /**
      * @param OrderFront $orderFront
-     * @throws OrderFrontNotFoundException
      */
     protected function synchronizeOrder(OrderFront $orderFront): void
     {
         $order = $this->orderRepository->findOneByFrontId($orderFront->getOrderId());
         $orderBack = $this->getOrderBackFromOrder($order);
 
+        $this->events[UpdateOrderEvent::class] = 1;
         if (null === $orderBack->getId()) {
             $this->events[NewOrderEvent::class] = 1;
         }
@@ -378,7 +380,11 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
 
         if (1 === $this->events[NewOrderEvent::class]) {
-            $this->eventDispatcher->dispatch(new NewOrderEvent($orderBack->getId()));
+            $this->eventDispatcher->dispatch(new NewOrderEvent($order));
+        }
+
+        if (1 === $this->events[UpdateOrderEvent::class]) {
+            $this->eventDispatcher->dispatch(new UpdateOrderEvent($order));
         }
     }
 
@@ -405,7 +411,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
      * @param OrderFront $orderFront
      * @param OrderBack $orderBack
      * @return OrderBack
-     * @throws OrderFrontNotFoundException
+     *
      */
     protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
@@ -642,6 +648,9 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             }
         }
 
+        $orderFront->setFax((string)$orderBack->getOrderNum());
+        $this->orderFrontRepository->persistAndFlush($orderFront);
+
         return $orderBack;
     }
 
@@ -708,7 +717,6 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     /**
      * @param OrderFront $orderFront
      * @return int
-     * @throws OrderFrontNotFoundException
      */
     protected function getClientIdByFrontCustomerPhone(OrderFront $orderFront): int
     {
@@ -734,8 +742,11 @@ class OrderSynchronizer extends FrontToBackSynchronizer
                 return $customerBack->getId();
             }
         }
-
-        $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOneByOrderFrontId($orderFront->getOrderId());
+        try {
+            $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOneByOrderFrontId($orderFront->getOrderId());
+        } catch (OrderFrontNotFoundException $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+        }
 
         return $customerBack->getId();
     }
@@ -744,8 +755,9 @@ class OrderSynchronizer extends FrontToBackSynchronizer
      * @param Order $order
      * @param int $backId
      * @param int $frontId
+     * @return Order
      */
-    protected function createOrUpdateOrder(?Order $order, int $backId, int $frontId): void
+    protected function createOrUpdateOrder(?Order $order, int $backId, int $frontId): Order
     {
         if (null === $order) {
             $order = new Order();
@@ -755,5 +767,29 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         $order->setFrontId($frontId);
 
         $this->orderRepository->persistAndFlush($order);
+
+        return $order;
+    }
+
+    /**
+     *
+     */
+    protected function synchronizeAll(): void
+    {
+        $ordersFront = $this->orderFrontRepository->findAll();
+        foreach ($ordersFront as $orderFront) {
+            $this->synchronizeOrder($orderFront);
+        }
+    }
+
+    /**
+     * @param string $ids
+     */
+    protected function synchronizeByIds(string $ids): void
+    {
+        $ordersFront = $this->orderFrontRepository->findByIds($ids);
+        foreach ($ordersFront as $orderFront) {
+            $this->synchronizeOrder($orderFront);
+        }
     }
 }
