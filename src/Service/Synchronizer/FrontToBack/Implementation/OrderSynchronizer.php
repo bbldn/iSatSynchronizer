@@ -377,7 +377,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         }
 
         $this->updateOrderBackFromOrderFront($orderFront, $orderBack);
-        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
+        $order = $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
 
         if (1 === $this->events[NewOrderEvent::class]) {
             $this->eventDispatcher->dispatch(new NewOrderEvent($order));
