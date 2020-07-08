@@ -365,23 +365,25 @@ class Store extends StoreBase
      */
     public static function parseFirstLastName(string $fio): array
     {
-        $fullName = explode(' ', $fio);
+        $parsedFio = explode(' ', $fio);
 
-        if (count($fullName) > 1) {
-            return [
-                'firstName' => trim($fullName[1]),
-                'lastName' => trim($fullName[0]),
-            ];
-        } elseif (count($fullName) == 1) {
-            return [
+        if (0 === count($parsedFio)) {
+            $data = [
                 'firstName' => ' ',
-                'lastName' => trim($fullName[0]),
+                'lastName' => ' ',
+            ];
+        } elseif (1 === count($parsedFio)) {
+            $data = [
+                'firstName' => ' ',
+                'lastName' => trim($parsedFio[0]),
+            ];
+        } else {
+            $data = [
+                'firstName' => trim($parsedFio[1]),
+                'lastName' => trim($parsedFio[0]),
             ];
         }
 
-        return [
-            'firstName' => ' ',
-            'lastName' => ' ',
-        ];
+        return $data;
     }
 }

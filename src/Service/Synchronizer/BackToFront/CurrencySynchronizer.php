@@ -2,11 +2,12 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\CurrencySynchronizerContract;
 use App\Helper\Store;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
 
-class CurrencySynchronizer extends BackToFrontSynchronizer
+class CurrencySynchronizer extends BackToFrontSynchronizer implements CurrencySynchronizerContract
 {
     /** @var CurrencyBackRepository $currencyBackRepository */
     protected $currencyBackRepository;
@@ -29,13 +30,11 @@ class CurrencySynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     * @return CurrencySynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**

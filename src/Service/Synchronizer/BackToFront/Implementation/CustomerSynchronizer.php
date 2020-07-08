@@ -16,6 +16,7 @@ use App\Service\Synchronizer\BackToFront\AddressSynchronizer;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
+use App\Helper\Back\Store as StoreBack;
 
 class CustomerSynchronizer extends BackToFrontSynchronizer
 {
@@ -79,23 +80,10 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->customerRepository->removeAll();
-        $this->customerFrontRepository->removeAll();
-        $this->customerRepository->resetAutoIncrements();
-        $this->customerFrontRepository->resetAutoIncrements();
-
-        $this->addressSynchronizer->clear();
-    }
-
-    /**
      * @param CustomerBack $customerBack
      * @return CustomerFront
      */
-    protected function synchronizeCustomer(CustomerBack $customerBack): CustomerFront
+    public function synchronizeCustomer(CustomerBack $customerBack): CustomerFront
     {
         $email = Filler::trim($customerBack->getMail());
         $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
@@ -111,7 +99,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
      * @param string|null $email
      * @return CustomerFront
      */
-    protected function getCustomerFrontFromCustomer(?Customer $customer, ?string $email = null): CustomerFront
+    public function getCustomerFrontFromCustomer(?Customer $customer, ?string $email = null): CustomerFront
     {
         if (null !== $customer) {
             $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
@@ -135,7 +123,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
      * @param CustomerFront $customerFront
      * @return CustomerFront
      */
-    protected function updateCustomerFrontFromCustomerBack(
+    public function updateCustomerFrontFromCustomerBack(
         CustomerBack $customerBack,
         CustomerFront $customerFront
     ): CustomerFront
@@ -145,7 +133,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
             $saul = Str::random($this->saulLength);
         }
 
-        $parsedFIO = $this->parseFIO($customerBack->getFio());
+        $parsedFIO = StoreBack::parseFirstLastName($customerBack->getFio());
 
         if (0 === $customerBack->getGroupId()) {
             $customerFront->setCustomerGroupId($this->storeFront->getDefaultCustomerGroupId());
@@ -216,8 +204,9 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
      * @param Customer $customer
      * @param int $backId
      * @param int $frontId
+     * @return Customer
      */
-    protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId): void
+    public function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId): Customer
     {
         if (null === $customer) {
             $customer = new Customer();
@@ -227,32 +216,7 @@ class CustomerSynchronizer extends BackToFrontSynchronizer
         $customer->setFrontId($frontId);
 
         $this->customerRepository->persistAndFlush($customer);
-    }
 
-    /**
-     * @param string $fio
-     * @return array
-     */
-    protected function parseFIO(string $fio): array
-    {
-        $parsedFio = explode(' ', $fio);
-        if (0 === count($parsedFio)) {
-            $data = [
-                'lastName' => ' ',
-                'firstName' => ' ',
-            ];
-        } elseif (1 == count($parsedFio)) {
-            $data = [
-                'lastName' => $parsedFio[0],
-                'firstName' => ' ',
-            ];
-        } else {
-            $data = [
-                'lastName' => $parsedFio[0],
-                'firstName' => $parsedFio[1],
-            ];
-        }
-
-        return $data;
+        return $customer;
     }
 }

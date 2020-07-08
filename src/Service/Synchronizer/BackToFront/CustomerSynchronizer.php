@@ -2,19 +2,18 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\CustomerSynchronizerContract;
 use App\Entity\Front\Customer as CustomerFront;
 use App\Service\Synchronizer\BackToFront\Implementation\CustomerSynchronizer as CustomerBaseSynchronizer;
 
-class CustomerSynchronizer extends CustomerBaseSynchronizer
+class CustomerSynchronizer extends CustomerBaseSynchronizer implements CustomerSynchronizerContract
 {
     /**
-     * @return CustomerSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**
@@ -44,7 +43,12 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->customerRepository->removeAll();
+        $this->customerFrontRepository->removeAll();
+        $this->customerRepository->resetAutoIncrements();
+        $this->customerFrontRepository->resetAutoIncrements();
+
+        $this->addressSynchronizer->clear();
     }
 
     /**

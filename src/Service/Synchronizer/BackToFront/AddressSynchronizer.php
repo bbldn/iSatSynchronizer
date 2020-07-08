@@ -2,20 +2,17 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Entity\Back\BuyersGamePost as CustomerBack;
-use App\Entity\Front\Address as AddressFront;
+use App\Contract\BackToFront\AddressSynchronizerContract;
 use App\Service\Synchronizer\BackToFront\Implementation\AddressSynchronizer as AddressBaseSynchronizer;
 
-class AddressSynchronizer extends AddressBaseSynchronizer
+class AddressSynchronizer extends AddressBaseSynchronizer implements AddressSynchronizerContract
 {
     /**
-     * @return AddressSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**
@@ -30,24 +27,11 @@ class AddressSynchronizer extends AddressBaseSynchronizer
     }
 
     /**
-     * @param CustomerBack $customerBack
-     * @return AddressFront
-     */
-    public function synchronizeByCustomerBack(CustomerBack $customerBack): AddressFront
-    {
-        $address = $this->addressRepository->findOneByOrderBackId($customerBack->getId());
-        $addressFront = $this->getAddressFrontFromAddress($address);
-        $this->updateAddressFrontFromCustomerBack($customerBack, $addressFront);
-        $this->createOrUpdateAddress($address, $customerBack->getId(), $addressFront->getAddressId());
-
-        return $addressFront;
-    }
-
-    /**
      *
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->addressFrontRepository->removeAll();
+        $this->addressFrontRepository->resetAutoIncrements();
     }
 }

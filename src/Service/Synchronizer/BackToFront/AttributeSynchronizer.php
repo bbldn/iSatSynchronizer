@@ -2,18 +2,17 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\AttributeSynchronizerContract;
 use App\Service\Synchronizer\BackToFront\Implementation\AttributeSynchronizer as AttributeBaseSynchronizer;
 
-class AttributeSynchronizer extends AttributeBaseSynchronizer
+class AttributeSynchronizer extends AttributeBaseSynchronizer implements AttributeSynchronizerContract
 {
     /**
-     * @return AttributeSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**
@@ -43,7 +42,12 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->attributeRepository->removeAll();
+        $this->attributeFrontRepository->removeAll();
+        $this->attributeDescriptionFrontRepository->removeAll();
+
+        $this->attributeRepository->resetAutoIncrements();
+        $this->attributeFrontRepository->resetAutoIncrements();
     }
 
     /**

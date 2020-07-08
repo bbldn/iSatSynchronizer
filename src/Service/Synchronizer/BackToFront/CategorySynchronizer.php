@@ -2,18 +2,18 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\CategorySynchronizerContract;
+use App\Event\BackToFront\CategoriesClearEvent;
 use App\Service\Synchronizer\BackToFront\Implementation\CategorySynchronizer as CategoryBaseSynchronizer;
 
-class CategorySynchronizer extends CategoryBaseSynchronizer
+class CategorySynchronizer extends CategoryBaseSynchronizer implements CategorySynchronizerContract
 {
     /**
-     * @return CategorySynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**
@@ -21,7 +21,6 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
      */
     public function synchronizeAll(bool $synchronizeImage = false): void
     {
-        $this->urls = $this->getSeoUrlFromProducts();
         $categoriesBack = $this->categoryBackRepository->findAll();
         foreach ($categoriesBack as $categoryBack) {
             $this->synchronizeCategory($categoryBack, $synchronizeImage);
@@ -34,7 +33,6 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
      */
     public function synchronizeByIds(string $ids, bool $synchronizeImage = false): void
     {
-        $this->urls = $this->getSeoUrlFromProducts();
         $categoriesBack = $this->categoryBackRepository->findByIds($ids);
         foreach ($categoriesBack as $categoryBack) {
             $this->synchronizeCategory($categoryBack, $synchronizeImage);
@@ -58,7 +56,19 @@ class CategorySynchronizer extends CategoryBaseSynchronizer
      */
     public function clear(bool $clearImage = false): void
     {
-        parent::clear($clearImage);
+        $this->categoryRepository->removeAll();
+
+        $this->categoryFrontRepository->removeAll();
+        $this->categoryDescriptionFrontRepository->removeAll();
+        $this->categoryFilterFrontRepository->removeAll();
+        $this->categoryPathFrontRepository->removeAll();
+        $this->categoryLayoutFrontRepository->removeAll();
+        $this->categoryStoreFrontRepository->removeAll();
+
+        $this->categoryRepository->resetAutoIncrements();
+        $this->categoryFrontRepository->resetAutoIncrements();
+
+        $this->eventDispatcher->dispatch(new CategoriesClearEvent($clearImage));
     }
 
     /**

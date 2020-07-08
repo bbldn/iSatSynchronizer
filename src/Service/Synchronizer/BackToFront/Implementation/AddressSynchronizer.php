@@ -5,6 +5,7 @@ namespace App\Service\Synchronizer\BackToFront\Implementation;
 use App\Entity\Address;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Front\Address as AddressFront;
+use App\Helper\BackToFront\AddressSynchronizerHelper;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\AddressRepository;
@@ -12,9 +13,13 @@ use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
+use App\Helper\Back\Store as StoreBack;
 
 class AddressSynchronizer extends BackToFrontSynchronizer
 {
+    /** @var AddressSynchronizerHelper $addressSynchronizerHelper */
+    protected $addressSynchronizerHelper;
+
     /** @var CustomerBackRepository $customerBackRepository */
     protected $customerBackRepository;
 
@@ -32,6 +37,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
 
     /**
      * AddressSynchronizer constructor.
+     * @param AddressSynchronizerHelper $addressSynchronizerHelper
      * @param CustomerBackRepository $customerBackRepository
      * @param CustomerRepository $customerRepository
      * @param AddressFrontRepository $addressFrontRepository
@@ -39,6 +45,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
      * @param StoreFront $storeFront
      */
     public function __construct(
+        AddressSynchronizerHelper $addressSynchronizerHelper,
         CustomerBackRepository $customerBackRepository,
         CustomerRepository $customerRepository,
         AddressFrontRepository $addressFrontRepository,
@@ -46,6 +53,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
         StoreFront $storeFront
     )
     {
+        $this->addressSynchronizerHelper = $addressSynchronizerHelper;
         $this->customerBackRepository = $customerBackRepository;
         $this->customerRepository = $customerRepository;
         $this->addressFrontRepository = $addressFrontRepository;
@@ -57,7 +65,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
      * @param Address|null $address
      * @return AddressFront|null
      */
-    protected function getAddressFrontFromAddress(?Address $address): ?AddressFront
+    public function getAddressFrontFromAddress(?Address $address): ?AddressFront
     {
         if (null === $address) {
             return new AddressFront();
@@ -75,8 +83,9 @@ class AddressSynchronizer extends BackToFrontSynchronizer
      * @param Address|null $address
      * @param int $customerBackId
      * @param int $frontId
+     * @return Address
      */
-    protected function createOrUpdateAddress(?Address $address, int $customerBackId, int $frontId): void
+    public function createOrUpdateAddress(?Address $address, int $customerBackId, int $frontId): Address
     {
         if (null === $address) {
             $address = new Address();
@@ -86,6 +95,8 @@ class AddressSynchronizer extends BackToFrontSynchronizer
         $address->setFrontId($frontId);
 
         $this->addressRepository->persistAndFlush($address);
+
+        return $address;
     }
 
     /**
@@ -93,17 +104,17 @@ class AddressSynchronizer extends BackToFrontSynchronizer
      * @param AddressFront $addressFront
      * @return AddressFront
      */
-    protected function updateAddressFrontFromCustomerBack(
+    public function updateAddressFrontFromCustomerBack(
         CustomerBack $customerBack,
         AddressFront $addressFront
     ): AddressFront
     {
         if (null === $addressFront->getCustomerId()) {
-            $customerFrontId = $this->getCustomerFrontIdByCustomerBack($customerBack);
+            $customerFrontId = $this->addressSynchronizerHelper->getCustomerFrontIdByCustomerBack($customerBack);
             $addressFront->setCustomerId($customerFrontId);
         }
 
-        $fullName = $this->parseFirstLastName($customerBack->getFio());
+        $fullName = StoreBack::parseFirstLastName($customerBack->getFio());
 
         $addressFront->setFirstName($fullName['firstName']);
         $addressFront->setLastName($fullName['lastName']);
@@ -122,53 +133,16 @@ class AddressSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->addressFrontRepository->removeAll();
-        $this->addressFrontRepository->resetAutoIncrements();
-    }
-
-    /**
-     * @param string $fio
-     * @return array
-     */
-    protected function parseFirstLastName(string $fio): array
-    {
-        $parsedFio = explode(' ', $fio);
-
-        if (0 === count($parsedFio)) {
-            $data = [
-                'firstName' => ' ',
-                'lastName' => ' ',
-            ];
-        } elseif (1 === count($parsedFio)) {
-            $data = [
-                'firstName' => ' ',
-                'lastName' => trim($parsedFio[0]),
-            ];
-        } else {
-            $data = [
-                'firstName' => trim($parsedFio[1]),
-                'lastName' => trim($parsedFio[0]),
-            ];
-        }
-
-        return $data;
-    }
-
-    /**
      * @param CustomerBack $customerBack
-     * @return int
+     * @return AddressFront
      */
-    protected function getCustomerFrontIdByCustomerBack(CustomerBack $customerBack): int
+    public function synchronizeByCustomerBack(CustomerBack $customerBack): AddressFront
     {
-        $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
-        if ($customer !== null && null !== $customer->getBackId()) {
-            return $customer->getBackId();
-        }
+        $address = $this->addressRepository->findOneByOrderBackId($customerBack->getId());
+        $addressFront = $this->getAddressFrontFromAddress($address);
+        $this->updateAddressFrontFromCustomerBack($customerBack, $addressFront);
+        $this->createOrUpdateAddress($address, $customerBack->getId(), $addressFront->getAddressId());
 
-        return 0;
+        return $addressFront;
     }
 }

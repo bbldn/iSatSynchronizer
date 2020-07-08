@@ -55,34 +55,24 @@ class AttributeSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->attributeRepository->removeAll();
-        $this->attributeFrontRepository->removeAll();
-        $this->attributeDescriptionFrontRepository->removeAll();
-
-        $this->attributeRepository->resetAutoIncrements();
-        $this->attributeFrontRepository->resetAutoIncrements();
-    }
-
-    /**
      * @param AttributeBack $attributeBack
+     * @return AttributeFront
      */
-    protected function synchronizeAttribute(AttributeBack $attributeBack): void
+    public function synchronizeAttribute(AttributeBack $attributeBack): AttributeFront
     {
         $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getOptionId());
         $attributeFront = $this->getAttributeFrontFromAttribute($attribute);
         $this->updateAttributeFrontFromBackProduct($attributeBack, $attributeFront);
         $this->createOrUpdateAttribute($attribute, $attributeBack->getOptionId(), $attributeFront->getAttributeId());
+
+        return $attributeFront;
     }
 
     /**
      * @param Attribute|null $attribute
      * @return AttributeFront
      */
-    protected function getAttributeFrontFromAttribute(?Attribute $attribute): AttributeFront
+    public function getAttributeFrontFromAttribute(?Attribute $attribute): AttributeFront
     {
         if (null === $attribute) {
             return new AttributeFront();
@@ -102,7 +92,7 @@ class AttributeSynchronizer extends BackToFrontSynchronizer
      * @param AttributeFront $attributeFront
      * @return AttributeFront
      */
-    protected function updateAttributeFrontFromBackProduct(
+    public function updateAttributeFrontFromBackProduct(
         AttributeBack $attributeBack,
         AttributeFront $attributeFront
     ): AttributeFront
@@ -134,8 +124,9 @@ class AttributeSynchronizer extends BackToFrontSynchronizer
      * @param Attribute|null $attribute
      * @param int $backId
      * @param int $frontId
+     * @return Attribute
      */
-    protected function createOrUpdateAttribute(?Attribute $attribute, int $backId, int $frontId): void
+    public function createOrUpdateAttribute(?Attribute $attribute, int $backId, int $frontId): Attribute
     {
         if (null === $attribute) {
             $attribute = new Attribute();
@@ -145,5 +136,7 @@ class AttributeSynchronizer extends BackToFrontSynchronizer
         $attribute->setFrontId($frontId);
 
         $this->attributeRepository->persistAndFlush($attribute);
+
+        return $attribute;
     }
 }
