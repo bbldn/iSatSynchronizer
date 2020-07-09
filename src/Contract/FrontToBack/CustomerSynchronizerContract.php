@@ -3,14 +3,10 @@
 namespace App\Contract\FrontToBack;
 
 use App\Entity\Back\BuyersGamePost as CustomerBack;
+use App\Contract\CanLoadInterface;
 
-interface CustomerSynchronizerContract
+interface CustomerSynchronizerContract extends CanLoadInterface
 {
-    /**
-     *
-     */
-    public function load(): void;
-
     /**
      * @param int $id
      * @param string $password

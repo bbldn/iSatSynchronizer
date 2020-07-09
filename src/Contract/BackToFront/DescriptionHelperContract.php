@@ -2,12 +2,10 @@
 
 namespace App\Contract\BackToFront;
 
-interface DescriptionHelperContract
+use App\Contract\CanLoadInterface;
+
+interface DescriptionHelperContract extends CanLoadInterface
 {
-    /**
-     *
-     */
-    public function load(): void;
 
     /**
      * @param null|string $text

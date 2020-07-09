@@ -2,34 +2,16 @@
 
 namespace App\Contract\BackToFront;
 
+use App\Contract\CanLoadInterface;
+use App\Contract\CanReload;
 use App\Entity\Front\Customer as CustomerFront;
 
-interface CustomerSynchronizerContract
+interface CustomerSynchronizerContract extends CanLoadInterface, CanReload
 {
-    /**
-     *
-     */
-    public function load(): void;
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void;
-
     /**
      * @param string $ids
      */
     public function synchronizeByIds(string $ids): void;
-
-    /**
-     *
-     */
-    public function clear(): void;
-
-    /**
-     *
-     */
-    public function reload(): void;
 
     /**
      * @param int $customerBackId

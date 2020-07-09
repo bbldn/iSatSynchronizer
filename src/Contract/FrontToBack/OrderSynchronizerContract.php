@@ -2,25 +2,13 @@
 
 namespace App\Contract\FrontToBack;
 
-interface OrderSynchronizerContract
+use App\Contract\CanLoadInterface;
+use App\Contract\CanReload;
+
+interface OrderSynchronizerContract extends CanLoadInterface, CanReload
 {
-    /**
-     *
-     */
-    public function load(): void;
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void;
-
     /**
      * @param string $ids
      */
     public function synchronizeByIds(string $ids): void;
-
-    /**
-     *
-     */
-    public function clear(): void;
 }

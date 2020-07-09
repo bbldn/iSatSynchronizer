@@ -2,15 +2,9 @@
 
 namespace App\Contract\BackToFront;
 
-interface CurrencySynchronizerContract
-{
-    /**
-     *
-     */
-    public function load(): void;
+use App\Contract\CanLoadInterface;
+use App\Contract\CanSynchronizeAll;
 
-    /**
-     *
-     */
-    public function synchronizeAll(): void;
+interface CurrencySynchronizerContract extends CanLoadInterface, CanSynchronizeAll
+{
 }

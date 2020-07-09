@@ -2,13 +2,11 @@
 
 namespace App\Contract\BackToFront;
 
-interface ProductSynchronizerContract
-{
-    /**
-     *
-     */
-    public function load(): void;
+use App\Contract\CanLoadInterface;
+use App\Contract\CanReload;
 
+interface ProductSynchronizerContract extends CanLoadInterface, CanReload
+{
     /**
      * @param string $ids
      * @param bool $synchronizeImage
@@ -31,16 +29,6 @@ interface ProductSynchronizerContract
      * @param bool $synchronizeImage
      */
     public function synchronizeAll(bool $synchronizeImage = false): void;
-
-    /**
-     * @param bool $reloadImage
-     */
-    public function reload(bool $reloadImage = false): void;
-
-    /**
-     * @param bool $clearImage
-     */
-    public function clear(bool $clearImage = false): void;
 
     /**
      *

@@ -2,18 +2,11 @@
 
 namespace App\Contract\FrontToBack;
 
-interface ReviewSynchronizerContract
+use App\Contract\CanLoadInterface;
+use App\Contract\CanSynchronizeAll;
+
+interface ReviewSynchronizerContract extends CanLoadInterface, CanSynchronizeAll
 {
-    /**
-     *
-     */
-    public function load(): void;
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void;
-
     /**
      * @param string $ids
      */

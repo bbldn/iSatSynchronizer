@@ -2,18 +2,11 @@
 
 namespace App\Contract\BackToFront;
 
-interface ProductDiscountSynchronizerContract
+use App\Contract\CanLoadInterface;
+use App\Contract\CanReload;
+
+interface ProductDiscountSynchronizerContract extends CanLoadInterface, CanReload
 {
-    /**
-     *
-     */
-    public function load(): void;
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void;
-
     /**
      * @param int $productBackId
      */
@@ -23,9 +16,4 @@ interface ProductDiscountSynchronizerContract
      * @param int $productId
      */
     public function createOrUpdateDiscountItems(int $productId): void;
-
-    /**
-     *
-     */
-    public function clear(): void;
 }

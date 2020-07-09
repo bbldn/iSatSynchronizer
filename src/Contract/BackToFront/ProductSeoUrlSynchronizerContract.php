@@ -2,22 +2,14 @@
 
 namespace App\Contract\BackToFront;
 
+use App\Contract\CanLoadInterface;
+use App\Contract\CanReload;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\SeoUrl as SeoUrlFront;
 
-interface ProductSeoUrlSynchronizerContract
+interface ProductSeoUrlSynchronizerContract extends CanLoadInterface, CanReload
 {
-    /**
-     *
-     */
-    public function load(): void;
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void;
-
     /**
      * @param string $ids
      */
@@ -32,9 +24,4 @@ interface ProductSeoUrlSynchronizerContract
         ProductBack $productBack,
         ProductFront $productFront
     ): ?SeoUrlFront;
-
-    /**
-     *
-     */
-    public function clear(): void;
 }

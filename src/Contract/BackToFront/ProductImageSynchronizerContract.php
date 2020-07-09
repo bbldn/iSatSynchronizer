@@ -2,16 +2,12 @@
 
 namespace App\Contract\BackToFront;
 
+use App\Contract\CanLoadInterface;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 
-interface ProductImageSynchronizerContract
+interface ProductImageSynchronizerContract extends CanLoadInterface
 {
-    /**
-     *
-     */
-    public function load(): void;
-
     /**
      *
      */
