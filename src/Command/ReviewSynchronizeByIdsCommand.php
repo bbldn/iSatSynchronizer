@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Contract\BackToFront\ReviewSynchronizerContract;
 use App\Service\Synchronizer\BackToFront\ReviewSynchronizer as ReviewBackToFrontSynchronizer;
 use App\Service\Synchronizer\FrontToBack\ReviewSynchronizer as ReviewFrontToBackSynchronizer;
 use InvalidArgumentException;
@@ -16,17 +17,17 @@ class ReviewSynchronizeByIdsCommand extends Command
     /** @var ReviewFrontToBackSynchronizer $reviewFrontToBackSynchronizer */
     protected $reviewFrontToBackSynchronizer;
 
-    /** @var ReviewBackToFrontSynchronizer $reviewBackToFrontSynchronizer */
+    /** @var ReviewSynchronizerContract $reviewBackToFrontSynchronizer */
     protected $reviewBackToFrontSynchronizer;
 
     /**
      * ReviewSynchronizeByIdsCommand constructor.
      * @param ReviewFrontToBackSynchronizer $reviewFrontToBackSynchronizer
-     * @param ReviewBackToFrontSynchronizer $reviewBackToFrontSynchronizer
+     * @param ReviewSynchronizerContract $reviewBackToFrontSynchronizer
      */
     public function __construct(
         ReviewFrontToBackSynchronizer $reviewFrontToBackSynchronizer,
-        ReviewBackToFrontSynchronizer $reviewBackToFrontSynchronizer
+        ReviewSynchronizerContract $reviewBackToFrontSynchronizer
     )
     {
         $this->reviewFrontToBackSynchronizer = $reviewFrontToBackSynchronizer;
@@ -45,9 +46,10 @@ class ReviewSynchronizeByIdsCommand extends Command
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->reviewFrontToBackSynchronizer->load();
         $this->reviewBackToFrontSynchronizer->load();
@@ -60,7 +62,6 @@ class ReviewSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {

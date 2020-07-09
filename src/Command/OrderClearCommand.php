@@ -15,11 +15,11 @@ class OrderClearCommand extends Command
 
     /**
      * OrderClearCommand constructor.
-     * @param OrderSynchronizer $orderSynchronize
+     * @param OrderSynchronizer $orderSynchronizer
      */
-    public function __construct(OrderSynchronizer $orderSynchronize)
+    public function __construct(OrderSynchronizer $orderSynchronizer)
     {
-        $this->orderSynchronize = $orderSynchronize;
+        $this->orderSynchronize = $orderSynchronizer;
         parent::__construct();
     }
 
@@ -32,9 +32,10 @@ class OrderClearCommand extends Command
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->orderSynchronize->load();
     }
@@ -46,7 +47,6 @@ class OrderClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $this->orderSynchronize->clear();
 
         return 0;

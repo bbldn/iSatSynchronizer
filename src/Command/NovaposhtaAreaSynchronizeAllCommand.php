@@ -24,9 +24,10 @@ class NovaposhtaAreaSynchronizeAllCommand extends Command
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->areaSynchronizer->load();
     }
@@ -38,7 +39,6 @@ class NovaposhtaAreaSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $this->areaSynchronizer->synchronizeAll();
 
         return 0;

@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\AttributeSynchronizer;
+use App\Contract\BackToFront\AttributeSynchronizerContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,33 +10,34 @@ class AttributeSynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'attribute:synchronize:all';
 
-    /** @var AttributeSynchronizer $attributeSynchronize */
-    protected $attributeSynchronize;
+    /** @var AttributeSynchronizerContract $attributeSynchronizer */
+    protected $attributeSynchronizer;
 
     /**
      * AttributeSynchronizeCommand constructor.
-     * @param AttributeSynchronizer $attributeSynchronize
+     * @param AttributeSynchronizerContract $attributeSynchronizer
      */
-    public function __construct(AttributeSynchronizer $attributeSynchronize)
+    public function __construct(AttributeSynchronizerContract $attributeSynchronizer)
     {
-        $this->attributeSynchronize = $attributeSynchronize;
+        $this->attributeSynchronizer = $attributeSynchronizer;
         parent::__construct();
     }
 
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize attribute');
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->attributeSynchronize->load();
+        $this->attributeSynchronizer->load();
     }
 
     /**
@@ -46,8 +47,7 @@ class AttributeSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $this->attributeSynchronize->synchronizeAll();
+        $this->attributeSynchronizer->synchronizeAll();
 
         return 0;
     }

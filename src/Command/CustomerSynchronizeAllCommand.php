@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronize;
+use App\Contract\BackToFront\CustomerSynchronizerContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,33 +10,34 @@ class CustomerSynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'customer:synchronize:all';
 
-    /** @var CustomerBackToFrontSynchronize $customerBackToFrontSynchronize */
-    protected $customerBackToFrontSynchronize;
+    /** @var CustomerSynchronizerContract $customerSynchronizer */
+    protected $customerSynchronizer;
 
     /**
      * CustomerSynchronizeAllCommand constructor.
-     * @param CustomerBackToFrontSynchronize $customerBackToFrontSynchronize
+     * @param CustomerSynchronizerContract $customerSynchronizer
      */
-    public function __construct(CustomerBackToFrontSynchronize $customerBackToFrontSynchronize)
+    public function __construct(CustomerSynchronizerContract $customerSynchronizer)
     {
-        $this->customerBackToFrontSynchronize = $customerBackToFrontSynchronize;
+        $this->customerSynchronizer = $customerSynchronizer;
         parent::__construct();
     }
 
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize customers');
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->customerBackToFrontSynchronize->load();
+        $this->customerSynchronizer->load();
     }
 
     /**
@@ -46,8 +47,7 @@ class CustomerSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $this->customerBackToFrontSynchronize->synchronizeAll();
+        $this->customerSynchronizer->synchronizeAll();
 
         return 0;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\OrderSynchronizer as OrderBackToFrontSynchronizer;
+use App\Contract\BackToFront\OrderSynchronizerContract;
 use App\Service\Synchronizer\FrontToBack\OrderSynchronizer as OrderFrontToBackSynchronizer;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,17 +16,17 @@ class OrderSynchronizeByIdsCommand extends Command
     /** @var OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer */
     protected $orderFrontToBackSynchronizer;
 
-    /** @var OrderBackToFrontSynchronizer $orderBackToFrontSynchronizer */
+    /** @var OrderSynchronizerContract $orderBackToFrontSynchronizer */
     protected $orderBackToFrontSynchronizer;
 
     /**
      * OrderSynchronizeByIdsCommand constructor.
      * @param OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer
-     * @param OrderBackToFrontSynchronizer $orderBackToFrontSynchronizer
+     * @param OrderSynchronizerContract $orderBackToFrontSynchronizer
      */
     public function __construct(
         OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer,
-        OrderBackToFrontSynchronizer $orderBackToFrontSynchronizer
+        OrderSynchronizerContract $orderBackToFrontSynchronizer
     )
     {
         $this->orderFrontToBackSynchronizer = $orderFrontToBackSynchronizer;
@@ -44,7 +44,11 @@ class OrderSynchronizeByIdsCommand extends Command
         $this->addArgument('ids', InputArgument::REQUIRED, 'Reset image');
     }
 
-    protected function load(): void
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->orderFrontToBackSynchronizer->load();
         $this->orderBackToFrontSynchronizer->load();
@@ -57,7 +61,6 @@ class OrderSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {

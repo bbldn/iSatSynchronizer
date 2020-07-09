@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronize;
+use App\Contract\BackToFront\CustomerSynchronizerContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,16 +11,16 @@ class CustomerSynchronizeByIdsCommand extends Command
 {
     protected static $defaultName = 'customer:synchronize:by-ids';
 
-    /** @var CustomerBackToFrontSynchronize $customerBackToFrontSynchronize */
-    protected $customerBackToFrontSynchronize;
+    /** @var CustomerSynchronizerContract $customerSynchronizer */
+    protected $customerSynchronizer;
 
     /**
      * CustomerSynchronizeByIdsCommand constructor.
-     * @param CustomerBackToFrontSynchronize $customerBackToFrontSynchronize
+     * @param CustomerSynchronizerContract $customerSynchronizer
      */
-    public function __construct(CustomerBackToFrontSynchronize $customerBackToFrontSynchronize)
+    public function __construct(CustomerSynchronizerContract $customerSynchronizer)
     {
-        $this->customerBackToFrontSynchronize = $customerBackToFrontSynchronize;
+        $this->customerSynchronizer = $customerSynchronizer;
         parent::__construct();
     }
 
@@ -34,11 +34,12 @@ class CustomerSynchronizeByIdsCommand extends Command
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->customerBackToFrontSynchronize->load();
+        $this->customerSynchronizer->load();
     }
 
     /**
@@ -48,9 +49,8 @@ class CustomerSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $ids = $this->testIds($input);
-        $this->customerBackToFrontSynchronize->synchronizeByIds($ids);
+        $this->customerSynchronizer->synchronizeByIds($ids);
 
         return 0;
     }

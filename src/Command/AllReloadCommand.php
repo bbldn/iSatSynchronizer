@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\AttributeSynchronizer;
-use App\Service\Synchronizer\BackToFront\CategorySynchronizer;
-use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
+use App\Contract\BackToFront\AttributeSynchronizerContract;
+use App\Contract\BackToFront\CategorySynchronizerContract;
+use App\Contract\BackToFront\ProductSynchronizerContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,50 +13,51 @@ class AllReloadCommand extends Command
 {
     protected static $defaultName = 'all:reload';
 
-    /** @var AttributeSynchronizer $attributeSynchronize */
-    protected $attributeSynchronize;
+    /** @var AttributeSynchronizerContract $attributeSynchronizer */
+    protected $attributeSynchronizer;
 
-    /** @var CategorySynchronizer $categorySynchronize */
-    protected $categorySynchronize;
+    /** @var CategorySynchronizerContract $categorySynchronizer */
+    protected $categorySynchronizer;
 
-    /** @var ProductSynchronizer $productSynchronize */
-    protected $productSynchronize;
+    /** @var ProductSynchronizerContract $productSynchronizer */
+    protected $productSynchronizer;
 
     /**
      * AllReloadCommand constructor.
-     * @param AttributeSynchronizer $attributeSynchronize
-     * @param CategorySynchronizer $categorySynchronize
-     * @param ProductSynchronizer $productSynchronize
+     * @param AttributeSynchronizerContract $attributeSynchronizer
+     * @param CategorySynchronizerContract $categorySynchronizer
+     * @param ProductSynchronizerContract $productSynchronizer
      */
     public function __construct(
-        AttributeSynchronizer $attributeSynchronize,
-        CategorySynchronizer $categorySynchronize,
-        ProductSynchronizer $productSynchronize
+        AttributeSynchronizerContract $attributeSynchronizer,
+        CategorySynchronizerContract $categorySynchronizer,
+        ProductSynchronizerContract $productSynchronizer
     )
     {
-        $this->attributeSynchronize = $attributeSynchronize;
-        $this->categorySynchronize = $categorySynchronize;
-        $this->productSynchronize = $productSynchronize;
+        $this->attributeSynchronizer = $attributeSynchronizer;
+        $this->categorySynchronizer = $categorySynchronizer;
+        $this->productSynchronizer = $productSynchronizer;
         parent::__construct();
     }
 
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Reload all');
         $this->addArgument('reloadImage', InputArgument::OPTIONAL, 'Reload image');
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->categorySynchronize->load();
-        $this->attributeSynchronize->load();
-        $this->productSynchronize->load();
+        $this->categorySynchronizer->load();
+        $this->attributeSynchronizer->load();
+        $this->productSynchronizer->load();
     }
 
     /**
@@ -66,12 +67,11 @@ class AllReloadCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $reloadImage = $input->getArgument('reloadImage') !== null;
 
-        $this->categorySynchronize->reload($reloadImage);
-        $this->attributeSynchronize->reload();
-        $this->productSynchronize->reload($reloadImage);
+        $this->categorySynchronizer->reload($reloadImage);
+        $this->attributeSynchronizer->reload();
+        $this->productSynchronizer->reload($reloadImage);
 
         return 0;
     }

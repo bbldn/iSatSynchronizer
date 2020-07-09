@@ -3,25 +3,25 @@
 namespace App\Command;
 
 use App\Exception\CustomerFrontNotFoundException;
+use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronize;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronize;
 
 class CustomerSynchronizeOneCommand extends Command
 {
     protected static $defaultName = 'customer:synchronize:one';
 
-    /** @var CustomerFrontToBackSynchronize $customerFrontToBackSynchronize */
-    protected $customerFrontToBackSynchronize;
+    /** @var CustomerFrontToBackSynchronize $customerSynchronizer */
+    protected $customerSynchronizer;
 
     /**
      * CustomerSynchronizeOneCommand constructor.
-     * @param CustomerFrontToBackSynchronize $customerFrontToBackSynchronize
+     * @param CustomerFrontToBackSynchronize $customerFrontToBackSynchronizer
      */
-    public function __construct(CustomerFrontToBackSynchronize $customerFrontToBackSynchronize)
+    public function __construct(CustomerFrontToBackSynchronize $customerFrontToBackSynchronizer)
     {
-        $this->customerFrontToBackSynchronize = $customerFrontToBackSynchronize;
+        $this->customerSynchronizer = $customerFrontToBackSynchronizer;
         parent::__construct();
     }
 
@@ -36,11 +36,12 @@ class CustomerSynchronizeOneCommand extends Command
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->customerFrontToBackSynchronize->load();
+        $this->customerSynchronizer->load();
     }
 
     /**
@@ -51,11 +52,9 @@ class CustomerSynchronizeOneCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-
         $id = $this->parseId($input);
         $password = $input->getArgument('password');
-        $this->customerFrontToBackSynchronize->synchronizeOne((int)$id, $password);
+        $this->customerSynchronizer->synchronizeOne((int)$id, $password);
 
         return 0;
     }

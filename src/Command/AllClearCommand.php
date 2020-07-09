@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\AttributeSynchronizer;
-use App\Service\Synchronizer\BackToFront\CategorySynchronizer;
-use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
+use App\Contract\BackToFront\AttributeSynchronizerContract;
+use App\Contract\BackToFront\CategorySynchronizerContract;
+use App\Contract\BackToFront\ProductSynchronizerContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,50 +13,51 @@ class AllClearCommand extends Command
 {
     protected static $defaultName = 'all:clear';
 
-    /** @var AttributeSynchronizer $attributeSynchronize */
-    protected $attributeSynchronize;
+    /** @var AttributeSynchronizerContract $attributeSynchronizer */
+    protected $attributeSynchronizer;
 
-    /** @var CategorySynchronizer $categorySynchronize */
-    protected $categorySynchronize;
+    /** @var CategorySynchronizerContract $categorySynchronizer */
+    protected $categorySynchronizer;
 
-    /** @var ProductSynchronizer $productSynchronize */
-    protected $productSynchronize;
+    /** @var ProductSynchronizerContract $productSynchronizer */
+    protected $productSynchronizer;
 
     /**
      * AllClearCommand constructor.
-     * @param AttributeSynchronizer $attributeSynchronize
-     * @param CategorySynchronizer $categorySynchronize
-     * @param ProductSynchronizer $productSynchronize
+     * @param AttributeSynchronizerContract $attributeSynchronizer
+     * @param CategorySynchronizerContract $categorySynchronizer
+     * @param ProductSynchronizerContract $productSynchronizer
      */
     public function __construct(
-        AttributeSynchronizer $attributeSynchronize,
-        CategorySynchronizer $categorySynchronize,
-        ProductSynchronizer $productSynchronize
+        AttributeSynchronizerContract $attributeSynchronizer,
+        CategorySynchronizerContract $categorySynchronizer,
+        ProductSynchronizerContract $productSynchronizer
     )
     {
-        $this->attributeSynchronize = $attributeSynchronize;
-        $this->categorySynchronize = $categorySynchronize;
-        $this->productSynchronize = $productSynchronize;
+        $this->attributeSynchronizer = $attributeSynchronizer;
+        $this->categorySynchronizer = $categorySynchronizer;
+        $this->productSynchronizer = $productSynchronizer;
         parent::__construct();
     }
 
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Clear all');
         $this->addArgument('resetImage', InputArgument::OPTIONAL, 'Reset image');
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->productSynchronize->load();
-        $this->attributeSynchronize->load();
-        $this->categorySynchronize->load();
+        $this->productSynchronizer->load();
+        $this->attributeSynchronizer->load();
+        $this->categorySynchronizer->load();
     }
 
     /**
@@ -66,12 +67,11 @@ class AllClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $resetImage = $input->getArgument('resetImage') !== null;
 
-        $this->productSynchronize->clear($resetImage);
-        $this->attributeSynchronize->clear();
-        $this->categorySynchronize->clear($resetImage);
+        $this->productSynchronizer->clear($resetImage);
+        $this->attributeSynchronizer->clear();
+        $this->categorySynchronizer->clear($resetImage);
 
         return 0;
     }

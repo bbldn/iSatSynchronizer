@@ -63,4 +63,11 @@ class ManufacturerHelper implements ManufacturerHelperContract
 
         return $this->storeFront->getDefaultManufacturerId();
     }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+    }
 }

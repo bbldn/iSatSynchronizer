@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
+use App\Contract\BackToFront\ProductSynchronizerContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,16 +10,16 @@ class ProductPriceSynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'product:price:synchronize:all';
 
-    /** @var ProductSynchronizer $productSynchronize */
+    /** @var ProductSynchronizerContract $productSynchronize */
     protected $productSynchronize;
 
     /**
      * ProductPriceUpdateCommand constructor.
-     * @param ProductSynchronizer $productSynchronize
+     * @param ProductSynchronizerContract $productSynchronizer
      */
-    public function __construct(ProductSynchronizer $productSynchronize)
+    public function __construct(ProductSynchronizerContract $productSynchronizer)
     {
-        $this->productSynchronize = $productSynchronize;
+        $this->productSynchronize = $productSynchronizer;
         parent::__construct();
     }
 
@@ -32,9 +32,10 @@ class ProductPriceSynchronizeAllCommand extends Command
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->productSynchronize->load();
     }
@@ -46,7 +47,6 @@ class ProductPriceSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $this->productSynchronize->synchronizePriceAll();
 
         return 0;

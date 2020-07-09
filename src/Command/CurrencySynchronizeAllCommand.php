@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\CurrencySynchronizer;
+use App\Contract\BackToFront\CurrencySynchronizerContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class CurrencySynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'currency:synchronize:all';
 
-    /** @var CurrencySynchronizer $currencySynchronizer */
+    /** @var CurrencySynchronizerContract $currencySynchronizer */
     protected $currencySynchronizer;
 
     /**
      * CurrencySynchronizeAllCommand constructor.
-     * @param CurrencySynchronizer $currencySynchronizer
+     * @param CurrencySynchronizerContract $currencySynchronizer
      */
-    public function __construct(CurrencySynchronizer $currencySynchronizer)
+    public function __construct(CurrencySynchronizerContract $currencySynchronizer)
     {
         $this->currencySynchronizer = $currencySynchronizer;
         parent::__construct();
@@ -26,15 +26,16 @@ class CurrencySynchronizeAllCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Currency all');
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->currencySynchronizer->load();
     }
@@ -46,7 +47,6 @@ class CurrencySynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $this->currencySynchronizer->synchronizeAll();
 
         return 0;

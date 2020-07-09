@@ -20,7 +20,6 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
     public function load(): void
     {
         parent::load();
-        $this->productDiscontinuedTableExists = $this->productDiscontinuedFrontRepository->tableExists();
         $this->descriptionHelper->load();
         $this->manufacturerHelper->load();
     }

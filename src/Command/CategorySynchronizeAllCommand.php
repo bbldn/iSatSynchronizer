@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\CategorySynchronizer;
+use App\Contract\BackToFront\CategorySynchronizerContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,34 +11,35 @@ class CategorySynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'category:synchronize:all';
 
-    /** @var CategorySynchronizer $categorySynchronize */
-    protected $categorySynchronize;
+    /** @var CategorySynchronizerContract $categorySynchronizer */
+    protected $categorySynchronizer;
 
     /**
      * CategorySynchronizeAllCommand constructor.
-     * @param CategorySynchronizer $categorySynchronize
+     * @param CategorySynchronizerContract $categorySynchronizer
      */
-    public function __construct(CategorySynchronizer $categorySynchronize)
+    public function __construct(CategorySynchronizerContract $categorySynchronizer)
     {
-        $this->categorySynchronize = $categorySynchronize;
+        $this->categorySynchronizer = $categorySynchronizer;
         parent::__construct();
     }
 
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize categories');
         $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Load image');
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->categorySynchronize->load();
+        $this->categorySynchronizer->load();
     }
 
     /**
@@ -48,10 +49,8 @@ class CategorySynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->categorySynchronize->synchronizeAll($loadImage);
+        $this->categorySynchronizer->synchronizeAll($loadImage);
 
         return 0;
     }

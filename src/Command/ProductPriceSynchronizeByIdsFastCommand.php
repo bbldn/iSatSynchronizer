@@ -2,8 +2,7 @@
 
 namespace App\Command;
 
-use App\Repository\Front\ProductDiscountRepository;
-use App\Service\Synchronizer\BackToFront\ProductDiscountSpeedSynchronizer;
+use App\Contract\BackToFront\ProductDiscountSpeedSynchronizerContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -11,20 +10,24 @@ class ProductPriceSynchronizeByIdsFastCommand extends Command
 {
     protected static $defaultName = 'product:price:synchronize:by-ids:fast';
 
-    /** @var ProductDiscountRepository $productDiscountRepository */
+    /** @var ProductDiscountSpeedSynchronizerContract $productDiscountRepository */
     protected $productDiscountSpeedSynchronizer;
 
     /**
      * ProductPriceSynchronizeAllFastCommand constructor.
-     * @param ProductDiscountSpeedSynchronizer $productSynchronizer
+     * @param ProductDiscountSpeedSynchronizerContract $productSynchronizer
      */
-    public function __construct(ProductDiscountSpeedSynchronizer $productSynchronizer)
+    public function __construct(ProductDiscountSpeedSynchronizerContract $productSynchronizer)
     {
         $this->productDiscountSpeedSynchronizer = $productSynchronizer;
         parent::__construct();
     }
 
-    protected function load(): void
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->productDiscountSpeedSynchronizer->load();
     }
@@ -36,7 +39,6 @@ class ProductPriceSynchronizeByIdsFastCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $ids = $this->testIds($input);
         $this->productDiscountSpeedSynchronizer->synchronizeByIds($ids);
 

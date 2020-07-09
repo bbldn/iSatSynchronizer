@@ -16,11 +16,11 @@ class ProductPriceSynchronizeByIdsCommand extends Command
 
     /**
      * ProductPriceUpdateByIdsCommand constructor.
-     * @param ProductSynchronizer $productSynchronize
+     * @param ProductSynchronizer $productSynchronizer
      */
-    public function __construct(ProductSynchronizer $productSynchronize)
+    public function __construct(ProductSynchronizer $productSynchronizer)
     {
-        $this->productSynchronize = $productSynchronize;
+        $this->productSynchronize = $productSynchronizer;
         parent::__construct();
     }
 
@@ -33,7 +33,11 @@ class ProductPriceSynchronizeByIdsCommand extends Command
         $this->addArgument('ids', InputArgument::REQUIRED, 'Ids');
     }
 
-    protected function load(): void
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->productSynchronize->load();
     }
@@ -45,7 +49,6 @@ class ProductPriceSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $ids = $this->testIds($input);
         $this->productSynchronize->synchronizePriceByIds($ids);
 

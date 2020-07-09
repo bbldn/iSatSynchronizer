@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerSynchronize;
+use App\Contract\BackToFront\CustomerSynchronizerContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,33 +10,34 @@ class CustomerClearCommand extends Command
 {
     protected static $defaultName = 'customer:clear';
 
-    /** @var CustomerSynchronize $customerSynchronize */
-    protected $customerSynchronize;
+    /** @var CustomerSynchronizerContract $customerSynchronizer */
+    protected $customerSynchronizer;
 
     /**
      * CustomerClearCommand constructor.
-     * @param CustomerSynchronize $customerSynchronize
+     * @param CustomerSynchronizerContract $customerSynchronizer
      */
-    public function __construct(CustomerSynchronize $customerSynchronize)
+    public function __construct(CustomerSynchronizerContract $customerSynchronizer)
     {
-        $this->customerSynchronize = $customerSynchronize;
+        $this->customerSynchronizer = $customerSynchronizer;
         parent::__construct();
     }
 
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Clear customers');
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->customerSynchronize->load();
+        $this->customerSynchronizer->load();
     }
 
     /**
@@ -46,8 +47,7 @@ class CustomerClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        $this->customerSynchronize->clear();
+        $this->customerSynchronizer->clear();
 
         return 0;
     }

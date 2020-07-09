@@ -9,4 +9,9 @@ interface ManufacturerHelperContract
      * @return int
      */
     public function getManufacturerId(string $productName): int;
+
+    /**
+     *
+     */
+    public function load(): void;
 }

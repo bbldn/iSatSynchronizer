@@ -16,11 +16,11 @@ class ProductSynchronizeByNameCommand extends Command
 
     /**
      * ProductSynchronizeByIdsCommand constructor.
-     * @param ProductSynchronizer $productSynchronize
+     * @param ProductSynchronizer $productSynchronizer
      */
-    public function __construct(ProductSynchronizer $productSynchronize)
+    public function __construct(ProductSynchronizer $productSynchronizer)
     {
-        $this->productSynchronize = $productSynchronize;
+        $this->productSynchronize = $productSynchronizer;
         parent::__construct();
     }
 
@@ -35,9 +35,10 @@ class ProductSynchronizeByNameCommand extends Command
     }
 
     /**
-     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function load(): void
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->productSynchronize->load();
     }
@@ -49,7 +50,6 @@ class ProductSynchronizeByNameCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
         $name = $input->getArgument('name');
         $loadImage = $input->getArgument('loadImage') !== null;
         $this->productSynchronize->synchronizeByName($name, $loadImage);
