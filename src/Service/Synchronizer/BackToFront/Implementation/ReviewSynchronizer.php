@@ -70,34 +70,16 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
         $this->reviewRepository = $reviewRepository;
         $this->productRepository = $productRepository;
         $this->reviewAnswerFrontRepository = $reviewAnswerFrontRepository;
-        $this->reviewAnswerTableExists = $reviewAnswerFrontRepository->tableExists();
-    }
-
-    /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->reviewRepository->clear();
-        $this->reviewFrontRepository->clear();
-
-        $this->reviewRepository->resetAutoIncrements();
-        $this->reviewFrontRepository->resetAutoIncrements();
-
-        if (true === $this->reviewAnswerTableExists) {
-            $this->reviewAnswerFrontRepository->clear();
-            $this->reviewAnswerFrontRepository->resetAutoIncrements();
-        }
     }
 
     /**
      * @param ReviewBack $reviewBack
      */
-    protected function synchronizeReviewBack(ReviewBack $reviewBack): void
+    public function synchronizeReviewBack(ReviewBack $reviewBack): void
     {
         $review = $this->reviewRepository->findOneByBackId($reviewBack->getDid());
         $reviewFront = $this->getReviewFrontFromReview($review);
-        $this->updateReviewFrontFromReviewBack($reviewFront, $reviewBack);
+        $this->updateReviewFrontAndOtherFromReviewBack($reviewFront, $reviewBack);
         $this->createOrUpdateReview($review, $reviewBack->getDid(), $reviewFront->getReviewId());
     }
 
@@ -105,7 +87,7 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param Review|null $review
      * @return ReviewFront
      */
-    protected function getReviewFrontFromReview(?Review $review): ReviewFront
+    public function getReviewFrontFromReview(?Review $review): ReviewFront
     {
         if (null === $review) {
             return new ReviewFront();
@@ -125,7 +107,23 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param ReviewBack $reviewBack
      * @return ReviewFront
      */
-    protected function updateReviewFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ReviewFront
+    public function updateReviewFrontAndOtherFromReviewBack(
+        ReviewFront $reviewFront,
+        ReviewBack $reviewBack
+    ): ReviewFront
+    {
+        $this->updateReviewFrontFromReviewBack($reviewFront, $reviewBack);
+        $this->updateReviewAnswerFrontFromReviewBack($reviewFront, $reviewBack);
+
+        return $reviewFront;
+    }
+
+    /**
+     * @param ReviewFront $reviewFront
+     * @param ReviewBack $reviewBack
+     * @return ReviewFront
+     */
+    public function updateReviewFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ReviewFront
     {
         $product = $this->productRepository->findOneByBackId($reviewBack->getProductId());
         if (null === $product) {
@@ -152,16 +150,28 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
 
         $this->reviewFrontRepository->persistAndFlush($reviewFront);
 
-        $text = trim(Store::encodingConvert($reviewBack->getAnswer()));
-        if (true === $this->reviewAnswerTableExists && mb_strlen($text) > 0) {
-            $reviewAnswerFront = $this->getReviewAnswerFrontByReviewFrontId($reviewFront->getReviewId());
-            $reviewAnswerFront->setReviewId($reviewFront->getReviewId());
-            $reviewAnswerFront->setText($text);
+        return $reviewFront;
+    }
 
-            $this->reviewAnswerFrontRepository->persistAndFlush($reviewAnswerFront);
+    /**
+     * @param ReviewFront $reviewFront
+     * @param ReviewBack $reviewBack
+     * @return ReviewAnswerFront|null
+     */
+    public function updateReviewAnswerFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ?ReviewAnswerFront
+    {
+        $text = trim(Store::encodingConvert($reviewBack->getAnswer()));
+        if (mb_strlen($text) === 0 || false === $this->reviewAnswerTableExists) {
+            return null;
         }
 
-        return $reviewFront;
+        $reviewAnswerFront = $this->getReviewAnswerFrontByReviewFrontId($reviewFront->getReviewId());
+        $reviewAnswerFront->setReviewId($reviewFront->getReviewId());
+        $reviewAnswerFront->setText($text);
+
+        $this->reviewAnswerFrontRepository->persistAndFlush($reviewAnswerFront);
+
+        return $reviewAnswerFront;
     }
 
     /**
@@ -183,7 +193,7 @@ class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param int $backId
      * @param int $frontId
      */
-    protected function createOrUpdateReview(?Review $review, int $backId, int $frontId): void
+    public function createOrUpdateReview(?Review $review, int $backId, int $frontId): void
     {
         if (null === $review) {
             $review = new Review();

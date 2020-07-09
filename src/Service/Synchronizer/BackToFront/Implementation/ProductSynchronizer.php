@@ -252,7 +252,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->synchronizeImage = $synchronizeImage;
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         $productFront = $this->getProductFrontFromProduct($product);
-        $this->updateProductFrontFromProductBack($productBack, $productFront);
+        $this->updateProductFrontAndOtherFromProductBack($productBack, $productFront);
         $product = $this->createOrUpdateProduct($product, $productBack->getProductId(), $productFront->getProductId());
 
         if (1 === $this->events[ProductsSynchronizedEvent::class]) {

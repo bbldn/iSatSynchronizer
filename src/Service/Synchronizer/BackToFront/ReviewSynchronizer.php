@@ -2,18 +2,17 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\ReviewSynchronizerContract;
 use App\Service\Synchronizer\BackToFront\Implementation\ReviewSynchronizer as ReviewBackSynchronizer;
 
-class ReviewSynchronizer extends ReviewBackSynchronizer
+class ReviewSynchronizer extends ReviewBackSynchronizer implements ReviewSynchronizerContract
 {
     /**
-     * @return ReviewSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
-        parent::load();
-
-        return $this;
+        $this->reviewAnswerTableExists = $this->reviewAnswerFrontRepository->tableExists();
     }
 
     /**
@@ -43,7 +42,16 @@ class ReviewSynchronizer extends ReviewBackSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->reviewRepository->clear();
+        $this->reviewFrontRepository->clear();
+
+        $this->reviewRepository->resetAutoIncrements();
+        $this->reviewFrontRepository->resetAutoIncrements();
+
+        if (true === $this->reviewAnswerTableExists) {
+            $this->reviewAnswerFrontRepository->clear();
+            $this->reviewAnswerFrontRepository->resetAutoIncrements();
+        }
     }
 
     /**
