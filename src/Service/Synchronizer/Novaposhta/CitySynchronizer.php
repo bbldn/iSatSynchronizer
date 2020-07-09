@@ -7,11 +7,11 @@ use App\Service\Synchronizer\Novaposhta\Implementation\CitySynchronizer as CityB
 class CitySynchronizer extends CityBaseSynchronizer
 {
     /**
-     * @return CitySynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
-        return $this;
+        parent::load();
     }
 
     /**

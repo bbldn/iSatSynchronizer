@@ -7,11 +7,11 @@ use App\Service\Synchronizer\Novaposhta\Implementation\WarehouseSynchronizer as 
 class WarehouseSynchronizer extends WarehouseBaseSynchronizer
 {
     /**
-     * @return WarehouseSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
-        return $this;
+        parent::load();
     }
 
     /**

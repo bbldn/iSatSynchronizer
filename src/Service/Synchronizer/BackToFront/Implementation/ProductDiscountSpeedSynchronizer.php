@@ -9,13 +9,6 @@ abstract class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSync
     /**
      *
      */
-    public function load(): void
-    {
-    }
-
-    /**
-     *
-     */
     public function synchronizeAll(): void
     {
         $discountPrices = $this->productDiscountBackRepository->getPricesAll();

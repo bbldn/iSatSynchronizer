@@ -7,13 +7,11 @@ use App\Service\Synchronizer\FrontToBack\Implementation\OrderSynchronizer as Ord
 class OrderSynchronizer extends OrderBaseSynchronizer
 {
     /**
-     * @return OrderSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**
