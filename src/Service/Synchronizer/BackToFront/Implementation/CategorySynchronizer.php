@@ -12,7 +12,6 @@ use App\Entity\Front\CategoryPath as CategoryPathFront;
 use App\Entity\Front\CategoryStore as CategoryStoreFront;
 use App\Event\BackToFront\CategorySynchronizedEvent;
 use App\Helper\Back\Store as StoreBack;
-use App\Helper\BackToFront\CategorySynchronizerHelper;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
@@ -25,7 +24,6 @@ use App\Repository\Front\CategoryLayoutRepository as CategoryLayoutFrontReposito
 use App\Repository\Front\CategoryPathRepository as CategoryPathFrontRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\CategoryStoreRepository as CategoryStoreFrontRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -124,6 +122,14 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
         $this->categoryRepository = $categoryRepository;
         $this->categoryBackRepository = $categoryBackRepository;
         $this->productBackRepository = $productBackRepository;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
     }
 
     /**

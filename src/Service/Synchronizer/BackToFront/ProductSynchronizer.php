@@ -15,16 +15,6 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductSynchronizer as P
 class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSynchronizerContract
 {
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-        $this->descriptionHelper->load();
-        $this->manufacturerHelper->load();
-    }
-
-    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */

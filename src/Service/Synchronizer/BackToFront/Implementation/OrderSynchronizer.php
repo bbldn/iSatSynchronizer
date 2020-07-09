@@ -33,7 +33,6 @@ use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
@@ -176,6 +175,14 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
         $this->orderHistoryFrontRepository = $orderHistoryFrontRepository;
         $this->orderSynchronizerHelper = $orderSynchronizerHelper;
         $this->customerBackToFrontSynchronizer = $customerBackToFrontSynchronizer;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
     }
 
     /**

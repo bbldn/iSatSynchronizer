@@ -13,7 +13,6 @@ use App\Repository\AddressRepository;
 use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
 abstract class AddressSynchronizer extends BackToFrontSynchronizer
 {
@@ -60,6 +59,15 @@ abstract class AddressSynchronizer extends BackToFrontSynchronizer
         $this->addressRepository = $addressRepository;
         $this->storeFront = $storeFront;
     }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
+
 
     /**
      * @param Address|null $address

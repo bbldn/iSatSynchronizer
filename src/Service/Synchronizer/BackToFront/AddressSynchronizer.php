@@ -10,14 +10,6 @@ class AddressSynchronizer extends AddressBaseSynchronizer implements AddressSync
     /**
      *
      */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
-     *
-     */
     public function synchronizeAll(): void
     {
         $customersBack = $this->customerBackRepository->findAll();

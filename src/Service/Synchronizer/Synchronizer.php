@@ -9,7 +9,7 @@ abstract class Synchronizer extends Service
     /**
      *
      */
-    public function load()
+    public function load(): void
     {
     }
 }

@@ -12,7 +12,6 @@ use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Front\CustomerGroupRepository as CustomerGroupFrontRepository;
 use App\Repository\Front\ProductDiscountRepository as ProductDiscountFrontRepository;
 use App\Repository\ProductRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 
@@ -66,6 +65,14 @@ abstract class ProductDiscountSynchronizer extends BackToFrontSynchronizer
         $this->productDiscountBackRepository = $productDiscountBackRepository;
         $this->customerGroupRepository = $customerGroupRepository;
         $this->storeFront = $storeFront;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
     }
 
     /**

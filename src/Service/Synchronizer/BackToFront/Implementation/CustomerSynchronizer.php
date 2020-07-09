@@ -13,7 +13,6 @@ use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Service\Synchronizer\BackToFront\AddressSynchronizer;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 use App\Helper\Back\Store as StoreBack;
@@ -77,6 +76,14 @@ abstract class CustomerSynchronizer extends BackToFrontSynchronizer
         $this->customerFrontRepository = $customerFrontRepository;
         $this->customerBackRepository = $customerBackRepository;
         $this->orderFrontRepository = $orderFrontRepository;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
     }
 
     /**

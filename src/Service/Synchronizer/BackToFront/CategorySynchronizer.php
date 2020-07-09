@@ -9,14 +9,6 @@ use App\Service\Synchronizer\BackToFront\Implementation\CategorySynchronizer as 
 class CategorySynchronizer extends CategoryBaseSynchronizer implements CategorySynchronizerContract
 {
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
      * @param bool $synchronizeImage
      */
     public function synchronizeAll(bool $synchronizeImage = false): void

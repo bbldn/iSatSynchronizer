@@ -84,7 +84,7 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
             return;
         }
 
-        $this->productSeoUrlBackToFrontSynchronizer->load()->synchronizeByProductBackAndProductFront(
+        $this->productSeoUrlBackToFrontSynchronizer->synchronizeByProductBackAndProductFront(
             $productBack,
             $productFront
         );

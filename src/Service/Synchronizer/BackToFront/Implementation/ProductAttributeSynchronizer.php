@@ -9,7 +9,6 @@ use App\Helper\Front\Store as StoreFront;
 use App\Repository\AttributeRepository;
 use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepository;
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
 abstract class ProductAttributeSynchronizer extends BackToFrontSynchronizer
 {
@@ -43,6 +42,13 @@ abstract class ProductAttributeSynchronizer extends BackToFrontSynchronizer
         $this->attributeRepository = $attributeRepository;
         $this->productAttributeFrontRepository = $productAttributeFrontRepository;
         $this->storeFront = $storeFront;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
     }
 
     /**

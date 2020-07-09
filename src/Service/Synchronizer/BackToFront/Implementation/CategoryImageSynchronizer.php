@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Helper\BackToFront;
+namespace App\Service\Synchronizer\BackToFront\Implementation;
 
-use App\Contract\BackToFront\CategoryImageHelperContract;
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Front\Category as CategoryFront;
 use App\Helper\Back\Store as StoreBack;
@@ -15,7 +14,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class CategoryImageHelper implements CategoryImageHelperContract
+abstract class CategoryImageSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

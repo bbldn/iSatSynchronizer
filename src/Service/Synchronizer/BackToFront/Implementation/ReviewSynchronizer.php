@@ -13,7 +13,6 @@ use App\Repository\Front\ReviewAnswerRepository as ReviewAnswerFrontRepository;
 use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ReviewRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 
@@ -70,6 +69,14 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
         $this->reviewRepository = $reviewRepository;
         $this->productRepository = $productRepository;
         $this->reviewAnswerFrontRepository = $reviewAnswerFrontRepository;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        $this->reviewAnswerTableExists = $this->reviewAnswerFrontRepository->tableExists();
     }
 
     /**

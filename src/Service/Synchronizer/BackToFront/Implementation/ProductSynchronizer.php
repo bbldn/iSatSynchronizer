@@ -45,7 +45,6 @@ use App\Repository\Front\ProductRewardRepository as ProductRewardFrontRepository
 use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontRepository;
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\ProductRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -243,6 +242,16 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productSynchronizerHelper = $productSynchronizerHelper;
         $this->descriptionHelper = $descriptionHelper;
         $this->manufacturerHelper = $manufacturerHelper;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+        $this->descriptionHelper->load();
+        $this->manufacturerHelper->load();
     }
 
     /**

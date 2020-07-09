@@ -10,14 +10,6 @@ class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer implem
     /**
      *
      */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
-     *
-     */
     public function clear(): void
     {
         $this->productDiscountFrontRepository->clear();

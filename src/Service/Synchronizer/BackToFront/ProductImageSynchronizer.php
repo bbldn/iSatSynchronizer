@@ -10,14 +10,6 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductImageSynchronizer
 class ProductImageSynchronizer extends ProductImageSynchronizerBase implements ProductImageSynchronizerContract
 {
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
      * @param ProductBack $productBack
      * @param ProductFront $productFront
      */

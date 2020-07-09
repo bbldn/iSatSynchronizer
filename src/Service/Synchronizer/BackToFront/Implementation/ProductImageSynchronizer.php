@@ -17,7 +17,6 @@ use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -98,6 +97,14 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
         $this->fileWriter = $fileWriter;
         $this->backPath = $productImageBackPath;
         $this->frontPath = $productImageFrontPath;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
     }
 
     /**

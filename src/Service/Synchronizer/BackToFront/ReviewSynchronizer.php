@@ -10,14 +10,6 @@ class ReviewSynchronizer extends ReviewBackSynchronizer implements ReviewSynchro
     /**
      *
      */
-    public function load(): void
-    {
-        $this->reviewAnswerTableExists = $this->reviewAnswerFrontRepository->tableExists();
-    }
-
-    /**
-     *
-     */
     public function synchronizeAll(): void
     {
         $reviewsBack = $this->reviewBackRepository->findAll();

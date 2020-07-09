@@ -10,14 +10,6 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer implements Attribu
     /**
      *
      */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
-     *
-     */
     public function synchronizeAll(): void
     {
         $attributesBack = $this->attributeBackRepository->findAll();

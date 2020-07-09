@@ -2,7 +2,7 @@
 
 namespace App\EventListener\BackToFront;
 
-use App\Contract\BackToFront\CategoryImageHelperContract;
+use App\Contract\BackToFront\CategoryImageSynchronizerContract;
 use App\Event\BackToFront\CategorySynchronizedEvent;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
@@ -20,7 +20,7 @@ class SynchronizeCategoryImage implements EventSubscriberInterface
     /** @var CategoryBackRepository $categoryBackRepository */
     protected $categoryBackRepository;
 
-    /** @var CategoryImageHelperContract $categoryImageSynchronizer */
+    /** @var CategoryImageSynchronizerContract $categoryImageSynchronizer */
     protected $categoryImageSynchronizer;
 
     /**
@@ -28,13 +28,13 @@ class SynchronizeCategoryImage implements EventSubscriberInterface
      * @param LoggerInterface $logger
      * @param CategoryFrontRepository $categoryFrontRepository
      * @param CategoryBackRepository $categoryBackRepository
-     * @param CategoryImageHelperContract $categoryImageSynchronizer
+     * @param CategoryImageSynchronizerContract $categoryImageSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
         CategoryFrontRepository $categoryFrontRepository,
         CategoryBackRepository $categoryBackRepository,
-        CategoryImageHelperContract $categoryImageSynchronizer
+        CategoryImageSynchronizerContract $categoryImageSynchronizer
     )
     {
         $this->logger = $logger;

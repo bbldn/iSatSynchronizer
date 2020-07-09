@@ -9,13 +9,6 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductAttributeSynchron
 class ProductAttributeSynchronizer extends ProductAttributeSynchronizerBase implements ProductAttributeSynchronizerContract
 {
     /**
-     *
-     */
-    public function load(): void
-    {
-    }
-
-    /**
      * @param ProductBack $productBack
      * @param int $productFrontId
      */

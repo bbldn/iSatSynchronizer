@@ -10,15 +10,6 @@ class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase implements
     /**
      *
      */
-    public function load(): void
-    {
-        parent::load();
-        $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
-    }
-
-    /**
-     *
-     */
     public function synchronizeAll(): void
     {
         if (false === $this->seoUrlTableExists) {

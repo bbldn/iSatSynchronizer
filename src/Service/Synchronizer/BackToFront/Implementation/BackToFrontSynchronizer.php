@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer\BackToFront;
+namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Service\Synchronizer\Synchronizer;
 

@@ -12,7 +12,6 @@ use App\Repository\AttributeRepository;
 use App\Repository\Back\ProductOptionsRepository as AttributeBackRepository;
 use App\Repository\Front\AttributeDescriptionRepository as AttributeDescriptionFrontRepository;
 use App\Repository\Front\AttributeRepository as AttributeFrontRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
 abstract class AttributeSynchronizer extends BackToFrontSynchronizer
 {
@@ -52,6 +51,14 @@ abstract class AttributeSynchronizer extends BackToFrontSynchronizer
         $this->attributeFrontRepository = $attributeFrontRepository;
         $this->attributeDescriptionFrontRepository = $attributeDescriptionFrontRepository;
         $this->attributeBackRepository = $attributeBackRepository;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
     }
 
     /**

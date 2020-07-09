@@ -12,7 +12,6 @@ use App\Helper\Store;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\ProductRepository as ProductRepository;
 use App\Repository\Front\SeoUrlRepository as SeoUrlFrontRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use Psr\Log\LoggerInterface;
 
@@ -63,6 +62,15 @@ abstract class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
         $this->productRepository = $productRepository;
         $this->seoUrlFrontRepository = $seoUrlFrontRepository;
         $this->storeFront = $storeFront;
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+        $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
     }
 
     /**
