@@ -3,6 +3,7 @@
 namespace App\Service\Synchronizer\BackToFront;
 
 use App\Contract\BackToFront\OrderSynchronizerContract;
+use App\Event\BackToFront\OrderClearEvent;
 use App\Service\Synchronizer\BackToFront\Implementation\OrderSynchronizer as OrderBackSynchronizer;
 
 class OrderSynchronizer extends OrderBackSynchronizer implements OrderSynchronizerContract
@@ -50,6 +51,8 @@ class OrderSynchronizer extends OrderBackSynchronizer implements OrderSynchroniz
 
         $this->orderRepository->clear();
         $this->orderRepository->resetAutoIncrements();
+
+        $this->eventDispatcher->dispatch(new OrderClearEvent());
     }
 
     /**

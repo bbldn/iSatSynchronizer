@@ -41,6 +41,9 @@ class SynchronizeCategorySeoPro implements EventSubscriberInterface
     /** @var string[] $urls */
     protected $urls = [];
 
+    /** @var ?bool $seoUrlTableExists */
+    protected $seoUrlTableExists = null;
+
     /**
      * SynchronizeCategorySeoPro constructor.
      * @param LoggerInterface $logger
@@ -82,7 +85,11 @@ class SynchronizeCategorySeoPro implements EventSubscriberInterface
      */
     public function action(CategorySynchronizedEvent $event): void
     {
-        if (false === $this->seoUrlFrontRepository->tableExists()) {
+        if (null === $this->seoUrlTableExists) {
+            $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
+        }
+
+        if (false === $this->seoUrlTableExists) {
             return;
         }
 

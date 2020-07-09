@@ -20,6 +20,9 @@ class SynchronizeProductAttributes implements EventSubscriberInterface
     /** @var ProductAttributeSynchronizer $productAttributeSynchronizer */
     protected $productAttributeSynchronizer;
 
+    /** @var bool $synchronizerLoaded */
+    protected $synchronizerLoaded = false;
+
     /**
      * SynchronizeProductAttributes constructor.
      * @param LoggerInterface $logger
@@ -52,6 +55,11 @@ class SynchronizeProductAttributes implements EventSubscriberInterface
      */
     public function action(ProductSynchronizedEvent $event): void
     {
+        if (false === $this->synchronizerLoaded) {
+            $this->productAttributeSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
         $product = $event->getProduct();
         $productBack = $this->productBackRepository->find($product->getBackId());
         if (null === $productBack) {
@@ -61,6 +69,6 @@ class SynchronizeProductAttributes implements EventSubscriberInterface
             return;
         }
 
-        $this->productAttributeSynchronizer->load()->synchronizeAttributes($productBack, $product->getFrontId());
+        $this->productAttributeSynchronizer->synchronizeAttributes($productBack, $product->getFrontId());
     }
 }

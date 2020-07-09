@@ -6,10 +6,10 @@ use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderHistory as OrderHistoryFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
-use App\Entity\Front\OrderSimpleFields as OrderSimpleFieldsFront;
 use App\Entity\Order;
 use App\Event\BackToFront\OrderSynchronizedEvent;
 use App\Helper\Back\Store as StoreBack;
+use App\Helper\BackToFront\OrderSynchronizerHelper;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
@@ -97,6 +97,9 @@ class OrderSynchronizer extends BackToFrontSynchronizer
     /** @var ZoneFrontRepository $zoneFrontRepository */
     protected $zoneFrontRepository;
 
+    /** @var OrderSynchronizerHelper $orderSynchronizerHelper */
+    protected $orderSynchronizerHelper;
+
     /** @var CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer */
     protected $customerBackToFrontSynchronizer;
 
@@ -124,6 +127,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
      * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
      * @param ZoneFrontRepository $zoneFrontRepository
      * @param OrderHistoryFrontRepository $orderHistoryFrontRepository
+     * @param OrderSynchronizerHelper $orderSynchronizerHelper
      * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      */
     public function __construct(
@@ -146,6 +150,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
         ZoneFrontRepository $zoneFrontRepository,
         OrderHistoryFrontRepository $orderHistoryFrontRepository,
+        OrderSynchronizerHelper $orderSynchronizerHelper,
         CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
     )
     {
@@ -168,6 +173,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         $this->orderSimpleFieldsFrontRepository = $orderSimpleFieldsFrontRepository;
         $this->zoneFrontRepository = $zoneFrontRepository;
         $this->orderHistoryFrontRepository = $orderHistoryFrontRepository;
+        $this->orderSynchronizerHelper = $orderSynchronizerHelper;
         $this->customerBackToFrontSynchronizer = $customerBackToFrontSynchronizer;
     }
 
@@ -228,15 +234,21 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         return $orderProductFront;
     }
 
+    /**
+     * @param OrderFront $orderFront
+     * @param OrderBack $mainOrderBack
+     * @return OrderFront
+     */
     public function updateOrderFrontAndOtherFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
     {
         $orderFront = $this->updateOrderFrontFromOrderBack($orderFront, $mainOrderBack);
-        $this->orderHistoryFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
         $this->updateOrderHistoryFrontFromOrderBack($orderFront);
         $ordersBack = $this->orderBackRepository->findByOrderNum($mainOrderBack->getId());
         foreach ($ordersBack as $orderBack) {
             $this->updateOrderProductFrontFromOrderBack($orderBack, $orderFront);
         }
+
+        return $orderFront;
     }
 
     /**
@@ -249,7 +261,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         if (0 === $mainOrderBack->getClientId()) {
             $customerFrontId = 0;
         } else {
-            $customerFrontId = $this->getCustomerFrontByCustomerBackId($mainOrderBack);
+            $customerFrontId = $this->orderSynchronizerHelper->getCustomerFrontByCustomerBackId($mainOrderBack);
         }
 
         $fullName = StoreBack::parseFirstLastName($mainOrderBack->getFio());
@@ -296,7 +308,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
 
         $zone = $this->zoneFrontRepository->findOneByCountryIdAndName($countryId, $shippingZone);
         if (null === $zone) {
-            $zoneId = 0;
+            $zoneId = $this->storeFront->getDefaultZoneId();
         } else {
             $zoneId = $zone->getZoneId();
         }
@@ -345,8 +357,8 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         $shippingCode = ShippingConverter::backToFront($mainOrderBack->getDelivery());
         $orderFront->setShippingCode($shippingCode);
         $comment = Filler::securityString($mainOrderBack->getComments());
-
         $orderFront->setComment($comment);
+
         $total = $this->orderBackRepository->getTotalPrice($mainOrderBack->getOrderNum());
         $orderFront->setTotal($total);
         $orderFront->setOrderStatusId(StoreFront::convertBackToFrontStatusOrder($mainOrderBack->getStatus()));
@@ -360,7 +372,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
 
         $currencyValue = $this->currencyFrontRepository->getCurrentCurrency($currency['id']);
         if (null === $currencyValue) {
-            $currencyValue = 1;
+            $currencyValue = 1.0;
         }
 
         $orderFront->setCurrencyValue($currencyValue);
@@ -451,6 +463,8 @@ class OrderSynchronizer extends BackToFrontSynchronizer
      */
     public function updateOrderHistoryFrontFromOrderBack(OrderFront $orderFront): OrderHistoryFront
     {
+        $this->orderHistoryFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
+
         $orderHistoryFront = new OrderHistoryFront();
         $orderHistoryFront->setOrderId($orderFront->getOrderId());
         $orderHistoryFront->setOrderStatusId($orderFront->getOrderStatusId());
@@ -481,30 +495,5 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         $this->orderRepository->persistAndFlush($order);
 
         return $order;
-    }
-
-    /**
-     * @param OrderBack $mainOrderBack
-     * @return int|null
-     */
-    public function getCustomerFrontByCustomerBackId(OrderBack $mainOrderBack): ?int
-    {
-        $clientId = $mainOrderBack->getClientId();
-        $customer = $this->customerRepository->findOneByBackId($clientId);
-
-        if (null !== $customer) {
-            $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
-            if (null !== $customerFront && null !== $customerFront->getCustomerId()) {
-                return $customerFront->getCustomerId();
-            }
-        }
-
-        $customerFront = $this->customerBackToFrontSynchronizer->synchronizeOneAndReturnCustomerFront($clientId);
-
-        if (null !== $customerFront && null !== $customerFront->getCustomerId()) {
-            return $customerFront->getCustomerId();
-        }
-
-        return 0;
     }
 }

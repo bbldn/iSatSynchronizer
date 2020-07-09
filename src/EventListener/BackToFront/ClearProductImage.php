@@ -11,6 +11,9 @@ class ClearProductImage implements EventSubscriberInterface
     /** @var ProductImageSynchronizer $productImageSynchronizer */
     protected $productImageSynchronizer;
 
+    /** @var bool $synchronizerLoaded */
+    protected $synchronizerLoaded = false;
+
     /**
      * SynchronizeProductImage constructor.
      * @param ProductImageSynchronizer $productImageSynchronizer
@@ -35,6 +38,11 @@ class ClearProductImage implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $this->productImageSynchronizer->load()->clearFolder();
+        if (false === $this->synchronizerLoaded) {
+            $this->productImageSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
+        $this->productImageSynchronizer->clearFolder();
     }
 }

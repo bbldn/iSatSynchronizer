@@ -24,6 +24,9 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
     /** @var ProductBackRepository $productBackRepository */
     protected $productBackRepository;
 
+    /** @var bool $synchronizerLoaded */
+    protected $synchronizerLoaded = false;
+
     /**
      * SynchronizeProductSeoPro constructor.
      * @param LoggerInterface $logger
@@ -59,6 +62,11 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
      */
     public function action(ProductSynchronizedEvent $event): void
     {
+        if (false === $this->synchronizerLoaded) {
+            $this->productSeoUrlBackToFrontSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
         $product = $event->getProduct();
         $productBack = $this->productBackRepository->find($product->getBackId());
         if (null === $productBack) {

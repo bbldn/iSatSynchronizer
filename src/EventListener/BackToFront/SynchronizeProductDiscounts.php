@@ -14,6 +14,9 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
     /** @var ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer */
     protected $productDiscountBackToFrontSynchronizer;
 
+    /** @var bool $synchronizerLoaded */
+    protected $synchronizerLoaded = false;
+
     /**
      * SynchronizeProductDiscount constructor.
      * @param ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
@@ -41,7 +44,10 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
      */
     public function action(ProductSynchronizedEvent $event): void
     {
-        $this->productDiscountBackToFrontSynchronizer->load();
+        if (false === $this->synchronizerLoaded) {
+            $this->productDiscountBackToFrontSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
 
         $product = $event->getProduct();
         $this->productDiscountBackToFrontSynchronizer->createOrUpdateDiscountItems($product->getFrontId());
@@ -53,7 +59,10 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
      */
     public function actionData(PriceSynchronizeEvent $event): void
     {
-        $this->productDiscountBackToFrontSynchronizer->load();
+        if (false === $this->synchronizerLoaded) {
+            $this->productDiscountBackToFrontSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
 
         foreach ($event->getData() as $value) {
             $this->productDiscountBackToFrontSynchronizer->synchronizeByProductBackId($value['productId']);
@@ -65,7 +74,12 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
      */
     public function actionDataFast(PriceSynchronizeFastEvent $event): void
     {
-        $this->productDiscountBackToFrontSynchronizer->load()->synchronizeByIds($event->getIds());
+        if (false === $this->synchronizerLoaded) {
+            $this->productDiscountBackToFrontSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
+        $this->productDiscountBackToFrontSynchronizer->synchronizeByIds($event->getIds());
     }
 
     /**
@@ -73,6 +87,11 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
      */
     public function actionDataAllFast(): void
     {
-        $this->productDiscountBackToFrontSynchronizer->load()->synchronizeAll();
+        if (false === $this->synchronizerLoaded) {
+            $this->productDiscountBackToFrontSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
+        $this->productDiscountBackToFrontSynchronizer->synchronizeAll();
     }
 }

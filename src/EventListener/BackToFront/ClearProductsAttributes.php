@@ -11,6 +11,9 @@ class ClearProductsAttributes implements EventSubscriberInterface
     /** @var ProductAttributeSynchronizer $productAttributeSynchronizer */
     protected $productAttributeSynchronizer;
 
+    /** @var bool $synchronizerLoaded */
+    protected $synchronizerLoaded = false;
+
     /**
      * ClearProductsAttributes constructor.
      * @param ProductAttributeSynchronizer $productAttributeSynchronizer
@@ -37,6 +40,11 @@ class ClearProductsAttributes implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $this->productAttributeSynchronizer->load()->clear();
+        if (false === $this->synchronizerLoaded) {
+            $this->productAttributeSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
+        $this->productAttributeSynchronizer->clear();
     }
 }

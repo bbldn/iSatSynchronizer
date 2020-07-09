@@ -11,6 +11,9 @@ class ClearCategoriesSeoPro implements EventSubscriberInterface
     /** @var SeoUrlFrontRepository $seoUrlFrontRepository */
     protected $seoUrlFrontRepository;
 
+    /** @var ?bool $seoUrlTableExists */
+    protected $seoUrlTableExists = null;
+
     /**
      * ClearCategoriesSeoPro constructor.
      * @param SeoUrlFrontRepository $seoUrlFrontRepository
@@ -35,7 +38,11 @@ class ClearCategoriesSeoPro implements EventSubscriberInterface
      */
     public function action(): void
     {
-        if (true === $this->seoUrlFrontRepository->tableExists()) {
+        if (null === $this->seoUrlTableExists) {
+            $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
+        }
+
+        if (true === $this->seoUrlTableExists) {
             $this->seoUrlFrontRepository->removeAllByQuery('category_id');
         }
     }

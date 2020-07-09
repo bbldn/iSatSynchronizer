@@ -11,6 +11,9 @@ class ClearProductsSeoPro implements EventSubscriberInterface
     /** @var ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer */
     protected $productSeoUrlBackToFrontSynchronizer;
 
+    /** @var bool $synchronizerLoaded */
+    protected $synchronizerLoaded = false;
+
     /**
      * ClearProductSeoPro constructor.
      * @param ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer
@@ -37,6 +40,11 @@ class ClearProductsSeoPro implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $this->productSeoUrlBackToFrontSynchronizer->load()->clear();
+        if (false === $this->synchronizerLoaded) {
+            $this->productSeoUrlBackToFrontSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
+        $this->productSeoUrlBackToFrontSynchronizer->clear();
     }
 }
