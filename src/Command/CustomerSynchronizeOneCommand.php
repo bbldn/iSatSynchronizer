@@ -2,8 +2,7 @@
 
 namespace App\Command;
 
-use App\Exception\CustomerFrontNotFoundException;
-use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronize;
+use App\Contract\FrontToBack\CustomerSynchronizerContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,14 +11,14 @@ class CustomerSynchronizeOneCommand extends Command
 {
     protected static $defaultName = 'customer:synchronize:one';
 
-    /** @var CustomerFrontToBackSynchronize $customerSynchronizer */
+    /** @var CustomerSynchronizerContract $customerSynchronizer */
     protected $customerSynchronizer;
 
     /**
      * CustomerSynchronizeOneCommand constructor.
-     * @param CustomerFrontToBackSynchronize $customerFrontToBackSynchronizer
+     * @param CustomerSynchronizerContract $customerFrontToBackSynchronizer
      */
-    public function __construct(CustomerFrontToBackSynchronize $customerFrontToBackSynchronizer)
+    public function __construct(CustomerSynchronizerContract $customerFrontToBackSynchronizer)
     {
         $this->customerSynchronizer = $customerFrontToBackSynchronizer;
         parent::__construct();
@@ -48,7 +47,6 @@ class CustomerSynchronizeOneCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @throws CustomerFrontNotFoundException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

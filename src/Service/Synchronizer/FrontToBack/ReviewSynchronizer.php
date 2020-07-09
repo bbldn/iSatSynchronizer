@@ -2,18 +2,11 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
+use App\Contract\FrontToBack\ReviewSynchronizerContract;
 use App\Service\Synchronizer\FrontToBack\Implementation\ReviewSynchronizer as ReviewBaseSynchronizer;
 
-class ReviewSynchronizer extends ReviewBaseSynchronizer
+class ReviewSynchronizer extends ReviewBaseSynchronizer implements ReviewSynchronizerContract
 {
-    /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
     /**
      *
      */

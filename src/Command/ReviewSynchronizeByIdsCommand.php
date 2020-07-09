@@ -2,9 +2,8 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\ReviewSynchronizerContract;
-use App\Service\Synchronizer\BackToFront\ReviewSynchronizer as ReviewBackToFrontSynchronizer;
-use App\Service\Synchronizer\FrontToBack\ReviewSynchronizer as ReviewFrontToBackSynchronizer;
+use App\Contract\BackToFront\ReviewSynchronizerContract as ReviewBackToFrontSynchronizerContract;
+use App\Contract\FrontToBack\ReviewSynchronizerContract as ReviewFrontToBackSynchronizerContract;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,20 +13,20 @@ class ReviewSynchronizeByIdsCommand extends Command
 {
     protected static $defaultName = 'review:synchronize:by-ids';
 
-    /** @var ReviewFrontToBackSynchronizer $reviewFrontToBackSynchronizer */
+    /** @var ReviewFrontToBackSynchronizerContract $reviewFrontToBackSynchronizer */
     protected $reviewFrontToBackSynchronizer;
 
-    /** @var ReviewSynchronizerContract $reviewBackToFrontSynchronizer */
+    /** @var ReviewBackToFrontSynchronizerContract $reviewBackToFrontSynchronizer */
     protected $reviewBackToFrontSynchronizer;
 
     /**
      * ReviewSynchronizeByIdsCommand constructor.
-     * @param ReviewFrontToBackSynchronizer $reviewFrontToBackSynchronizer
-     * @param ReviewSynchronizerContract $reviewBackToFrontSynchronizer
+     * @param ReviewFrontToBackSynchronizerContract $reviewFrontToBackSynchronizer
+     * @param ReviewBackToFrontSynchronizerContract $reviewBackToFrontSynchronizer
      */
     public function __construct(
-        ReviewFrontToBackSynchronizer $reviewFrontToBackSynchronizer,
-        ReviewSynchronizerContract $reviewBackToFrontSynchronizer
+        ReviewFrontToBackSynchronizerContract $reviewFrontToBackSynchronizer,
+        ReviewBackToFrontSynchronizerContract $reviewBackToFrontSynchronizer
     )
     {
         $this->reviewFrontToBackSynchronizer = $reviewFrontToBackSynchronizer;

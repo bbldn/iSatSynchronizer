@@ -72,6 +72,14 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
     }
 
     /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
+
+    /**
      * @param OrderFront $orderFront
      * @param CustomerBack $customerBack
      * @return CustomerBack

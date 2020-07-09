@@ -61,6 +61,14 @@ class ReviewSynchronizer extends FrontToBackSynchronizer
     }
 
     /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
+
+    /**
      * @param ReviewFront $reviewFront
      */
     protected function synchronizeReviewFront(ReviewFront $reviewFront): void

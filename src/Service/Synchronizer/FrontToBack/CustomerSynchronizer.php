@@ -2,21 +2,14 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
+use App\Contract\FrontToBack\CustomerSynchronizerContract;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Exception\OrderFrontNotFoundException;
 use App\Service\Synchronizer\FrontToBack\Implementation\CustomerSynchronizer as CustomerSynchronizerBase;
 
-class CustomerSynchronizer extends CustomerSynchronizerBase
+class CustomerSynchronizer extends CustomerSynchronizerBase implements CustomerSynchronizerContract
 {
-    /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
     /**
      * @param int $id
      * @param string $password

@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\OrderSynchronizerContract;
-use App\Service\Synchronizer\FrontToBack\OrderSynchronizer as OrderFrontToBackSynchronizer;
+use App\Contract\BackToFront\OrderSynchronizerContract as OrderBackToFrontSynchronizerContract;
+use App\Contract\FrontToBack\OrderSynchronizerContract as OrderFrontToBackSynchronizerContract;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,20 +13,20 @@ class OrderSynchronizeByIdsCommand extends Command
 {
     protected static $defaultName = 'order:synchronize:by-ids';
 
-    /** @var OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer */
+    /** @var OrderFrontToBackSynchronizerContract $orderFrontToBackSynchronizer */
     protected $orderFrontToBackSynchronizer;
 
-    /** @var OrderSynchronizerContract $orderBackToFrontSynchronizer */
+    /** @var OrderBackToFrontSynchronizerContract $orderBackToFrontSynchronizer */
     protected $orderBackToFrontSynchronizer;
 
     /**
      * OrderSynchronizeByIdsCommand constructor.
-     * @param OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer
-     * @param OrderSynchronizerContract $orderBackToFrontSynchronizer
+     * @param OrderFrontToBackSynchronizerContract $orderFrontToBackSynchronizer
+     * @param OrderBackToFrontSynchronizerContract $orderBackToFrontSynchronizer
      */
     public function __construct(
-        OrderFrontToBackSynchronizer $orderFrontToBackSynchronizer,
-        OrderSynchronizerContract $orderBackToFrontSynchronizer
+        OrderFrontToBackSynchronizerContract $orderFrontToBackSynchronizer,
+        OrderBackToFrontSynchronizerContract $orderBackToFrontSynchronizer
     )
     {
         $this->orderFrontToBackSynchronizer = $orderFrontToBackSynchronizer;
