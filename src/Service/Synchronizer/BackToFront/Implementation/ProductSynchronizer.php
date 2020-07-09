@@ -3,11 +3,9 @@
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Product as ProductBack;
-use App\Entity\Front\Category as CategoryFront;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
 use App\Entity\Front\ProductDescription as ProductDescriptionFront;
-use App\Entity\Front\ProductDiscontinued as ProductDiscontinuedFront;
 use App\Entity\Front\ProductLayout as ProductLayoutFront;
 use App\Entity\Front\ProductStore as ProductStoreFront;
 use App\Entity\Product;
@@ -19,7 +17,7 @@ use App\Event\BackToFront\ProductsClearEvent;
 use App\Event\BackToFront\ProductsSynchronizedEvent;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\Back\Store as StoreBack;
-use App\Helper\ExceptionFormatter;
+use App\Helper\BackToFront\ProductSynchronizerHelper;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
@@ -31,7 +29,6 @@ use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Repository\Front\ProductDescriptionRepository as ProductDescriptionFrontRepository;
-use App\Repository\Front\ProductDiscontinuedRepository as ProductDiscontinuedFrontRepository;
 use App\Repository\Front\ProductDownloadRepository as ProductDownloadFrontRepository;
 use App\Repository\Front\ProductFilterRepository as ProductFilterFrontRepository;
 use App\Repository\Front\ProductImageRepository as ProductImageFrontRepository;
@@ -125,20 +122,17 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductPicturesBackRepository $productPicturesBackRepository */
     protected $productPicturesBackRepository;
 
-    /** @var ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository */
-    protected $productDiscontinuedFrontRepository;
-
     /** @var CurrencyBackRepository $currencyBackRepository */
     protected $currencyBackRepository;
+
+    /** @var ProductSynchronizerHelper $productSynchronizerHelper */
+    protected $productSynchronizerHelper;
 
     /** @var DescriptionSynchronizer $descriptionSynchronizer */
     protected $descriptionSynchronizer;
 
     /** @var ManufacturerSynchronizer $manufacturerSynchronizer */
     protected $manufacturerSynchronizer;
-
-    /** @var bool $seoUrlTableExists */
-    protected $productDiscontinuedTableExists = false;
 
     /** @var bool $synchronizeImage */
     protected $synchronizeImage = false;
@@ -183,8 +177,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductStoreFrontRepository $productStoreFrontRepository
      * @param ProductBackRepository $productBackRepository
      * @param ProductPicturesBackRepository $productPicturesBackRepository
-     * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
      * @param CurrencyBackRepository $currencyBackRepository
+     * @param ProductSynchronizerHelper $productSynchronizerHelper
      * @param DescriptionSynchronizer $descriptionSynchronizer
      * @param ManufacturerSynchronizer $manufacturerSynchronizer
      */
@@ -213,8 +207,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductStoreFrontRepository $productStoreFrontRepository,
         ProductBackRepository $productBackRepository,
         ProductPicturesBackRepository $productPicturesBackRepository,
-        ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository,
         CurrencyBackRepository $currencyBackRepository,
+        ProductSynchronizerHelper $productSynchronizerHelper,
         DescriptionSynchronizer $descriptionSynchronizer,
         ManufacturerSynchronizer $manufacturerSynchronizer
     )
@@ -243,72 +237,17 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productStoreFrontRepository = $productStoreFrontRepository;
         $this->productBackRepository = $productBackRepository;
         $this->productPicturesBackRepository = $productPicturesBackRepository;
-        $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
         $this->currencyBackRepository = $currencyBackRepository;
+        $this->productSynchronizerHelper = $productSynchronizerHelper;
         $this->descriptionSynchronizer = $descriptionSynchronizer;
         $this->manufacturerSynchronizer = $manufacturerSynchronizer;
-    }
-
-    /**
-     * @param bool $clearImage
-     */
-    protected function clear(bool $clearImage = false): void
-    {
-        $this->synchronizeImage = $clearImage;
-        $this->events[ProductsClearEvent::class] = 1;
-
-        $this->productRepository->removeAll();
-        $this->productFrontRepository->removeAll();
-        $this->productDescriptionFrontRepository->removeAll();
-        $this->productFilterFrontRepository->removeAll();
-        $this->productImageFrontRepository->removeAll();
-        $this->productOptionFrontRepository->removeAll();
-        $this->productOptionValueFrontRepository->removeAll();
-        $this->productRecurringFrontRepository->removeAll();
-        $this->productRelatedFrontRepository->removeAll();
-        $this->productRewardFrontRepository->removeAll();
-        $this->productSpecialFrontRepository->removeAll();
-        $this->productCategoryFrontRepository->removeAll();
-        $this->productLayoutFrontRepository->removeAll();
-        $this->productStoreFrontRepository->removeAll();
-
-        $this->productRepository->resetAutoIncrements();
-        $this->productFrontRepository->resetAutoIncrements();
-        $this->productImageFrontRepository->resetAutoIncrements();
-        $this->productOptionFrontRepository->resetAutoIncrements();
-        $this->productOptionValueFrontRepository->resetAutoIncrements();
-        $this->productRewardFrontRepository->resetAutoIncrements();
-        $this->productSpecialFrontRepository->resetAutoIncrements();
-
-        if (true === $this->productDiscontinuedTableExists) {
-            $this->productDiscontinuedFrontRepository->removeAll();
-            $this->productDiscontinuedFrontRepository->resetAutoIncrements();
-        }
-
-        if (true === $this->synchronizeImage) {
-            $this->descriptionSynchronizer->clearFolder();
-        }
-
-        if (1 === $this->events[ProductsClearEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductsClearEvent());
-        }
-    }
-
-    /**
-     *
-     */
-    protected function _load(): void
-    {
-        $this->productDiscontinuedTableExists = $this->productDiscontinuedFrontRepository->tableExists();
-        $this->descriptionSynchronizer->load();
-        $this->manufacturerSynchronizer->load();
     }
 
     /**
      * @param ProductBack $productBack
      * @param bool $synchronizeImage
      */
-    protected function synchronizeProduct(ProductBack $productBack, bool $synchronizeImage = false): void
+    public function synchronizeProduct(ProductBack $productBack, bool $synchronizeImage = false): void
     {
         $this->synchronizeImage = $synchronizeImage;
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
@@ -329,7 +268,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param Product|null $product
      * @return ProductFront
      */
-    protected function getProductFrontFromProduct(?Product $product): ProductFront
+    public function getProductFrontFromProduct(?Product $product): ProductFront
     {
         if (null === $product) {
             return new ProductFront();
@@ -349,7 +288,26 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductFront
      */
-    protected function updateProductFrontFromProductBack(
+    public function updateProductFrontAndOtherFromProductBack(
+        ProductBack $productBack,
+        ProductFront $productFront
+    ): ProductFront
+    {
+        $productFront = $this->updateProductFrontFromProductBack($productBack, $productFront);
+        $this->updateProductDescriptionFrontFromProductBack($productBack, $productFront);
+        $this->updateProductLayoutFrontFromProductBack($productFront);
+        $this->updateProductStoreFrontFromProductBack($productFront);
+        $this->updateProductCategoryFrontFromProductBack($productBack, $productFront);
+
+        return $productFront;
+    }
+
+    /**
+     * @param ProductBack $productBack
+     * @param ProductFront $productFront
+     * @return ProductFront
+     */
+    public function updateProductFrontFromProductBack(
         ProductBack $productBack,
         ProductFront $productFront
     ): ProductFront
@@ -384,12 +342,13 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setMinimum(true);
         $productFront->setSortOrder($productBack->getSortOrder());
 
-        $categoryFront = $this->getCategoryFrontByCategoryBackId($productBack->getCategoryId());
+        $categoryFront = $this->productSynchronizerHelper->getCategoryFrontByCategoryBackId(
+            $productBack->getCategoryId()
+        );
+
         if (null !== $categoryFront) {
-            $categoryFrontId = $categoryFront->getCategoryId();
             $categoryStatus = $categoryFront->getStatus();
         } else {
-            $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
             $categoryStatus = true;
         }
 
@@ -401,6 +360,19 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productFrontRepository->persistAndFlush($productFront);
 
+        return $productFront;
+    }
+
+    /**
+     * @param ProductBack $productBack
+     * @param ProductFront $productFront
+     * @return ProductDescriptionFront
+     */
+    public function updateProductDescriptionFrontFromProductBack(
+        ProductBack $productBack,
+        ProductFront $productFront
+    ): ProductDescriptionFront
+    {
         $productDescriptionFront = $this->productDescriptionFrontRepository->findOneByProductFrontIdAndLanguageId(
             $productFront->getProductId(),
             $this->storeFront->getDefaultLanguageId()
@@ -412,7 +384,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $productDescriptionFront->setProductId($productFront->getProductId());
         $productDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
-        $productDescriptionFront->setName($productName);
+        $productDescriptionFront->setName(
+            Filler::securityString(Store::encodingConvert($productBack->getName()))
+        );
 
         if (true === $this->synchronizeImage) {
             $productDescriptionFront->setDescription(
@@ -440,6 +414,15 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 
+        return $productDescriptionFront;
+    }
+
+    /**
+     * @param ProductFront $productFront
+     * @return ProductLayoutFront
+     */
+    public function updateProductLayoutFrontFromProductBack(ProductFront $productFront): ProductLayoutFront
+    {
         $productLayoutFront = $this->productLayoutFrontRepository->findOneByProductFrontIdAndStoreId(
             $productFront->getProductId(),
             $this->storeFront->getDefaultStoreId()
@@ -455,6 +438,15 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productLayoutFrontRepository->persistAndFlush($productLayoutFront);
 
+        return $productLayoutFront;
+    }
+
+    /**
+     * @param ProductFront $productFront
+     * @return ProductStoreFront
+     */
+    public function updateProductStoreFrontFromProductBack(ProductFront $productFront): ProductStoreFront
+    {
         $productStoreFront = $this->productStoreFrontRepository->findOneByProductFrontIdAndStoreId(
             $productFront->getProductId(),
             $this->storeFront->getDefaultStoreId()
@@ -468,6 +460,29 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productStoreFront->setStoreId($this->storeFront->getDefaultStoreId());
 
         $this->productStoreFrontRepository->persistAndFlush($productStoreFront);
+
+        return $productStoreFront;
+    }
+
+    /**
+     * @param ProductBack $productBack
+     * @param ProductFront $productFront
+     * @return ProductCategoryFront
+     */
+    public function updateProductCategoryFrontFromProductBack(
+        ProductBack $productBack,
+        ProductFront $productFront
+    ): ProductCategoryFront
+    {
+        $categoryFront = $this->productSynchronizerHelper->getCategoryFrontByCategoryBackId(
+            $productBack->getCategoryId()
+        );
+
+        if (null !== $categoryFront) {
+            $categoryFrontId = $categoryFront->getCategoryId();
+        } else {
+            $categoryFrontId = $this->storeFront->getDefaultCategoryFrontId();
+        }
 
         $productCategoryFront = $this->productCategoryFrontRepository->findOneByProductFrontIdAndCategoryId(
             $productFront->getProductId(),
@@ -483,59 +498,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         $this->productCategoryFrontRepository->persistAndFlush($productCategoryFront);
 
-        if (true === $this->productDiscontinuedTableExists) {
-            if (true === $productBack->getDiscontinued()) {
-                $exists = $this->productDiscontinuedFrontRepository->exists($productFront->getProductId());
-                if (false === $exists) {
-                    $productFrontDiscontinued = new ProductDiscontinuedFront();
-                    $productFrontDiscontinued->setProductId($productFront->getProductId());
-
-                    $this->productDiscontinuedFrontRepository->persistAndFlush($productFrontDiscontinued);
-                }
-            } else {
-                $this->productDiscontinuedFrontRepository->removeById($productFront->getProductId());
-            }
-        }
-
-        return $productFront;
-    }
-
-    /**
-     * @param int|null $categoryBackId
-     * @return CategoryFront|null
-     */
-    protected function getCategoryFrontByCategoryBackId(?int $categoryBackId): ?CategoryFront
-    {
-        if (null === $categoryBackId) {
-            return null;
-        }
-
-        $category = $this->categoryRepository->findOneByBackId($categoryBackId);
-        if (null === $category) {
-            $message = "Category with backId {$categoryBackId} not found";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return null;
-        }
-
-        $frontId = $category->getFrontId();
-        if (null === $frontId) {
-            $message = "Category front id is null";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return null;
-        }
-
-        $categoryFront = $this->categoryFrontRepository->find($frontId);
-
-        if (null === $categoryFront) {
-            $message = "Category description front is null";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return null;
-        }
-
-        return $categoryFront;
+        return $productCategoryFront;
     }
 
     /**
@@ -544,7 +507,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param int $frontId
      * @return Product
      */
-    protected function createOrUpdateProduct(?Product $product, int $backId, int $frontId): Product
+    public function createOrUpdateProduct(?Product $product, int $backId, int $frontId): Product
     {
         if (null === $product) {
             $product = new Product();
@@ -556,154 +519,5 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productRepository->persistAndFlush($product);
 
         return $product;
-    }
-
-    /**
-     * @param int $id
-     * @param bool $synchronizeImage
-     */
-    protected function synchronizeByCategoryId(int $id, bool $synchronizeImage = false): void
-    {
-        $this->events[ProductsSynchronizedEvent::class] = 1;
-
-        $productsBack = $this->productBackRepository->findByCategoryId($id);
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
-
-        if (1 === $this->events[ProductSynchronizedEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
-        }
-    }
-
-    /**
-     * @param string $ids
-     * @param bool $synchronizeImage
-     */
-    protected function synchronizeByIds(string $ids, bool $synchronizeImage = false): void
-    {
-        $this->events[ProductSynchronizedEvent::class] = 1;
-        $this->events[ProductsSynchronizedEvent::class] = 1;
-
-        $productsBack = $this->productBackRepository->findByIds($ids);
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
-
-        if (1 === $this->events[ProductsSynchronizedEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
-        }
-    }
-
-    /**
-     * @param string $name
-     * @param bool $synchronizeImage
-     */
-    protected function synchronizeByName(string $name, bool $synchronizeImage = false): void
-    {
-        $this->events[ProductSynchronizedEvent::class] = 1;
-        $this->events[ProductsSynchronizedEvent::class] = 1;
-
-        $productsBack = $this->productBackRepository->findByName($name);
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
-
-        if (1 === $this->events[ProductsSynchronizedEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
-        }
-    }
-
-    /**
-     * @param bool $synchronizeImage
-     */
-    protected function synchronizeAll(bool $synchronizeImage = false): void
-    {
-        $this->events[ProductSynchronizedEvent::class] = 1;
-        $this->events[ProductsAllSynchronizedEvent::class] = 1;
-
-        $productsBack = $this->productBackRepository->findAll();
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
-
-        if (1 === $this->events[ProductsAllSynchronizedEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductsAllSynchronizedEvent());
-        }
-    }
-
-    /**
-     *
-     */
-    protected function synchronizePriceAll(): void
-    {
-        $this->events[PriceSynchronizeEvent::class] = 1;
-
-        $products = $this->productBackRepository->getPricesAll();
-        $this->productFrontRepository->updatePriceByData($products);
-
-        if (1 === $this->events[PriceSynchronizeEvent::class]) {
-            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
-        }
-    }
-
-    /**
-     *
-     */
-    protected function synchronizePriceAllFast(): void
-    {
-        $this->events[PriceSynchronizeAllFastEvent::class] = 1;
-
-        $products = $this->productBackRepository->getPricesAll();
-        $this->productFrontRepository->updatePriceByData($products);
-
-        if (1 === $this->events[PriceSynchronizeAllFastEvent::class]) {
-            $this->eventDispatcher->dispatch(new PriceSynchronizeAllFastEvent());
-        }
-    }
-
-    /**
-     * @param string $ids
-     */
-    protected function synchronizePriceByIds(string $ids): void
-    {
-        $this->events[PriceSynchronizeEvent::class] = 1;
-
-        $products = $this->productBackRepository->getPricesByIds($ids);
-        $this->productFrontRepository->updatePriceByData($products);
-
-        if (1 === $this->events[PriceSynchronizeEvent::class]) {
-            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
-        }
-    }
-
-    /**
-     * @param string $ids
-     */
-    protected function synchronizePriceByIdsFast(string $ids): void
-    {
-        $this->events[PriceSynchronizeFastEvent::class] = 1;
-
-        $products = $this->productBackRepository->getPricesByIds($ids);
-        $this->productFrontRepository->updatePriceByData($products);
-
-        if (1 === $this->events[PriceSynchronizeFastEvent::class]) {
-            $this->eventDispatcher->dispatch(new PriceSynchronizeFastEvent($ids));
-        }
-    }
-
-    /**
-     * @param string $ids
-     */
-    protected function synchronizePriceByCategoryIds(string $ids): void
-    {
-        $this->events[PriceSynchronizeEvent::class] = 1;
-
-        $products = $this->productBackRepository->getPricesByCategoryIds($ids);
-        $this->productFrontRepository->updatePriceByData($products);
-
-        if (1 === $this->events[PriceSynchronizeEvent::class]) {
-            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
-        }
     }
 }

@@ -2,19 +2,27 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\ProductSynchronizerContract;
+use App\Event\BackToFront\PriceSynchronizeAllFastEvent;
+use App\Event\BackToFront\PriceSynchronizeEvent;
+use App\Event\BackToFront\PriceSynchronizeFastEvent;
+use App\Event\BackToFront\ProductsAllSynchronizedEvent;
+use App\Event\BackToFront\ProductsClearEvent;
+use App\Event\BackToFront\ProductsSynchronizedEvent;
+use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductSynchronizer as ProductBaseSynchronizer;
 
-class ProductSynchronizer extends ProductBaseSynchronizer
+class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSynchronizerContract
 {
     /**
-     * @return ProductSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-        $this->_load();
-
-        return $this;
+        $this->productDiscontinuedTableExists = $this->productDiscontinuedFrontRepository->tableExists();
+        $this->descriptionSynchronizer->load();
+        $this->manufacturerSynchronizer->load();
     }
 
     /**
@@ -23,7 +31,17 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeByIds(string $ids, bool $synchronizeImage = false): void
     {
-        parent::synchronizeByIds($ids, $synchronizeImage);
+        $this->events[ProductSynchronizedEvent::class] = 1;
+        $this->events[ProductsSynchronizedEvent::class] = 1;
+
+        $productsBack = $this->productBackRepository->findByIds($ids);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductsSynchronizedEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
+        }
     }
 
     /**
@@ -32,7 +50,16 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeByCategoryId(int $id, bool $synchronizeImage = false): void
     {
-        parent::synchronizeByCategoryId($id, $synchronizeImage);
+        $this->events[ProductsSynchronizedEvent::class] = 1;
+
+        $productsBack = $this->productBackRepository->findByCategoryId($id);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductSynchronizedEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
+        }
     }
 
     /**
@@ -41,7 +68,17 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeByName(string $name, bool $synchronizeImage = false): void
     {
-        parent::synchronizeByName($name, $synchronizeImage);
+        $this->events[ProductSynchronizedEvent::class] = 1;
+        $this->events[ProductsSynchronizedEvent::class] = 1;
+
+        $productsBack = $this->productBackRepository->findByName($name);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductsSynchronizedEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
+        }
     }
 
     /**
@@ -49,7 +86,17 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizeAll(bool $synchronizeImage = false): void
     {
-        parent::synchronizeAll($synchronizeImage);
+        $this->events[ProductSynchronizedEvent::class] = 1;
+        $this->events[ProductsAllSynchronizedEvent::class] = 1;
+
+        $productsBack = $this->productBackRepository->findAll();
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductsAllSynchronizedEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsAllSynchronizedEvent());
+        }
     }
 
     /**
@@ -66,7 +113,39 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function clear(bool $clearImage = false): void
     {
-        parent::clear($clearImage);
+        $this->synchronizeImage = $clearImage;
+        $this->events[ProductsClearEvent::class] = 1;
+
+        $this->productRepository->removeAll();
+        $this->productFrontRepository->removeAll();
+        $this->productDescriptionFrontRepository->removeAll();
+        $this->productFilterFrontRepository->removeAll();
+        $this->productImageFrontRepository->removeAll();
+        $this->productOptionFrontRepository->removeAll();
+        $this->productOptionValueFrontRepository->removeAll();
+        $this->productRecurringFrontRepository->removeAll();
+        $this->productRelatedFrontRepository->removeAll();
+        $this->productRewardFrontRepository->removeAll();
+        $this->productSpecialFrontRepository->removeAll();
+        $this->productCategoryFrontRepository->removeAll();
+        $this->productLayoutFrontRepository->removeAll();
+        $this->productStoreFrontRepository->removeAll();
+
+        $this->productRepository->resetAutoIncrements();
+        $this->productFrontRepository->resetAutoIncrements();
+        $this->productImageFrontRepository->resetAutoIncrements();
+        $this->productOptionFrontRepository->resetAutoIncrements();
+        $this->productOptionValueFrontRepository->resetAutoIncrements();
+        $this->productRewardFrontRepository->resetAutoIncrements();
+        $this->productSpecialFrontRepository->resetAutoIncrements();
+
+        if (true === $this->synchronizeImage) {
+            $this->descriptionSynchronizer->clearFolder();
+        }
+
+        if (1 === $this->events[ProductsClearEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsClearEvent($this->synchronizeImage));
+        }
     }
 
     /**
@@ -74,7 +153,14 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizePriceAll(): void
     {
-        parent::synchronizePriceAll();
+        $this->events[PriceSynchronizeEvent::class] = 1;
+
+        $products = $this->productBackRepository->getPricesAll();
+        $this->productFrontRepository->updatePriceByData($products);
+
+        if (1 === $this->events[PriceSynchronizeEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
+        }
     }
 
     /**
@@ -82,7 +168,14 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizePriceByIds(string $ids): void
     {
-        parent::synchronizePriceByIds($ids);
+        $this->events[PriceSynchronizeEvent::class] = 1;
+
+        $products = $this->productBackRepository->getPricesByIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+
+        if (1 === $this->events[PriceSynchronizeEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
+        }
     }
 
     /**
@@ -90,7 +183,14 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizePriceByCategoryIds(string $ids): void
     {
-        parent::synchronizePriceByCategoryIds($ids);
+        $this->events[PriceSynchronizeEvent::class] = 1;
+
+        $products = $this->productBackRepository->getPricesByCategoryIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+
+        if (1 === $this->events[PriceSynchronizeEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeEvent($products));
+        }
     }
 
     /**
@@ -98,7 +198,14 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizePriceByIdsFast(string $ids): void
     {
-        parent::synchronizePriceByIdsFast($ids);
+        $this->events[PriceSynchronizeFastEvent::class] = 1;
+
+        $products = $this->productBackRepository->getPricesByIds($ids);
+        $this->productFrontRepository->updatePriceByData($products);
+
+        if (1 === $this->events[PriceSynchronizeFastEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeFastEvent($ids));
+        }
     }
 
     /**
@@ -106,6 +213,13 @@ class ProductSynchronizer extends ProductBaseSynchronizer
      */
     public function synchronizePriceAllFast(): void
     {
-        parent::synchronizePriceAllFast();
+        $this->events[PriceSynchronizeAllFastEvent::class] = 1;
+
+        $products = $this->productBackRepository->getPricesAll();
+        $this->productFrontRepository->updatePriceByData($products);
+
+        if (1 === $this->events[PriceSynchronizeAllFastEvent::class]) {
+            $this->eventDispatcher->dispatch(new PriceSynchronizeAllFastEvent());
+        }
     }
 }
