@@ -3,12 +3,12 @@
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\OrderGamePost as OrderBack;
-use App\Entity\Front\Customer as CustomerFront;
 use App\Entity\Front\Order as OrderFront;
+use App\Entity\Front\OrderHistory as OrderHistoryFront;
 use App\Entity\Front\OrderProduct as OrderProductFront;
 use App\Entity\Front\OrderSimpleFields as OrderSimpleFieldsFront;
-use App\Entity\Front\OrderHistory as OrderHistoryFront;
 use App\Entity\Order;
+use App\Event\BackToFront\OrderSynchronizedEvent;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
@@ -36,11 +36,15 @@ use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class OrderSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;
+
+    /** @var EventDispatcherInterface $eventDispatcher */
+    protected $eventDispatcher;
 
     /** @var StoreFront $storeFront */
     protected $storeFront;
@@ -102,6 +106,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
     /**
      * OrderSynchronizer constructor.
      * @param LoggerInterface $logger
+     * @param EventDispatcherInterface $eventDispatcher
      * @param StoreFront $storeFront
      * @param ShippingMethodRepository $shippingMethodsRepository
      * @param PaymentTypeRepository $paymentTypeRepository
@@ -123,6 +128,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
+        EventDispatcherInterface $eventDispatcher,
         StoreFront $storeFront,
         ShippingMethodRepository $shippingMethodsRepository,
         PaymentTypeRepository $paymentTypeRepository,
@@ -144,6 +150,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
     )
     {
         $this->logger = $logger;
+        $this->eventDispatcher = $eventDispatcher;
         $this->storeFront = $storeFront;
         $this->shippingMethodsRepository = $shippingMethodsRepository;
         $this->paymentTypeRepository = $paymentTypeRepository;
@@ -165,36 +172,26 @@ class OrderSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->orderProductFrontRepository->clear();
-        $this->orderProductFrontRepository->resetAutoIncrements();
-
-        $this->orderFrontRepository->clear();
-        $this->orderFrontRepository->resetAutoIncrements();
-
-        $this->orderRepository->clear();
-        $this->orderRepository->resetAutoIncrements();
-    }
-
-    /**
      * @param OrderBack $orderBack
+     * @return OrderFront
      */
-    protected function synchronizeOrder(OrderBack $orderBack): void
+    public function synchronizeOrder(OrderBack $orderBack): OrderFront
     {
         $order = $this->orderRepository->findOneByBackId($orderBack->getId());
         $orderFront = $this->getOrderFrontFromOrder($order);
         $this->updateOrderFrontFromOrderBack($orderFront, $orderBack);
-        $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
+        $order = $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
+
+        $this->eventDispatcher->dispatch(new OrderSynchronizedEvent($order));
+
+        return $orderFront;
     }
 
     /**
      * @param Order|null $order
      * @return OrderFront
      */
-    protected function getOrderFrontFromOrder(?Order $order): OrderFront
+    public function getOrderFrontFromOrder(?Order $order): OrderFront
     {
         if (null === $order) {
             return new OrderFront();
@@ -214,7 +211,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
      * @param int $productFrontId
      * @return OrderProductFront
      */
-    protected function getOrderProductFrontFromOrderFrontIdAndProductFrontId(
+    public function getOrderProductFrontFromOrderFrontIdAndProductFrontId(
         int $orderFrontId,
         int $productFrontId
     ): OrderProductFront
@@ -231,12 +228,23 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         return $orderProductFront;
     }
 
+    public function updateOrderFrontAndOtherFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
+    {
+        $orderFront = $this->updateOrderFrontFromOrderBack($orderFront, $mainOrderBack);
+        $this->orderHistoryFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
+        $this->updateOrderHistoryFrontFromOrderBack($orderFront);
+        $ordersBack = $this->orderBackRepository->findByOrderNum($mainOrderBack->getId());
+        foreach ($ordersBack as $orderBack) {
+            $this->updateOrderProductFrontFromOrderBack($orderBack, $orderFront);
+        }
+    }
+
     /**
      * @param OrderFront $orderFront
      * @param OrderBack $mainOrderBack
      * @return OrderFront
      */
-    protected function updateOrderFrontFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
+    public function updateOrderFrontFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
     {
         if (0 === $mainOrderBack->getClientId()) {
             $customerFrontId = 0;
@@ -372,21 +380,77 @@ class OrderSynchronizer extends BackToFrontSynchronizer
 
         $this->orderFrontRepository->persistAndFlush($orderFront);
 
-        if ('novaposhta.novaposhta' === $shippingCode) {
-            if (true === $this->orderSimpleFieldsFrontRepository->tableExists()) {
-                $orderSimpleFieldsFront = $this->getOrderSimpleFieldsFront($orderFront);
-                $orderSimpleFieldsFront->setOrderId($orderFront->getOrderId());
-                $orderSimpleFieldsFront->setMetadata('oblast,gorod,otdelenie');
-                $orderSimpleFieldsFront->setOblast($countryId);
-                $orderSimpleFieldsFront->setGorod($zoneId);
-                $orderSimpleFieldsFront->setOtdelenie($mainOrderBack->getWarehouse());
+        return $orderFront;
+    }
 
-                $this->orderSimpleFieldsFrontRepository->persistAndFlush($orderSimpleFieldsFront);
-            }
+    /**
+     * @param OrderBack $orderBack
+     * @param OrderFront $orderFront
+     * @return OrderProductFront|null
+     */
+    public function updateOrderProductFrontFromOrderBack(
+        OrderBack $orderBack,
+        OrderFront $orderFront
+    ): ?OrderProductFront
+    {
+        $product = $this->productRepository->findOneByBackId($orderBack->getProductId());
+
+        if (null === $product) {
+            $message = "Product with for back id {$orderBack->getProductId()} not found";
+            $this->logger->error(ExceptionFormatter::f($message));
+
+            return null;
         }
 
-        $this->orderHistoryFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
+        $productFront = $this->productFrontRepository->find($product->getFrontId());
 
+        if (null === $productFront) {
+            $message = "Product front with id: {$product->getFrontId()} not found";
+            $this->logger->error(ExceptionFormatter::f($message));
+
+            return null;
+        }
+
+        $productDescriptionFront = $this->productDescriptionFrontRepository->findOneByProductFrontIdAndLanguageId(
+            $product->getFrontId(),
+            $this->storeFront->getDefaultLanguageId()
+        );
+
+        if (null === $productDescriptionFront) {
+            $message = "Product Description front with id: {$product->getFrontId()} not found";
+            $this->logger->error(ExceptionFormatter::f($message));
+
+            return null;
+        }
+
+        $orderProductFront = $this->getOrderProductFrontFromOrderFrontIdAndProductFrontId(
+            $orderFront->getOrderId(),
+            $product->getFrontId()
+        );
+
+        $orderProductFront->setOrderId($orderFront->getOrderId());
+        $orderProductFront->setProductId($product->getFrontId());
+        $orderProductFront->setName(Store::encodingConvert($productDescriptionFront->getName()));
+        $orderProductFront->setModel(Store::encodingConvert($productFront->getModel()));
+        $orderProductFront->setQuantity($orderBack->getAmount());
+        $orderProductFront->setPrice($orderBack->getPrice());
+
+        $total = $orderBack->getAmount() * $orderBack->getPrice();
+        $orderProductFront->setTotal($total);
+        $orderProductFront->setTax($this->storeFront->getDefaultTax());
+        $orderProductFront->setReward($this->storeFront->getDefaultReward());
+
+        $this->orderProductFrontRepository->persistAndFlush($orderProductFront);
+
+        return $orderProductFront;
+    }
+
+    /**
+     * @param OrderFront $orderFront
+     * @return OrderHistoryFront
+     */
+    public function updateOrderHistoryFrontFromOrderBack(OrderFront $orderFront): OrderHistoryFront
+    {
         $orderHistoryFront = new OrderHistoryFront();
         $orderHistoryFront->setOrderId($orderFront->getOrderId());
         $orderHistoryFront->setOrderStatusId($orderFront->getOrderStatusId());
@@ -396,68 +460,16 @@ class OrderSynchronizer extends BackToFrontSynchronizer
 
         $this->orderHistoryFrontRepository->persistAndFlush($orderHistoryFront);
 
-        $ordersBack = $this->orderBackRepository->findByOrderNum($mainOrderBack->getId());
-
-        foreach ($ordersBack as $orderBack) {
-            $product = $this->productRepository->findOneByBackId($orderBack->getProductId());
-
-            if (null === $product) {
-                $message = "Product with for back id {$orderBack->getProductId()} not found";
-                $this->logger->error(ExceptionFormatter::f($message));
-
-                return $orderFront;
-            }
-
-            $productFront = $this->productFrontRepository->find($product->getFrontId());
-
-            if (null === $productFront) {
-                $message = "Product front with id: {$product->getFrontId()} not found";
-                $this->logger->error(ExceptionFormatter::f($message));
-
-                return $orderFront;
-            }
-
-            $productDescriptionFront = $this->productDescriptionFrontRepository->findOneByProductFrontIdAndLanguageId(
-                $product->getFrontId(),
-                $this->storeFront->getDefaultLanguageId()
-            );
-
-            if (null === $productDescriptionFront) {
-                $message = "Product Description front with id: {$product->getFrontId()} not found";
-                $this->logger->error(ExceptionFormatter::f($message));
-
-                return $orderFront;
-            }
-
-            $orderProductFront = $this->getOrderProductFrontFromOrderFrontIdAndProductFrontId(
-                $orderFront->getOrderId(),
-                $product->getFrontId()
-            );
-
-            $orderProductFront->setOrderId($orderFront->getOrderId());
-            $orderProductFront->setProductId($product->getFrontId());
-            $orderProductFront->setName(Store::encodingConvert($productDescriptionFront->getName()));
-            $orderProductFront->setModel(Store::encodingConvert($productFront->getModel()));
-            $orderProductFront->setQuantity($orderBack->getAmount());
-            $orderProductFront->setPrice($orderBack->getPrice());
-
-            $total = $orderBack->getAmount() * $orderBack->getPrice();
-            $orderProductFront->setTotal($total);
-            $orderProductFront->setTax($this->storeFront->getDefaultTax());
-            $orderProductFront->setReward($this->storeFront->getDefaultReward());
-
-            $this->orderProductFrontRepository->persistAndFlush($orderProductFront);
-        }
-
-        return $orderFront;
+        return $orderHistoryFront;
     }
 
     /**
      * @param Order|null $order
      * @param int $backId
      * @param int $frontId
+     * @return Order
      */
-    protected function createOrUpdateOrder(?Order $order, int $backId, int $frontId): void
+    public function createOrUpdateOrder(?Order $order, int $backId, int $frontId): Order
     {
         if (null === $order) {
             $order = new Order();
@@ -467,13 +479,15 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         $order->setFrontId($frontId);
 
         $this->orderRepository->persistAndFlush($order);
+
+        return $order;
     }
 
     /**
      * @param OrderBack $mainOrderBack
-     * @return CustomerFront|null
+     * @return int|null
      */
-    protected function getCustomerFrontByCustomerBackId(OrderBack $mainOrderBack): ?int
+    public function getCustomerFrontByCustomerBackId(OrderBack $mainOrderBack): ?int
     {
         $clientId = $mainOrderBack->getClientId();
         $customer = $this->customerRepository->findOneByBackId($clientId);
@@ -492,23 +506,5 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         }
 
         return 0;
-    }
-
-    /**
-     * @param OrderFront $orderFront
-     * @return OrderSimpleFieldsFront
-     */
-    protected function getOrderSimpleFieldsFront(OrderFront $orderFront): OrderSimpleFieldsFront
-    {
-        if (null === $orderFront->getOrderId()) {
-            return new OrderSimpleFieldsFront();
-        }
-
-        $orderSimpleFields = $this->orderSimpleFieldsFrontRepository->find($orderFront->getOrderId());
-        if (null === $orderSimpleFields) {
-            return new OrderSimpleFieldsFront();
-        }
-
-        return $orderSimpleFields;
     }
 }

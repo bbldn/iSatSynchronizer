@@ -2,18 +2,17 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\OrderSynchronizerContract;
 use App\Service\Synchronizer\BackToFront\Implementation\OrderSynchronizer as OrderBackSynchronizer;
 
-class OrderSynchronizer extends OrderBackSynchronizer
+class OrderSynchronizer extends OrderBackSynchronizer implements OrderSynchronizerContract
 {
     /**
-     * @return OrderSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**
@@ -43,7 +42,14 @@ class OrderSynchronizer extends OrderBackSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->orderProductFrontRepository->clear();
+        $this->orderProductFrontRepository->resetAutoIncrements();
+
+        $this->orderFrontRepository->clear();
+        $this->orderFrontRepository->resetAutoIncrements();
+
+        $this->orderRepository->clear();
+        $this->orderRepository->resetAutoIncrements();
     }
 
     /**
