@@ -24,13 +24,22 @@ class NovaposhtaCitySynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->citySynchronizer->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->citySynchronizer->load()->synchronizeAll();
+        parent::execute($input, $output);
+        $this->citySynchronizer->synchronizeAll();
 
         return 0;
     }

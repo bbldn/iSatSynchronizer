@@ -34,14 +34,23 @@ class CustomerSynchronizeByIdsCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->customerBackToFrontSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $ids = $this->testIds($input);
-        $this->customerBackToFrontSynchronize->load()->synchronizeByIds($ids);
+        $this->customerBackToFrontSynchronize->synchronizeByIds($ids);
 
         return 0;
     }

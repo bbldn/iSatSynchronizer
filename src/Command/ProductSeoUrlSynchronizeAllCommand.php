@@ -32,13 +32,22 @@ class ProductSeoUrlSynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->productSeoUrlSynchronizer->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSeoUrlSynchronizer->load()->synchronizeAll();
+        parent::execute($input, $output);
+        $this->productSeoUrlSynchronizer->synchronizeAll();
 
         return 0;
     }

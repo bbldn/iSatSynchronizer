@@ -45,20 +45,30 @@ class ReviewSynchronizeByIdsCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->reviewFrontToBackSynchronizer->load();
+        $this->reviewBackToFrontSynchronizer->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
             $ids = $this->testIds($input);
-            $this->reviewFrontToBackSynchronizer->load()->synchronizeByIds($ids);
+            $this->reviewFrontToBackSynchronizer->synchronizeByIds($ids);
         } elseif ('backToFront' === $direction) {
             $ids = $this->testIds($input);
-            $this->reviewBackToFrontSynchronizer->load()->synchronizeByIds($ids);
+            $this->reviewBackToFrontSynchronizer->synchronizeByIds($ids);
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }

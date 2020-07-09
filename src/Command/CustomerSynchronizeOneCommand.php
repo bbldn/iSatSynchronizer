@@ -36,6 +36,14 @@ class CustomerSynchronizeOneCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->customerFrontToBackSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
@@ -43,9 +51,11 @@ class CustomerSynchronizeOneCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
+
         $id = $this->parseId($input);
         $password = $input->getArgument('password');
-        $this->customerFrontToBackSynchronize->load()->synchronizeOne((int)$id, $password);
+        $this->customerFrontToBackSynchronize->synchronizeOne((int)$id, $password);
 
         return 0;
     }

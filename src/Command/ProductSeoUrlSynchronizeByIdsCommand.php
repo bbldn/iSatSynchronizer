@@ -41,14 +41,23 @@ class ProductSeoUrlSynchronizeByIdsCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->productSeoUrlSynchronizer->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $ids = $this->testIds($input);
-        $this->productSeoUrlSynchronizer->load()->synchronizeByIds($ids);
+        $this->productSeoUrlSynchronizer->synchronizeByIds($ids);
 
         return 0;
     }

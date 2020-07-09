@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Service\Synchronizer\BackToFront\AttributeSynchronizer;
 use App\Service\Synchronizer\BackToFront\CategorySynchronizer;
 use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,16 +50,28 @@ class AllReloadCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->categorySynchronize->load();
+        $this->attributeSynchronize->load();
+        $this->productSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $reloadImage = $input->getArgument('reloadImage') !== null;
-        $this->categorySynchronize->load()->reload($reloadImage);
-        $this->attributeSynchronize->load()->reload();
-        $this->productSynchronize->load()->reload($reloadImage);
+
+        $this->categorySynchronize->reload($reloadImage);
+        $this->attributeSynchronize->reload();
+        $this->productSynchronize->reload($reloadImage);
 
         return 0;
     }

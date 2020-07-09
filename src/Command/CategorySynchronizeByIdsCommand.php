@@ -35,15 +35,25 @@ class CategorySynchronizeByIdsCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->categorySynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
+
         $ids = $this->testIds($input);
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->categorySynchronize->load()->synchronizeByIds($ids, $loadImage);
+        $this->categorySynchronize->synchronizeByIds($ids, $loadImage);
 
         return 0;
     }

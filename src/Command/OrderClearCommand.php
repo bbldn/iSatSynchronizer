@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Service\Synchronizer\FrontToBack\OrderSynchronizer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,13 +32,22 @@ class OrderClearCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->orderSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->orderSynchronize->load()->clear();
+        parent::execute($input, $output);
+        $this->orderSynchronize->clear();
 
         return 0;
     }

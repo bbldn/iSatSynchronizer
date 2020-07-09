@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,14 +34,23 @@ class ProductSynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->productSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->productSynchronize->load()->synchronizeAll($loadImage);
+        $this->productSynchronize->synchronizeAll($loadImage);
 
         return 0;
     }

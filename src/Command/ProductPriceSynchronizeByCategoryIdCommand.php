@@ -34,14 +34,23 @@ class ProductPriceSynchronizeByCategoryIdCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->productSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $ids = $this->testIds($input);
-        $this->productSynchronize->load()->synchronizePriceByCategoryIds($ids);
+        $this->productSynchronize->synchronizePriceByCategoryIds($ids);
 
         return 0;
     }

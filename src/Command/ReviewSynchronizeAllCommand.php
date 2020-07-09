@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Service\Synchronizer\BackToFront\ReviewSynchronizer as ReviewBackToFrontSynchronizer;
 use App\Service\Synchronizer\FrontToBack\ReviewSynchronizer as ReviewFrontToBackSynchronizer;
 use InvalidArgumentException;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -44,6 +43,12 @@ class ReviewSynchronizeAllCommand extends Command
         $this->addArgument('direction', InputArgument::REQUIRED, 'Direction');
     }
 
+    protected function load(): void
+    {
+        $this->reviewFrontToBackSynchronizer->load();
+        $this->reviewBackToFrontSynchronizer->load();
+    }
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -51,12 +56,13 @@ class ReviewSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $this->reviewFrontToBackSynchronizer->load()->synchronizeAll();
+            $this->reviewFrontToBackSynchronizer->synchronizeAll();
         } elseif ('backToFront' === $direction) {
-            $this->reviewBackToFrontSynchronizer->load()->synchronizeAll();
+            $this->reviewBackToFrontSynchronizer->synchronizeAll();
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }

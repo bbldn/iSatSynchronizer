@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use App\Repository\Front\ProductDiscountRepository;
 use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,13 +24,22 @@ class ProductPriceSynchronizeAllFastCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->productSynchronizer->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSynchronizer->load()->synchronizePriceAllFast();
+        parent::execute($input, $output);
+        $this->productSynchronizer->synchronizePriceAllFast();
 
         return 0;
     }

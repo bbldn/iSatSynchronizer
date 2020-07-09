@@ -33,6 +33,11 @@ class ProductPriceSynchronizeByIdsCommand extends Command
         $this->addArgument('ids', InputArgument::REQUIRED, 'Ids');
     }
 
+    protected function load(): void
+    {
+        $this->productSynchronize->load();
+    }
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -40,8 +45,9 @@ class ProductPriceSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $ids = $this->testIds($input);
-        $this->productSynchronize->load()->synchronizePriceByIds($ids);
+        $this->productSynchronize->synchronizePriceByIds($ids);
 
         return 0;
     }

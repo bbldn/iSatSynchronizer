@@ -44,6 +44,12 @@ class OrderSynchronizeByIdsCommand extends Command
         $this->addArgument('ids', InputArgument::REQUIRED, 'Reset image');
     }
 
+    protected function load(): void
+    {
+        $this->orderFrontToBackSynchronizer->load();
+        $this->orderBackToFrontSynchronizer->load();
+    }
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -51,14 +57,15 @@ class OrderSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
             $ids = $this->testIds($input);
-            $this->orderFrontToBackSynchronizer->load()->synchronizeByIds($ids);
+            $this->orderFrontToBackSynchronizer->synchronizeByIds($ids);
         } elseif ('backToFront' === $direction) {
             $ids = $this->testIds($input);
-            $this->orderBackToFrontSynchronizer->load()->synchronizeByIds($ids);
+            $this->orderBackToFrontSynchronizer->synchronizeByIds($ids);
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }

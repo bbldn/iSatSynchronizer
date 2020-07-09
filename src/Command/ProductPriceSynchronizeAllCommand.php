@@ -32,13 +32,22 @@ class ProductPriceSynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->productSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->productSynchronize->load()->synchronizePriceAll();
+        parent::execute($input, $output);
+        $this->productSynchronize->synchronizePriceAll();
 
         return 0;
     }

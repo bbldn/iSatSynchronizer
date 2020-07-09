@@ -32,13 +32,22 @@ class CustomerSynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->customerBackToFrontSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->customerBackToFrontSynchronize->load()->synchronizeAll();
+        parent::execute($input, $output);
+        $this->customerBackToFrontSynchronize->synchronizeAll();
 
         return 0;
     }

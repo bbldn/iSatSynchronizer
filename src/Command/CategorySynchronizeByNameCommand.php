@@ -35,15 +35,25 @@ class CategorySynchronizeByNameCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->categorySynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $loadImage = $input->getArgument('loadImage') !== null;
         $name = $input->getArgument('name');
-        $this->categorySynchronize->load()->synchronizeByName($name, $loadImage);
+
+        $this->categorySynchronize->synchronizeByName($name, $loadImage);
 
         return 0;
     }

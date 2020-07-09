@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Service\Synchronizer\BackToFront\CurrencySynchronizer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,13 +32,22 @@ class CurrencySynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->currencySynchronizer->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->currencySynchronizer->load()->synchronizeAll();
+        parent::execute($input, $output);
+        $this->currencySynchronizer->synchronizeAll();
 
         return 0;
     }

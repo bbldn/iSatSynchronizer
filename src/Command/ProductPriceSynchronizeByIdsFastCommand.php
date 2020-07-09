@@ -24,6 +24,11 @@ class ProductPriceSynchronizeByIdsFastCommand extends Command
         parent::__construct();
     }
 
+    protected function load(): void
+    {
+        $this->productDiscountSpeedSynchronizer->load();
+    }
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -31,8 +36,9 @@ class ProductPriceSynchronizeByIdsFastCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $ids = $this->testIds($input);
-        $this->productDiscountSpeedSynchronizer->load()->synchronizeByIds($ids);
+        $this->productDiscountSpeedSynchronizer->synchronizeByIds($ids);
 
         return 0;
     }

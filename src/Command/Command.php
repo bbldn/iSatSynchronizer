@@ -5,6 +5,7 @@ namespace App\Command;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command as Base;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class Command extends Base
 {
@@ -52,5 +53,24 @@ abstract class Command extends Base
         }
 
         return $ids;
+    }
+
+    /**
+     *
+     */
+    protected function load(): void
+    {
+
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $this->load();
+        return parent::execute($input, $output);
     }
 }

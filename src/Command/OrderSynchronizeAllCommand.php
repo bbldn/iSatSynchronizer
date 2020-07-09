@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Service\Synchronizer\BackToFront\OrderSynchronizer as OrderBackToFrontSynchronizer;
 use App\Service\Synchronizer\FrontToBack\OrderSynchronizer as OrderFrontToBackSynchronizer;
 use InvalidArgumentException;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,18 +44,28 @@ class OrderSynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->orderFrontToBackSynchronizer->load();
+        $this->orderBackToFrontSynchronizer->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $this->orderFrontToBackSynchronizer->load()->synchronizeAll();
+            $this->orderFrontToBackSynchronizer->synchronizeAll();
         } elseif ('backToFront' === $direction) {
-            $this->orderBackToFrontSynchronizer->load()->synchronizeAll();
+            $this->orderBackToFrontSynchronizer->synchronizeAll();
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }

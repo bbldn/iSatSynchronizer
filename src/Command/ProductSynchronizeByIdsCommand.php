@@ -35,15 +35,24 @@ class ProductSynchronizeByIdsCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->productSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        parent::execute($input, $output);
         $ids = $this->testIds($input);
         $loadImage = $input->getArgument('loadImage') !== null;
-        $this->productSynchronize->load()->synchronizeByIds($ids, $loadImage);
+        $this->productSynchronize->synchronizeByIds($ids, $loadImage);
 
         return 0;
     }

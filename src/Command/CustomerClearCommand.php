@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerSynchronize;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,13 +32,22 @@ class CustomerClearCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function load(): void
+    {
+        $this->customerSynchronize->load();
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->customerSynchronize->load()->clear();
+        parent::execute($input, $output);
+        $this->customerSynchronize->clear();
 
         return 0;
     }

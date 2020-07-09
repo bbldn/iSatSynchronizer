@@ -23,6 +23,11 @@ class NovaposhtaWarehouseSynchronizeAllCommand extends Command
         $this->warehousesSynchronizer = $warehousesSynchronizer;
     }
 
+    protected function load(): void
+    {
+        $this->warehousesSynchronizer->load();
+    }
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -30,7 +35,8 @@ class NovaposhtaWarehouseSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->warehousesSynchronizer->load()->synchronizeAll();
+        parent::execute($input, $output);
+        $this->warehousesSynchronizer->synchronizeAll();
 
         return 0;
     }
