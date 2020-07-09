@@ -2,10 +2,11 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
+use App\Contract\BackToFront\AddressSynchronizerHelperContract;
 use App\Entity\Address;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Front\Address as AddressFront;
-use App\Helper\BackToFront\AddressSynchronizerHelper;
+use App\Helper\Back\Store as StoreBack;
 use App\Helper\Filler;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\AddressRepository;
@@ -13,11 +14,10 @@ use App\Repository\Back\BuyersGamePostRepository as CustomerBackRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressFrontRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
-use App\Helper\Back\Store as StoreBack;
 
-class AddressSynchronizer extends BackToFrontSynchronizer
+abstract class AddressSynchronizer extends BackToFrontSynchronizer
 {
-    /** @var AddressSynchronizerHelper $addressSynchronizerHelper */
+    /** @var AddressSynchronizerHelperContract $addressSynchronizerHelper */
     protected $addressSynchronizerHelper;
 
     /** @var CustomerBackRepository $customerBackRepository */
@@ -37,7 +37,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
 
     /**
      * AddressSynchronizer constructor.
-     * @param AddressSynchronizerHelper $addressSynchronizerHelper
+     * @param AddressSynchronizerHelperContract $addressSynchronizerHelper
      * @param CustomerBackRepository $customerBackRepository
      * @param CustomerRepository $customerRepository
      * @param AddressFrontRepository $addressFrontRepository
@@ -45,7 +45,7 @@ class AddressSynchronizer extends BackToFrontSynchronizer
      * @param StoreFront $storeFront
      */
     public function __construct(
-        AddressSynchronizerHelper $addressSynchronizerHelper,
+        AddressSynchronizerHelperContract $addressSynchronizerHelper,
         CustomerBackRepository $customerBackRepository,
         CustomerRepository $customerRepository,
         AddressFrontRepository $addressFrontRepository,

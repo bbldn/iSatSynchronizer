@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Service\Synchronizer\BackToFront\Implementation;
+namespace App\Helper\BackToFront;
 
+use App\Contract\BackToFront\DescriptionHelperContract;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
 use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class DescriptionSynchronizer extends BackToFrontSynchronizer
+class DescriptionHelper implements DescriptionHelperContract
 {
     /** @var LoggerInterface $logger */
     protected $logger;
@@ -49,10 +48,17 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
+     *
+     */
+    public function load(): void
+    {
+    }
+
+    /**
      * @param string|null $text
      * @return string
      */
-    protected function synchronize(?string $text): string
+    public function synchronize(?string $text): string
     {
         if (null === $text) {
             return $text;
@@ -122,7 +128,7 @@ class DescriptionSynchronizer extends BackToFrontSynchronizer
     /**
      *
      */
-    protected function clearFolder(): void
+    public function clearFolder(): void
     {
         try {
             $this->fileWriter->clearFolder($this->frontPath);

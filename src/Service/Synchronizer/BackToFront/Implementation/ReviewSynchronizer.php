@@ -17,7 +17,7 @@ use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 
-class ReviewSynchronizer extends BackToFrontSynchronizer
+abstract class ReviewSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

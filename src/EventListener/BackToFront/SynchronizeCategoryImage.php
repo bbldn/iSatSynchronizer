@@ -2,10 +2,10 @@
 
 namespace App\EventListener\BackToFront;
 
+use App\Contract\BackToFront\CategoryImageHelperContract;
 use App\Event\BackToFront\CategorySynchronizedEvent;
 use App\Repository\Back\CategoryRepository as CategoryBackRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
-use App\Service\Synchronizer\BackToFront\Implementation\CategoryImageSynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -20,7 +20,7 @@ class SynchronizeCategoryImage implements EventSubscriberInterface
     /** @var CategoryBackRepository $categoryBackRepository */
     protected $categoryBackRepository;
 
-    /** @var CategoryImageSynchronizer $categoryImageSynchronizer */
+    /** @var CategoryImageHelperContract $categoryImageSynchronizer */
     protected $categoryImageSynchronizer;
 
     /**
@@ -28,13 +28,13 @@ class SynchronizeCategoryImage implements EventSubscriberInterface
      * @param LoggerInterface $logger
      * @param CategoryFrontRepository $categoryFrontRepository
      * @param CategoryBackRepository $categoryBackRepository
-     * @param CategoryImageSynchronizer $categoryImageSynchronizer
+     * @param CategoryImageHelperContract $categoryImageSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
         CategoryFrontRepository $categoryFrontRepository,
         CategoryBackRepository $categoryBackRepository,
-        CategoryImageSynchronizer $categoryImageSynchronizer
+        CategoryImageHelperContract $categoryImageSynchronizer
     )
     {
         $this->logger = $logger;

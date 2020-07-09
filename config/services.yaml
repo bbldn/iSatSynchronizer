@@ -90,6 +90,7 @@ services:
         - 'ru'
         - false
         - 'curl'
+
     App\Service\Other\SeoProCacheCleaner:
         arguments:
         - '@Psr\Log\LoggerInterface'
@@ -101,3 +102,24 @@ services:
         arguments:
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
         - 'https://tbot.isat.com.ua/order/new'
+
+    App\Helper\BackToFront\AddressSynchronizerHelper: ~
+    App\Contract\BackToFront\AddressSynchronizerHelperContract: '@App\Helper\BackToFront\AddressSynchronizerHelper'
+
+    App\Helper\BackToFront\CategorySynchronizerHelper: ~
+    App\Contract\BackToFront\CategorySynchronizerHelperContract: '@App\Helper\BackToFront\CategorySynchronizerHelper'
+
+    App\Helper\BackToFront\DescriptionHelper: ~
+    App\Contract\BackToFront\DescriptionHelperContract: '@App\Helper\BackToFront\DescriptionHelper'
+
+    App\Helper\BackToFront\ManufacturerHelper: ~
+    App\Contract\BackToFront\ManufacturerHelperContract: '@App\Helper\BackToFront\ManufacturerHelper'
+
+    App\Helper\BackToFront\OrderSynchronizerHelper: ~
+    App\Contract\BackToFront\OrderSynchronizerHelperContract: '@App\Helper\BackToFront\OrderSynchronizerHelper'
+
+    App\Helper\BackToFront\ProductSynchronizerHelper: ~
+    App\Contract\BackToFront\ProductSynchronizerHelperContract: '@App\Helper\BackToFront\ProductSynchronizerHelper'
+
+    App\Helper\BackToFront\CategoryImageHelper: ~
+    App\Contract\BackToFront\CategoryImageHelperContract: '@App\Helper\BackToFront\CategoryImageHelper'

@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 use App\Helper\Back\Store as StoreBack;
 
-class CustomerSynchronizer extends BackToFrontSynchronizer
+abstract class CustomerSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

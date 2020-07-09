@@ -21,7 +21,7 @@ use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class ProductImageSynchronizer extends BackToFrontSynchronizer
+abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

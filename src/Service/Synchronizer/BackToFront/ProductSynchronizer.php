@@ -21,8 +21,8 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
     {
         parent::load();
         $this->productDiscontinuedTableExists = $this->productDiscontinuedFrontRepository->tableExists();
-        $this->descriptionSynchronizer->load();
-        $this->manufacturerSynchronizer->load();
+        $this->descriptionHelper->load();
+        $this->manufacturerHelper->load();
     }
 
     /**
@@ -140,7 +140,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
         $this->productSpecialFrontRepository->resetAutoIncrements();
 
         if (true === $this->synchronizeImage) {
-            $this->descriptionSynchronizer->clearFolder();
+            $this->descriptionHelper->clearFolder();
         }
 
         if (1 === $this->events[ProductsClearEvent::class]) {

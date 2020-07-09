@@ -2,6 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
+use App\Contract\BackToFront\OrderSynchronizerHelperContract;
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderHistory as OrderHistoryFront;
@@ -38,7 +39,7 @@ use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class OrderSynchronizer extends BackToFrontSynchronizer
+abstract class OrderSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;
@@ -127,7 +128,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
      * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
      * @param ZoneFrontRepository $zoneFrontRepository
      * @param OrderHistoryFrontRepository $orderHistoryFrontRepository
-     * @param OrderSynchronizerHelper $orderSynchronizerHelper
+     * @param OrderSynchronizerHelperContract $orderSynchronizerHelper
      * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      */
     public function __construct(
@@ -150,7 +151,7 @@ class OrderSynchronizer extends BackToFrontSynchronizer
         OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
         ZoneFrontRepository $zoneFrontRepository,
         OrderHistoryFrontRepository $orderHistoryFrontRepository,
-        OrderSynchronizerHelper $orderSynchronizerHelper,
+        OrderSynchronizerHelperContract $orderSynchronizerHelper,
         CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
     )
     {

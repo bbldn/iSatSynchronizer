@@ -2,6 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
+use App\Contract\BackToFront\CategorySynchronizerHelperContract;
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Category;
 use App\Entity\Front\Category as CategoryFront;
@@ -28,7 +29,7 @@ use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CategorySynchronizer extends BackToFrontSynchronizer
+abstract class CategorySynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;
@@ -42,7 +43,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
     /** @var StoreBack $storeBack */
     protected $storeBack;
 
-    /** @var CategorySynchronizerHelper $categorySynchronizerHelper */
+    /** @var CategorySynchronizerHelperContract $categorySynchronizerHelper */
     protected $categorySynchronizerHelper;
 
     /** @var CategoryFrontRepository $categoryFrontRepository */
@@ -81,7 +82,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
      * @param EventDispatcherInterface $eventDispatcher
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
-     * @param CategorySynchronizerHelper $categorySynchronizerHelper
+     * @param CategorySynchronizerHelperContract $categorySynchronizerHelper
      * @param CategoryFrontRepository $categoryFrontRepository
      * @param CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository
      * @param CategoryFilterFrontRepository $categoryFilterFrontRepository
@@ -97,7 +98,7 @@ class CategorySynchronizer extends BackToFrontSynchronizer
         EventDispatcherInterface $eventDispatcher,
         StoreFront $storeFront,
         StoreBack $storeBack,
-        CategorySynchronizerHelper $categorySynchronizerHelper,
+        CategorySynchronizerHelperContract $categorySynchronizerHelper,
         CategoryFrontRepository $categoryFrontRepository,
         CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
         CategoryFilterFrontRepository $categoryFilterFrontRepository,

@@ -11,7 +11,7 @@ use App\Repository\Back\ProductOptionsValuesRepository as AttributeBackRepositor
 use App\Repository\Front\ProductAttributeRepository as ProductAttributeFrontRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
-class ProductAttributeSynchronizer extends BackToFrontSynchronizer
+abstract class ProductAttributeSynchronizer extends BackToFrontSynchronizer
 {
     /** @var AttributeBackRepository $attributeBackRepository */
     protected $attributeBackRepository;

@@ -14,7 +14,7 @@ use App\Repository\Front\AttributeDescriptionRepository as AttributeDescriptionF
 use App\Repository\Front\AttributeRepository as AttributeFrontRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
-class AttributeSynchronizer extends BackToFrontSynchronizer
+abstract class AttributeSynchronizer extends BackToFrontSynchronizer
 {
     /** @var StoreFront $storeFront */
     protected $storeFront;

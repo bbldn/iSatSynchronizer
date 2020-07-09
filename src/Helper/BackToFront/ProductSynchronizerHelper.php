@@ -2,13 +2,14 @@
 
 namespace App\Helper\BackToFront;
 
+use App\Contract\BackToFront\ProductSynchronizerHelperContract;
 use App\Entity\Front\Category as CategoryFront;
 use App\Helper\ExceptionFormatter;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use Psr\Log\LoggerInterface;
 
-class ProductSynchronizerHelper
+class ProductSynchronizerHelper implements ProductSynchronizerHelperContract
 {
     /** @var LoggerInterface $logger */
     protected $logger;

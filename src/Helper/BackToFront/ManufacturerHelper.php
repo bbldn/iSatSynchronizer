@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Service\Synchronizer\BackToFront\Implementation;
+namespace App\Helper\BackToFront;
 
+use App\Contract\BackToFront\ManufacturerHelperContract;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\Front\ManufacturerRepository as ManufacturerFrontRepository;
-use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 
-class ManufacturerSynchronizer extends BackToFrontSynchronizer
+class ManufacturerHelper implements ManufacturerHelperContract
 {
     /** @var ManufacturerFrontRepository $manufacturerFrontRepository */
     protected $manufacturerFrontRepository;

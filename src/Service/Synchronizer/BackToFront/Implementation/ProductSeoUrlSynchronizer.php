@@ -16,7 +16,7 @@ use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use Psr\Log\LoggerInterface;
 
-class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
+abstract class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;

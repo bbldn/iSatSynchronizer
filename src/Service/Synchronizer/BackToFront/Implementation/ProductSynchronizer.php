@@ -2,6 +2,9 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
+use App\Contract\BackToFront\DescriptionHelperContract;
+use App\Contract\BackToFront\ManufacturerHelperContract;
+use App\Contract\BackToFront\ProductSynchronizerHelperContract;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
@@ -43,12 +46,11 @@ use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontReposito
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\BackToFront\BackToFrontSynchronizer;
-use App\Service\Synchronizer\BackToFront\DescriptionSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ProductSynchronizer extends BackToFrontSynchronizer
+abstract class ProductSynchronizer extends BackToFrontSynchronizer
 {
     /** @var LoggerInterface $logger */
     protected $logger;
@@ -128,11 +130,11 @@ class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductSynchronizerHelper $productSynchronizerHelper */
     protected $productSynchronizerHelper;
 
-    /** @var DescriptionSynchronizer $descriptionSynchronizer */
-    protected $descriptionSynchronizer;
+    /** @var DescriptionHelperContract $descriptionHelper */
+    protected $descriptionHelper;
 
-    /** @var ManufacturerSynchronizer $manufacturerSynchronizer */
-    protected $manufacturerSynchronizer;
+    /** @var ManufacturerHelperContract $manufacturerHelper */
+    protected $manufacturerHelper;
 
     /** @var bool $synchronizeImage */
     protected $synchronizeImage = false;
@@ -178,9 +180,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductBackRepository $productBackRepository
      * @param ProductPicturesBackRepository $productPicturesBackRepository
      * @param CurrencyBackRepository $currencyBackRepository
-     * @param ProductSynchronizerHelper $productSynchronizerHelper
-     * @param DescriptionSynchronizer $descriptionSynchronizer
-     * @param ManufacturerSynchronizer $manufacturerSynchronizer
+     * @param ProductSynchronizerHelperContract $productSynchronizerHelper
+     * @param DescriptionHelperContract $descriptionHelper
+     * @param ManufacturerHelperContract $manufacturerHelper
      */
     public function __construct(
         LoggerInterface $logger,
@@ -208,9 +210,9 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         ProductBackRepository $productBackRepository,
         ProductPicturesBackRepository $productPicturesBackRepository,
         CurrencyBackRepository $currencyBackRepository,
-        ProductSynchronizerHelper $productSynchronizerHelper,
-        DescriptionSynchronizer $descriptionSynchronizer,
-        ManufacturerSynchronizer $manufacturerSynchronizer
+        ProductSynchronizerHelperContract $productSynchronizerHelper,
+        DescriptionHelperContract $descriptionHelper,
+        ManufacturerHelperContract $manufacturerHelper
     )
     {
         $this->logger = $logger;
@@ -239,8 +241,8 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productPicturesBackRepository = $productPicturesBackRepository;
         $this->currencyBackRepository = $currencyBackRepository;
         $this->productSynchronizerHelper = $productSynchronizerHelper;
-        $this->descriptionSynchronizer = $descriptionSynchronizer;
-        $this->manufacturerSynchronizer = $manufacturerSynchronizer;
+        $this->descriptionHelper = $descriptionHelper;
+        $this->manufacturerHelper = $manufacturerHelper;
     }
 
     /**
@@ -326,7 +328,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setStockStatusId($stockAvailableStatusId);
         $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
         if (null === $productFront->getManufacturerId()) {
-            $productFront->setManufacturerId($this->manufacturerSynchronizer->getManufacturerId($productName));
+            $productFront->setManufacturerId($this->manufacturerHelper->getManufacturerId($productName));
         }
         $productFront->setShipping(true);
         $productFront->setPrice($productBack->getPrice());
@@ -390,7 +392,7 @@ class ProductSynchronizer extends BackToFrontSynchronizer
 
         if (true === $this->synchronizeImage) {
             $productDescriptionFront->setDescription(
-                $this->descriptionSynchronizer->synchronize(
+                $this->descriptionHelper->synchronize(
                     trim(Store::encodingConvert($productBack->getDescription()))
                 )
             );
