@@ -103,7 +103,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
     /**
      *
      */
-    protected function clearFolder(): void
+    public function clearFolder(): void
     {
         try {
             $this->fileWriter->clearFolder($this->frontPath);
@@ -119,7 +119,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param int $number
      * @return ProductImageFront|null
      */
-    protected function synchronizeProductImage(
+    public function synchronizeProductImage(
         ProductPicturesBack $productPicturesBack,
         ProductFront $productFront,
         int $number = 1
@@ -133,7 +133,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param string $imagePath
      * @return ProductImageFront
      */
-    protected function getProductImageFrontByProductIdAndImagePath(int $productId, string $imagePath): ProductImageFront
+    public function getProductImageFrontByProductIdAndImagePath(int $productId, string $imagePath): ProductImageFront
     {
         $productImage = $this->productImageFrontRepository->findOneByProductIdAndImagePath($productId, $imagePath);
 
@@ -150,7 +150,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param int $number
      * @return ProductImageFront|null
      */
-    protected function synchronize(string $picture, ProductFront $productFront, int $number = 1): ?ProductImageFront
+    public function synchronize(string $picture, ProductFront $productFront, int $number = 1): ?ProductImageFront
     {
         if (null === $picture) {
             return null;
@@ -200,7 +200,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param int $number
      * @return ProductImageFront|null
      */
-    protected function synchronizePhoto(
+    public function synchronizePhoto(
         PhotoBack $photoBack,
         ProductFront $productFront,
         int $number = 1
@@ -216,7 +216,7 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param string $path
      * @return string|null
      */
-    protected function getFile(string $path): ?string
+    public function getFile(string $path): ?string
     {
         try {
             return $this->fileReader->getFile($path);
@@ -228,7 +228,11 @@ class ProductImageSynchronizer extends BackToFrontSynchronizer
         }
     }
 
-    protected function synchronizeImage(ProductBack $productBack, ProductFront $productFront): void
+    /**
+     * @param ProductBack $productBack
+     * @param ProductFront $productFront
+     */
+    public function synchronizeImage(ProductBack $productBack, ProductFront $productFront): void
     {
         $productFront->setImage($this->defaultImagePath);
         $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());

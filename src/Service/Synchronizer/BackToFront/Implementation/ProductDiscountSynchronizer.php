@@ -3,6 +3,7 @@
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\BuyersGroupsPrices as ProductDiscountBack;
+use App\Entity\Front\CustomerGroup as CustomerGroupFront;
 use App\Entity\Front\ProductDiscount as ProductDiscountFront;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
@@ -68,37 +69,9 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    protected function synchronizeAll(): void
-    {
-        $productDiscountsBack = $this->productDiscountBackRepository->findAll();
-        foreach ($productDiscountsBack as $productDiscountBack) {
-            $this->synchronizeProductDiscount($productDiscountBack);
-        }
-    }
-
-    /**
-     * @param int $productBackId
-     */
-    protected function synchronizeByProductBackId(int $productBackId): void
-    {
-        $productDiscountsBack = $this->productDiscountBackRepository->findByProductBackId($productBackId);
-        $productDiscountBack = $this->getProductDiscountBack($productBackId);
-
-        if (null !== $productDiscountBack) {
-            $productDiscountsBack[] = $productDiscountBack;
-        }
-
-        foreach ($productDiscountsBack as $productDiscountBack) {
-            $this->synchronizeProductDiscount($productDiscountBack);
-        }
-    }
-
-    /**
      * @param ProductDiscountBack $productDiscountBack
      */
-    protected function synchronizeProductDiscount(ProductDiscountBack $productDiscountBack): void
+    public function synchronizeProductDiscount(ProductDiscountBack $productDiscountBack): void
     {
         $productDiscountFront = $this->getProductDiscountFrontFromProductDiscountBack($productDiscountBack);
         $this->updateCategoryFrontFromCategoryBack($productDiscountBack, $productDiscountFront);
@@ -108,7 +81,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param ProductDiscountBack $productDiscountBack
      * @return ProductDiscountFront|null
      */
-    protected function getProductDiscountFrontFromProductDiscountBack(
+    public function getProductDiscountFrontFromProductDiscountBack(
         ProductDiscountBack $productDiscountBack
     ): ?ProductDiscountFront
     {
@@ -134,7 +107,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param ProductDiscountFront $productDiscountFront
      * @return ProductDiscountFront
      */
-    protected function updateCategoryFrontFromCategoryBack(
+    public function updateCategoryFrontFromCategoryBack(
         ProductDiscountBack $productDiscountBack,
         ProductDiscountFront $productDiscountFront
     ): ProductDiscountFront
@@ -163,7 +136,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param int $productBackId
      * @return ProductDiscountBack|null
      */
-    protected function getProductDiscountBack(int $productBackId): ?ProductDiscountBack
+    public function getProductDiscountBack(int $productBackId): ?ProductDiscountBack
     {
         $productBack = $this->productBackRepository->find($productBackId);
         if (null === $productBack) {
@@ -185,7 +158,7 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param float $price
      * @return ProductDiscountFront
      */
-    protected function createProductDiscountFront(
+    public function createProductDiscountFront(
         ProductDiscountFront $productDiscountFront,
         int $productId,
         int $customerGroupId,
@@ -204,38 +177,33 @@ class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
+     * @param CustomerGroupFront $customerGroupFront
      * @param int $productId
+     * @return ProductDiscountFront|null
      */
-    protected function createOrUpdateDiscountItems(int $productId): void
+    public function createOrUpdateDiscountItem(
+        CustomerGroupFront $customerGroupFront,
+        int $productId
+    ): ?ProductDiscountFront
     {
-        $customersGroupFront = $this->customerGroupRepository->findAll();
-        foreach ($customersGroupFront as $customerGroupFront) {
-            $productDiscountFront = $this->productDiscountFrontRepository->findOneByCustomerGroupIdAndProductId(
-                $customerGroupFront->getCustomerGroupId(),
-                $productId
-            );
+        $productDiscountFront = $this->productDiscountFrontRepository->findOneByCustomerGroupIdAndProductId(
+            $customerGroupFront->getCustomerGroupId(),
+            $productId
+        );
 
-            if (null !== $productDiscountFront) {
-                continue;
-            }
-
-            $productDiscountFront = $this->createProductDiscountFront(
-                new ProductDiscountFront(),
-                $productId,
-                $customerGroupFront->getCustomerGroupId(),
-                0
-            );
-
-            $this->productDiscountFrontRepository->persistAndFlush($productDiscountFront);
+        if (null !== $productDiscountFront) {
+            return null;
         }
-    }
 
-    /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->productDiscountFrontRepository->clear();
-        $this->productDiscountFrontRepository->resetAutoIncrements();
+        $productDiscountFront = $this->createProductDiscountFront(
+            new ProductDiscountFront(),
+            $productId,
+            $customerGroupFront->getCustomerGroupId(),
+            0
+        );
+
+        $this->productDiscountFrontRepository->persistAndFlush($productDiscountFront);
+
+        return $productDiscountFront;
     }
 }

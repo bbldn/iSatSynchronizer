@@ -2,17 +2,17 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\ProductAttributeSynchronizerContract;
 use App\Entity\Back\Product as ProductBack;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductAttributeSynchronizer as ProductAttributeSynchronizerBase;
 
-class ProductAttributeSynchronizer extends ProductAttributeSynchronizerBase
+class ProductAttributeSynchronizer extends ProductAttributeSynchronizerBase implements ProductAttributeSynchronizerContract
 {
     /**
-     * @return ProductAttributeSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
-        return $this;
     }
 
     /**
@@ -29,6 +29,7 @@ class ProductAttributeSynchronizer extends ProductAttributeSynchronizerBase
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->productAttributeFrontRepository->clear();
+        $this->productAttributeFrontRepository->resetAutoIncrements();
     }
 }

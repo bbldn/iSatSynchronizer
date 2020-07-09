@@ -2,18 +2,17 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Service\Synchronizer\BackToFront\Implementation\ProductDiscountSpeedSynchronizer as ProductDiscountSpeedSynchronizerBase;
+use App\Contract\BackToFront\ProductDiscountSpeedSynchronizerContract;
+use App\Service\Synchronizer\BackToFront\ProductDiscountSynchronizer as ProductDiscountSpeedSynchronizerBase;
 
-class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSynchronizerBase
+class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSynchronizerBase implements ProductDiscountSpeedSynchronizerContract
 {
     /**
-     * @return ProductDiscountSpeedSynchronizer
+     *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-
-        return $this;
     }
 
     /**
@@ -21,7 +20,10 @@ class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSynchronizerB
      */
     public function synchronizeAll(): void
     {
-        parent::synchronizeAll();
+        $discountPrices = $this->productDiscountBackRepository->getPricesAll();
+        $productPrices = $this->productBackRepository->getPricesAll();
+        $values = array_merge($discountPrices, $productPrices);
+        $this->productDiscountFrontRepository->updatePriceByValues($values);
     }
 
     /**
@@ -29,30 +31,10 @@ class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSynchronizerB
      */
     public function synchronizeByIds(string $ids): void
     {
-        parent::synchronizeByIds($ids);
+        $discountPrices = $this->productDiscountBackRepository->getPricesByIds($ids);
+        $productPrices = $this->productBackRepository->getPricesByIds($ids);
+        $values = array_merge($discountPrices, $productPrices);
+        $this->productDiscountFrontRepository->updatePriceByValues($values);
     }
 
-    /**
-     * @param int $productBackId
-     */
-    public function synchronizeByProductBackId(int $productBackId): void
-    {
-        parent::synchronizeByProductBackId($productBackId);
-    }
-
-    /**
-     * @param int $productId
-     */
-    public function createOrUpdateDiscountItems(int $productId): void
-    {
-        parent::createOrUpdateDiscountItems($productId);
-    }
-
-    /**
-     *
-     */
-    public function clear(): void
-    {
-        parent::clear();
-    }
 }

@@ -2,42 +2,17 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\ProductDiscountSynchronizerContract;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductDiscountSynchronizer as ProductDiscountBaseSynchronizer;
 
-class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
+class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer implements ProductDiscountSynchronizerContract
 {
-    /**
-     * @return ProductDiscountSynchronizer
-     */
-    public function load(): self
-    {
-        parent::load();
-
-        return $this;
-    }
-
     /**
      *
      */
-    public function synchronizeAll(): void
+    public function load(): void
     {
-        parent::synchronizeAll();
-    }
-
-    /**
-     * @param int $productBackId
-     */
-    public function synchronizeByProductBackId(int $productBackId): void
-    {
-        parent::synchronizeByProductBackId($productBackId);
-    }
-
-    /**
-     * @param int $productId
-     */
-    public function createOrUpdateDiscountItems(int $productId): void
-    {
-        parent::createOrUpdateDiscountItems($productId);
+        parent::load();
     }
 
     /**
@@ -45,6 +20,46 @@ class ProductDiscountSynchronizer extends ProductDiscountBaseSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->productDiscountFrontRepository->clear();
+        $this->productDiscountFrontRepository->resetAutoIncrements();
+    }
+
+    /**
+     * @param int $productId
+     */
+    public function createOrUpdateDiscountItems(int $productId): void
+    {
+        $customersGroupFront = $this->customerGroupRepository->findAll();
+        foreach ($customersGroupFront as $customerGroupFront) {
+            $this->createOrUpdateDiscountItem($customerGroupFront, $productId);
+        }
+    }
+
+    /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $productDiscountsBack = $this->productDiscountBackRepository->findAll();
+        foreach ($productDiscountsBack as $productDiscountBack) {
+            $this->synchronizeProductDiscount($productDiscountBack);
+        }
+    }
+
+    /**
+     * @param int $productBackId
+     */
+    public function synchronizeByProductBackId(int $productBackId): void
+    {
+        $productDiscountsBack = $this->productDiscountBackRepository->findByProductBackId($productBackId);
+        $productDiscountBack = $this->getProductDiscountBack($productBackId);
+
+        if (null !== $productDiscountBack) {
+            $productDiscountsBack[] = $productDiscountBack;
+        }
+
+        foreach ($productDiscountsBack as $productDiscountBack) {
+            $this->synchronizeProductDiscount($productDiscountBack);
+        }
     }
 }

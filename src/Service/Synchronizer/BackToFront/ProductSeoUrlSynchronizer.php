@@ -2,35 +2,18 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
+use App\Contract\BackToFront\ProductSeoUrlSynchronizerContract;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductSeoUrlSynchronizer as ProductSeoUrlSynchronizerBase;
-use App\Entity\Back\Product as ProductBack;
-use App\Entity\Front\Product as ProductFront;
 
-class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase
+class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase implements ProductSeoUrlSynchronizerContract
 {
     /**
      *
      */
-    public function load(): self
+    public function load(): void
     {
         parent::load();
-        $this->_load();
-
-        return $this;
-    }
-
-    /**
-     * @param ProductBack $productBack
-     * @param ProductFront $productFront
-     */
-    public function synchronizeByProductBackAndProductFront(
-        ProductBack $productBack,
-        ProductFront $productFront
-    ): void
-    {
-        if (true === $this->seoUrlTableExists) {
-            parent::synchronizeByProductBackAndProductFront($productBack, $productFront);
-        }
+        $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
     }
 
     /**
@@ -38,8 +21,13 @@ class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase
      */
     public function synchronizeAll(): void
     {
-        if (true === $this->seoUrlTableExists) {
-            parent::synchronizeAll();
+        if (false === $this->seoUrlTableExists) {
+            return;
+        }
+
+        $productsBack = $this->productBackRepository->findAll();
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeByProductBack($productBack);
         }
     }
 
@@ -48,8 +36,13 @@ class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase
      */
     public function synchronizeByIds(string $ids): void
     {
-        if (true === $this->seoUrlTableExists) {
-            parent::synchronizeByIds($ids);
+        if (false === $this->seoUrlTableExists) {
+            return;
+        }
+
+        $productsBack = $this->productBackRepository->findByIds($ids);
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeByProductBack($productBack);
         }
     }
 
@@ -59,7 +52,7 @@ class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase
     public function clear(): void
     {
         if (true === $this->seoUrlTableExists) {
-            parent::clear();
+            $this->seoUrlFrontRepository->removeAllByQuery('product_id');
         }
     }
 }

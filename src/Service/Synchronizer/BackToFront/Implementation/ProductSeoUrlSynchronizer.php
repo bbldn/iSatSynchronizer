@@ -66,22 +66,19 @@ class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    protected function _load()
-    {
-        $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
-    }
-
-    /**
      * @param ProductBack $productBack
      * @param ProductFront $productFront
+     * @return SeoUrlFront
      */
-    protected function synchronizeByProductBackAndProductFront(
+    public function synchronizeByProductBackAndProductFront(
         ProductBack $productBack,
         ProductFront $productFront
-    ): void
+    ): ?SeoUrlFront
     {
+        if (false === $this->seoUrlTableExists) {
+            return null;
+        }
+
         $seoUrl = $this->seoUrlFrontRepository->findOneByQueryAndLanguageId(
             "product_id={$productFront->getProductId()}",
             $this->storeFront->getDefaultLanguageId()
@@ -111,34 +108,14 @@ class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
         }
 
         $this->seoUrlFrontRepository->persistAndFlush($seoUrl);
-    }
 
-    /**
-     *
-     */
-    protected function synchronizeAll(): void
-    {
-        $productsBack = $this->productBackRepository->findAll();
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeByProductBack($productBack);
-        }
-    }
-
-    /**
-     * @param string $ids
-     */
-    protected function synchronizeByIds(string $ids): void
-    {
-        $productsBack = $this->productBackRepository->findByIds($ids);
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeByProductBack($productBack);
-        }
+        return $seoUrl;
     }
 
     /**
      * @param ProductBack $productBack
      */
-    protected function synchronizeByProductBack(ProductBack $productBack): void
+    public function synchronizeByProductBack(ProductBack $productBack): void
     {
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         if (null === $product) {
@@ -157,13 +134,5 @@ class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
         }
 
         $this->synchronizeByProductBackAndProductFront($productBack, $productFront);
-    }
-
-    /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->seoUrlFrontRepository->removeAllByQuery('product_id');
     }
 }
