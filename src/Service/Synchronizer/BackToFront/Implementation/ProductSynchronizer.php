@@ -314,9 +314,9 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
     ): ProductFront
     {
         if (0.0 === round($productBack->getPrice(), 0)) {
-            $stockAvailableStatusId = $this->storeFront->getDefaultProductAvailableStatusId();
+            $quantity = 0;
         } else {
-            $stockAvailableStatusId = $this->storeFront->getDefaultProductNotAvailableStatusId();
+            $quantity = 99999;
         }
 
         $productFront->setModel("art{$productBack->getProductId()}");
@@ -327,8 +327,10 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront->setIsbn(Filler::securityString(null));
         $productFront->setMpn(Filler::securityString(null));
         $productFront->setLocation(Filler::securityString(null));
-        $productFront->setQuantity(999999);
-        $productFront->setStockStatusId($stockAvailableStatusId);
+        $productFront->setQuantity($quantity);
+        $productFront->setStockStatusId(
+            $this->storeFront->getDefaultProductAvailableStatusId()
+        );
         $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
         if (null === $productFront->getManufacturerId()) {
             $productFront->setManufacturerId($this->manufacturerHelper->getManufacturerId($productName));
