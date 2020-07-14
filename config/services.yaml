@@ -102,3 +102,6 @@ services:
         arguments:
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
         - 'https://tbot.isat.com.ua/order/new'
+
+    App\Contract\Novaposhta\AreaSynchronizerContract: '@App\Service\Synchronizer\Novaposhta\AreaSynchronizer'
+    App\Contract\BackToFront\ProductAttributeSynchronizerContract: '@App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer'
