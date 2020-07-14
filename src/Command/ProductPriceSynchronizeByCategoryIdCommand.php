@@ -49,7 +49,7 @@ class ProductPriceSynchronizeByCategoryIdCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->testIds($input);
+        $ids = $this->getIdsFromInput($input);
         $this->productSynchronize->synchronizePriceByCategoryIds($ids);
 
         return 0;

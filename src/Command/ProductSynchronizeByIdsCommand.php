@@ -50,7 +50,7 @@ class ProductSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->testIds($input);
+        $ids = $this->getIdsFromInput($input);
         $loadImage = $input->getArgument('loadImage') !== null;
         $this->productSynchronize->synchronizeByIds($ids, $loadImage);
 

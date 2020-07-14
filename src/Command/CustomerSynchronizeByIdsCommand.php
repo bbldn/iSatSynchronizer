@@ -49,7 +49,7 @@ class CustomerSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->testIds($input);
+        $ids = $this->getIdsFromInput($input);
         $this->customerSynchronizer->synchronizeByIds($ids);
 
         return 0;

@@ -64,10 +64,10 @@ class OrderSynchronizeByIdsCommand extends Command
         $direction = $input->getArgument('direction');
 
         if ('frontToBack' === $direction) {
-            $ids = $this->testIds($input);
+            $ids = $this->getIdsFromInput($input);
             $this->orderFrontToBackSynchronizer->synchronizeByIds($ids);
         } elseif ('backToFront' === $direction) {
-            $ids = $this->testIds($input);
+            $ids = $this->getIdsFromInput($input);
             $this->orderBackToFrontSynchronizer->synchronizeByIds($ids);
         } else {
             throw new InvalidArgumentException("Invalidate direction: {$direction}");

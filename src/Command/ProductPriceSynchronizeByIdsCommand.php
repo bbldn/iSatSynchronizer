@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
+use App\Contract\BackToFront\ProductSynchronizerContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +11,14 @@ class ProductPriceSynchronizeByIdsCommand extends Command
 {
     protected static $defaultName = 'product:price:synchronize:by-ids';
 
-    /** @var ProductSynchronizer $productSynchronize */
+    /** @var ProductSynchronizerContract $productSynchronize */
     protected $productSynchronize;
 
     /**
      * ProductPriceUpdateByIdsCommand constructor.
-     * @param ProductSynchronizer $productSynchronizer
+     * @param ProductSynchronizerContract $productSynchronizer
      */
-    public function __construct(ProductSynchronizer $productSynchronizer)
+    public function __construct(ProductSynchronizerContract $productSynchronizer)
     {
         $this->productSynchronize = $productSynchronizer;
         parent::__construct();
@@ -49,7 +49,7 @@ class ProductPriceSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->testIds($input);
+        $ids = $this->getIdsFromInput($input);
         $this->productSynchronize->synchronizePriceByIds($ids);
 
         return 0;

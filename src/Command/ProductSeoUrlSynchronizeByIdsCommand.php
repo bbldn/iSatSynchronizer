@@ -56,7 +56,7 @@ class ProductSeoUrlSynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->testIds($input);
+        $ids = $this->getIdsFromInput($input);
         $this->productSeoUrlSynchronizer->synchronizeByIds($ids);
 
         return 0;

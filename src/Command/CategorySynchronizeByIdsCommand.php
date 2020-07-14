@@ -50,7 +50,7 @@ class CategorySynchronizeByIdsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->testIds($input);
+        $ids = $this->getIdsFromInput($input);
         $loadImage = $input->getArgument('loadImage') !== null;
         $this->categorySynchronizer->synchronizeByIds($ids, $loadImage);
 

@@ -14,7 +14,7 @@ abstract class Command extends Base
      */
     protected function parseId(InputInterface $input): int
     {
-        return (int)$this->testId($input);
+        return (int)$this->getIdFromInput($input);
     }
 
     /**
@@ -23,14 +23,14 @@ abstract class Command extends Base
      */
     protected function parseIdArray(InputInterface $input): array
     {
-        return explode(',', $this->testIds($input));
+        return explode(',', $this->getIdsFromInput($input));
     }
 
     /**
      * @param InputInterface $input
      * @return string
      */
-    protected function testId(InputInterface $input): string
+    protected function getIdFromInput(InputInterface $input): string
     {
         $id = $input->getArgument('id');
         if (0 === preg_match('/[0-9]+/', $id)) {
@@ -44,7 +44,7 @@ abstract class Command extends Base
      * @param InputInterface $input
      * @return string
      */
-    protected function testIds(InputInterface $input): string
+    protected function getIdsFromInput(InputInterface $input): string
     {
         $ids = trim(rtrim($input->getArgument('ids'), ','));
         if (0 === preg_match('/^([0-9]+,?)+$/i', $ids)) {

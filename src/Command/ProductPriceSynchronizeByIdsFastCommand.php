@@ -39,7 +39,7 @@ class ProductPriceSynchronizeByIdsFastCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = $this->testIds($input);
+        $ids = $this->getIdsFromInput($input);
         $this->productDiscountSpeedSynchronizer->synchronizeByIds($ids);
 
         return 0;
