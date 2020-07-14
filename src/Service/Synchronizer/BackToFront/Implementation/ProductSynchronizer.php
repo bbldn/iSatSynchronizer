@@ -313,7 +313,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         ProductFront $productFront
     ): ProductFront
     {
-        if (0 === round($productBack->getPrice(), 0)) {
+        if (0.0 === round($productBack->getPrice(), 0)) {
             $stockAvailableStatusId = $this->storeFront->getDefaultProductAvailableStatusId();
         } else {
             $stockAvailableStatusId = $this->storeFront->getDefaultProductNotAvailableStatusId();
