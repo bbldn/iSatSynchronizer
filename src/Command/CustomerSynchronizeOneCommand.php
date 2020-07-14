@@ -50,7 +50,7 @@ class CustomerSynchronizeOneCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $id = $this->parseId($input);
+        $id = $this->getIdFromInput($input);
         $password = $input->getArgument('password');
         $this->customerSynchronizer->synchronizeOne((int)$id, $password);
 

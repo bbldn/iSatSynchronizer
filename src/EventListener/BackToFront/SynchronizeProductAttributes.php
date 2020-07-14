@@ -2,6 +2,7 @@
 
 namespace App\EventListener\BackToFront;
 
+use App\Contract\BackToFront\ProductAttributeSynchronizerContract;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
@@ -17,7 +18,7 @@ class SynchronizeProductAttributes implements EventSubscriberInterface
     /** @var ProductBackRepository $productBackRepository */
     protected $productBackRepository;
 
-    /** @var ProductAttributeSynchronizer $productAttributeSynchronizer */
+    /** @var ProductAttributeSynchronizerContract $productAttributeSynchronizer */
     protected $productAttributeSynchronizer;
 
     /** @var bool $synchronizerLoaded */
@@ -27,12 +28,12 @@ class SynchronizeProductAttributes implements EventSubscriberInterface
      * SynchronizeProductAttributes constructor.
      * @param LoggerInterface $logger
      * @param ProductBackRepository $productBackRepository
-     * @param ProductAttributeSynchronizer $productAttributeSynchronizer
+     * @param ProductAttributeSynchronizerContract $productAttributeSynchronizer
      */
     public function __construct(
         LoggerInterface $logger,
         ProductBackRepository $productBackRepository,
-        ProductAttributeSynchronizer $productAttributeSynchronizer
+        ProductAttributeSynchronizerContract $productAttributeSynchronizer
     )
     {
         $this->logger = $logger;

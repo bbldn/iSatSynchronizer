@@ -2,20 +2,20 @@
 
 namespace App\EventListener\BackToFront;
 
+use App\Contract\BackToFront\ProductSeoUrlSynchronizerContract;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\ExceptionFormatter;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
-use App\Service\Synchronizer\BackToFront\ProductSeoUrlSynchronizer as ProductSeoUrlBackToFrontSynchronizer;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SynchronizeProductSeoPro implements EventSubscriberInterface
 {
     /** @var LoggerInterface $logger */
     protected $logger;
 
-    /** @var ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer */
+    /** @var ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer */
     protected $productSeoUrlBackToFrontSynchronizer;
 
     /** @var ProductFrontRepository $productFrontRepository */
@@ -30,13 +30,13 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
     /**
      * SynchronizeProductSeoPro constructor.
      * @param LoggerInterface $logger
-     * @param ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer
+     * @param ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer
      * @param ProductFrontRepository $productFrontRepository
      * @param ProductBackRepository $productBackRepository
      */
     public function __construct(
         LoggerInterface $logger,
-        ProductSeoUrlBackToFrontSynchronizer $productSeoUrlBackToFrontSynchronizer,
+        ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer,
         ProductFrontRepository $productFrontRepository,
         ProductBackRepository $productBackRepository
     )

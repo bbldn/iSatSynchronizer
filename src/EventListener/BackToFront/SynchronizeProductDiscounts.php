@@ -2,16 +2,16 @@
 
 namespace App\EventListener\BackToFront;
 
+use App\Contract\BackToFront\ProductDiscountSpeedSynchronizerContract;
 use App\Event\BackToFront\PriceSynchronizeAllFastEvent;
 use App\Event\BackToFront\PriceSynchronizeEvent;
 use App\Event\BackToFront\PriceSynchronizeFastEvent;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use App\Service\Synchronizer\BackToFront\ProductDiscountSpeedSynchronizer as ProductDiscountBackToFrontSynchronizer;
 
 class SynchronizeProductDiscounts implements EventSubscriberInterface
 {
-    /** @var ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer */
+    /** @var ProductDiscountSpeedSynchronizerContract $productDiscountBackToFrontSynchronizer */
     protected $productDiscountBackToFrontSynchronizer;
 
     /** @var bool $synchronizerLoaded */
@@ -19,9 +19,9 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
 
     /**
      * SynchronizeProductDiscount constructor.
-     * @param ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer
+     * @param ProductDiscountSpeedSynchronizerContract $productDiscountBackToFrontSynchronizer
      */
-    public function __construct(ProductDiscountBackToFrontSynchronizer $productDiscountBackToFrontSynchronizer)
+    public function __construct(ProductDiscountSpeedSynchronizerContract $productDiscountBackToFrontSynchronizer)
     {
         $this->productDiscountBackToFrontSynchronizer = $productDiscountBackToFrontSynchronizer;
     }

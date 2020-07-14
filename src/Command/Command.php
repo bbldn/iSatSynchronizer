@@ -8,14 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 
 abstract class Command extends Base
 {
-    /**
-     * @param InputInterface $input
-     * @return int
-     */
-    protected function parseId(InputInterface $input): int
-    {
-        return (int)$this->getIdFromInput($input);
-    }
 
     /**
      * @param InputInterface $input
@@ -28,16 +20,16 @@ abstract class Command extends Base
 
     /**
      * @param InputInterface $input
-     * @return string
+     * @return int
      */
-    protected function getIdFromInput(InputInterface $input): string
+    protected function getIdFromInput(InputInterface $input): int
     {
         $id = $input->getArgument('id');
         if (0 === preg_match('/[0-9]+/', $id)) {
             throw new InvalidArgumentException("`id` must be int: {$id}");
         }
 
-        return $id;
+        return (int)$id;
     }
 
     /**

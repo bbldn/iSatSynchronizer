@@ -24,6 +24,9 @@ class SynchronizeProductImage implements EventSubscriberInterface
     /** @var ProductImageSynchronizer $productImageSynchronizer */
     protected $productImageSynchronizer;
 
+    /** @var bool $synchronizerLoaded */
+    protected $synchronizerLoaded = false;
+
     /**
      * SynchronizeProductImage constructor.
      * @param LoggerInterface $logger
@@ -63,6 +66,11 @@ class SynchronizeProductImage implements EventSubscriberInterface
             return;
         }
 
+        if (false === $this->synchronizerLoaded) {
+            $this->productImageSynchronizer->load();
+            $this->synchronizerLoaded = true;
+        }
+
         $product = $event->getProduct();
 
         $productBack = $this->productBackRepository->find($product->getBackId());
@@ -81,6 +89,6 @@ class SynchronizeProductImage implements EventSubscriberInterface
             return;
         }
 
-        $this->productImageSynchronizer->load()->synchronizeImage($productBack, $productFront);
+        $this->productImageSynchronizer->synchronizeImage($productBack, $productFront);
     }
 }

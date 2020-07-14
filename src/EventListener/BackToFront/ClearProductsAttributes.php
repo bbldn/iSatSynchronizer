@@ -2,13 +2,13 @@
 
 namespace App\EventListener\BackToFront;
 
+use App\Contract\BackToFront\ProductAttributeSynchronizerContract;
 use App\Event\BackToFront\ProductsClearEvent;
-use App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClearProductsAttributes implements EventSubscriberInterface
 {
-    /** @var ProductAttributeSynchronizer $productAttributeSynchronizer */
+    /** @var ProductAttributeSynchronizerContract $productAttributeSynchronizer */
     protected $productAttributeSynchronizer;
 
     /** @var bool $synchronizerLoaded */
@@ -16,11 +16,9 @@ class ClearProductsAttributes implements EventSubscriberInterface
 
     /**
      * ClearProductsAttributes constructor.
-     * @param ProductAttributeSynchronizer $productAttributeSynchronizer
+     * @param ProductAttributeSynchronizerContract $productAttributeSynchronizer
      */
-    public function __construct(
-        ProductAttributeSynchronizer $productAttributeSynchronizer
-    )
+    public function __construct(ProductAttributeSynchronizerContract $productAttributeSynchronizer)
     {
         $this->productAttributeSynchronizer = $productAttributeSynchronizer;
     }

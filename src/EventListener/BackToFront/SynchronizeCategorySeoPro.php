@@ -119,7 +119,7 @@ class SynchronizeCategorySeoPro implements EventSubscriberInterface
      * @param int $categoryFrontId
      * @param CategoryBack $categoryBack
      */
-    public function synchronizeSeoUrl(?SeoUrlFront $seoUrl, int $categoryFrontId, CategoryBack $categoryBack): void
+    protected function synchronizeSeoUrl(?SeoUrlFront $seoUrl, int $categoryFrontId, CategoryBack $categoryBack): void
     {
         if (null === $seoUrl) {
             $seoUrl = new SeoUrlFront();
@@ -152,7 +152,7 @@ class SynchronizeCategorySeoPro implements EventSubscriberInterface
     /**
      * @return array
      */
-    public function getSeoUrlFromProducts(): array
+    protected function getSeoUrlFromProducts(): array
     {
         $urls = [];
         $slugs = $this->productBackRepository->getAllSlugs();

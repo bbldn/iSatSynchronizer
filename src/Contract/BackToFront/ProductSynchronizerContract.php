@@ -3,9 +3,8 @@
 namespace App\Contract\BackToFront;
 
 use App\Contract\CanLoadInterface;
-use App\Contract\CanReloadInterface;
 
-interface ProductSynchronizerContract extends CanLoadInterface, CanReloadInterface
+interface ProductSynchronizerContract extends CanLoadInterface
 {
     /**
      * @param string $ids
@@ -54,4 +53,14 @@ interface ProductSynchronizerContract extends CanLoadInterface, CanReloadInterfa
      *
      */
     public function synchronizePriceAllFast(): void;
+
+    /**
+     * @param bool $synchronizeImage
+     */
+    public function reload(bool $synchronizeImage = false): void;
+
+    /**
+     * @param bool $clearImage
+     */
+    public function clear(bool $clearImage = false): void;
 }
