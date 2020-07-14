@@ -11,6 +11,14 @@ class OrderSynchronizer extends OrderBackSynchronizer implements OrderSynchroniz
     /**
      *
      */
+    public function load(): void
+    {
+        parent::load();
+    }
+
+    /**
+     *
+     */
     public function synchronizeAll(): void
     {
         $ordersBack = $this->orderBackRepository->findWithoutIds($this->excludeCustomerIds);

@@ -65,15 +65,6 @@ abstract class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-        $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
-    }
-
-    /**
      * @param ProductBack $productBack
      * @param ProductFront $productFront
      * @return SeoUrlFront
@@ -123,7 +114,7 @@ abstract class ProductSeoUrlSynchronizer extends BackToFrontSynchronizer
     /**
      * @param ProductBack $productBack
      */
-    public function synchronizeByProductBack(ProductBack $productBack): void
+    protected function synchronizeByProductBack(ProductBack $productBack): void
     {
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
         if (null === $product) {

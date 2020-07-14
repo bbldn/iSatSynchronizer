@@ -11,6 +11,14 @@ class CustomerSynchronizer extends CustomerBaseSynchronizer implements CustomerS
     /**
      *
      */
+    public function load(): void
+    {
+        parent::load();
+    }
+
+    /**
+     *
+     */
     public function synchronizeAll(): void
     {
         $customersBack = $this->customerBackRepository->findAll();

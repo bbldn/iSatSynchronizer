@@ -50,4 +50,12 @@ class AttributeSynchronizer extends AttributeBaseSynchronizer implements Attribu
         $this->clear();
         $this->synchronizeAll();
     }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
 }

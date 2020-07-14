@@ -84,4 +84,21 @@ class OrderSynchronizer extends OrderBaseSynchronizer implements OrderSynchroniz
             $this->orderSimpleFieldsFrontRepository->resetAutoIncrements();
         }
     }
+
+    /**
+     *
+     */
+    public function reload(): void
+    {
+        $this->clear();
+        $this->synchronizeAll();
+    }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
 }

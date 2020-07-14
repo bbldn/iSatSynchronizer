@@ -10,6 +10,14 @@ class ReviewSynchronizer extends ReviewBaseSynchronizer implements ReviewSynchro
     /**
      *
      */
+    public function load(): void
+    {
+        parent::load();
+    }
+
+    /**
+     *
+     */
     public function synchronizeAll(): void
     {
         $reviewsFront = $this->reviewFrontRepository->findAll();

@@ -79,18 +79,10 @@ abstract class CustomerSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
      * @param CustomerBack $customerBack
      * @return CustomerFront
      */
-    public function synchronizeCustomer(CustomerBack $customerBack): CustomerFront
+    protected function synchronizeCustomer(CustomerBack $customerBack): CustomerFront
     {
         $email = Filler::trim($customerBack->getMail());
         $customer = $this->customerRepository->findOneByBackId($customerBack->getId());
@@ -106,7 +98,7 @@ abstract class CustomerSynchronizer extends BackToFrontSynchronizer
      * @param string|null $email
      * @return CustomerFront
      */
-    public function getCustomerFrontFromCustomer(?Customer $customer, ?string $email = null): CustomerFront
+    protected function getCustomerFrontFromCustomer(?Customer $customer, ?string $email = null): CustomerFront
     {
         if (null !== $customer) {
             $customerFront = $this->customerFrontRepository->find($customer->getFrontId());
@@ -130,7 +122,7 @@ abstract class CustomerSynchronizer extends BackToFrontSynchronizer
      * @param CustomerFront $customerFront
      * @return CustomerFront
      */
-    public function updateCustomerFrontFromCustomerBack(
+    protected function updateCustomerFrontFromCustomerBack(
         CustomerBack $customerBack,
         CustomerFront $customerFront
     ): CustomerFront
@@ -213,7 +205,7 @@ abstract class CustomerSynchronizer extends BackToFrontSynchronizer
      * @param int $frontId
      * @return Customer
      */
-    public function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId): Customer
+    protected function createOrUpdateCustomer(?Customer $customer, int $backId, int $frontId): Customer
     {
         if (null === $customer) {
             $customer = new Customer();

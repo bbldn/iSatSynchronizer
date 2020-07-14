@@ -9,12 +9,23 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductAttributeSynchron
 class ProductAttributeSynchronizer extends ProductAttributeSynchronizerBase implements ProductAttributeSynchronizerContract
 {
     /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
+
+    /**
      * @param ProductBack $productBack
      * @param int $productFrontId
      */
     public function synchronizeAttributes(ProductBack $productBack, int $productFrontId): void
     {
-        parent::synchronizeAttributes($productBack, $productFrontId);
+        $productAttributesBack = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
+        foreach ($productAttributesBack as $productAttributeBack) {
+            $this->synchronizeAttribute($productAttributeBack, $productFrontId);
+        }
     }
 
     /**

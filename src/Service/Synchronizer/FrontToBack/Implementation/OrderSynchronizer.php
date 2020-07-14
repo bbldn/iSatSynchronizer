@@ -308,14 +308,6 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
      * @param OrderFront $orderFront
      */
     protected function synchronizeOrder(OrderFront $orderFront): void
@@ -694,6 +686,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
                 return $customerBack->getId();
             }
         }
+
         try {
             $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOneByOrderFrontId($orderFront->getOrderId());
         } catch (OrderFrontNotFoundException $e) {

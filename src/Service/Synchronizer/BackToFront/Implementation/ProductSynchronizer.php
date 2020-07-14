@@ -245,20 +245,10 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-        $this->descriptionHelper->load();
-        $this->manufacturerHelper->load();
-    }
-
-    /**
      * @param ProductBack $productBack
      * @param bool $synchronizeImage
      */
-    public function synchronizeProduct(ProductBack $productBack, bool $synchronizeImage = false): void
+    protected function synchronizeProduct(ProductBack $productBack, bool $synchronizeImage = false): void
     {
         $this->synchronizeImage = $synchronizeImage;
         $product = $this->productRepository->findOneByBackId($productBack->getProductId());
@@ -279,7 +269,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param Product|null $product
      * @return ProductFront
      */
-    public function getProductFrontFromProduct(?Product $product): ProductFront
+    protected function getProductFrontFromProduct(?Product $product): ProductFront
     {
         if (null === $product) {
             return new ProductFront();
@@ -299,7 +289,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductFront
      */
-    public function updateProductFrontAndOtherFromProductBack(
+    protected function updateProductFrontAndOtherFromProductBack(
         ProductBack $productBack,
         ProductFront $productFront
     ): ProductFront
@@ -318,7 +308,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductFront
      */
-    public function updateProductFrontFromProductBack(
+    protected function updateProductFrontFromProductBack(
         ProductBack $productBack,
         ProductFront $productFront
     ): ProductFront
@@ -379,7 +369,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductDescriptionFront
      */
-    public function updateProductDescriptionFrontFromProductBack(
+    protected function updateProductDescriptionFrontFromProductBack(
         ProductBack $productBack,
         ProductFront $productFront
     ): ProductDescriptionFront
@@ -432,7 +422,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductLayoutFront
      */
-    public function updateProductLayoutFrontFromProductBack(ProductFront $productFront): ProductLayoutFront
+    protected function updateProductLayoutFrontFromProductBack(ProductFront $productFront): ProductLayoutFront
     {
         $productLayoutFront = $this->productLayoutFrontRepository->findOneByProductFrontIdAndStoreId(
             $productFront->getProductId(),
@@ -456,7 +446,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductStoreFront
      */
-    public function updateProductStoreFrontFromProductBack(ProductFront $productFront): ProductStoreFront
+    protected function updateProductStoreFrontFromProductBack(ProductFront $productFront): ProductStoreFront
     {
         $productStoreFront = $this->productStoreFrontRepository->findOneByProductFrontIdAndStoreId(
             $productFront->getProductId(),
@@ -480,7 +470,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductCategoryFront
      */
-    public function updateProductCategoryFrontFromProductBack(
+    protected function updateProductCategoryFrontFromProductBack(
         ProductBack $productBack,
         ProductFront $productFront
     ): ProductCategoryFront
@@ -518,7 +508,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param int $frontId
      * @return Product
      */
-    public function createOrUpdateProduct(?Product $product, int $backId, int $frontId): Product
+    protected function createOrUpdateProduct(?Product $product, int $backId, int $frontId): Product
     {
         if (null === $product) {
             $product = new Product();

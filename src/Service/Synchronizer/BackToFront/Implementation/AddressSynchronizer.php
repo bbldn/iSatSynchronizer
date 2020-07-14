@@ -60,20 +60,12 @@ abstract class AddressSynchronizer extends BackToFrontSynchronizer
         $this->storeFront = $storeFront;
     }
 
-    /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
 
     /**
      * @param Address|null $address
      * @return AddressFront|null
      */
-    public function getAddressFrontFromAddress(?Address $address): ?AddressFront
+    protected function getAddressFrontFromAddress(?Address $address): ?AddressFront
     {
         if (null === $address) {
             return new AddressFront();
@@ -93,7 +85,7 @@ abstract class AddressSynchronizer extends BackToFrontSynchronizer
      * @param int $frontId
      * @return Address
      */
-    public function createOrUpdateAddress(?Address $address, int $customerBackId, int $frontId): Address
+    protected function createOrUpdateAddress(?Address $address, int $customerBackId, int $frontId): Address
     {
         if (null === $address) {
             $address = new Address();
@@ -112,7 +104,7 @@ abstract class AddressSynchronizer extends BackToFrontSynchronizer
      * @param AddressFront $addressFront
      * @return AddressFront
      */
-    public function updateAddressFrontFromCustomerBack(
+    protected function updateAddressFrontFromCustomerBack(
         CustomerBack $customerBack,
         AddressFront $addressFront
     ): AddressFront
@@ -136,20 +128,6 @@ abstract class AddressSynchronizer extends BackToFrontSynchronizer
         $addressFront->setZoneId($this->storeFront->getDefaultZoneId());
         $addressFront->setCustomField(Filler::securityString(null));
         $this->addressFrontRepository->persistAndFlush($addressFront);
-
-        return $addressFront;
-    }
-
-    /**
-     * @param CustomerBack $customerBack
-     * @return AddressFront
-     */
-    public function synchronizeByCustomerBack(CustomerBack $customerBack): AddressFront
-    {
-        $address = $this->addressRepository->findOneByOrderBackId($customerBack->getId());
-        $addressFront = $this->getAddressFrontFromAddress($address);
-        $this->updateAddressFrontFromCustomerBack($customerBack, $addressFront);
-        $this->createOrUpdateAddress($address, $customerBack->getId(), $addressFront->getAddressId());
 
         return $addressFront;
     }

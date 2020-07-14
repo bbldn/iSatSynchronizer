@@ -178,18 +178,10 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
      * @param OrderBack $orderBack
      * @return OrderFront
      */
-    public function synchronizeOrder(OrderBack $orderBack): OrderFront
+    protected function synchronizeOrder(OrderBack $orderBack): OrderFront
     {
         $order = $this->orderRepository->findOneByBackId($orderBack->getId());
         $orderFront = $this->getOrderFrontFromOrder($order);
@@ -205,7 +197,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param Order|null $order
      * @return OrderFront
      */
-    public function getOrderFrontFromOrder(?Order $order): OrderFront
+    protected function getOrderFrontFromOrder(?Order $order): OrderFront
     {
         if (null === $order) {
             return new OrderFront();
@@ -225,7 +217,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param int $productFrontId
      * @return OrderProductFront
      */
-    public function getOrderProductFrontFromOrderFrontIdAndProductFrontId(
+    protected function getOrderProductFrontFromOrderFrontIdAndProductFrontId(
         int $orderFrontId,
         int $productFrontId
     ): OrderProductFront
@@ -247,7 +239,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param OrderBack $mainOrderBack
      * @return OrderFront
      */
-    public function updateOrderFrontAndOtherFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
+    protected function updateOrderFrontAndOtherFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
     {
         $orderFront = $this->updateOrderFrontFromOrderBack($orderFront, $mainOrderBack);
         $this->updateOrderHistoryFrontFromOrderBack($orderFront);
@@ -264,7 +256,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param OrderBack $mainOrderBack
      * @return OrderFront
      */
-    public function updateOrderFrontFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
+    protected function updateOrderFrontFromOrderBack(OrderFront $orderFront, OrderBack $mainOrderBack): OrderFront
     {
         if (0 === $mainOrderBack->getClientId()) {
             $customerFrontId = 0;
@@ -408,7 +400,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param OrderFront $orderFront
      * @return OrderProductFront|null
      */
-    public function updateOrderProductFrontFromOrderBack(
+    protected function updateOrderProductFrontFromOrderBack(
         OrderBack $orderBack,
         OrderFront $orderFront
     ): ?OrderProductFront
@@ -469,7 +461,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param OrderFront $orderFront
      * @return OrderHistoryFront
      */
-    public function updateOrderHistoryFrontFromOrderBack(OrderFront $orderFront): OrderHistoryFront
+    protected function updateOrderHistoryFrontFromOrderBack(OrderFront $orderFront): OrderHistoryFront
     {
         $this->orderHistoryFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
 
@@ -491,7 +483,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param int $frontId
      * @return Order
      */
-    public function createOrUpdateOrder(?Order $order, int $backId, int $frontId): Order
+    protected function createOrUpdateOrder(?Order $order, int $backId, int $frontId): Order
     {
         if (null === $order) {
             $order = new Order();

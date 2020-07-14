@@ -54,18 +54,10 @@ abstract class AttributeSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
      * @param AttributeBack $attributeBack
      * @return AttributeFront
      */
-    public function synchronizeAttribute(AttributeBack $attributeBack): AttributeFront
+    protected function synchronizeAttribute(AttributeBack $attributeBack): AttributeFront
     {
         $attribute = $this->attributeRepository->findOneByBackId($attributeBack->getOptionId());
         $attributeFront = $this->getAttributeFrontFromAttribute($attribute);
@@ -79,7 +71,7 @@ abstract class AttributeSynchronizer extends BackToFrontSynchronizer
      * @param Attribute|null $attribute
      * @return AttributeFront
      */
-    public function getAttributeFrontFromAttribute(?Attribute $attribute): AttributeFront
+    protected function getAttributeFrontFromAttribute(?Attribute $attribute): AttributeFront
     {
         if (null === $attribute) {
             return new AttributeFront();
@@ -99,7 +91,7 @@ abstract class AttributeSynchronizer extends BackToFrontSynchronizer
      * @param AttributeFront $attributeFront
      * @return AttributeFront
      */
-    public function updateAttributeFrontFromBackProduct(
+    protected function updateAttributeFrontFromBackProduct(
         AttributeBack $attributeBack,
         AttributeFront $attributeFront
     ): AttributeFront
@@ -133,7 +125,7 @@ abstract class AttributeSynchronizer extends BackToFrontSynchronizer
      * @param int $frontId
      * @return Attribute
      */
-    public function createOrUpdateAttribute(?Attribute $attribute, int $backId, int $frontId): Attribute
+    protected function createOrUpdateAttribute(?Attribute $attribute, int $backId, int $frontId): Attribute
     {
         if (null === $attribute) {
             $attribute = new Attribute();

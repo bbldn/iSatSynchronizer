@@ -140,6 +140,16 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
     /**
      *
      */
+    public function load(): void
+    {
+        parent::load();
+        $this->descriptionHelper->load();
+        $this->manufacturerHelper->load();
+    }
+
+    /**
+     *
+     */
     public function synchronizePriceAll(): void
     {
         $this->events[PriceSynchronizeEvent::class] = 1;

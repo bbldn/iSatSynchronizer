@@ -30,30 +30,10 @@ class CurrencySynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
-     *
-     */
-    public function synchronizeAll(): void
-    {
-        $currenciesFront = $this->currencyFrontRepository->findAll();
-
-        foreach ($currenciesFront as $currencyFront) {
-            $this->synchronizeCurrency($currencyFront);
-        }
-    }
-
-    /**
      * @param CurrencyFront $currencyFront
      * @return CurrencyFront|null
      */
-    public function synchronizeCurrency(CurrencyFront $currencyFront): ?CurrencyFront
+    protected function synchronizeCurrency(CurrencyFront $currencyFront): ?CurrencyFront
     {
         $backCurrency = Store::convertFrontToBackCurrency($currencyFront->getCode());
         $currencyBack = $this->currencyBackRepository->findOneByNameAndShopId($backCurrency, 0);

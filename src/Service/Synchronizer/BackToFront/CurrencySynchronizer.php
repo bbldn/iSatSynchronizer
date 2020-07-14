@@ -7,4 +7,23 @@ use App\Service\Synchronizer\BackToFront\Implementation\CurrencySynchronizer as 
 
 class CurrencySynchronizer extends CurrencySynchronizerBase implements CurrencySynchronizerContract
 {
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
+
+    /**
+     *
+     */
+    public function synchronizeAll(): void
+    {
+        $currenciesFront = $this->currencyFrontRepository->findAll();
+
+        foreach ($currenciesFront as $currencyFront) {
+            $this->synchronizeCurrency($currencyFront);
+        }
+    }
 }

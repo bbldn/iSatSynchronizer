@@ -17,4 +17,12 @@ class ProductImageSynchronizer extends ProductImageSynchronizerBase implements P
     {
         parent::synchronizeImage($productBack, $productFront);
     }
+
+    /**
+     *
+     */
+    public function load(): void
+    {
+        parent::load();
+    }
 }

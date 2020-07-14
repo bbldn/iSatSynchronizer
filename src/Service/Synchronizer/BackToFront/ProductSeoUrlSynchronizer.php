@@ -10,6 +10,15 @@ class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase implements
     /**
      *
      */
+    public function load(): void
+    {
+        parent::load();
+        $this->seoUrlTableExists = $this->seoUrlFrontRepository->tableExists();
+    }
+
+    /**
+     *
+     */
     public function synchronizeAll(): void
     {
         if (false === $this->seoUrlTableExists) {
@@ -45,5 +54,14 @@ class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase implements
         if (true === $this->seoUrlTableExists) {
             $this->seoUrlFrontRepository->removeAllByQuery('product_id');
         }
+    }
+
+    /**
+     *
+     */
+    public function reload(): void
+    {
+        $this->clear();
+        $this->synchronizeAll();
     }
 }

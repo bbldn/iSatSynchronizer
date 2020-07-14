@@ -72,17 +72,9 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        $this->reviewAnswerTableExists = $this->reviewAnswerFrontRepository->tableExists();
-    }
-
-    /**
      * @param ReviewBack $reviewBack
      */
-    public function synchronizeReviewBack(ReviewBack $reviewBack): void
+    protected function synchronizeReviewBack(ReviewBack $reviewBack): void
     {
         $review = $this->reviewRepository->findOneByBackId($reviewBack->getDid());
         $reviewFront = $this->getReviewFrontFromReview($review);
@@ -94,7 +86,7 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param Review|null $review
      * @return ReviewFront
      */
-    public function getReviewFrontFromReview(?Review $review): ReviewFront
+    protected function getReviewFrontFromReview(?Review $review): ReviewFront
     {
         if (null === $review) {
             return new ReviewFront();
@@ -114,7 +106,7 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param ReviewBack $reviewBack
      * @return ReviewFront
      */
-    public function updateReviewFrontAndOtherFromReviewBack(
+    protected function updateReviewFrontAndOtherFromReviewBack(
         ReviewFront $reviewFront,
         ReviewBack $reviewBack
     ): ReviewFront
@@ -130,7 +122,7 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param ReviewBack $reviewBack
      * @return ReviewFront
      */
-    public function updateReviewFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ReviewFront
+    protected function updateReviewFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ReviewFront
     {
         $product = $this->productRepository->findOneByBackId($reviewBack->getProductId());
         if (null === $product) {
@@ -165,7 +157,7 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param ReviewBack $reviewBack
      * @return ReviewAnswerFront|null
      */
-    public function updateReviewAnswerFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ?ReviewAnswerFront
+    protected function updateReviewAnswerFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ?ReviewAnswerFront
     {
         $text = trim(Store::encodingConvert($reviewBack->getAnswer()));
         if (mb_strlen($text) === 0 || false === $this->reviewAnswerTableExists) {
@@ -185,7 +177,7 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param int $reviewFrontId
      * @return ReviewAnswerFront
      */
-    public function getReviewAnswerFrontByReviewFrontId(int $reviewFrontId): ReviewAnswerFront
+    protected function getReviewAnswerFrontByReviewFrontId(int $reviewFrontId): ReviewAnswerFront
     {
         $reviewAnswerFront = $this->reviewAnswerFrontRepository->find($reviewFrontId);
         if (null !== $reviewAnswerFront) {
@@ -200,7 +192,7 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param int $backId
      * @param int $frontId
      */
-    public function createOrUpdateReview(?Review $review, int $backId, int $frontId): void
+    protected function createOrUpdateReview(?Review $review, int $backId, int $frontId): void
     {
         if (null === $review) {
             $review = new Review();

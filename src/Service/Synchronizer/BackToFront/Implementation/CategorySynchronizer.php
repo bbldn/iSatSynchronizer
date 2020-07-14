@@ -125,18 +125,10 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-        parent::load();
-    }
-
-    /**
      * @param CategoryBack $categoryBack
      * @param bool $synchronizeImage
      */
-    public function synchronizeCategory(CategoryBack $categoryBack, bool $synchronizeImage = false): void
+    protected function synchronizeCategory(CategoryBack $categoryBack, bool $synchronizeImage = false): void
     {
         $category = $this->categoryRepository->findOneByBackId($categoryBack->getCategoryId());
         $categoryFront = $this->getCategoryFrontFromCategory($category);
@@ -154,7 +146,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param Category|null $category
      * @return CategoryFront
      */
-    public function getCategoryFrontFromCategory(?Category $category): CategoryFront
+    protected function getCategoryFrontFromCategory(?Category $category): CategoryFront
     {
         if (null === $category) {
             return new CategoryFront();
@@ -174,7 +166,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param CategoryFront $categoryFront
      * @return CategoryFront
      */
-    public function updateCategoryFrontAndOtherFromCategoryBack(
+    protected function updateCategoryFrontAndOtherFromCategoryBack(
         CategoryBack $categoryBack,
         CategoryFront $categoryFront
     ): CategoryFront
@@ -196,7 +188,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param int $parentId
      * @return CategoryFront
      */
-    public function updateCategoryFrontFromCategoryBack(
+    protected function updateCategoryFrontFromCategoryBack(
         CategoryBack $categoryBack,
         CategoryFront $categoryFront,
         int $parentId
@@ -232,7 +224,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param CategoryFront $categoryFront
      * @return CategoryDescriptionFront
      */
-    public function updateCategoryDescriptionFrontFromCategoryBack(
+    protected function updateCategoryDescriptionFrontFromCategoryBack(
         CategoryBack $categoryBack,
         CategoryFront $categoryFront
     ): CategoryDescriptionFront
@@ -272,7 +264,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param CategoryFront $categoryFront
      * @return CategoryLayoutFront
      */
-    public function updateCategoryLayoutFrontFromCategoryBack(CategoryFront $categoryFront): CategoryLayoutFront
+    protected function updateCategoryLayoutFrontFromCategoryBack(CategoryFront $categoryFront): CategoryLayoutFront
     {
         $categoryLayoutFront = $this->categoryLayoutFrontRepository->findOneByCategoryFrontIdAndStoreId(
             $categoryFront->getCategoryId(),
@@ -296,7 +288,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param CategoryFront $categoryFront
      * @return CategoryStoreFront
      */
-    public function updateCategoryStoreFrontFromCategoryBack(CategoryFront $categoryFront): CategoryStoreFront
+    protected function updateCategoryStoreFrontFromCategoryBack(CategoryFront $categoryFront): CategoryStoreFront
     {
         $categoryStoreFront = $this->categoryStoreFrontRepository->findOneByCategoryFrontIdAndStoreId(
             $categoryFront->getCategoryId(),
@@ -319,7 +311,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param CategoryFront $categoryFront
      * @param int $parentId
      */
-    public function updateCategoryPathsFrontFromCategoryBack(CategoryFront $categoryFront, int $parentId)
+    protected function updateCategoryPathsFrontFromCategoryBack(CategoryFront $categoryFront, int $parentId)
     {
         if ($this->storeFront->getDefaultCategoryFrontId() !== $parentId) {
             $categoryPath = $this->categoryPathFrontRepository->findOneByCategoryFrontIdAndPathId(
@@ -361,7 +353,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param int $frontId
      * @return Category
      */
-    public function createOrUpdateCategory(?Category $category, int $backId, int $frontId): Category
+    protected function createOrUpdateCategory(?Category $category, int $backId, int $frontId): Category
     {
         if (null === $category) {
             $category = new Category();

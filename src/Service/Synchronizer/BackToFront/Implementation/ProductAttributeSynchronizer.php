@@ -2,7 +2,6 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
-use App\Entity\Back\Product as ProductBack;
 use App\Entity\Back\ProductOptionsValues as ProductAttributeBack;
 use App\Entity\Front\ProductAttribute as ProductAttributeFront;
 use App\Helper\Front\Store as StoreFront;
@@ -45,30 +44,11 @@ abstract class ProductAttributeSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     *
-     */
-    public function load(): void
-    {
-    }
-
-    /**
-     * @param ProductBack $productBack
-     * @param int $productFrontId
-     */
-    public function synchronizeAttributes(ProductBack $productBack, int $productFrontId): void
-    {
-        $productAttributesBack = $this->attributeBackRepository->findAllByProductBackId($productBack->getProductId());
-        foreach ($productAttributesBack as $productAttributeBack) {
-            $this->synchronizeAttribute($productAttributeBack, $productFrontId);
-        }
-    }
-
-    /**
      * @param ProductAttributeBack $productAttributeBack
      * @param int $productFrontId
      * @return ProductAttributeFront|null
      */
-    public function synchronizeAttribute(
+    protected function synchronizeAttribute(
         ProductAttributeBack $productAttributeBack,
         int $productFrontId
     ): ?ProductAttributeFront
