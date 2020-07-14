@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer\Novaposhta;
+namespace App\Service\Synchronizer\Novaposhta\Implementation;
 
 use App\Helper\ExceptionFormatter;
 use App\Service\Synchronizer\Synchronizer;

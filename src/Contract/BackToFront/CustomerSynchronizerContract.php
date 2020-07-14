@@ -3,10 +3,10 @@
 namespace App\Contract\BackToFront;
 
 use App\Contract\CanLoadInterface;
-use App\Contract\CanReload;
+use App\Contract\CanReloadInterface;
 use App\Entity\Front\Customer as CustomerFront;
 
-interface CustomerSynchronizerContract extends CanLoadInterface, CanReload
+interface CustomerSynchronizerContract extends CanLoadInterface, CanReloadInterface
 {
     /**
      * @param string $ids

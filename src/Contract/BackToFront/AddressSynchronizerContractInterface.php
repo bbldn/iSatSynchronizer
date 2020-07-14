@@ -3,11 +3,11 @@
 namespace App\Contract\BackToFront;
 
 use App\Contract\CanLoadInterface;
-use App\Contract\CanReload;
+use App\Contract\CanReloadInterface;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Front\Address as AddressFront;
 
-interface AddressSynchronizerContract extends CanLoadInterface, CanReload
+interface AddressSynchronizerContract extends CanLoadInterface, CanReloadInterface
 {
     /**
      * @param CustomerBack $customerBack

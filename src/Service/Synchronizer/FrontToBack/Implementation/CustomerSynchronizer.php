@@ -14,7 +14,6 @@ use App\Repository\CustomerRepository;
 use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
-use App\Service\Synchronizer\FrontToBack\FrontToBackSynchronizer;
 use DateTime;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;

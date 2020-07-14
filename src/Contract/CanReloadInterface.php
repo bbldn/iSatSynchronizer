@@ -2,7 +2,7 @@
 
 namespace App\Contract;
 
-interface CanReload extends CanClear, CanSynchronizeAll
+interface CanReloadInterface extends CanClearInterface, CanSynchronizeAll
 {
     /**
      *

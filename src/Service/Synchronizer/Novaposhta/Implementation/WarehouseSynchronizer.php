@@ -7,7 +7,6 @@ use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
 use App\Repository\Front\CityRepository as CityFrontRepository;
 use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
-use App\Service\Synchronizer\Novaposhta\NovaposhtaSynchronizer;
 use LisDev\Delivery\NovaPoshtaApi2;
 use Psr\Log\LoggerInterface;
 
@@ -40,30 +39,6 @@ class WarehouseSynchronizer extends NovaposhtaSynchronizer
         $this->cityFrontRepository = $cityFrontRepository;
         $this->zoneFrontRepository = $zoneFrontRepository;
         $this->novaPoshtaApi2 = $novaPoshtaApi2;
-    }
-
-    /**
-     *
-     */
-    protected function synchronizeAll(): void
-    {
-        $zones = $this->zoneFrontRepository->getZones();
-        foreach ($zones as $key => $zone) {
-            $response = $this->novaPoshtaApi2->getWarehouses($zone['ref']);
-            if (false === is_array($response)) {
-                continue;
-            }
-            $this->synchronizeWarehouses($response, $zone['zoneId']);
-        }
-    }
-
-    /**
-     *
-     */
-    protected function clear()
-    {
-        $this->cityFrontRepository->removeAll();
-        $this->cityFrontRepository->setAutoIncrements(100000);
     }
 
     /**

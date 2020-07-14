@@ -52,7 +52,6 @@ use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Service\Synchronizer\FrontToBack\CustomerSynchronizer as CustomerFrontToBackSynchronizer;
-use App\Service\Synchronizer\FrontToBack\FrontToBackSynchronizer;
 use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

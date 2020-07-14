@@ -2,7 +2,7 @@
 
 namespace App\Contract;
 
-interface CanClear
+interface CanClearInterface
 {
     /**
      *

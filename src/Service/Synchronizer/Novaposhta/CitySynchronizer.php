@@ -2,9 +2,12 @@
 
 namespace App\Service\Synchronizer\Novaposhta;
 
+use App\Contract\Novaposhta\CitySynchronizerContract;
+use App\Helper\ExceptionFormatter;
 use App\Service\Synchronizer\Novaposhta\Implementation\CitySynchronizer as CityBaseSynchronizer;
+use Exception;
 
-class CitySynchronizer extends CityBaseSynchronizer
+class CitySynchronizer extends CityBaseSynchronizer implements CitySynchronizerContract
 {
     /**
      *
@@ -19,7 +22,26 @@ class CitySynchronizer extends CityBaseSynchronizer
      */
     public function synchronizeAll(): void
     {
-        parent::synchronizeAll();
+        try {
+            $response = $this->novaPoshtaApi2->getCities();
+        } catch (Exception $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
+            return;
+        }
+
+        if (false === $this->validateResponse($response)) {
+            return;
+        }
+
+        $countries = $this->countryFrontRepository->getCountries();
+        foreach ($countries as $country) {
+            $this->countryNamesById[$country['name']] = $country['countryId'];
+        }
+
+        foreach ($response['data'] as $key => $item) {
+            $this->createOrUpdateZone($item, $key);
+        }
     }
 
     /**
@@ -27,7 +49,8 @@ class CitySynchronizer extends CityBaseSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->zoneFrontRepository->removeAll();
+        $this->zoneFrontRepository->setAutoIncrements(200000);
     }
 
     /**

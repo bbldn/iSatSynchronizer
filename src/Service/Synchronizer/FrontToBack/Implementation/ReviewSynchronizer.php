@@ -11,7 +11,6 @@ use App\Repository\Back\DiscussionsRepository as ReviewBackRepository;
 use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ReviewRepository;
-use App\Service\Synchronizer\FrontToBack\FrontToBackSynchronizer;
 use Psr\Log\LoggerInterface;
 
 class ReviewSynchronizer extends FrontToBackSynchronizer

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Synchronizer\FrontToBack;
+namespace App\Service\Synchronizer\FrontToBack\Implementation;
 
 use App\Service\Synchronizer\Synchronizer;
 

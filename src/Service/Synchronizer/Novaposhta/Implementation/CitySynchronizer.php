@@ -5,10 +5,8 @@ namespace App\Service\Synchronizer\Novaposhta\Implementation;
 use App\Entity\Front\Zone as ZoneFront;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
-use App\Service\Synchronizer\Novaposhta\NovaposhtaSynchronizer;
-use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 use App\Repository\Front\CountryRepository as CountryFrontRepository;
-use Exception;
+use App\Repository\Front\ZoneRepository as ZoneFrontRepository;
 use LisDev\Delivery\NovaPoshtaApi2;
 use Psr\Log\LoggerInterface;
 
@@ -44,42 +42,6 @@ class CitySynchronizer extends NovaposhtaSynchronizer
         $this->zoneFrontRepository = $zoneFrontRepository;
         $this->countryFrontRepository = $countryFrontRepository;
         $this->novaPoshtaApi2 = $novaPoshtaApi2;
-    }
-
-    /**
-     *
-     */
-    protected function synchronizeAll(): void
-    {
-        try {
-            $response = $this->novaPoshtaApi2->getCities();
-        } catch (Exception $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
-
-            return;
-        }
-
-        if (false === $this->validateResponse($response)) {
-            return;
-        }
-
-        $countries = $this->countryFrontRepository->getCountries();
-        foreach ($countries as $country) {
-            $this->countryNamesById[$country['name']] = $country['countryId'];
-        }
-
-        foreach ($response['data'] as $key => $item) {
-            $this->createOrUpdateZone($item, $key);
-        }
-    }
-
-    /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->zoneFrontRepository->removeAll();
-        $this->zoneFrontRepository->setAutoIncrements(200000);
     }
 
     /**

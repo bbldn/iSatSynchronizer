@@ -2,9 +2,12 @@
 
 namespace App\Service\Synchronizer\Novaposhta;
 
+use App\Contract\Novaposhta\AreaSynchronizerContract;
+use App\Helper\ExceptionFormatter;
 use App\Service\Synchronizer\Novaposhta\Implementation\AreaSynchronizer as AreaBaseSynchronizer;
+use Exception;
 
-class AreaSynchronizer extends AreaBaseSynchronizer
+class AreaSynchronizer extends AreaBaseSynchronizer implements AreaSynchronizerContract
 {
     /**
      *
@@ -19,7 +22,22 @@ class AreaSynchronizer extends AreaBaseSynchronizer
      */
     public function synchronizeAll(): void
     {
-        parent::synchronizeAll();
+        try {
+            $response = $this->novaPoshtaApi2->getAreas();
+        } catch (Exception $e) {
+            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+
+            return;
+        }
+
+        if (false === $this->validateResponse($response)) {
+            return;
+        }
+
+
+        foreach ($response['data'] as $key => $item) {
+            $this->createOrUpdateCountry($item, $key);
+        }
     }
 
     /**
@@ -27,7 +45,8 @@ class AreaSynchronizer extends AreaBaseSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->countryFrontRepository->removeAll();
+        $this->countryFrontRepository->setAutoIncrements(300001);
     }
 
     /**

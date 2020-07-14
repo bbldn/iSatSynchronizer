@@ -2,9 +2,10 @@
 
 namespace App\Service\Synchronizer\Novaposhta;
 
+use App\Contract\Novaposhta\WarehouseSynchronizerContract;
 use App\Service\Synchronizer\Novaposhta\Implementation\WarehouseSynchronizer as WarehouseBaseSynchronizer;
 
-class WarehouseSynchronizer extends WarehouseBaseSynchronizer
+class WarehouseSynchronizer extends WarehouseBaseSynchronizer implements WarehouseSynchronizerContract
 {
     /**
      *
@@ -19,7 +20,14 @@ class WarehouseSynchronizer extends WarehouseBaseSynchronizer
      */
     public function synchronizeAll(): void
     {
-        parent::synchronizeAll();
+        $zones = $this->zoneFrontRepository->getZones();
+        foreach ($zones as $key => $zone) {
+            $response = $this->novaPoshtaApi2->getWarehouses($zone['ref']);
+            if (false === is_array($response)) {
+                continue;
+            }
+            $this->synchronizeWarehouses($response, $zone['zoneId']);
+        }
     }
 
     /**
@@ -27,7 +35,8 @@ class WarehouseSynchronizer extends WarehouseBaseSynchronizer
      */
     public function clear(): void
     {
-        parent::clear();
+        $this->cityFrontRepository->removeAll();
+        $this->cityFrontRepository->setAutoIncrements(100000);
     }
 
     /**
@@ -35,6 +44,7 @@ class WarehouseSynchronizer extends WarehouseBaseSynchronizer
      */
     public function reload(): void
     {
+        $this->clear();
         $this->synchronizeAll();
     }
 }

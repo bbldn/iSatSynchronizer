@@ -2,11 +2,11 @@
 
 namespace App\Contract\BackToFront;
 
-use App\Contract\CanClear;
+use App\Contract\CanClearInterface;
 use App\Contract\CanLoadInterface;
 use App\Entity\Back\Product as ProductBack;
 
-interface ProductAttributeSynchronizerContract extends CanLoadInterface, CanClear
+interface ProductAttributeSynchronizerContract extends CanLoadInterface, CanClearInterface
 {
     /**
      * @param ProductBack $productBack

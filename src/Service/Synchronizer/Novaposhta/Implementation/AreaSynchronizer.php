@@ -5,8 +5,6 @@ namespace App\Service\Synchronizer\Novaposhta\Implementation;
 use App\Entity\Front\Country as CountryFront;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Front\CountryRepository as CountryFrontRepository;
-use App\Service\Synchronizer\Novaposhta\NovaposhtaSynchronizer;
-use Exception;
 use LisDev\Delivery\NovaPoshtaApi2;
 use Psr\Log\LoggerInterface;
 
@@ -33,38 +31,6 @@ class AreaSynchronizer extends NovaposhtaSynchronizer
         parent::__construct($logger);
         $this->countryFrontRepository = $countryFrontRepository;
         $this->novaPoshtaApi2 = $novaPoshtaApi2;
-    }
-
-    /**
-     *
-     */
-    protected function synchronizeAll(): void
-    {
-        try {
-            $response = $this->novaPoshtaApi2->getAreas();
-        } catch (Exception $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
-
-            return;
-        }
-
-        if (false === $this->validateResponse($response)) {
-            return;
-        }
-
-
-        foreach ($response['data'] as $key => $item) {
-            $this->createOrUpdateCountry($item, $key);
-        }
-    }
-
-    /**
-     *
-     */
-    protected function clear(): void
-    {
-        $this->countryFrontRepository->removeAll();
-        $this->countryFrontRepository->setAutoIncrements(300001);
     }
 
     /**
