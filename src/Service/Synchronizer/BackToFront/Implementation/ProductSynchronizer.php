@@ -319,7 +319,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
             $stockAvailableStatusId = $this->storeFront->getDefaultProductNotAvailableStatusId();
         }
 
-        $productFront->setModel('art' . $productBack->getProductId());
+        $productFront->setModel("art{$productBack->getProductId()}");
         $productFront->setSku($productBack->getProductId());
         $productFront->setUpc(Filler::securityString(null));
         $productFront->setEan(Filler::securityString(null));
