@@ -3,6 +3,7 @@
 namespace App\Service\Synchronizer\FrontToBack;
 
 use App\Contract\FrontToBack\OrderSynchronizerContract;
+use App\Event\FrontToBack\OrderClearEvent;
 use App\Service\Synchronizer\FrontToBack\Implementation\OrderSynchronizer as OrderBaseSynchronizer;
 
 class OrderSynchronizer extends OrderBaseSynchronizer implements OrderSynchronizerContract
@@ -34,6 +35,8 @@ class OrderSynchronizer extends OrderBaseSynchronizer implements OrderSynchroniz
      */
     public function clear(): void
     {
+        $this->events[OrderClearEvent::class] = 1;
+
         $this->orderRepository->removeAll();
         $this->orderFrontRepository->removeAll();
         $this->orderHistoryRepository->removeAll();
@@ -79,9 +82,8 @@ class OrderSynchronizer extends OrderBaseSynchronizer implements OrderSynchroniz
         $this->customerTransactionFrontRepository->resetAutoIncrements();
         $this->customerWishListFrontRepository->resetAutoIncrements();
 
-        if (true === $this->orderSimpleFieldsFrontRepository->tableExists()) {
-            $this->orderSimpleFieldsFrontRepository->removeAll();
-            $this->orderSimpleFieldsFrontRepository->resetAutoIncrements();
+        if (1 === $this->events[OrderClearEvent::class]) {
+            $this->eventDispatcher->dispatch(new OrderClearEvent());
         }
     }
 

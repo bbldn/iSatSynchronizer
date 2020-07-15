@@ -7,6 +7,7 @@ use App\Entity\Back\OrderHistory as OrderHistoryBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Order;
 use App\Event\FrontToBack\NewOrderEvent;
+use App\Event\FrontToBack\OrderClearEvent;
 use App\Event\FrontToBack\UpdateOrderEvent;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Exception\OrderFrontNotFoundException;
@@ -179,6 +180,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
     protected $events = [
         NewOrderEvent::class => 0,
         UpdateOrderEvent::class => 0,
+        OrderClearEvent::class => 0,
     ];
 
     /**
