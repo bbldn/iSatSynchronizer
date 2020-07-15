@@ -213,28 +213,6 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
-     * @param int $orderFrontId
-     * @param int $productFrontId
-     * @return OrderProductFront
-     */
-    protected function getOrderProductFrontFromOrderFrontIdAndProductFrontId(
-        int $orderFrontId,
-        int $productFrontId
-    ): OrderProductFront
-    {
-        $orderProductFront = $this->orderProductFrontRepository->findOneByOrderFrontIdAndProductFrontId(
-            $orderFrontId,
-            $productFrontId
-        );
-
-        if (null === $orderProductFront) {
-            $orderProductFront = new OrderProductFront();
-        }
-
-        return $orderProductFront;
-    }
-
-    /**
      * @param OrderFront $orderFront
      * @param OrderBack $mainOrderBack
      * @return OrderFront
@@ -435,11 +413,9 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
             return null;
         }
 
-        $orderProductFront = $this->getOrderProductFrontFromOrderFrontIdAndProductFrontId(
-            $orderFront->getOrderId(),
-            $product->getFrontId()
-        );
+        $this->orderProductFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
 
+        $orderProductFront = new OrderProductFront();
         $orderProductFront->setOrderId($orderFront->getOrderId());
         $orderProductFront->setProductId($product->getFrontId());
         $orderProductFront->setName(Store::encodingConvert($productDescriptionFront->getName()));

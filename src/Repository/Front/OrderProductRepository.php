@@ -66,4 +66,18 @@ class OrderProductRepository extends FrontRepository
             return null;
         }
     }
+
+    /**
+     * @param int $orderId
+     * @return mixed
+     */
+    public function removeAllByOrderFrontId(int $orderId)
+    {
+        return $this->createQueryBuilder('op')
+            ->andWhere('op.orderId = :val')
+            ->setParameter('val', $orderId)
+            ->delete()
+            ->getQuery()
+            ->execute();
+    }
 }
