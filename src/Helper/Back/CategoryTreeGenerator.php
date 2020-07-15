@@ -3,6 +3,7 @@
 namespace App\Helper\Back;
 
 use App\Helper\Back\Store as StoreBack;
+use stdClass;
 
 class CategoryTreeGenerator
 {
@@ -18,7 +19,7 @@ class CategoryTreeGenerator
         foreach ($categoriesBack as $categoryBack) {
             $categoryId = $categoryBack->getId();
 
-            $node = new \stdClass();
+            $node = new stdClass();
             $node->value = $categoryId;
             $node->label = StoreBack::encodingConvert($categoryBack->getName());
 

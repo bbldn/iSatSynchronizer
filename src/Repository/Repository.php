@@ -99,6 +99,7 @@ abstract class Repository extends ServiceEntityRepository
      */
     public function setAutoIncrements(int $value): bool
     {
+        /* @noinspection SqlNoDataSourceInspection */
         $sql = "ALTER TABLE `{$this->tableName}` AUTO_INCREMENT = {$value};";
 
         try {

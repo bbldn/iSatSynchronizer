@@ -58,6 +58,7 @@ class BuyersGamePostRepository extends BackRepository
     public function getBalanceByCustomerId(int $customerId): float
     {
         $connection = $this->getEntityManager()->getConnection();
+        /* @noinspection SqlNoDataSourceInspection */
         $sql = "
             SELECT 
                 (IFNULL(cash.`income`, 0) - IFNULL(SUM(orders.`price` * orders.`amount`), 0)) as `balance` 

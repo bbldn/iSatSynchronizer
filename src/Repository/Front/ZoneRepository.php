@@ -3,6 +3,7 @@
 namespace App\Repository\Front;
 
 use App\Entity\Front\Zone;
+use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Psr\Log\LoggerInterface;

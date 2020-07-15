@@ -18,10 +18,10 @@ class SetOrderBackToOrderFront implements EventSubscriberInterface
 
     /**
      * SetOrderBackToOrderFront constructor.
-     * @param OrderFrontRepository $orderFrontRepository
      * @param LoggerInterface $logger
+     * @param OrderFrontRepository $orderFrontRepository
      */
-    public function __construct(OrderFrontRepository $orderFrontRepository, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, OrderFrontRepository $orderFrontRepository)
     {
         $this->logger = $logger;
         $this->orderFrontRepository = $orderFrontRepository;

@@ -6,7 +6,6 @@ use App\Contract\BackToFront\ProductAttributeSynchronizerContract;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
-use App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

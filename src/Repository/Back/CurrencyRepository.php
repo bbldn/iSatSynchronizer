@@ -61,6 +61,7 @@ class CurrencyRepository extends BackRepository
     public function getCurrentCourse(): array
     {
         $connection = $this->getEntityManager()->getConnection();
+        /* @noinspection SqlNoDataSourceInspection */
         $sql = "
             SELECT 
                 `one`.value as 'грн', `two`.value as 'р', 1 as '$' 

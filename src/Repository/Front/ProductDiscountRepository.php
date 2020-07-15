@@ -88,6 +88,7 @@ class ProductDiscountRepository extends FrontRepository
 
         $sql = '';
         foreach ($values as $value) {
+            /* @noinspection SqlNoDataSourceInspection */
             $sql .= "
               UPDATE
                   {$this->dataBaseNameFront}.{$tableNameFront} ps
