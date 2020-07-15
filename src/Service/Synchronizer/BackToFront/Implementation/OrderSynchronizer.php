@@ -185,7 +185,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
     {
         $order = $this->orderRepository->findOneByBackId($orderBack->getId());
         $orderFront = $this->getOrderFrontFromOrder($order);
-        $this->updateOrderFrontFromOrderBack($orderFront, $orderBack);
+        $orderFront = $this->updateOrderFrontAndOtherFromOrderBack($orderFront, $orderBack);
         $order = $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
 
         $this->eventDispatcher->dispatch(new OrderSynchronizedEvent($order));
