@@ -313,24 +313,24 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         ProductFront $productFront
     ): ProductFront
     {
-        if (0.0 === round($productBack->getPrice(), 0)) {
+        if (0.0 === $productBack->getPrice()) {
             $quantity = 0;
+            $stockStatusId = $this->storeFront->getDefaultProductNotAvailableStatusId();
         } else {
             $quantity = 99999;
+            $stockStatusId = $this->storeFront->getDefaultProductAvailableStatusId();
         }
 
         $productFront->setModel("art{$productBack->getProductId()}");
         $productFront->setSku($productBack->getProductId());
-        $productFront->setUpc(Filler::securityString(null));
-        $productFront->setEan(Filler::securityString(null));
-        $productFront->setJan(Filler::securityString(null));
-        $productFront->setIsbn(Filler::securityString(null));
-        $productFront->setMpn(Filler::securityString(null));
-        $productFront->setLocation(Filler::securityString(null));
+        $productFront->setUpc('');
+        $productFront->setEan('');
+        $productFront->setJan('');
+        $productFront->setIsbn('');
+        $productFront->setMpn('');
+        $productFront->setLocation('');
         $productFront->setQuantity($quantity);
-        $productFront->setStockStatusId(
-            $this->storeFront->getDefaultProductAvailableStatusId()
-        );
+        $productFront->setStockStatusId($stockStatusId);
         $productName = Filler::securityString(Store::encodingConvert($productBack->getName()));
         if (null === $productFront->getManufacturerId()) {
             $productFront->setManufacturerId($this->manufacturerHelper->getManufacturerId($productName));
@@ -417,7 +417,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
             $productDescriptionFront->setMetaDescription('');
         }
 
-        $productDescriptionFront->setMetaKeyword(Filler::securityString($productBack->getMetaKeywords()));
+        $productDescriptionFront->setMetaKeyword(Filler::trim($productBack->getMetaKeywords()));
 
         $this->productDescriptionFrontRepository->persistAndFlush($productDescriptionFront);
 

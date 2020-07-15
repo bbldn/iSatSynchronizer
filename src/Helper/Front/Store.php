@@ -12,7 +12,7 @@ class Store extends StoreBase
     protected $defaultProductAvailableStatusId = 7;
 
     /** @var int|mixed $defaultProductNotAvailableStatusId */
-    protected $defaultProductNotAvailableStatusId = 5;
+    protected $defaultProductNotAvailableStatusId = 9;
 
     /** @var int|mixed $defaultLanguageId */
     protected $defaultLanguageId = 1;
