@@ -221,6 +221,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
     {
         $orderFront = $this->updateOrderFrontFromOrderBack($orderFront, $mainOrderBack);
         $this->updateOrderHistoryFrontFromOrderBack($orderFront);
+        $this->orderProductFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
         $ordersBack = $this->orderBackRepository->findByOrderNum($mainOrderBack->getId());
         foreach ($ordersBack as $orderBack) {
             $this->updateOrderProductFrontFromOrderBack($orderBack, $orderFront);
@@ -412,8 +413,6 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
 
             return null;
         }
-
-        $this->orderProductFrontRepository->removeAllByOrderFrontId($orderFront->getOrderId());
 
         $orderProductFront = new OrderProductFront();
         $orderProductFront->setOrderId($orderFront->getOrderId());
