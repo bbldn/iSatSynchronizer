@@ -101,8 +101,7 @@ class DescriptionHelper implements DescriptionHelperContract
         try {
             $this->fileWriter->saveFile($path, $content);
         } catch (Throwable $e) {
-            $message = "Error image save: {$e->getMessage()}";
-            $this->logger->error(ExceptionFormatter::f($message));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }
@@ -133,8 +132,7 @@ class DescriptionHelper implements DescriptionHelperContract
         try {
             $this->fileWriter->clearFolder($this->frontPath);
         } catch (Throwable $e) {
-            $message = "Error clear folder: {$e->getMessage()}";
-            $this->logger->error(ExceptionFormatter::f($message));
+            $this->logger->error(ExceptionFormatter::e($e));
         }
     }
 
@@ -149,8 +147,7 @@ class DescriptionHelper implements DescriptionHelperContract
                 preg_replace('/https?:\/\/isat\.com\.ua/', 'https://admin.isat.com.ua', $path)
             );
         } catch (Throwable $e) {
-            $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
-            $this->logger->error(ExceptionFormatter::f($error));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }

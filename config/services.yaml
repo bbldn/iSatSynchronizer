@@ -82,6 +82,7 @@ services:
 
     App\Command\DebugServerCommand:
         arguments:
+        - '@Psr\Log\LoggerInterface'
         - '8088'
 
     LisDev\Delivery\NovaPoshtaApi2:

@@ -43,7 +43,7 @@ class ZoneRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }

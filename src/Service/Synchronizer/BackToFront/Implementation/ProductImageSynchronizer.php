@@ -107,8 +107,7 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
         try {
             $this->fileWriter->clearFolder($this->frontPath);
         } catch (Throwable $e) {
-            $error = "Error clear folder: {$e->getMessage()}";
-            $this->logger->error(ExceptionFormatter::f($error));
+            $this->logger->error(ExceptionFormatter::e($e));
         }
     }
 
@@ -181,8 +180,7 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
         try {
             $this->fileWriter->saveFile($path, $content);
         } catch (Throwable $e) {
-            $message = "Error image save: {$e->getMessage()}";
-            $this->logger->error(ExceptionFormatter::f($message));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }
@@ -220,8 +218,7 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
         try {
             return $this->fileReader->getFile($path);
         } catch (Throwable $e) {
-            $error = "Error getting path: {$path}. Error: {$e->getMessage()}";
-            $this->logger->error(ExceptionFormatter::f($error));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }

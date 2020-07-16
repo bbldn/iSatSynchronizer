@@ -71,7 +71,7 @@ class ProductDiscountRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }
@@ -106,7 +106,7 @@ class ProductDiscountRepository extends FrontRepository
         try {
             $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
         } catch (DBALException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             $result = false;
         }

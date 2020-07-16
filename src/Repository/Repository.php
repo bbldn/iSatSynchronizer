@@ -105,7 +105,7 @@ abstract class Repository extends ServiceEntityRepository
         try {
             return $this->getEntityManager()->getConnection()->prepare($sql)->execute();
         } catch (DBALException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return false;
         }
@@ -120,7 +120,7 @@ abstract class Repository extends ServiceEntityRepository
         try {
             $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
         } catch (MappingException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return [];
         }
@@ -153,7 +153,7 @@ abstract class Repository extends ServiceEntityRepository
 
             return $query->rowCount() > 0;
         } catch (DBALException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return false;
         }
@@ -173,7 +173,7 @@ abstract class Repository extends ServiceEntityRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (ORMException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }
@@ -193,7 +193,7 @@ abstract class Repository extends ServiceEntityRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (ORMException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }

@@ -48,7 +48,7 @@ class CurrencyRepository extends FrontRepository
                 ->getQuery()
                 ->getSingleScalarResult();
         } catch (UnexpectedResultException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }
@@ -67,7 +67,7 @@ class CurrencyRepository extends FrontRepository
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return null;
         }

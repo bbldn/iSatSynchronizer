@@ -48,7 +48,7 @@ class ClearSeoProCache implements EventSubscriberInterface
         try {
             $this->cacheCleaner->clear();
         } catch (Throwable $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
         }
     }
 }

@@ -691,7 +691,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         try {
             $customerBack = $this->customerFrontToBackSynchronizer->synchronizeOneByOrderFrontId($orderFront->getOrderId());
         } catch (OrderFrontNotFoundException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
         }
 
         return $customerBack->getId();

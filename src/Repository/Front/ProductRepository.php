@@ -79,7 +79,7 @@ class ProductRepository extends FrontRepository
         try {
             $result = $this->getEntityManager()->getConnection()->prepare($sql)->execute();
         } catch (DBALException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             $result = false;
         }

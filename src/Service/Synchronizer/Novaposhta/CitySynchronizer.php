@@ -25,7 +25,7 @@ class CitySynchronizer extends CityBaseSynchronizer implements CitySynchronizerC
         try {
             $response = $this->novaPoshtaApi2->getCities();
         } catch (Exception $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return;
         }

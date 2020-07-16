@@ -43,7 +43,7 @@ class ProductDiscontinuedRepository extends FrontRepository
                     ->getQuery()
                     ->getSingleScalarResult() > 0;
         } catch (UnexpectedResultException $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->logger->error(ExceptionFormatter::e($e));
 
             return false;
         }

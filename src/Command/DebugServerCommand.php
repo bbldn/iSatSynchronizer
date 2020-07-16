@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use React\EventLoop\Factory;
 use React\Http\Response;
 use React\Http\Server as HttpServer;
@@ -15,16 +16,21 @@ class DebugServerCommand extends Command
 {
     protected static $defaultName = 'debug:server:start';
 
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var string $debugServerPort */
     protected $debugServerPort;
 
     /**
      * DebugServerCommand constructor.
+     * @param LoggerInterface $logger
      * @param string $debugServerPort
      */
-    public function __construct(string $debugServerPort)
+    public function __construct(LoggerInterface $logger, string $debugServerPort)
     {
         parent::__construct();
+        $this->logger = $logger;
         $this->debugServerPort = $debugServerPort;
     }
 
@@ -36,7 +42,7 @@ class DebugServerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $server = new HttpServer(function (ServerRequestInterface $request) {
-            var_dump($request->getParsedBody());
+            dump($request->getParsedBody());
 
             return new Response(200, ['Content-Type' => 'application/json'], json_encode(['ok' => true]));
         });
