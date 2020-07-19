@@ -46,10 +46,8 @@ class TelegramOrderNew implements EventSubscriberInterface
      */
     public function action(NewOrderEvent $event): void
     {
-        $order = $event->getOrder();
-
         $formData = new FormDataPart([
-            'id' => (string)$order->getBackId(),
+            'command' => "telegram:order:send {$event->getOrder()->getBackId()}",
         ]);
 
         $response = $this->httpClient->request('POST', $this->url, [

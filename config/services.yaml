@@ -102,7 +102,7 @@ services:
     App\EventListener\FrontToBack\TelegramOrderNew:
         arguments:
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
-        - 'https://tbot.isat.com.ua/order/new'
+        - 'http://synchronizer.isat.com.ua:9000/tbot'
 
     App\Contract\Novaposhta\AreaSynchronizerContract: '@App\Service\Synchronizer\Novaposhta\AreaSynchronizer'
     App\Contract\BackToFront\ProductAttributeSynchronizerContract: '@App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer'
