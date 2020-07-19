@@ -104,5 +104,10 @@ services:
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
         - 'http://synchronizer.isat.com.ua:9000/tbot'
 
+    App\EventListener\BackToFront\UpdatePriceList:
+        arguments:
+        - '@Symfony\Contracts\HttpClient\HttpClientInterface'
+        - 'http://synchronizer.isat.com.ua:9000/generator'
+
     App\Contract\Novaposhta\AreaSynchronizerContract: '@App\Service\Synchronizer\Novaposhta\AreaSynchronizer'
     App\Contract\BackToFront\ProductAttributeSynchronizerContract: '@App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer'

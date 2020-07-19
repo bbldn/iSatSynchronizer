@@ -6,9 +6,13 @@ use App\Entity\Front\Currency as CurrencyFront;
 use App\Helper\Store;
 use App\Repository\Back\CurrencyRepository as CurrencyBackRepository;
 use App\Repository\Front\CurrencyRepository as CurrencyFrontRepository;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class CurrencySynchronizer extends BackToFrontSynchronizer
 {
+    /** @var EventDispatcherInterface $eventDispatcher */
+    protected $eventDispatcher;
+
     /** @var CurrencyBackRepository $currencyBackRepository */
     protected $currencyBackRepository;
 

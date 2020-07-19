@@ -1,8 +1,13 @@
 <?php
 
-namespace App\EventListener\FrontToBack;
+namespace App\EventListener\BackToFront;
 
-use App\Event\FrontToBack\NewOrderEvent;
+use App\Event\BackToFront\CategorySynchronizedEvent;
+use App\Event\BackToFront\CurrencySynchronizedEvent;
+use App\Event\BackToFront\PriceSynchronizeAllFastEvent;
+use App\Event\BackToFront\PriceSynchronizeEvent;
+use App\Event\BackToFront\PriceSynchronizeFastEvent;
+use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\ExceptionFormatter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
@@ -13,7 +18,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
-class TelegramOrderNew implements EventSubscriberInterface
+class UpdatePriceList implements EventSubscriberInterface
 {
     /** @var HttpClientInterface $httpClient */
     protected $httpClient;
@@ -22,7 +27,7 @@ class TelegramOrderNew implements EventSubscriberInterface
     protected $url;
 
     /**
-     * TelegramOrderNew constructor.
+     * UpdatePriceList constructor.
      * @param HttpClientInterface $httpClient
      * @param string $url
      */
@@ -38,17 +43,22 @@ class TelegramOrderNew implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            NewOrderEvent::class => 'action',
+            ProductSynchronizedEvent::class => 'action',
+            CategorySynchronizedEvent::class => 'action',
+            PriceSynchronizeEvent::class => 'action',
+            PriceSynchronizeFastEvent::class => 'action',
+            PriceSynchronizeAllFastEvent::class => 'action',
+            CurrencySynchronizedEvent::class => 'action',
         ];
     }
 
     /**
-     * @param NewOrderEvent $event
+     *
      */
-    public function action(NewOrderEvent $event): void
+    public function action(): void
     {
         $formData = new FormDataPart([
-            'command' => "telegram:order:send {$event->getOrder()->getBackId()}",
+            'command' => 'generate:all',
         ]);
 
         try {
