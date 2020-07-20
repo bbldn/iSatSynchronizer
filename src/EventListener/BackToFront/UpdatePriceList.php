@@ -57,14 +57,9 @@ class UpdatePriceList implements EventSubscriberInterface
      */
     public function action(): void
     {
-        $formData = new FormDataPart([
-            'command' => 'generate:all',
-        ]);
-
         try {
             $response = $this->httpClient->request('POST', $this->url, [
-                'headers' => $formData->getPreparedHeaders()->toArray(),
-                'body' => $formData->bodyToIterable(),
+                'body' => ['command' => 'generate:all'],
             ]);
 
             $this->validateResponse($response);
