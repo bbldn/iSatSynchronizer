@@ -21,14 +21,17 @@ class CurrencySynchronizer extends BackToFrontSynchronizer
 
     /**
      * CurrencySynchronizer constructor.
+     * @param EventDispatcherInterface $eventDispatcher
      * @param CurrencyBackRepository $currencyBackRepository
      * @param CurrencyFrontRepository $currencyFrontRepository
      */
     public function __construct(
+        EventDispatcherInterface $eventDispatcher,
         CurrencyBackRepository $currencyBackRepository,
         CurrencyFrontRepository $currencyFrontRepository
     )
     {
+        $this->eventDispatcher = $eventDispatcher;
         $this->currencyBackRepository = $currencyBackRepository;
         $this->currencyFrontRepository = $currencyFrontRepository;
     }
