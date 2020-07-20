@@ -258,7 +258,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
         $orderFront->setLastName($fullName['lastName']);
         $orderFront->setEmail($mainOrderBack->getMail());
         $orderFront->setTelephone($mainOrderBack->getPhone());
-        $orderFront->setFax(Filler::securityString(null));
+        $orderFront->setFax($mainOrderBack->getId());
         $orderFront->setCustomField(Filler::securityString(null));
         $orderFront->setPaymentFirstName($fullName['firstName']);
         $orderFront->setPaymentLastName($fullName['lastName']);
