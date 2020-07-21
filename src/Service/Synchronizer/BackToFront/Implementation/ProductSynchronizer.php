@@ -297,7 +297,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         $productFront = $this->updateProductFrontFromProductBack($productBack, $productFront);
         $this->updateProductDescriptionFrontFromProductBack($productBack, $productFront);
         $this->updateProductLayoutFrontFromProductBack($productFront);
-        $this->updateProductStoreFrontFromProductBack($productFront);
+        $this->updateProductStoreFrontFromProductFront($productFront);
         $this->updateProductCategoryFrontFromProductBack($productBack, $productFront);
 
         return $productFront;
@@ -452,7 +452,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductFront $productFront
      * @return ProductStoreFront
      */
-    protected function updateProductStoreFrontFromProductBack(ProductFront $productFront): ProductStoreFront
+    protected function updateProductStoreFrontFromProductFront(ProductFront $productFront): ProductStoreFront
     {
         $productStoreFront = $this->productStoreFrontRepository->findOneByProductFrontIdAndStoreId(
             $productFront->getProductId(),
