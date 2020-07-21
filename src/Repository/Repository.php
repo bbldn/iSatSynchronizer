@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Helper\ExceptionFormatter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\ORMException;
@@ -127,7 +128,7 @@ abstract class Repository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('c')
             ->where("c.{$identifier} IN (:ids)")
-            ->setParameter('ids', $ids)
+            ->setParameter('ids', explode(',', $ids), Connection::PARAM_INT_ARRAY)
             ->getQuery()
             ->getResult();
     }
@@ -141,7 +142,7 @@ abstract class Repository extends ServiceEntityRepository
 
         $database = $connection->getDatabase();
         $queryBuilder = $connection->createQueryBuilder();
-        $queryBuilder->select('count(*)');
+        $queryBuilder->select('COUNT(*)');
         $queryBuilder->from('information_schema.tables', 't');
         $queryBuilder->andWhere("table_name = '{$this->tableName}'");
         $queryBuilder->andWhere("table_schema = '{$database}'");

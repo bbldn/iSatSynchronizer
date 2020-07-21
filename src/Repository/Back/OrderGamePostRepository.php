@@ -5,6 +5,7 @@ namespace App\Repository\Back;
 use App\Entity\Back\OrderGamePost;
 use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Psr\Log\LoggerInterface;
@@ -64,7 +65,8 @@ class OrderGamePostRepository extends BackRepository
         $queryBuilder = $this->createQueryBuilder('o');
 
         if (count($ids) > 0) {
-            $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->notIn('o.clientId', $ids));
+            $queryBuilder = $queryBuilder->andWhere("o.clientId NOT IN (:ids)");
+            $queryBuilder =  $queryBuilder->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
         }
 
         return $queryBuilder->andWhere('o.documentType = 2')

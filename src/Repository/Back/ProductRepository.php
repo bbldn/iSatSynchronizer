@@ -5,6 +5,7 @@ namespace App\Repository\Back;
 use App\Entity\Back\Product;
 use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Psr\Log\LoggerInterface;
 
@@ -58,7 +59,7 @@ class ProductRepository extends BackRepository
             ->setParameter('name', "{$name}%");
 
         if (null !== $max && $max > 0) {
-            $query->setMaxResults($max);
+            $query = $query->setMaxResults($max);
         }
 
         return $query->getQuery()->getArrayResult();
@@ -108,7 +109,7 @@ class ProductRepository extends BackRepository
         return $this->createQueryBuilder('p')
             ->select('p.productId, p.price, 1 as groupId')
             ->andWhere('p.productId IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->setParameter('ids', explode(',', $ids), Connection::PARAM_INT_ARRAY)
             ->getQuery()
             ->getArrayResult();
     }
@@ -122,7 +123,7 @@ class ProductRepository extends BackRepository
         return $this->createQueryBuilder('p')
             ->select('p.productId, p.price')
             ->andWhere('p.categoryId IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->setParameter('ids', explode(',', $ids), Connection::PARAM_INT_ARRAY)
             ->getQuery()
             ->getArrayResult();
     }

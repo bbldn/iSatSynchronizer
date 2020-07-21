@@ -4,6 +4,7 @@ namespace App\Repository\Back;
 
 use App\Entity\Back\BuyersGroupsPrices;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -64,7 +65,7 @@ class BuyersGroupsPricesRepository extends BackRepository
         return $this->createQueryBuilder('bgp')
             ->select('bgp.productId, bgp.price, bgp.groupId')
             ->andWhere('bgp.productId IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->setParameter('ids', explode(',', $ids), Connection::PARAM_INT_ARRAY)
             ->getQuery()
             ->getArrayResult();
     }
