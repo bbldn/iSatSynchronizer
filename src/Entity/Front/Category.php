@@ -70,6 +70,17 @@ class Category
     protected $dateModified;
 
     /**
+     * @param int|null $categoryId
+     * @return Category
+     */
+    public function setCategoryId(?int $categoryId): self
+    {
+        $this->categoryId = $categoryId;
+
+        return $this;
+    }
+
+    /**
      * @return int|null
      */
     public function getCategoryId(): ?int

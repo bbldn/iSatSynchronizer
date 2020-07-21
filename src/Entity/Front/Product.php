@@ -202,6 +202,17 @@ class Product
     protected $dateModified;
 
     /**
+     * @param int|null $productId
+     * @return Product
+     */
+    public function setProductId(?int $productId): self
+    {
+        $this->productId = $productId;
+
+        return $this;
+    }
+
+    /**
      * @return int|null
      */
     public function getProductId(): ?int
