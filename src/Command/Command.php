@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 
 abstract class Command extends Base
 {
-
     /**
      * @param InputInterface $input
      * @return array
@@ -24,7 +23,7 @@ abstract class Command extends Base
      */
     protected function getIdFromInput(InputInterface $input): int
     {
-        $id = $input->getArgument('id');
+        $id = trim($input->getArgument('id'));
         if (0 === preg_match('/[0-9]+/', $id)) {
             throw new InvalidArgumentException("`id` must be int: {$id}");
         }
@@ -38,7 +37,7 @@ abstract class Command extends Base
      */
     protected function getIdsFromInput(InputInterface $input): string
     {
-        $ids = trim(rtrim($input->getArgument('ids'), ','));
+        $ids = rtrim(trim($input->getArgument('ids')), ',');
         if (0 === preg_match('/^([0-9]+,?)+$/i', $ids)) {
             throw new InvalidArgumentException('parameter `id` has error');
         }
