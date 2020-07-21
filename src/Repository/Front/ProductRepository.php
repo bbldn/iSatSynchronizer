@@ -59,21 +59,12 @@ class ProductRepository extends FrontRepository
      */
     public function updatePriceByData(array $data): bool
     {
-        $tableName = $this->productRepository->getClassMetadata()->getTableName();
         $tableNameFront = $this->getClassMetadata()->getTableName();
 
         $sql = '';
         foreach ($data as $value) {
             /* @noinspection SqlNoDataSourceInspection */
-            $sql .= "
-              UPDATE 
-                  {$this->dataBaseNameFront}.{$tableNameFront} pf 
-              INNER JOIN {$this->dataBaseName}.{$tableName} p ON pf.product_id = p.front_id 
-              SET 
-                  pf.price = {$value['price']} 
-              WHERE 
-                  p.back_id = {$value['productId']};
-            ";
+            $sql .= "UPDATE {$this->dataBaseNameFront}.{$tableNameFront} pf SET pf.price = {$value['price']} WHERE pf.sku = '{$value['productId']}';";
         }
 
         try {
