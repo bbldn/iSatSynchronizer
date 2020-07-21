@@ -12,14 +12,28 @@ trait CreateOrUpdateProductTrait
     protected $productSynchronizer;
 
     /**
-     * @see ProductSynchronizer::createOrUpdateProduct
+     * @return array
      */
-    public function testCreateOrUpdateProduct_ProductNotNull()
+    public function providerCreateOrUpdateProduct()
     {
         $productResult = new Product();
         $productResult->setBackId(1);
         $productResult->setFrontId(2);
 
+        return [
+            [null, $productResult],
+            [$productResult, $productResult],
+        ];
+    }
+
+    /**
+     * @see          ProductSynchronizer::createOrUpdateProduct
+     * @dataProvider providerCreateOrUpdateProduct
+     * @param Product|null $productInput
+     * @param Product $productResult
+     */
+    public function testCreateOrUpdateProduct(?Product $productInput, Product $productResult)
+    {
         $productRepository = $this->getMockBuilder(ProductRepository::class)
             ->setMethods(['persistAndFlush'])
             ->disableOriginalConstructor()
@@ -31,36 +45,13 @@ trait CreateOrUpdateProductTrait
         $productTest = $this->invokeMethod(
             $this->productSynchronizer,
             'createOrUpdateProduct',
-            [$productResult, 1, 2]
+            [$productInput, 1, 2]
         );
 
-        $this->assertSame($productResult, $productTest);
+        if (null === $productInput) {
+            $this->assertEquals($productResult, $productTest);
+        } else {
+            $this->assertSame($productResult, $productTest);
+        }
     }
-
-    /**
-     * @see ProductSynchronizer::createOrUpdateProduct
-     */
-    public function testCreateOrUpdateProduct_ProductNull()
-    {
-        $productResult = new Product();
-        $productResult->setBackId(1);
-        $productResult->setFrontId(2);
-
-        $productRepository = $this->getMockBuilder(ProductRepository::class)
-            ->setMethods(['persistAndFlush'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productRepository->method('persistAndFlush')->with($productResult);
-
-        $this->setProperty($this->productSynchronizer, 'productRepository', $productRepository);
-
-        $productTest = $this->invokeMethod(
-            $this->productSynchronizer,
-            'createOrUpdateProduct',
-            [null, 1, 2]
-        );
-
-        $this->assertEquals($productResult, $productTest);
-    }
-
 }

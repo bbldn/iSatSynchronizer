@@ -17,6 +17,14 @@ trait UpdateProductCategoryFrontFromProductBackTrait
     protected $productSynchronizer;
 
     /**
+     * @return array
+     */
+    public function providerUpdateProductCategoryFrontFromProductBack()
+    {
+
+    }
+
+    /**
      * @see ProductSynchronizer::updateProductCategoryFrontFromProductBack
      */
     public function testUpdateProductCategoryFrontFromProductBack_ProductCategoryFrontNull()
