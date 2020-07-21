@@ -28,9 +28,11 @@ trait CreateOrUpdateProductTrait
 
         $this->setProperty($this->productSynchronizer, 'productRepository', $productRepository);
 
-        $productTest = $this->invokeMethod($this->productSynchronizer, 'createOrUpdateProduct', [
-            $productResult, 1, 2
-        ]);
+        $productTest = $this->invokeMethod(
+            $this->productSynchronizer,
+            'createOrUpdateProduct',
+            [$productResult, 1, 2]
+        );
 
         $this->assertSame($productResult, $productTest);
     }
@@ -52,9 +54,11 @@ trait CreateOrUpdateProductTrait
 
         $this->setProperty($this->productSynchronizer, 'productRepository', $productRepository);
 
-        $productTest = $this->invokeMethod($this->productSynchronizer, 'createOrUpdateProduct', [
-            null, 1, 2
-        ]);
+        $productTest = $this->invokeMethod(
+            $this->productSynchronizer,
+            'createOrUpdateProduct',
+            [null, 1, 2]
+        );
 
         $this->assertEquals($productResult, $productTest);
     }

@@ -68,9 +68,10 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             $productCategoryFrontRepository
         );
 
-        $productCategoryFrontTest = $this->invokeMethod($this->productSynchronizer, 'updateProductCategoryFrontFromProductBack', [
-            $productBack, $productFront
-        ]);
+        $productCategoryFrontTest = $this->invokeMethod(
+            $this->productSynchronizer,
+            'updateProductCategoryFrontFromProductBack', [$productBack, $productFront]
+        );
 
         $this->assertSame($productCategoryFront, $productCategoryFrontTest);
     }
@@ -140,9 +141,10 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             $productCategoryFrontRepository
         );
 
-        $productCategoryFrontTest = $this->invokeMethod($this->productSynchronizer, 'updateProductCategoryFrontFromProductBack', [
-            $productBack, $productFront
-        ]);
+        $productCategoryFrontTest = $this->invokeMethod(
+            $this->productSynchronizer,
+            'updateProductCategoryFrontFromProductBack', [$productBack, $productFront]
+        );
 
         $this->assertSame($productCategoryFront, $productCategoryFrontTest);
     }
@@ -199,9 +201,11 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             $productCategoryFrontRepository
         );
 
-        $productCategoryFrontTest = $this->invokeMethod($this->productSynchronizer, 'updateProductCategoryFrontFromProductBack', [
-            $productBack, $productFront
-        ]);
+        $productCategoryFrontTest = $this->invokeMethod(
+            $this->productSynchronizer,
+            'updateProductCategoryFrontFromProductBack',
+            [$productBack, $productFront]
+        );
 
         $this->assertSame($productCategoryFront, $productCategoryFrontTest);
     }
