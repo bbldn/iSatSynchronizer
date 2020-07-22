@@ -398,12 +398,14 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         if (true === $this->synchronizeImage) {
             $productDescriptionFront->setDescription(
                 $this->descriptionHelper->synchronize(
-                    trim(Store::encodingConvert($productBack->getDescription()))
+                    Filler::trim(Store::encodingConvert($productBack->getDescription()))
                 )
             );
         } else {
             if (null === $productDescriptionFront->getDescription()) {
-                $productDescriptionFront->setDescription(trim(Store::encodingConvert($productBack->getDescription())));
+                $productDescriptionFront->setDescription(
+                    Filler::trim(Store::encodingConvert($productBack->getDescription()))
+                );
             }
         }
 
