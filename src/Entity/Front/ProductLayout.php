@@ -31,6 +31,23 @@ class ProductLayout
     protected $layoutId;
 
     /**
+     * ProductLayout constructor.
+     * @param int|null $productId
+     * @param int|null $storeId
+     * @param int|null $layoutId
+     */
+    public function __construct(
+        ?int $productId = null,
+        ?int $storeId = null,
+        ?int $layoutId = null
+    )
+    {
+        $this->productId = $productId;
+        $this->storeId = $storeId;
+        $this->layoutId = $layoutId;
+    }
+
+    /**
      * @return int|null
      */
     public function getProductId(): ?int
