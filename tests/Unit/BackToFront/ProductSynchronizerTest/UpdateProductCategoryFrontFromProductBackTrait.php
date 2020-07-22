@@ -10,6 +10,7 @@ use App\Helper\BackToFront\ProductSynchronizerHelper;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\Front\ProductCategoryRepository as ProductCategoryFrontRepository;
 use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
+use Exception;
 
 trait UpdateProductCategoryFrontFromProductBackTrait
 {
@@ -21,28 +22,65 @@ trait UpdateProductCategoryFrontFromProductBackTrait
      */
     public function providerUpdateProductCategoryFrontFromProductBack()
     {
-
+        return [
+            [
+                new CategoryFront(1),
+                new ProductCategoryFront(2, 1),
+                [
+                    'categoryFrontId' => 1,
+                    'productFrontId' => 2,
+                ]
+            ],
+            [
+                null,
+                new ProductCategoryFront(3, 4),
+                [
+                    'categoryFrontId' => 3,
+                    'productFrontId' => 4,
+                ]
+            ],
+            [
+                new CategoryFront(5),
+                null,
+                [
+                    'categoryFrontId' => 5,
+                    'productFrontId' => 6,
+                ]
+            ],
+            [
+                null,
+                null,
+                [
+                    'categoryFrontId' => 7,
+                    'productFrontId' => 8,
+                ]
+            ],
+        ];
     }
 
     /**
      * @see ProductSynchronizer::updateProductCategoryFrontFromProductBack
+     * @param CategoryFront|null $categoryFront
+     * @param ProductCategoryFront|null $productCategoryFront
+     * @param array $values
+     * @throws Exception
      */
-    public function testUpdateProductCategoryFrontFromProductBack_ProductCategoryFrontNull()
+    public function testUpdateProductCategoryFrontFromProductBack(
+        ?CategoryFront $categoryFront,
+        ?ProductCategoryFront $productCategoryFront,
+        array $values
+    ): void
     {
-        $productBack = new ProductBack();
-        $productBack->setCategoryId(1);
+        $productBack = new ProductBack(null ,random_int(10, 40));
+        $productFront = new ProductFront($values['productFrontId']);
 
-        $productFront = new ProductFront();
-        $productFront->setProductId(1);
-
-        $categoryFront = new CategoryFront();
-        $categoryFront->setCategoryId(1);
-
+        /* @noinspection PhpUndefinedMethodInspection */
         $productSynchronizerHelper = $this->getMockBuilder(ProductSynchronizerHelper::class)
             ->setMethods(['getCategoryFrontByCategoryBackId'])
             ->disableOriginalConstructor()
             ->getMock();
 
+        /* @noinspection PhpUndefinedMethodInspection */
         $productSynchronizerHelper->expects($this->once())
             ->method('getCategoryFrontByCategoryBackId')
             ->with($productBack->getCategoryId())
@@ -54,153 +92,32 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             $productSynchronizerHelper
         );
 
-        $productCategoryFront = new ProductCategoryFront();
-        $productCategoryFront->setProductId($productFront->getProductId());
-        $productCategoryFront->setCategoryId($categoryFront->getCategoryId());
+        if (null === $categoryFront) {
+            /* @noinspection PhpUndefinedMethodInspection */
+            $storeFront = $this->getMockBuilder(StoreFront::class)
+                ->setMethods(['getDefaultCategoryFrontId'])
+                ->disableOriginalConstructor()
+                ->getMock();
 
+            /* @noinspection PhpUndefinedMethodInspection */
+            $storeFront->expects($this->once())
+                ->method('getDefaultCategoryFrontId')
+                ->willReturn($values['categoryFrontId']);
+        }
+
+        /* @noinspection PhpUndefinedMethodInspection */
         $productCategoryFrontRepository = $this->getMockBuilder(ProductCategoryFrontRepository::class)
             ->setMethods(['findOneByProductFrontIdAndCategoryId', 'persistAndFlush'])
             ->disableOriginalConstructor()
             ->getMock();
 
+        /* @noinspection PhpUndefinedMethodInspection */
         $productCategoryFrontRepository->expects($this->once())
             ->method('findOneByProductFrontIdAndCategoryId')
-            ->with($productFront->getProductId(), $categoryFront->getCategoryId())
+            ->with($values['productFrontId'], $values['categoryFrontId'])
             ->willReturn($productCategoryFront);
 
-        $productCategoryFrontRepository->method('persistAndFlush')->with($productCategoryFront);
-
-        $this->setProperty(
-            $this->productSynchronizer,
-            'productCategoryFrontRepository',
-            $productCategoryFrontRepository
-        );
-
-        $productCategoryFrontTest = $this->invokeMethod(
-            $this->productSynchronizer,
-            'updateProductCategoryFrontFromProductBack', [$productBack, $productFront]
-        );
-
-        $this->assertSame($productCategoryFront, $productCategoryFrontTest);
-    }
-
-    /**
-     * @see ProductSynchronizer::updateProductCategoryFrontFromProductBack
-     */
-    public function testUpdateProductCategoryFrontFromProductBack_CategoryFrontNull()
-    {
-        $productBack = new ProductBack();
-        $productBack->setCategoryId(1);
-
-        $productFront = new ProductFront();
-        $productFront->setProductId(1);
-
-        $categoryFront = new CategoryFront();
-        $categoryFront->setCategoryId(1);
-
-        $productSynchronizerHelper = $this->getMockBuilder(ProductSynchronizerHelper::class)
-            ->setMethods(['getCategoryFrontByCategoryBackId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $productSynchronizerHelper->expects($this->once())
-            ->method('getCategoryFrontByCategoryBackId')
-            ->with($productBack->getCategoryId())
-            ->willReturn(null);
-
-        $this->setProperty(
-            $this->productSynchronizer,
-            'productSynchronizerHelper',
-            $productSynchronizerHelper
-        );
-
-        $storeFront = $this->getMockBuilder(StoreFront::class)
-            ->setMethods(['getDefaultCategoryFrontId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $storeFront->expects($this->once())->method('getDefaultCategoryFrontId')->willReturn(1);
-
-        $this->setProperty(
-            $this->productSynchronizer,
-            'storeFront',
-            $storeFront
-        );
-
-        $productCategoryFront = new ProductCategoryFront();
-        $productCategoryFront->setProductId($productFront->getProductId());
-        $productCategoryFront->setCategoryId($categoryFront->getCategoryId());
-
-        $productCategoryFrontRepository = $this->getMockBuilder(ProductCategoryFrontRepository::class)
-            ->setMethods(['findOneByProductFrontIdAndCategoryId', 'persistAndFlush'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $productCategoryFrontRepository->expects($this->once())
-            ->method('findOneByProductFrontIdAndCategoryId')
-            ->with($productFront->getProductId(), $categoryFront->getCategoryId())
-            ->willReturn($productCategoryFront);
-
-        $productCategoryFrontRepository->method('persistAndFlush')->with($productCategoryFront);
-
-        $this->setProperty(
-            $this->productSynchronizer,
-            'productCategoryFrontRepository',
-            $productCategoryFrontRepository
-        );
-
-        $productCategoryFrontTest = $this->invokeMethod(
-            $this->productSynchronizer,
-            'updateProductCategoryFrontFromProductBack', [$productBack, $productFront]
-        );
-
-        $this->assertSame($productCategoryFront, $productCategoryFrontTest);
-    }
-
-    /**
-     * @see ProductSynchronizer::updateProductCategoryFrontFromProductBack
-     */
-    public function testUpdateProductCategoryFrontFromProductBack_CategoryFrontNotNull()
-    {
-        $productBack = new ProductBack();
-        $productBack->setCategoryId(1);
-
-        $productFront = new ProductFront();
-        $productFront->setProductId(1);
-
-        $categoryFront = new CategoryFront();
-        $categoryFront->setCategoryId(1);
-
-        $productSynchronizerHelper = $this->getMockBuilder(ProductSynchronizerHelper::class)
-            ->setMethods(['getCategoryFrontByCategoryBackId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $productSynchronizerHelper->expects($this->once())
-            ->method('getCategoryFrontByCategoryBackId')
-            ->with($productBack->getCategoryId())
-            ->willReturn($categoryFront);
-
-        $this->setProperty(
-            $this->productSynchronizer,
-            'productSynchronizerHelper',
-            $productSynchronizerHelper
-        );
-
-        $productCategoryFront = new ProductCategoryFront();
-        $productCategoryFront->setProductId($productFront->getProductId());
-        $productCategoryFront->setCategoryId($categoryFront->getCategoryId());
-
-        $productCategoryFrontRepository = $this->getMockBuilder(ProductCategoryFrontRepository::class)
-            ->setMethods(['findOneByProductFrontIdAndCategoryId', 'persistAndFlush'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $productCategoryFrontRepository->expects($this->once())
-            ->method('findOneByProductFrontIdAndCategoryId')
-            ->with($productFront->getProductId(), $categoryFront->getCategoryId())
-            ->willReturn($productCategoryFront);
-
+        /* @noinspection PhpUndefinedMethodInspection */
         $productCategoryFrontRepository->method('persistAndFlush')->with($productCategoryFront);
 
         $this->setProperty(
@@ -215,6 +132,12 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             [$productBack, $productFront]
         );
 
-        $this->assertSame($productCategoryFront, $productCategoryFrontTest);
+        if (null === $productCategoryFront) {
+            $productCategoryFront = new ProductCategoryFront($values['productFrontId'], $values['categoryFrontId']);
+            $this->assertEquals($productCategoryFront, $productCategoryFrontTest);
+        } else {
+            $productCategoryFront->setProductId($values['productFrontId'])->setCategoryId($values['categoryFrontId']);
+            $this->assertSame($productCategoryFront, $productCategoryFrontTest);
+        }
     }
 }

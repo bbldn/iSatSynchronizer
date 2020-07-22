@@ -410,6 +410,213 @@ class Product
     protected $agsatPriceUpdatedAt;
 
     /**
+     * Product constructor.
+     * @param int|null $productId
+     * @param int|null $categoryId
+     * @param null|string $name
+     * @param null|string $description
+     * @param null|string $description1
+     * @param float|null $customersRating
+     * @param float|null $price
+     * @param float|null $priceHrn
+     * @param int|null $inStock
+     * @param int|null $inStock1
+     * @param int|null $customerVotes
+     * @param int|null $itemsSold
+     * @param int|null $enabled
+     * @param bool|null $enabled1
+     * @param null|string $briefDescription
+     * @param null|string $briefDescription1
+     * @param float|null $listPrice
+     * @param null|string $productCode
+     * @param int|null $sortOrder
+     * @param int|null $defaultPicture
+     * @param DateTimeInterface|null $dateAdded
+     * @param DateTimeInterface|null $dateModified
+     * @param int|null $viewedTimes
+     * @param null|string $eProductFilename
+     * @param int|null $eProductAvailableDays
+     * @param int|null $eProductDownloadTimes
+     * @param int|null $weight
+     * @param null|string $metaDescription
+     * @param null|string $metaKeywords
+     * @param int|null $freeShipping
+     * @param int|null $minOrderAmount
+     * @param float|null $shippingFreight
+     * @param int|null $classId
+     * @param float|null $pricePurchase
+     * @param int|null $commentsEnabled
+     * @param int|null $clientId
+     * @param bool|null $noBonus
+     * @param bool|null $showInPriceList
+     * @param bool|null $showInPriceList1
+     * @param null|string $recommendedText
+     * @param null|string $recommendedText1
+     * @param null|string $specialStripeText
+     * @param null|string $specialStripeText1
+     * @param null|string $specialStripeColor
+     * @param null|string $specialStripeColor1
+     * @param null|string $specialStripeTextColor
+     * @param null|string $specialStripeTextColor1
+     * @param null|string $productAbsentText
+     * @param null|string $productAbsentText1
+     * @param null|string $productAbsentColor
+     * @param null|string $productAbsentColor1
+     * @param null|string $measure
+     * @param bool|null $discontinued
+     * @param null|string $preOrderText
+     * @param null|string $barcode
+     * @param null|string $serialNum
+     * @param bool|null $documentTypeDefault
+     * @param null|string $warranty
+     * @param null|string $emailAfterCheckout
+     * @param int|null $minCount
+     * @param null|string $tags
+     * @param null|string $brand
+     * @param bool|null $fixPriceInHrn
+     * @param bool|null $slug
+     * @param bool|null $agsatPriceInherit
+     * @param DateTimeInterface|null $agsatPriceUpdatedAt
+     */
+    public function __construct(
+        ?int $productId = null,
+        ?int $categoryId = null,
+        ?string $name = null,
+        ?string $description = null,
+        ?string $description1 = null,
+        ?float $customersRating = null,
+        ?float $price = null,
+        ?float $priceHrn = null,
+        ?int $inStock = null,
+        ?int $inStock1 = null,
+        ?int $customerVotes = null,
+        ?int $itemsSold = null,
+        ?int $enabled = null,
+        ?bool $enabled1 = null,
+        ?string $briefDescription = null,
+        ?string $briefDescription1 = null,
+        ?float $listPrice = null,
+        ?string $productCode = null,
+        ?int $sortOrder = null,
+        ?int $defaultPicture = null,
+        ?DateTimeInterface $dateAdded = null,
+        ?DateTimeInterface $dateModified = null,
+        ?int $viewedTimes = null,
+        ?string $eProductFilename = null,
+        ?int $eProductAvailableDays = null,
+        ?int $eProductDownloadTimes = null,
+        ?int $weight = null,
+        ?string $metaDescription = null,
+        ?string $metaKeywords = null,
+        ?int $freeShipping = null,
+        ?int $minOrderAmount = null,
+        ?float $shippingFreight = null,
+        ?int $classId = null,
+        ?float $pricePurchase = null,
+        ?int $commentsEnabled = null,
+        ?int $clientId = null,
+        ?bool $noBonus = null,
+        ?bool $showInPriceList = null,
+        ?bool $showInPriceList1 = null,
+        ?string $recommendedText = null,
+        ?string $recommendedText1 = null,
+        ?string $specialStripeText = null,
+        ?string $specialStripeText1 = null,
+        ?string $specialStripeColor = null,
+        ?string $specialStripeColor1 = null,
+        ?string $specialStripeTextColor = null,
+        ?string $specialStripeTextColor1 = null,
+        ?string $productAbsentText = null,
+        ?string $productAbsentText1 = null,
+        ?string $productAbsentColor = null,
+        ?string $productAbsentColor1 = null,
+        ?string $measure = null,
+        ?bool $discontinued = null,
+        ?string $preOrderText = null,
+        ?string $barcode = null,
+        ?string $serialNum = null,
+        ?bool $documentTypeDefault = null,
+        ?string $warranty = null,
+        ?string $emailAfterCheckout = null,
+        ?int $minCount = null,
+        ?string $tags = null,
+        ?string $brand = null,
+        ?bool $fixPriceInHrn = null,
+        ?bool $slug = null,
+        ?bool $agsatPriceInherit = null,
+        ?DateTimeInterface $agsatPriceUpdatedAt = null
+    )
+    {
+        $this->productId = $productId;
+        $this->categoryId = $categoryId;
+        $this->name = $name;
+        $this->description = $description;
+        $this->description1 = $description1;
+        $this->customersRating = $customersRating;
+        $this->price = $price;
+        $this->priceHrn = $priceHrn;
+        $this->inStock = $inStock;
+        $this->inStock1 = $inStock1;
+        $this->customerVotes = $customerVotes;
+        $this->itemsSold = $itemsSold;
+        $this->enabled = $enabled;
+        $this->enabled1 = $enabled1;
+        $this->briefDescription = $briefDescription;
+        $this->briefDescription1 = $briefDescription1;
+        $this->listPrice = $listPrice;
+        $this->productCode = $productCode;
+        $this->sortOrder = $sortOrder;
+        $this->defaultPicture = $defaultPicture;
+        $this->dateAdded = $dateAdded;
+        $this->dateModified = $dateModified;
+        $this->viewedTimes = $viewedTimes;
+        $this->eProductFilename = $eProductFilename;
+        $this->eProductAvailableDays = $eProductAvailableDays;
+        $this->eProductDownloadTimes = $eProductDownloadTimes;
+        $this->weight = $weight;
+        $this->metaDescription = $metaDescription;
+        $this->metaKeywords = $metaKeywords;
+        $this->freeShipping = $freeShipping;
+        $this->minOrderAmount = $minOrderAmount;
+        $this->shippingFreight = $shippingFreight;
+        $this->classId = $classId;
+        $this->pricePurchase = $pricePurchase;
+        $this->commentsEnabled = $commentsEnabled;
+        $this->clientId = $clientId;
+        $this->noBonus = $noBonus;
+        $this->showInPriceList = $showInPriceList;
+        $this->showInPriceList1 = $showInPriceList1;
+        $this->recommendedText = $recommendedText;
+        $this->recommendedText1 = $recommendedText1;
+        $this->specialStripeText = $specialStripeText;
+        $this->specialStripeText1 = $specialStripeText1;
+        $this->specialStripeColor = $specialStripeColor;
+        $this->specialStripeColor1 = $specialStripeColor1;
+        $this->specialStripeTextColor = $specialStripeTextColor;
+        $this->specialStripeTextColor1 = $specialStripeTextColor1;
+        $this->productAbsentText = $productAbsentText;
+        $this->productAbsentText1 = $productAbsentText1;
+        $this->productAbsentColor = $productAbsentColor;
+        $this->productAbsentColor1 = $productAbsentColor1;
+        $this->measure = $measure;
+        $this->discontinued = $discontinued;
+        $this->preOrderText = $preOrderText;
+        $this->barcode = $barcode;
+        $this->serialNum = $serialNum;
+        $this->documentTypeDefault = $documentTypeDefault;
+        $this->warranty = $warranty;
+        $this->emailAfterCheckout = $emailAfterCheckout;
+        $this->minCount = $minCount;
+        $this->tags = $tags;
+        $this->brand = $brand;
+        $this->fixPriceInHrn = $fixPriceInHrn;
+        $this->slug = $slug;
+        $this->agsatPriceInherit = $agsatPriceInherit;
+        $this->agsatPriceUpdatedAt = $agsatPriceUpdatedAt;
+    }
+
+
+    /**
      * @return int|null
      */
     public function getProductId(): ?int

@@ -34,10 +34,13 @@ trait CreateOrUpdateProductTrait
      */
     public function testCreateOrUpdateProduct(?Product $productInput, Product $productResult)
     {
+        /* @noinspection PhpUndefinedMethodInspection */
         $productRepository = $this->getMockBuilder(ProductRepository::class)
             ->setMethods(['persistAndFlush'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        /* @noinspection PhpUndefinedMethodInspection */
         $productRepository->expects($this->once())->method('persistAndFlush')->with($productResult);
 
         $this->setProperty($this->productSynchronizer, 'productRepository', $productRepository);

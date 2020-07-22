@@ -25,6 +25,20 @@ class ProductCategory
     protected $categoryId;
 
     /**
+     * ProductCategory constructor.
+     * @param int|null $productId
+     * @param int|null $categoryId
+     */
+    public function __construct(
+        ?int $productId = null,
+        ?int $categoryId = null
+    )
+    {
+        $this->productId = $productId;
+        $this->categoryId = $categoryId;
+    }
+
+    /**
      * @return int|null
      */
     public function getProductId(): ?int

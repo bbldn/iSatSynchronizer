@@ -70,6 +70,42 @@ class Category
     protected $dateModified;
 
     /**
+     * Category constructor.
+     * @param int|null $categoryId
+     * @param null|string $image
+     * @param int|null $parentId
+     * @param bool|null $top
+     * @param int|null $column
+     * @param int|null $sortOrder
+     * @param bool|null $status
+     * @param DateTimeInterface|null $dateAdded
+     * @param DateTimeInterface|null $dateModified
+     */
+    public function __construct(
+        ?int $categoryId = null,
+        ?string $image = null,
+        ?int $parentId = null,
+        ?bool $top = null,
+        ?int $column = null,
+        ?int $sortOrder = null,
+        ?bool $status = null,
+        ?DateTimeInterface $dateAdded = null,
+        ?DateTimeInterface $dateModified = null
+    )
+    {
+        $this->categoryId = $categoryId;
+        $this->image = $image;
+        $this->parentId = $parentId;
+        $this->top = $top;
+        $this->column = $column;
+        $this->sortOrder = $sortOrder;
+        $this->status = $status;
+        $this->dateAdded = $dateAdded;
+        $this->dateModified = $dateModified;
+    }
+
+
+    /**
      * @param int|null $categoryId
      * @return Category
      */

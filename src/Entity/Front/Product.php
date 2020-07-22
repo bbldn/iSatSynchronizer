@@ -202,6 +202,108 @@ class Product
     protected $dateModified;
 
     /**
+     * Product constructor.
+     * @param int|null $productId
+     * @param null|string $model
+     * @param null|string $sku
+     * @param null|string $upc
+     * @param null|string $ean
+     * @param null|string $jan
+     * @param null|string $isbn
+     * @param null|string $mpn
+     * @param null|string $location
+     * @param int|null $quantity
+     * @param int|null $stockStatusId
+     * @param null|string $image
+     * @param int|null $manufacturerId
+     * @param bool|null $shipping
+     * @param float|null $price
+     * @param int|null $points
+     * @param int|null $taxClassId
+     * @param DateTimeInterface|null $dateAvailable
+     * @param float|null $weight
+     * @param int|null $weightClassId
+     * @param float|null $length
+     * @param float|null $width
+     * @param float|null $height
+     * @param int|null $lengthClassId
+     * @param bool|null $subtract
+     * @param bool|null $minimum
+     * @param int|null $sortOrder
+     * @param bool|null $status
+     * @param int|null $viewed
+     * @param DateTimeInterface|null $dateAdded
+     * @param DateTimeInterface|null $dateModified
+     */
+    public function __construct(
+        ?int $productId,
+        ?string $model,
+        ?string $sku,
+        ?string $upc,
+        ?string $ean,
+        ?string $jan,
+        ?string $isbn,
+        ?string $mpn,
+        ?string $location,
+        ?int $quantity,
+        ?int $stockStatusId,
+        ?string $image,
+        ?int $manufacturerId,
+        ?bool $shipping,
+        ?float $price,
+        ?int $points,
+        ?int $taxClassId,
+        ?DateTimeInterface $dateAvailable,
+        ?float $weight,
+        ?int $weightClassId,
+        ?float $length,
+        ?float $width,
+        ?float $height,
+        ?int $lengthClassId,
+        ?bool $subtract,
+        ?bool $minimum,
+        ?int $sortOrder,
+        ?bool $status,
+        ?int $viewed,
+        ?DateTimeInterface $dateAdded,
+        ?DateTimeInterface $dateModified
+    )
+    {
+        $this->productId = $productId;
+        $this->model = $model;
+        $this->sku = $sku;
+        $this->upc = $upc;
+        $this->ean = $ean;
+        $this->jan = $jan;
+        $this->isbn = $isbn;
+        $this->mpn = $mpn;
+        $this->location = $location;
+        $this->quantity = $quantity;
+        $this->stockStatusId = $stockStatusId;
+        $this->image = $image;
+        $this->manufacturerId = $manufacturerId;
+        $this->shipping = $shipping;
+        $this->price = $price;
+        $this->points = $points;
+        $this->taxClassId = $taxClassId;
+        $this->dateAvailable = $dateAvailable;
+        $this->weight = $weight;
+        $this->weightClassId = $weightClassId;
+        $this->length = $length;
+        $this->width = $width;
+        $this->height = $height;
+        $this->lengthClassId = $lengthClassId;
+        $this->subtract = $subtract;
+        $this->minimum = $minimum;
+        $this->sortOrder = $sortOrder;
+        $this->status = $status;
+        $this->viewed = $viewed;
+        $this->dateAdded = $dateAdded;
+        $this->dateModified = $dateModified;
+    }
+
+
+    /**
      * @param int|null $productId
      * @return Product
      */
