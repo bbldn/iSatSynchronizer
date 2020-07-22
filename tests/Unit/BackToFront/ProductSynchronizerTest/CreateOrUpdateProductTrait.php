@@ -14,7 +14,7 @@ trait CreateOrUpdateProductTrait
     /**
      * @return array
      */
-    public function providerCreateOrUpdateProduct()
+    public function providerCreateOrUpdateProduct(): array
     {
         $productResult = new Product();
         $productResult->setBackId(1);
@@ -32,7 +32,7 @@ trait CreateOrUpdateProductTrait
      * @param Product|null $productInput
      * @param Product $productResult
      */
-    public function testCreateOrUpdateProduct(?Product $productInput, Product $productResult)
+    public function testCreateOrUpdateProduct(?Product $productInput, Product $productResult): void
     {
         /* @noinspection PhpUndefinedMethodInspection */
         $productRepository = $this->getMockBuilder(ProductRepository::class)

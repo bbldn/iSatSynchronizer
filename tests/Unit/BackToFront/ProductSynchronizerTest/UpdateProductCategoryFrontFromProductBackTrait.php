@@ -20,7 +20,7 @@ trait UpdateProductCategoryFrontFromProductBackTrait
     /**
      * @return array
      */
-    public function providerUpdateProductCategoryFrontFromProductBack()
+    public function providerUpdateProductCategoryFrontFromProductBack(): array
     {
         return [
             [
