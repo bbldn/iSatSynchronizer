@@ -27,39 +27,40 @@ trait UpdateProductCategoryFrontFromProductBackTrait
                 new CategoryFront(1),
                 new ProductCategoryFront(2, 1),
                 [
-                    'categoryFrontId' => 1,
                     'productFrontId' => 2,
+                    'categoryFrontId' => 1,
                 ]
             ],
             [
                 null,
-                new ProductCategoryFront(3, 4),
+                new ProductCategoryFront(4, 3),
                 [
-                    'categoryFrontId' => 3,
                     'productFrontId' => 4,
+                    'categoryFrontId' => 3,
                 ]
             ],
             [
                 new CategoryFront(5),
                 null,
                 [
-                    'categoryFrontId' => 5,
                     'productFrontId' => 6,
+                    'categoryFrontId' => 5,
                 ]
             ],
             [
                 null,
                 null,
                 [
-                    'categoryFrontId' => 7,
                     'productFrontId' => 8,
+                    'categoryFrontId' => 7,
                 ]
             ],
         ];
     }
 
     /**
-     * @see ProductSynchronizer::updateProductCategoryFrontFromProductBack
+     * @dataProvider providerUpdateProductCategoryFrontFromProductBack
+     * @see          ProductSynchronizer::updateProductCategoryFrontFromProductBack
      * @param CategoryFront|null $categoryFront
      * @param ProductCategoryFront|null $productCategoryFront
      * @param array $values
@@ -71,7 +72,7 @@ trait UpdateProductCategoryFrontFromProductBackTrait
         array $values
     ): void
     {
-        $productBack = new ProductBack(null ,random_int(10, 40));
+        $productBack = new ProductBack(null, random_int(10, 40));
         $productFront = new ProductFront($values['productFrontId']);
 
         /* @noinspection PhpUndefinedMethodInspection */
@@ -103,6 +104,12 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             $storeFront->expects($this->once())
                 ->method('getDefaultCategoryFrontId')
                 ->willReturn($values['categoryFrontId']);
+
+            $this->setProperty(
+                $this->productSynchronizer,
+                'storeFront',
+                $storeFront
+            );
         }
 
         /* @noinspection PhpUndefinedMethodInspection */
@@ -118,7 +125,8 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             ->willReturn($productCategoryFront);
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productCategoryFrontRepository->method('persistAndFlush')->with($productCategoryFront);
+        $productCategoryFrontRepository->method('persistAndFlush')
+            ->with(new ProductCategoryFront($values['productFrontId'], $values['categoryFrontId']));
 
         $this->setProperty(
             $this->productSynchronizer,
