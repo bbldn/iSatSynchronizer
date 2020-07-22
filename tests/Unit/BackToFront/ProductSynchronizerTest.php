@@ -5,14 +5,14 @@ namespace App\Tests\Unit\BackToFront;
 use App\Service\Synchronizer\BackToFront\ProductSynchronizer;
 use App\Tests\Unit\BackToFront\ProductSynchronizerTest\CreateOrUpdateProductTrait;
 use App\Tests\Unit\BackToFront\ProductSynchronizerTest\UpdateProductCategoryFrontFromProductBackTrait;
-use App\Tests\Unit\BackToFront\ProductSynchronizerTest\UpdateProductStoreFrontFromProductBackTrait;
+use App\Tests\Unit\BackToFront\ProductSynchronizerTest\UpdateProductStoreFrontFromProductFrontTrait;
 use App\Tests\WebTestCase;
 
 class ProductSynchronizerTest extends WebTestCase
 {
     use CreateOrUpdateProductTrait;
     use UpdateProductCategoryFrontFromProductBackTrait;
-    use UpdateProductStoreFrontFromProductBackTrait;
+    use UpdateProductStoreFrontFromProductFrontTrait;
 
     /** @var ProductSynchronizer $productSynchronizer */
     protected $productSynchronizer;

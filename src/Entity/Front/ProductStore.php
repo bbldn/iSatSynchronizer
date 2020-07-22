@@ -25,6 +25,20 @@ class ProductStore
     protected $storeId = 0;
 
     /**
+     * ProductStore constructor.
+     * @param int|null $productId
+     * @param int|null $storeId
+     */
+    public function __construct(
+        ?int $productId = null,
+        ?int $storeId = 0
+    )
+    {
+        $this->productId = $productId;
+        $this->storeId = $storeId;
+    }
+
+    /**
      * @return int|null
      */
     public function getProductId(): ?int
