@@ -55,8 +55,7 @@ trait UpdateProductLayoutFrontFromProductFrontTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productLayoutFrontRepository->expects($this->once())
-            ->method('findOneByProductFrontIdAndStoreId')
+        $productLayoutFrontRepository->method('findOneByProductFrontIdAndStoreId')
             ->with($values['productId'], $values['defaultStoreId'])
             ->willReturn($productLayoutFront);
 
@@ -82,13 +81,11 @@ trait UpdateProductLayoutFrontFromProductFrontTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $storeFront->expects($this->atMost(2))
-            ->method('getDefaultStoreId')
+        $storeFront->method('getDefaultStoreId')
             ->willReturn($values['defaultStoreId']);
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $storeFront->expects($this->once())
-            ->method('getDefaultProductLayoutId')
+        $storeFront->method('getDefaultProductLayoutId')
             ->willReturn($values['defaultProductLayoutId']);
 
         $this->setProperty(

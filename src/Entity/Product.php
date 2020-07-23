@@ -46,6 +46,29 @@ class Product
     protected $updatedAt;
 
     /**
+     * Product constructor.
+     * @param int|null $id
+     * @param int|null $frontId
+     * @param int|null $backId
+     * @param DateTimeInterface|null $createdAt
+     * @param DateTimeInterface|null $updatedAt
+     */
+    public function __construct(
+        ?int $id = null,
+        ?int $frontId = null,
+        ?int $backId = null,
+        ?DateTimeInterface $createdAt = null,
+        ?DateTimeInterface $updatedAt = null
+    )
+    {
+        $this->id = $id;
+        $this->frontId = $frontId;
+        $this->backId = $backId;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
      * @return int|null
      */
     public function getId(): ?int

@@ -16,9 +16,7 @@ trait CreateOrUpdateProductTrait
      */
     public function providerCreateOrUpdateProduct(): array
     {
-        $productResult = new Product();
-        $productResult->setBackId(1);
-        $productResult->setFrontId(2);
+        $productResult = new Product(0, 2, 1);
 
         return [
             [null, $productResult],
@@ -41,7 +39,7 @@ trait CreateOrUpdateProductTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productRepository->expects($this->once())->method('persistAndFlush')->with($productResult);
+        $productRepository->method('persistAndFlush')->with($productResult);
 
         $this->setProperty($this->productSynchronizer, 'productRepository', $productRepository);
 

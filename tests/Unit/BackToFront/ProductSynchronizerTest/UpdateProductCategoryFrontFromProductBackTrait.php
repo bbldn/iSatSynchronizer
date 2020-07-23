@@ -82,8 +82,7 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productSynchronizerHelper->expects($this->once())
-            ->method('getCategoryFrontByCategoryBackId')
+        $productSynchronizerHelper->method('getCategoryFrontByCategoryBackId')
             ->with($productBack->getCategoryId())
             ->willReturn($categoryFront);
 
@@ -93,24 +92,21 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             $productSynchronizerHelper
         );
 
-        if (null === $categoryFront) {
-            /* @noinspection PhpUndefinedMethodInspection */
-            $storeFront = $this->getMockBuilder(StoreFront::class)
-                ->setMethods(['getDefaultCategoryFrontId'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        /* @noinspection PhpUndefinedMethodInspection */
+        $storeFront = $this->getMockBuilder(StoreFront::class)
+            ->setMethods(['getDefaultCategoryFrontId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-            /* @noinspection PhpUndefinedMethodInspection */
-            $storeFront->expects($this->once())
-                ->method('getDefaultCategoryFrontId')
-                ->willReturn($values['categoryFrontId']);
+        /* @noinspection PhpUndefinedMethodInspection */
+        $storeFront->method('getDefaultCategoryFrontId')
+            ->willReturn($values['categoryFrontId']);
 
-            $this->setProperty(
-                $this->productSynchronizer,
-                'storeFront',
-                $storeFront
-            );
-        }
+        $this->setProperty(
+            $this->productSynchronizer,
+            'storeFront',
+            $storeFront
+        );
 
         /* @noinspection PhpUndefinedMethodInspection */
         $productCategoryFrontRepository = $this->getMockBuilder(ProductCategoryFrontRepository::class)
@@ -119,8 +115,7 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productCategoryFrontRepository->expects($this->once())
-            ->method('findOneByProductFrontIdAndCategoryId')
+        $productCategoryFrontRepository->method('findOneByProductFrontIdAndCategoryId')
             ->with($values['productFrontId'], $values['categoryFrontId'])
             ->willReturn($productCategoryFront);
 

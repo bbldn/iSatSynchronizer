@@ -34,8 +34,7 @@ trait UpdateProductStoreFrontFromProductFrontTrait
         array $values
     ): void
     {
-        $productFront = new ProductFront();
-        $productFront->setProductId($values['productId']);
+        $productFront = new ProductFront($values['productId']);
 
         /* @noinspection PhpUndefinedMethodInspection */
         $storeFront = $this->getMockBuilder(StoreFront::class)
@@ -44,9 +43,7 @@ trait UpdateProductStoreFrontFromProductFrontTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $storeFront->expects($this->atMost(2))
-            ->method('getDefaultStoreId')
-            ->willReturn($values['storeId']);
+        $storeFront->method('getDefaultStoreId')->willReturn($values['storeId']);
 
         $this->setProperty(
             $this->productSynchronizer,
@@ -54,9 +51,7 @@ trait UpdateProductStoreFrontFromProductFrontTrait
             $storeFront
         );
 
-        $productStoreFrontResult = new ProductStoreFront();
-        $productStoreFrontResult->setProductId($values['productId']);
-        $productStoreFrontResult->setStoreId($values['storeId']);
+        $productStoreFrontResult = new ProductStoreFront($values['productId'], $values['storeId']);
 
         /* @noinspection PhpUndefinedMethodInspection */
         $productStoreFrontRepository = $this->getMockBuilder(ProductStoreFrontRepository::class)
@@ -65,17 +60,12 @@ trait UpdateProductStoreFrontFromProductFrontTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productStoreFrontRepository
-            ->expects($this->once())
-            ->method('findOneByProductFrontIdAndStoreId')
+        $productStoreFrontRepository->method('findOneByProductFrontIdAndStoreId')
             ->with($values['productId'], $values['storeId'])
             ->willReturn($productStoreFrontResult);
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productStoreFrontRepository
-            ->expects($this->once())
-            ->method('persistAndFlush')
-            ->with($productStoreFrontResult);
+        $productStoreFrontRepository->method('persistAndFlush')->with($productStoreFrontResult);
 
         $this->setProperty(
             $this->productSynchronizer,
