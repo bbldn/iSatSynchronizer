@@ -114,10 +114,6 @@ trait UpdateProductLayoutFrontFromProductFrontTrait
 
             $this->assertEquals($productLayoutFront, $productLayoutFrontTest);
         } else {
-            $productLayoutFront->setProductId($values['productId'])
-                ->setStoreId($values['defaultStoreId'])
-                ->setLayoutId($values['defaultProductLayoutId']);
-
             $this->assertSame($productLayoutFront, $productLayoutFrontTest);
         }
     }

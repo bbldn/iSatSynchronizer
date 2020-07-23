@@ -144,7 +144,6 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             $productCategoryFront = new ProductCategoryFront($values['productFrontId'], $values['categoryFrontId']);
             $this->assertEquals($productCategoryFront, $productCategoryFrontTest);
         } else {
-            $productCategoryFront->setProductId($values['productFrontId'])->setCategoryId($values['categoryFrontId']);
             $this->assertSame($productCategoryFront, $productCategoryFrontTest);
         }
     }
