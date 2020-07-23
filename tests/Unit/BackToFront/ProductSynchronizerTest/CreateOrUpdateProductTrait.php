@@ -39,7 +39,7 @@ trait CreateOrUpdateProductTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productRepository->method('persistAndFlush')->with($productResult);
+        $productRepository->method('persistAndFlush');
 
         $this->setProperty($this->productSynchronizer, 'productRepository', $productRepository);
 

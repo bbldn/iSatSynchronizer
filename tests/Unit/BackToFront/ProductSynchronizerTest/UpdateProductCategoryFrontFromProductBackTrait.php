@@ -82,9 +82,7 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productSynchronizerHelper->method('getCategoryFrontByCategoryBackId')
-            ->with($productBack->getCategoryId())
-            ->willReturn($categoryFront);
+        $productSynchronizerHelper->method('getCategoryFrontByCategoryBackId')->willReturn($categoryFront);
 
         $this->setProperty(
             $this->productSynchronizer,
@@ -99,8 +97,7 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $storeFront->method('getDefaultCategoryFrontId')
-            ->willReturn($values['categoryFrontId']);
+        $storeFront->method('getDefaultCategoryFrontId')->willReturn($values['categoryFrontId']);
 
         $this->setProperty(
             $this->productSynchronizer,
@@ -115,13 +112,10 @@ trait UpdateProductCategoryFrontFromProductBackTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productCategoryFrontRepository->method('findOneByProductFrontIdAndCategoryId')
-            ->with($values['productFrontId'], $values['categoryFrontId'])
-            ->willReturn($productCategoryFront);
+        $productCategoryFrontRepository->method('findOneByProductFrontIdAndCategoryId')->willReturn($productCategoryFront);
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productCategoryFrontRepository->method('persistAndFlush')
-            ->with(new ProductCategoryFront($values['productFrontId'], $values['categoryFrontId']));
+        $productCategoryFrontRepository->method('persistAndFlush');
 
         $this->setProperty(
             $this->productSynchronizer,

@@ -60,12 +60,10 @@ trait UpdateProductStoreFrontFromProductFrontTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productStoreFrontRepository->method('findOneByProductFrontIdAndStoreId')
-            ->with($values['productId'], $values['storeId'])
-            ->willReturn($productStoreFrontResult);
+        $productStoreFrontRepository->method('findOneByProductFrontIdAndStoreId')->willReturn($productStoreFrontResult);
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productStoreFrontRepository->method('persistAndFlush')->with($productStoreFrontResult);
+        $productStoreFrontRepository->method('persistAndFlush');
 
         $this->setProperty(
             $this->productSynchronizer,

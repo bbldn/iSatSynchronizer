@@ -55,18 +55,10 @@ trait UpdateProductLayoutFrontFromProductFrontTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productLayoutFrontRepository->method('findOneByProductFrontIdAndStoreId')
-            ->with($values['productId'], $values['defaultStoreId'])
-            ->willReturn($productLayoutFront);
+        $productLayoutFrontRepository->method('findOneByProductFrontIdAndStoreId')->willReturn($productLayoutFront);
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $productLayoutFrontRepository->expects($this->once())
-            ->method('persistAndFlush')
-            ->with(new ProductLayoutFront(
-                $values['productId'],
-                $values['defaultStoreId'],
-                $values['defaultProductLayoutId']
-            ));
+        $productLayoutFrontRepository->method('persistAndFlush');
 
         $this->setProperty(
             $this->productSynchronizer,
@@ -81,12 +73,10 @@ trait UpdateProductLayoutFrontFromProductFrontTrait
             ->getMock();
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $storeFront->method('getDefaultStoreId')
-            ->willReturn($values['defaultStoreId']);
+        $storeFront->method('getDefaultStoreId')->willReturn($values['defaultStoreId']);
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $storeFront->method('getDefaultProductLayoutId')
-            ->willReturn($values['defaultProductLayoutId']);
+        $storeFront->method('getDefaultProductLayoutId')->willReturn($values['defaultProductLayoutId']);
 
         $this->setProperty(
             $this->productSynchronizer,
@@ -102,16 +92,16 @@ trait UpdateProductLayoutFrontFromProductFrontTrait
             [$productFront]
         );
 
-        if (null === $productLayoutFront) {
-            $productLayoutFront = new ProductLayoutFront(
-                $values['productId'],
-                $values['defaultStoreId'],
-                $values['defaultProductLayoutId']
-            );
-
-            $this->assertEquals($productLayoutFront, $productLayoutFrontTest);
-        } else {
+        if (null !== $productLayoutFront) {
             $this->assertSame($productLayoutFront, $productLayoutFrontTest);
         }
+
+        $productLayoutFront = new ProductLayoutFront(
+            $values['productId'],
+            $values['defaultStoreId'],
+            $values['defaultProductLayoutId']
+        );
+
+        $this->assertEquals($productLayoutFront, $productLayoutFrontTest);
     }
 }
