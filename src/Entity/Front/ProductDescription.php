@@ -61,6 +61,39 @@ class ProductDescription
     protected $metaKeyword;
 
     /**
+     * ProductDescription constructor.
+     * @param int|null $productId
+     * @param int|null $languageId
+     * @param null|string $name
+     * @param null|string $description
+     * @param null|string $tag
+     * @param null|string $metaTitle
+     * @param null|string $metaDescription
+     * @param null|string $metaKeyword
+     */
+    public function __construct(
+        ?int $productId = null,
+        ?int $languageId = null,
+        ?string $name = null,
+        ?string $description = null,
+        ?string $tag = null,
+        ?string $metaTitle = null,
+        ?string $metaDescription = null,
+        ?string $metaKeyword = null
+    )
+    {
+        $this->productId = $productId;
+        $this->languageId = $languageId;
+        $this->name = $name;
+        $this->description = $description;
+        $this->tag = $tag;
+        $this->metaTitle = $metaTitle;
+        $this->metaDescription = $metaDescription;
+        $this->metaKeyword = $metaKeyword;
+    }
+
+
+    /**
      * @return int|null
      */
     public function getProductId(): ?int
