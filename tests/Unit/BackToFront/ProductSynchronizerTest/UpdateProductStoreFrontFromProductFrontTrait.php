@@ -19,18 +19,18 @@ trait UpdateProductStoreFrontFromProductFrontTrait
     public function providerUpdateProductStoreFrontFromProductFront(): array
     {
         return [
-            [new ProductStoreFront(1, 2), ['productId' => 1, 'storeId' => 2,]],
+            [new ProductStoreFront(5, 7), ['productId' => 1, 'storeId' => 2,]],
             [null, ['productId' => 3, 'storeId' => 4,]]
         ];
     }
 
     /**
      * @dataProvider providerUpdateProductStoreFrontFromProductFront
-     * @param ProductStoreFront|null $productStoreFront
+     * @param ProductStoreFront|null $productStoreFrontResult
      * @param array $values
      */
     public function testUpdateProductStoreFrontFromProductFront(
-        ?ProductStoreFront $productStoreFront,
+        ?ProductStoreFront $productStoreFrontResult,
         array $values
     ): void
     {
@@ -50,8 +50,6 @@ trait UpdateProductStoreFrontFromProductFrontTrait
             'storeFront',
             $storeFront
         );
-
-        $productStoreFrontResult = new ProductStoreFront($values['productId'], $values['storeId']);
 
         /* @noinspection PhpUndefinedMethodInspection */
         $productStoreFrontRepository = $this->getMockBuilder(ProductStoreFrontRepository::class)
@@ -77,10 +75,11 @@ trait UpdateProductStoreFrontFromProductFrontTrait
             [$productFront]
         );
 
-        if (null === $productStoreFront) {
-            $this->assertEquals($productStoreFrontResult, $productCategoryFrontTest);
-        } else {
+        if (null !== $productStoreFrontResult) {
             $this->assertSame($productStoreFrontResult, $productCategoryFrontTest);
         }
+
+        $productStoreFrontResult = new ProductStoreFront($values['productId'], $values['storeId']);
+        $this->assertEquals($productStoreFrontResult, $productCategoryFrontTest);
     }
 }
