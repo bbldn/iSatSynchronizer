@@ -101,7 +101,7 @@ class DescriptionHelper implements DescriptionHelperContract
         try {
             $this->fileWriter->saveFile($path, $content);
         } catch (Throwable $e) {
-            $this->logger->error(ExceptionFormatter::e($e));
+            $this->logger->warning(ExceptionFormatter::e($e));
 
             return null;
         }
