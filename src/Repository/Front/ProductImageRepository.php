@@ -39,10 +39,10 @@ class ProductImageRepository extends FrontRepository
     public function findOneByProductIdAndImagePath(int $productId, string $imagePath): ?ProductImage
     {
         try {
-            return $this->createQueryBuilder('c')
-                ->andWhere('c.productId = :productId')
+            return $this->createQueryBuilder('pi')
+                ->andWhere('pi.productId = :productId')
                 ->setParameter('productId', $productId)
-                ->andWhere('c.image = :imagePath')
+                ->andWhere('pi.image = :imagePath')
                 ->setParameter('imagePath', $imagePath)
                 ->setMaxResults(1)
                 ->getQuery()
@@ -52,5 +52,19 @@ class ProductImageRepository extends FrontRepository
 
             return null;
         }
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function removeAllByProductFrontId(int $id)
+    {
+        return $this->createQueryBuilder('pi')
+            ->andWhere('pi.productId = :productId')
+            ->setParameter('productId', $id)
+            ->delete()
+            ->getQuery()
+            ->execute();
     }
 }

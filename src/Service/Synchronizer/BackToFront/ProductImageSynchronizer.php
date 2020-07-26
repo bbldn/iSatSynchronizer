@@ -25,4 +25,12 @@ class ProductImageSynchronizer extends ProductImageSynchronizerBase implements P
     {
         parent::load();
     }
+
+    /**
+     * @param int $id
+     */
+    public function clearByProductFrontId(int $id): void
+    {
+        $this->productImageFrontRepository->removeAllByProductFrontId($id);
+    }
 }

@@ -89,6 +89,7 @@ class SynchronizeProductImage implements EventSubscriberInterface
             return;
         }
 
+        $this->productImageSynchronizer->clearByProductFrontId($productFront->getProductId());
         $this->productImageSynchronizer->synchronizeImage($productBack, $productFront);
     }
 }
