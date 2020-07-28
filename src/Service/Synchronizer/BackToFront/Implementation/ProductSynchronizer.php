@@ -335,14 +335,16 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         if (null === $productFront->getManufacturerId()) {
             $productFront->setManufacturerId($this->manufacturerHelper->getManufacturerId($productName));
         }
+
         $productFront->setShipping(true);
         $productFront->setPrice($productBack->getPrice());
         $productFront->setPoints(0);
         $productFront->setTaxClassId(0);
         $productFront->setDateAvailable(new DateTime('now'));
-        $productFront->setLength(0);
         $productFront->setWeight(0);
         $productFront->setWeightClassId(0);
+        $productFront->setLength(0);
+        $productFront->setWidth(0);
         $productFront->setHeight(0);
         $productFront->setLengthClassId(0);
         $productFront->setSubtract(false);
