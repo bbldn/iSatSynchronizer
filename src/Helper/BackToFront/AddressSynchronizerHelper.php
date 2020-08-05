@@ -2,11 +2,11 @@
 
 namespace App\Helper\BackToFront;
 
-use App\Contract\BackToFront\AddressSynchronizerHelperContract;
+use App\Contract\BackToFront\AddressSynchronizerHelperInterface;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Repository\CustomerRepository;
 
-class AddressSynchronizerHelper implements AddressSynchronizerHelperContract
+class AddressSynchronizerHelper implements AddressSynchronizerHelperInterface
 {
     /** @var CustomerRepository $customerRepository */
     protected $customerRepository;

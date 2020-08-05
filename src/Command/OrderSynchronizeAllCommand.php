@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\OrderSynchronizerContract as OrderBackToFrontSynchronizerContract;
-use App\Contract\FrontToBack\OrderSynchronizerContract as OrderFrontToBackSynchronizerContract;
+use App\Contract\BackToFront\OrderSynchronizerInterface as OrderBackToFrontSynchronizerContract;
+use App\Contract\FrontToBack\OrderSynchronizerInterface as OrderFrontToBackSynchronizerContract;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

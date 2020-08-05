@@ -2,13 +2,13 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
-use App\Contract\FrontToBack\CustomerSynchronizerContract;
+use App\Contract\FrontToBack\CustomerSynchronizerInterface;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Exception\OrderFrontNotFoundException;
 use App\Service\Synchronizer\FrontToBack\Implementation\CustomerSynchronizer as CustomerSynchronizerBase;
 
-class CustomerSynchronizer extends CustomerSynchronizerBase implements CustomerSynchronizerContract
+class CustomerSynchronizer extends CustomerSynchronizerBase implements CustomerSynchronizerInterface
 {
     /**
      *

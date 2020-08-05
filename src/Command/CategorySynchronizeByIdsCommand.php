@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\CategorySynchronizerContract;
+use App\Contract\BackToFront\CategorySynchronizerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +11,14 @@ class CategorySynchronizeByIdsCommand extends Command
 {
     protected static $defaultName = 'category:synchronize:by-ids';
 
-    /** @var CategorySynchronizerContract $categorySynchronizer */
+    /** @var CategorySynchronizerInterface $categorySynchronizer */
     protected $categorySynchronizer;
 
     /**
      * CategorySynchronizeByIdsCommand constructor.
-     * @param CategorySynchronizerContract $categorySynchronizer
+     * @param CategorySynchronizerInterface $categorySynchronizer
      */
-    public function __construct(CategorySynchronizerContract $categorySynchronizer)
+    public function __construct(CategorySynchronizerInterface $categorySynchronizer)
     {
         $this->categorySynchronizer = $categorySynchronizer;
         parent::__construct();

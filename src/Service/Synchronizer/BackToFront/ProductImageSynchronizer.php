@@ -2,12 +2,12 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\ProductImageSynchronizerContract;
+use App\Contract\BackToFront\ProductImageSynchronizerInterface;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductImageSynchronizer as ProductImageSynchronizerBase;
 
-class ProductImageSynchronizer extends ProductImageSynchronizerBase implements ProductImageSynchronizerContract
+class ProductImageSynchronizer extends ProductImageSynchronizerBase implements ProductImageSynchronizerInterface
 {
     /**
      * @param ProductBack $productBack

@@ -2,11 +2,11 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\CategorySynchronizerContract;
+use App\Contract\BackToFront\CategorySynchronizerInterface;
 use App\Event\BackToFront\CategoriesClearEvent;
 use App\Service\Synchronizer\BackToFront\Implementation\CategorySynchronizer as CategoryBaseSynchronizer;
 
-class CategorySynchronizer extends CategoryBaseSynchronizer implements CategorySynchronizerContract
+class CategorySynchronizer extends CategoryBaseSynchronizer implements CategorySynchronizerInterface
 {
     /**
      *

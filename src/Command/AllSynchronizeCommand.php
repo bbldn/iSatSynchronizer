@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\AttributeSynchronizerContract;
-use App\Contract\BackToFront\CategorySynchronizerContract;
-use App\Contract\BackToFront\ProductSynchronizerContract;
+use App\Contract\BackToFront\AttributeSynchronizerInterface;
+use App\Contract\BackToFront\CategorySynchronizerInterface;
+use App\Contract\BackToFront\ProductSynchronizerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,25 +13,25 @@ class AllSynchronizeCommand extends Command
 {
     protected static $defaultName = 'all:synchronize';
 
-    /** @var AttributeSynchronizerContract $attributeSynchronizer */
+    /** @var AttributeSynchronizerInterface $attributeSynchronizer */
     protected $attributeSynchronizer;
 
-    /** @var CategorySynchronizerContract $categorySynchronizer */
+    /** @var CategorySynchronizerInterface $categorySynchronizer */
     protected $categorySynchronizer;
 
-    /** @var ProductSynchronizerContract $productSynchronizer */
+    /** @var ProductSynchronizerInterface $productSynchronizer */
     protected $productSynchronizer;
 
     /**
      * AllSynchronizeCommand constructor.
-     * @param AttributeSynchronizerContract $attributeSynchronizer
-     * @param CategorySynchronizerContract $categorySynchronizer
-     * @param ProductSynchronizerContract $productSynchronizer
+     * @param AttributeSynchronizerInterface $attributeSynchronizer
+     * @param CategorySynchronizerInterface $categorySynchronizer
+     * @param ProductSynchronizerInterface $productSynchronizer
      */
     public function __construct(
-        AttributeSynchronizerContract $attributeSynchronizer,
-        CategorySynchronizerContract $categorySynchronizer,
-        ProductSynchronizerContract $productSynchronizer
+        AttributeSynchronizerInterface $attributeSynchronizer,
+        CategorySynchronizerInterface $categorySynchronizer,
+        ProductSynchronizerInterface $productSynchronizer
     )
     {
         $this->attributeSynchronizer = $attributeSynchronizer;

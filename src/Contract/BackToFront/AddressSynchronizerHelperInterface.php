@@ -4,7 +4,7 @@ namespace App\Contract\BackToFront;
 
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 
-interface AddressSynchronizerHelperContract
+interface AddressSynchronizerHelperInterface
 {
     /**
      * @param CustomerBack $customerBack

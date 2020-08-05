@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\ProductSeoUrlSynchronizerContract;
+use App\Contract\BackToFront\ProductSeoUrlSynchronizerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class ProductSeoUrlSynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'product:seo-url:synchronize:all';
 
-    /** @var ProductSeoUrlSynchronizerContract $productSeoUrlSynchronizer */
+    /** @var ProductSeoUrlSynchronizerInterface $productSeoUrlSynchronizer */
     protected $productSeoUrlSynchronizer;
 
     /**
      * ProductSeoUrlSynchronizeAllCommand constructor.
-     * @param ProductSeoUrlSynchronizerContract $productSeoUrlSynchronizer
+     * @param ProductSeoUrlSynchronizerInterface $productSeoUrlSynchronizer
      */
-    public function __construct(ProductSeoUrlSynchronizerContract $productSeoUrlSynchronizer)
+    public function __construct(ProductSeoUrlSynchronizerInterface $productSeoUrlSynchronizer)
     {
         $this->productSeoUrlSynchronizer = $productSeoUrlSynchronizer;
         parent::__construct();

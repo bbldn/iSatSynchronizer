@@ -2,7 +2,7 @@
 
 namespace App\Contract\BackToFront;
 
-interface ProductDiscountSpeedSynchronizerContract extends ProductDiscountSynchronizerContract
+interface ProductDiscountSpeedSynchronizerInterface extends ProductDiscountSynchronizerInterface
 {
     /**
      * @param string $ids

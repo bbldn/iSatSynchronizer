@@ -5,7 +5,7 @@ namespace App\Contract\FrontToBack;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Contract\CanLoadInterface;
 
-interface CustomerSynchronizerContract extends CanLoadInterface
+interface CustomerSynchronizerInterface extends CanLoadInterface
 {
     /**
      * @param int $id

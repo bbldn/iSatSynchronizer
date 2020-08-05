@@ -2,11 +2,11 @@
 
 namespace App\Helper\BackToFront;
 
-use App\Contract\BackToFront\ManufacturerHelperContract;
+use App\Contract\BackToFront\ManufacturerHelperInterface;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\Front\ManufacturerRepository as ManufacturerFrontRepository;
 
-class ManufacturerHelper implements ManufacturerHelperContract
+class ManufacturerHelper implements ManufacturerHelperInterface
 {
     /** @var ManufacturerFrontRepository $manufacturerFrontRepository */
     protected $manufacturerFrontRepository;

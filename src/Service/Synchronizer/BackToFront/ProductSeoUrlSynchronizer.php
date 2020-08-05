@@ -2,10 +2,10 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\ProductSeoUrlSynchronizerContract;
+use App\Contract\BackToFront\ProductSeoUrlSynchronizerInterface;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductSeoUrlSynchronizer as ProductSeoUrlSynchronizerBase;
 
-class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase implements ProductSeoUrlSynchronizerContract
+class ProductSeoUrlSynchronizer extends ProductSeoUrlSynchronizerBase implements ProductSeoUrlSynchronizerInterface
 {
     /**
      *

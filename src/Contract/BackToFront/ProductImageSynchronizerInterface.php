@@ -6,7 +6,7 @@ use App\Contract\CanLoadInterface;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 
-interface ProductImageSynchronizerContract extends CanLoadInterface
+interface ProductImageSynchronizerInterface extends CanLoadInterface
 {
     /**
      *

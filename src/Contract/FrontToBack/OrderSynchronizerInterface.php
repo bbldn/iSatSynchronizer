@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Contract\BackToFront;
+namespace App\Contract\FrontToBack;
 
 use App\Contract\CanLoadInterface;
 use App\Contract\CanReloadInterface;
 
-interface OrderSynchronizerContract extends CanLoadInterface, CanReloadInterface
+interface OrderSynchronizerInterface extends CanLoadInterface, CanReloadInterface
 {
     /**
      * @param string $ids

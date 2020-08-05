@@ -7,7 +7,7 @@ use App\Contract\CanReloadInterface;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Front\Address as AddressFront;
 
-interface AddressSynchronizerContract extends CanLoadInterface, CanReloadInterface
+interface AddressSynchronizerInterface extends CanLoadInterface, CanReloadInterface
 {
     /**
      * @param CustomerBack $customerBack

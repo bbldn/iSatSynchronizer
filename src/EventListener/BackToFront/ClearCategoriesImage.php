@@ -2,20 +2,20 @@
 
 namespace App\EventListener\BackToFront;
 
-use App\Contract\BackToFront\CategoryImageSynchronizerContract;
+use App\Contract\BackToFront\CategoryImageSynchronizerInterface;
 use App\Event\BackToFront\CategoriesClearEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClearCategoriesImage implements EventSubscriberInterface
 {
-    /** @var CategoryImageSynchronizerContract $categoryImageHelper */
+    /** @var CategoryImageSynchronizerInterface $categoryImageHelper */
     protected $categoryImageHelper;
 
     /**
      * ClearCategoriesImage constructor.
-     * @param CategoryImageSynchronizerContract $categoryImageHelper
+     * @param CategoryImageSynchronizerInterface $categoryImageHelper
      */
-    public function __construct(CategoryImageSynchronizerContract $categoryImageHelper)
+    public function __construct(CategoryImageSynchronizerInterface $categoryImageHelper)
     {
         $this->categoryImageHelper = $categoryImageHelper;
     }

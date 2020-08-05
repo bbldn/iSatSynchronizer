@@ -4,7 +4,7 @@ namespace App\Contract\BackToFront;
 
 use App\Contract\CanLoadInterface;
 
-interface DescriptionHelperContract extends CanLoadInterface
+interface DescriptionHelperInterface extends CanLoadInterface
 {
 
     /**

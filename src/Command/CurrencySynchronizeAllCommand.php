@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\CurrencySynchronizerContract;
+use App\Contract\BackToFront\CurrencySynchronizerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class CurrencySynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'currency:synchronize:all';
 
-    /** @var CurrencySynchronizerContract $currencySynchronizer */
+    /** @var CurrencySynchronizerInterface $currencySynchronizer */
     protected $currencySynchronizer;
 
     /**
      * CurrencySynchronizeAllCommand constructor.
-     * @param CurrencySynchronizerContract $currencySynchronizer
+     * @param CurrencySynchronizerInterface $currencySynchronizer
      */
-    public function __construct(CurrencySynchronizerContract $currencySynchronizer)
+    public function __construct(CurrencySynchronizerInterface $currencySynchronizer)
     {
         $this->currencySynchronizer = $currencySynchronizer;
         parent::__construct();

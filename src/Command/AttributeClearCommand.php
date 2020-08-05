@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\AttributeSynchronizerContract;
+use App\Contract\BackToFront\AttributeSynchronizerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class AttributeClearCommand extends Command
 {
     protected static $defaultName = 'attribute:clear';
 
-    /** @var AttributeSynchronizerContract $attributeSynchronizer */
+    /** @var AttributeSynchronizerInterface $attributeSynchronizer */
     protected $attributeSynchronizer;
 
     /**
      * AttributeClearCommand constructor.
-     * @param AttributeSynchronizerContract $attributeSynchronizer
+     * @param AttributeSynchronizerInterface $attributeSynchronizer
      */
-    public function __construct(AttributeSynchronizerContract $attributeSynchronizer)
+    public function __construct(AttributeSynchronizerInterface $attributeSynchronizer)
     {
         $this->attributeSynchronizer = $attributeSynchronizer;
         parent::__construct();

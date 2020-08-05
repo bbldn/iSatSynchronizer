@@ -4,7 +4,7 @@ namespace App\Contract\BackToFront;
 
 use App\Contract\CanLoadInterface;
 
-interface ManufacturerHelperContract extends CanLoadInterface
+interface ManufacturerHelperInterface extends CanLoadInterface
 {
     /**
      * @param string $productName

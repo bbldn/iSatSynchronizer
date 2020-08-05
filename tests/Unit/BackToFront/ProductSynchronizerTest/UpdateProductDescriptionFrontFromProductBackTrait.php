@@ -2,7 +2,7 @@
 
 namespace App\Tests\Unit\BackToFront\ProductSynchronizerTest;
 
-use App\Contract\BackToFront\DescriptionHelperContract;
+use App\Contract\BackToFront\DescriptionHelperInterface;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductDescription as ProductDescriptionFront;
@@ -66,7 +66,7 @@ trait UpdateProductDescriptionFrontFromProductBackTrait
         );
 
         /* @noinspection PhpUndefinedMethodInspection */
-        $descriptionHelper = $this->getMockBuilder(DescriptionHelperContract::class)
+        $descriptionHelper = $this->getMockBuilder(DescriptionHelperInterface::class)
             ->setMethods(['synchronize'])
             ->disableOriginalConstructor()
             ->getMock();

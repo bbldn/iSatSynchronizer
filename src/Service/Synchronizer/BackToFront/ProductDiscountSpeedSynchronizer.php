@@ -2,10 +2,10 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\ProductDiscountSpeedSynchronizerContract;
+use App\Contract\BackToFront\ProductDiscountSpeedSynchronizerInterface;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductDiscountSpeedSynchronizer as ProductDiscountSpeedSynchronizerBase;
 
-class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSynchronizerBase implements ProductDiscountSpeedSynchronizerContract
+class ProductDiscountSpeedSynchronizer extends ProductDiscountSpeedSynchronizerBase implements ProductDiscountSpeedSynchronizerInterface
 {
     /**
      *

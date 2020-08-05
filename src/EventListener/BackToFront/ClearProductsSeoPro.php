@@ -2,13 +2,13 @@
 
 namespace App\EventListener\BackToFront;
 
-use App\Contract\BackToFront\ProductSeoUrlSynchronizerContract;
+use App\Contract\BackToFront\ProductSeoUrlSynchronizerInterface;
 use App\Event\BackToFront\ProductsClearEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClearProductsSeoPro implements EventSubscriberInterface
 {
-    /** @var ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer */
+    /** @var ProductSeoUrlSynchronizerInterface $productSeoUrlBackToFrontSynchronizer */
     protected $productSeoUrlBackToFrontSynchronizer;
 
     /** @var bool $synchronizerLoaded */
@@ -16,9 +16,9 @@ class ClearProductsSeoPro implements EventSubscriberInterface
 
     /**
      * ClearProductSeoPro constructor.
-     * @param ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer
+     * @param ProductSeoUrlSynchronizerInterface $productSeoUrlBackToFrontSynchronizer
      */
-    public function __construct(ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer)
+    public function __construct(ProductSeoUrlSynchronizerInterface $productSeoUrlBackToFrontSynchronizer)
     {
         $this->productSeoUrlBackToFrontSynchronizer = $productSeoUrlBackToFrontSynchronizer;
     }

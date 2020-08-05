@@ -4,7 +4,7 @@ namespace App\Contract\BackToFront;
 
 use App\Contract\CanLoadInterface;
 
-interface ProductSynchronizerContract extends CanLoadInterface
+interface ProductSynchronizerInterface extends CanLoadInterface
 {
     /**
      * @param string $ids

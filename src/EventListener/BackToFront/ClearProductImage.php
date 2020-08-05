@@ -2,13 +2,13 @@
 
 namespace App\EventListener\BackToFront;
 
-use App\Contract\BackToFront\ProductImageSynchronizerContract;
+use App\Contract\BackToFront\ProductImageSynchronizerInterface;
 use App\Event\BackToFront\ProductsClearEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClearProductImage implements EventSubscriberInterface
 {
-    /** @var ProductImageSynchronizerContract $productImageSynchronizer */
+    /** @var ProductImageSynchronizerInterface $productImageSynchronizer */
     protected $productImageSynchronizer;
 
     /** @var bool $synchronizerLoaded */
@@ -16,9 +16,9 @@ class ClearProductImage implements EventSubscriberInterface
 
     /**
      * SynchronizeProductImage constructor.
-     * @param ProductImageSynchronizerContract $productImageSynchronizer
+     * @param ProductImageSynchronizerInterface $productImageSynchronizer
      */
-    public function __construct(ProductImageSynchronizerContract $productImageSynchronizer)
+    public function __construct(ProductImageSynchronizerInterface $productImageSynchronizer)
     {
         $this->productImageSynchronizer = $productImageSynchronizer;
     }

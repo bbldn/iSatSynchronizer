@@ -2,11 +2,11 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
-use App\Contract\FrontToBack\OrderSynchronizerContract;
+use App\Contract\FrontToBack\OrderSynchronizerInterface;
 use App\Event\FrontToBack\OrderClearEvent;
 use App\Service\Synchronizer\FrontToBack\Implementation\OrderSynchronizer as OrderBaseSynchronizer;
 
-class OrderSynchronizer extends OrderBaseSynchronizer implements OrderSynchronizerContract
+class OrderSynchronizer extends OrderBaseSynchronizer implements OrderSynchronizerInterface
 {
     /**
      *

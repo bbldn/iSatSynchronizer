@@ -2,7 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
-use App\Contract\BackToFront\AddressSynchronizerHelperContract;
+use App\Contract\BackToFront\AddressSynchronizerHelperInterface;
 use App\Entity\Address;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Front\Address as AddressFront;
@@ -16,7 +16,7 @@ use App\Repository\Front\AddressRepository as AddressFrontRepository;
 
 abstract class AddressSynchronizer extends BackToFrontSynchronizer
 {
-    /** @var AddressSynchronizerHelperContract $addressSynchronizerHelper */
+    /** @var AddressSynchronizerHelperInterface $addressSynchronizerHelper */
     protected $addressSynchronizerHelper;
 
     /** @var CustomerBackRepository $customerBackRepository */
@@ -36,7 +36,7 @@ abstract class AddressSynchronizer extends BackToFrontSynchronizer
 
     /**
      * AddressSynchronizer constructor.
-     * @param AddressSynchronizerHelperContract $addressSynchronizerHelper
+     * @param AddressSynchronizerHelperInterface $addressSynchronizerHelper
      * @param CustomerBackRepository $customerBackRepository
      * @param CustomerRepository $customerRepository
      * @param AddressFrontRepository $addressFrontRepository
@@ -44,7 +44,7 @@ abstract class AddressSynchronizer extends BackToFrontSynchronizer
      * @param StoreFront $storeFront
      */
     public function __construct(
-        AddressSynchronizerHelperContract $addressSynchronizerHelper,
+        AddressSynchronizerHelperInterface $addressSynchronizerHelper,
         CustomerBackRepository $customerBackRepository,
         CustomerRepository $customerRepository,
         AddressFrontRepository $addressFrontRepository,

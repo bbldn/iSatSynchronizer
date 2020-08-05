@@ -5,6 +5,6 @@ namespace App\Contract\BackToFront;
 use App\Contract\CanLoadInterface;
 use App\Contract\CanSynchronizeAll;
 
-interface CurrencySynchronizerContract extends CanLoadInterface, CanSynchronizeAll
+interface CurrencySynchronizerInterface extends CanLoadInterface, CanSynchronizeAll
 {
 }

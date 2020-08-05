@@ -2,10 +2,10 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\AttributeSynchronizerContract;
+use App\Contract\BackToFront\AttributeSynchronizerInterface;
 use App\Service\Synchronizer\BackToFront\Implementation\AttributeSynchronizer as AttributeBaseSynchronizer;
 
-class AttributeSynchronizer extends AttributeBaseSynchronizer implements AttributeSynchronizerContract
+class AttributeSynchronizer extends AttributeBaseSynchronizer implements AttributeSynchronizerInterface
 {
     /**
      *

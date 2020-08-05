@@ -5,7 +5,7 @@ namespace App\Contract\BackToFront;
 use App\Contract\CanLoadInterface;
 use App\Contract\CanSynchronizeAll;
 
-interface CategorySynchronizerContract extends CanLoadInterface, CanSynchronizeAll
+interface CategorySynchronizerInterface extends CanLoadInterface, CanSynchronizeAll
 {
     /**
      * @param bool $synchronizeImage

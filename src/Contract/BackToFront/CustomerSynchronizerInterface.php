@@ -6,7 +6,7 @@ use App\Contract\CanLoadInterface;
 use App\Contract\CanReloadInterface;
 use App\Entity\Front\Customer as CustomerFront;
 
-interface CustomerSynchronizerContract extends CanLoadInterface, CanReloadInterface
+interface CustomerSynchronizerInterface extends CanLoadInterface, CanReloadInterface
 {
     /**
      * @param string $ids

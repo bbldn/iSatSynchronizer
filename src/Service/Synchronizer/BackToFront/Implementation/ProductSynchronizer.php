@@ -2,9 +2,9 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
-use App\Contract\BackToFront\DescriptionHelperContract;
-use App\Contract\BackToFront\ManufacturerHelperContract;
-use App\Contract\BackToFront\ProductSynchronizerHelperContract;
+use App\Contract\BackToFront\DescriptionHelperInterface;
+use App\Contract\BackToFront\ManufacturerHelperInterface;
+use App\Contract\BackToFront\ProductSynchronizerHelperInterface;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\ProductCategory as ProductCategoryFront;
@@ -129,10 +129,10 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ProductSynchronizerHelper $productSynchronizerHelper */
     protected $productSynchronizerHelper;
 
-    /** @var DescriptionHelperContract $descriptionHelper */
+    /** @var DescriptionHelperInterface $descriptionHelper */
     protected $descriptionHelper;
 
-    /** @var ManufacturerHelperContract $manufacturerHelper */
+    /** @var ManufacturerHelperInterface $manufacturerHelper */
     protected $manufacturerHelper;
 
     /** @var bool $synchronizeImage */
@@ -179,9 +179,9 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductBackRepository $productBackRepository
      * @param ProductPicturesBackRepository $productPicturesBackRepository
      * @param CurrencyBackRepository $currencyBackRepository
-     * @param ProductSynchronizerHelperContract $productSynchronizerHelper
-     * @param DescriptionHelperContract $descriptionHelper
-     * @param ManufacturerHelperContract $manufacturerHelper
+     * @param ProductSynchronizerHelperInterface $productSynchronizerHelper
+     * @param DescriptionHelperInterface $descriptionHelper
+     * @param ManufacturerHelperInterface $manufacturerHelper
      */
     public function __construct(
         LoggerInterface $logger,
@@ -209,9 +209,9 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         ProductBackRepository $productBackRepository,
         ProductPicturesBackRepository $productPicturesBackRepository,
         CurrencyBackRepository $currencyBackRepository,
-        ProductSynchronizerHelperContract $productSynchronizerHelper,
-        DescriptionHelperContract $descriptionHelper,
-        ManufacturerHelperContract $manufacturerHelper
+        ProductSynchronizerHelperInterface $productSynchronizerHelper,
+        DescriptionHelperInterface $descriptionHelper,
+        ManufacturerHelperInterface $manufacturerHelper
     )
     {
         $this->logger = $logger;

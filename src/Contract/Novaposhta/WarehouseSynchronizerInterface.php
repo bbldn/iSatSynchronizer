@@ -7,6 +7,6 @@ use App\Contract\CanLoadInterface;
 use App\Contract\CanReloadInterface;
 use App\Contract\CanSynchronizeAll;
 
-interface AreaSynchronizerContract extends CanLoadInterface, CanSynchronizeAll, CanClearInterface, CanReloadInterface
+interface WarehouseSynchronizerInterface extends CanLoadInterface, CanSynchronizeAll, CanClearInterface, CanReloadInterface
 {
 }

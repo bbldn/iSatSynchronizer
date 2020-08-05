@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\FrontToBack\OrderSynchronizerContract;
+use App\Contract\FrontToBack\OrderSynchronizerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class OrderClearCommand extends Command
 {
     protected static $defaultName = 'order:clear';
 
-    /** @var OrderSynchronizerContract $orderSynchronize */
+    /** @var OrderSynchronizerInterface $orderSynchronize */
     protected $orderSynchronize;
 
     /**
      * OrderClearCommand constructor.
-     * @param OrderSynchronizerContract $orderSynchronizer
+     * @param OrderSynchronizerInterface $orderSynchronizer
      */
-    public function __construct(OrderSynchronizerContract $orderSynchronizer)
+    public function __construct(OrderSynchronizerInterface $orderSynchronizer)
     {
         $this->orderSynchronize = $orderSynchronizer;
         parent::__construct();

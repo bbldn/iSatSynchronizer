@@ -2,7 +2,7 @@
 
 namespace App\EventListener\BackToFront;
 
-use App\Contract\BackToFront\ProductSeoUrlSynchronizerContract;
+use App\Contract\BackToFront\ProductSeoUrlSynchronizerInterface;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
@@ -15,7 +15,7 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
     /** @var LoggerInterface $logger */
     protected $logger;
 
-    /** @var ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer */
+    /** @var ProductSeoUrlSynchronizerInterface $productSeoUrlBackToFrontSynchronizer */
     protected $productSeoUrlBackToFrontSynchronizer;
 
     /** @var ProductFrontRepository $productFrontRepository */
@@ -30,13 +30,13 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
     /**
      * SynchronizeProductSeoPro constructor.
      * @param LoggerInterface $logger
-     * @param ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer
+     * @param ProductSeoUrlSynchronizerInterface $productSeoUrlBackToFrontSynchronizer
      * @param ProductFrontRepository $productFrontRepository
      * @param ProductBackRepository $productBackRepository
      */
     public function __construct(
         LoggerInterface $logger,
-        ProductSeoUrlSynchronizerContract $productSeoUrlBackToFrontSynchronizer,
+        ProductSeoUrlSynchronizerInterface $productSeoUrlBackToFrontSynchronizer,
         ProductFrontRepository $productFrontRepository,
         ProductBackRepository $productBackRepository
     )

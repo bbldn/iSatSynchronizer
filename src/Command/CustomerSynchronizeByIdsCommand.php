@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\CustomerSynchronizerContract;
+use App\Contract\BackToFront\CustomerSynchronizerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +11,14 @@ class CustomerSynchronizeByIdsCommand extends Command
 {
     protected static $defaultName = 'customer:synchronize:by-ids';
 
-    /** @var CustomerSynchronizerContract $customerSynchronizer */
+    /** @var CustomerSynchronizerInterface $customerSynchronizer */
     protected $customerSynchronizer;
 
     /**
      * CustomerSynchronizeByIdsCommand constructor.
-     * @param CustomerSynchronizerContract $customerSynchronizer
+     * @param CustomerSynchronizerInterface $customerSynchronizer
      */
-    public function __construct(CustomerSynchronizerContract $customerSynchronizer)
+    public function __construct(CustomerSynchronizerInterface $customerSynchronizer)
     {
         $this->customerSynchronizer = $customerSynchronizer;
         parent::__construct();

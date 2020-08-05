@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\ReviewSynchronizerContract as ReviewBackToFrontSynchronizerContract;
-use App\Contract\FrontToBack\ReviewSynchronizerContract as ReviewFrontToBackSynchronizerContract;
+use App\Contract\BackToFront\ReviewSynchronizerInterface as ReviewBackToFrontSynchronizerContract;
+use App\Contract\FrontToBack\ReviewSynchronizerInterface as ReviewFrontToBackSynchronizerContract;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

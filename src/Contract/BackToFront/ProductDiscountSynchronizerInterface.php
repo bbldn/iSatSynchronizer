@@ -5,7 +5,7 @@ namespace App\Contract\BackToFront;
 use App\Contract\CanLoadInterface;
 use App\Contract\CanReloadInterface;
 
-interface ProductDiscountSynchronizerContract extends CanLoadInterface, CanReloadInterface
+interface ProductDiscountSynchronizerInterface extends CanLoadInterface, CanReloadInterface
 {
     /**
      * @param int $productBackId

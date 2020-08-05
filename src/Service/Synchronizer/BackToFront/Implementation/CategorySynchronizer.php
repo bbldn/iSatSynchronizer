@@ -2,7 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
-use App\Contract\BackToFront\CategorySynchronizerHelperContract;
+use App\Contract\BackToFront\CategorySynchronizerHelperInterface;
 use App\Entity\Back\Category as CategoryBack;
 use App\Entity\Category;
 use App\Entity\Front\Category as CategoryFront;
@@ -41,7 +41,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
     /** @var StoreBack $storeBack */
     protected $storeBack;
 
-    /** @var CategorySynchronizerHelperContract $categorySynchronizerHelper */
+    /** @var CategorySynchronizerHelperInterface $categorySynchronizerHelper */
     protected $categorySynchronizerHelper;
 
     /** @var CategoryFrontRepository $categoryFrontRepository */
@@ -80,7 +80,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
      * @param EventDispatcherInterface $eventDispatcher
      * @param StoreFront $storeFront
      * @param StoreBack $storeBack
-     * @param CategorySynchronizerHelperContract $categorySynchronizerHelper
+     * @param CategorySynchronizerHelperInterface $categorySynchronizerHelper
      * @param CategoryFrontRepository $categoryFrontRepository
      * @param CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository
      * @param CategoryFilterFrontRepository $categoryFilterFrontRepository
@@ -96,7 +96,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
         EventDispatcherInterface $eventDispatcher,
         StoreFront $storeFront,
         StoreBack $storeBack,
-        CategorySynchronizerHelperContract $categorySynchronizerHelper,
+        CategorySynchronizerHelperInterface $categorySynchronizerHelper,
         CategoryFrontRepository $categoryFrontRepository,
         CategoryDescriptionFrontRepository $categoryDescriptionFrontRepository,
         CategoryFilterFrontRepository $categoryFilterFrontRepository,

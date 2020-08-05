@@ -2,7 +2,7 @@
 
 namespace App\Helper\BackToFront;
 
-use App\Contract\BackToFront\DescriptionHelperContract;
+use App\Contract\BackToFront\DescriptionHelperInterface;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Service\FrontBackFileSystem\GetBackFileInterface;
@@ -10,7 +10,7 @@ use App\Service\FrontBackFileSystem\SaveFrontFileInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class DescriptionHelper implements DescriptionHelperContract
+class DescriptionHelper implements DescriptionHelperInterface
 {
     /** @var LoggerInterface $logger */
     protected $logger;

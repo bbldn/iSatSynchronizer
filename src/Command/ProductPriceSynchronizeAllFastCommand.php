@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\ProductSynchronizerContract;
+use App\Contract\BackToFront\ProductSynchronizerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class ProductPriceSynchronizeAllFastCommand extends Command
 {
     protected static $defaultName = 'product:price:synchronize:all:fast';
 
-    /** @var ProductSynchronizerContract $productSynchronizer */
+    /** @var ProductSynchronizerInterface $productSynchronizer */
     protected $productSynchronizer;
 
     /**
      * ProductPriceSynchronizeAllFastCommand constructor.
-     * @param ProductSynchronizerContract $productSynchronizer
+     * @param ProductSynchronizerInterface $productSynchronizer
      */
-    public function __construct(ProductSynchronizerContract $productSynchronizer)
+    public function __construct(ProductSynchronizerInterface $productSynchronizer)
     {
         $this->productSynchronizer = $productSynchronizer;
         parent::__construct();

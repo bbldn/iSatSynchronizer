@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\Novaposhta\WarehouseSynchronizerContract;
+use App\Contract\Novaposhta\WarehouseSynchronizerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class NovaposhtaWarehouseSynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'novaposhta:warehouse:synchronize:all';
 
-    /** @var WarehouseSynchronizerContract $warehousesSynchronizer */
+    /** @var WarehouseSynchronizerInterface $warehousesSynchronizer */
     protected $warehousesSynchronizer;
 
     /**
      * NovaposhtaWarehouseSynchronizeAllCommand constructor.
-     * @param WarehouseSynchronizerContract $warehousesSynchronizer
+     * @param WarehouseSynchronizerInterface $warehousesSynchronizer
      */
-    public function __construct(WarehouseSynchronizerContract $warehousesSynchronizer)
+    public function __construct(WarehouseSynchronizerInterface $warehousesSynchronizer)
     {
         parent::__construct();
         $this->warehousesSynchronizer = $warehousesSynchronizer;

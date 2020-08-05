@@ -2,7 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
-use App\Contract\BackToFront\OrderSynchronizerHelperContract;
+use App\Contract\BackToFront\OrderSynchronizerHelperInterface;
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderHistory as OrderHistoryFront;
@@ -127,7 +127,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
      * @param OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository
      * @param ZoneFrontRepository $zoneFrontRepository
      * @param OrderHistoryFrontRepository $orderHistoryFrontRepository
-     * @param OrderSynchronizerHelperContract $orderSynchronizerHelper
+     * @param OrderSynchronizerHelperInterface $orderSynchronizerHelper
      * @param CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
      */
     public function __construct(
@@ -150,7 +150,7 @@ abstract class OrderSynchronizer extends BackToFrontSynchronizer
         OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository,
         ZoneFrontRepository $zoneFrontRepository,
         OrderHistoryFrontRepository $orderHistoryFrontRepository,
-        OrderSynchronizerHelperContract $orderSynchronizerHelper,
+        OrderSynchronizerHelperInterface $orderSynchronizerHelper,
         CustomerBackToFrontSynchronizer $customerBackToFrontSynchronizer
     )
     {

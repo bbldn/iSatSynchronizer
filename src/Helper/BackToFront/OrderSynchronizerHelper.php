@@ -2,13 +2,13 @@
 
 namespace App\Helper\BackToFront;
 
-use App\Contract\BackToFront\OrderSynchronizerHelperContract;
+use App\Contract\BackToFront\OrderSynchronizerHelperInterface;
 use App\Entity\Back\OrderGamePost as OrderBack;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use App\Repository\CustomerRepository;
 use App\Service\Synchronizer\BackToFront\CustomerSynchronizer as CustomerBackToFrontSynchronizer;
 
-class OrderSynchronizerHelper implements OrderSynchronizerHelperContract
+class OrderSynchronizerHelper implements OrderSynchronizerHelperInterface
 {
     /** @var CustomerRepository $customerRepository */
     protected $customerRepository;

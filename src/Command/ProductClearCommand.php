@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\BackToFront\ProductSynchronizerContract;
+use App\Contract\BackToFront\ProductSynchronizerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +11,14 @@ class ProductClearCommand extends Command
 {
     protected static $defaultName = 'product:clear';
 
-    /** @var ProductSynchronizerContract $productSynchronize */
+    /** @var ProductSynchronizerInterface $productSynchronize */
     protected $productSynchronize;
 
     /**
      * ProductClearCommand constructor.
-     * @param ProductSynchronizerContract $productSynchronizer
+     * @param ProductSynchronizerInterface $productSynchronizer
      */
-    public function __construct(ProductSynchronizerContract $productSynchronizer)
+    public function __construct(ProductSynchronizerInterface $productSynchronizer)
     {
         $this->productSynchronize = $productSynchronizer;
         parent::__construct();

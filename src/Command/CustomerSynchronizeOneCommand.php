@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\FrontToBack\CustomerSynchronizerContract;
+use App\Contract\FrontToBack\CustomerSynchronizerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +11,14 @@ class CustomerSynchronizeOneCommand extends Command
 {
     protected static $defaultName = 'customer:synchronize:one';
 
-    /** @var CustomerSynchronizerContract $customerSynchronizer */
+    /** @var CustomerSynchronizerInterface $customerSynchronizer */
     protected $customerSynchronizer;
 
     /**
      * CustomerSynchronizeOneCommand constructor.
-     * @param CustomerSynchronizerContract $customerFrontToBackSynchronizer
+     * @param CustomerSynchronizerInterface $customerFrontToBackSynchronizer
      */
-    public function __construct(CustomerSynchronizerContract $customerFrontToBackSynchronizer)
+    public function __construct(CustomerSynchronizerInterface $customerFrontToBackSynchronizer)
     {
         $this->customerSynchronizer = $customerFrontToBackSynchronizer;
         parent::__construct();

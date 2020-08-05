@@ -4,7 +4,7 @@ namespace App\Contract\BackToFront;
 
 use App\Entity\Back\Category as CategoryBack;
 
-interface CategorySynchronizerHelperContract
+interface CategorySynchronizerHelperInterface
 {
     /**
      * @param CategoryBack $categoryBack

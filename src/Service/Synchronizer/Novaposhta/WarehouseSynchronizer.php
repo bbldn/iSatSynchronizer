@@ -2,10 +2,10 @@
 
 namespace App\Service\Synchronizer\Novaposhta;
 
-use App\Contract\Novaposhta\WarehouseSynchronizerContract;
+use App\Contract\Novaposhta\WarehouseSynchronizerInterface;
 use App\Service\Synchronizer\Novaposhta\Implementation\WarehouseSynchronizer as WarehouseBaseSynchronizer;
 
-class WarehouseSynchronizer extends WarehouseBaseSynchronizer implements WarehouseSynchronizerContract
+class WarehouseSynchronizer extends WarehouseBaseSynchronizer implements WarehouseSynchronizerInterface
 {
     /**
      *

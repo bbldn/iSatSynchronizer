@@ -8,7 +8,7 @@ use App\Entity\Back\Product as ProductBack;
 use App\Entity\Front\Product as ProductFront;
 use App\Entity\Front\SeoUrl as SeoUrlFront;
 
-interface ProductSeoUrlSynchronizerContract extends CanLoadInterface, CanReloadInterface
+interface ProductSeoUrlSynchronizerInterface extends CanLoadInterface, CanReloadInterface
 {
     /**
      * @param string $ids

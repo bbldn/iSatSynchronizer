@@ -2,7 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\ProductSynchronizerContract;
+use App\Contract\BackToFront\ProductSynchronizerInterface;
 use App\Event\BackToFront\PriceSynchronizeAllFastEvent;
 use App\Event\BackToFront\PriceSynchronizeEvent;
 use App\Event\BackToFront\PriceSynchronizeFastEvent;
@@ -12,7 +12,7 @@ use App\Event\BackToFront\ProductsSynchronizedEvent;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductSynchronizer as ProductBaseSynchronizer;
 
-class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSynchronizerContract
+class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSynchronizerInterface
 {
     /**
      * @param string $ids

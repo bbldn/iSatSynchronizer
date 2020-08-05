@@ -4,7 +4,7 @@ namespace App\Contract\BackToFront;
 
 use App\Entity\Back\OrderGamePost as OrderBack;
 
-interface OrderSynchronizerHelperContract
+interface OrderSynchronizerHelperInterface
 {
     /**
      * @param OrderBack $mainOrderBack

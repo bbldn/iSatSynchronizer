@@ -2,12 +2,12 @@
 
 namespace App\Service\Synchronizer\Novaposhta;
 
-use App\Contract\Novaposhta\CitySynchronizerContract;
+use App\Contract\Novaposhta\CitySynchronizerInterface;
 use App\Helper\ExceptionFormatter;
 use App\Service\Synchronizer\Novaposhta\Implementation\CitySynchronizer as CityBaseSynchronizer;
 use Exception;
 
-class CitySynchronizer extends CityBaseSynchronizer implements CitySynchronizerContract
+class CitySynchronizer extends CityBaseSynchronizer implements CitySynchronizerInterface
 {
     /**
      *

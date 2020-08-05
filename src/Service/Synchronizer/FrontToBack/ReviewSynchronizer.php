@@ -2,10 +2,10 @@
 
 namespace App\Service\Synchronizer\FrontToBack;
 
-use App\Contract\FrontToBack\ReviewSynchronizerContract;
+use App\Contract\FrontToBack\ReviewSynchronizerInterface;
 use App\Service\Synchronizer\FrontToBack\Implementation\ReviewSynchronizer as ReviewBaseSynchronizer;
 
-class ReviewSynchronizer extends ReviewBaseSynchronizer implements ReviewSynchronizerContract
+class ReviewSynchronizer extends ReviewBaseSynchronizer implements ReviewSynchronizerInterface
 {
     /**
      *

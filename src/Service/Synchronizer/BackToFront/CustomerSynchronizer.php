@@ -2,11 +2,11 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\CustomerSynchronizerContract;
+use App\Contract\BackToFront\CustomerSynchronizerInterface;
 use App\Entity\Front\Customer as CustomerFront;
 use App\Service\Synchronizer\BackToFront\Implementation\CustomerSynchronizer as CustomerBaseSynchronizer;
 
-class CustomerSynchronizer extends CustomerBaseSynchronizer implements CustomerSynchronizerContract
+class CustomerSynchronizer extends CustomerBaseSynchronizer implements CustomerSynchronizerInterface
 {
     /**
      *

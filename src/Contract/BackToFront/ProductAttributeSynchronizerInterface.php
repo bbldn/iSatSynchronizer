@@ -6,7 +6,7 @@ use App\Contract\CanClearInterface;
 use App\Contract\CanLoadInterface;
 use App\Entity\Back\Product as ProductBack;
 
-interface ProductAttributeSynchronizerContract extends CanLoadInterface, CanClearInterface
+interface ProductAttributeSynchronizerInterface extends CanLoadInterface, CanClearInterface
 {
     /**
      * @param ProductBack $productBack
