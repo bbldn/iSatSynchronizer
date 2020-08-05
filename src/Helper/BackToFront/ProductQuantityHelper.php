@@ -96,6 +96,12 @@ class ProductQuantityHelper
             return;
         }
 
+        $productFront->setQuantity(99999);
+        $productFront->setStockStatusId($this->storeFront->getDefaultProductAvailableStatusId());
+        $this->productFrontRepository->persistAndFlush($productFront);
+
+        return;
+
         if (true === $this->agsatCheck) {
             $agsatStatus = $this->checkAgsatStatus($product);
             if ($agsatStatus === $this->storeFront->getDefaultProductAvailableStatusId()) {
