@@ -2,11 +2,11 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\ProductAttributeSynchronizerContract;
+use App\Contract\BackToFront\ProductAttributeSynchronizerInterface;
 use App\Entity\Back\Product as ProductBack;
 use App\Service\Synchronizer\BackToFront\Implementation\ProductAttributeSynchronizer as ProductAttributeSynchronizerBase;
 
-class ProductAttributeSynchronizer extends ProductAttributeSynchronizerBase implements ProductAttributeSynchronizerContract
+class ProductAttributeSynchronizer extends ProductAttributeSynchronizerBase implements ProductAttributeSynchronizerInterface
 {
     /**
      *

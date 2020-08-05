@@ -3,11 +3,12 @@
 namespace App\Service\Synchronizer\Novaposhta;
 
 use App\Contract\Novaposhta\AreaSynchronizerContract;
+use App\Contract\Novaposhta\AreaSynchronizerInterface;
 use App\Helper\ExceptionFormatter;
 use App\Service\Synchronizer\Novaposhta\Implementation\AreaSynchronizer as AreaBaseSynchronizer;
 use Exception;
 
-class AreaSynchronizer extends AreaBaseSynchronizer implements AreaSynchronizerContract
+class AreaSynchronizer extends AreaBaseSynchronizer implements AreaSynchronizerInterface
 {
     /**
      *

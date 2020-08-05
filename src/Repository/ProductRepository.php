@@ -12,6 +12,8 @@ use Psr\Log\LoggerInterface;
  * @method Product|[]    findAll()
  * @method Product|[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Product[]    findByIds(string $ids)
+ * @method Product[]    findByBackIds(string $ids)
+ * @method Product[]    findByFrontIds(string $ids)
  * @method void    persist(Product $instance)
  * @method void    persistAndFlush(Product $instance)
  * @method void    remove(Product $instance)

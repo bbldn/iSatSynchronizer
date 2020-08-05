@@ -2,12 +2,12 @@
 
 namespace App\Service\Synchronizer\BackToFront;
 
-use App\Contract\BackToFront\AddressSynchronizerContract;
+use App\Contract\BackToFront\AddressSynchronizerInterface;
 use App\Entity\Back\BuyersGamePost as CustomerBack;
 use App\Entity\Front\Address as AddressFront;
 use App\Service\Synchronizer\BackToFront\Implementation\AddressSynchronizer as AddressBaseSynchronizer;
 
-class AddressSynchronizer extends AddressBaseSynchronizer implements AddressSynchronizerContract
+class AddressSynchronizer extends AddressBaseSynchronizer implements AddressSynchronizerInterface
 {
     /**
      *

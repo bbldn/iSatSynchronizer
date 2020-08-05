@@ -2,6 +2,8 @@
 
 namespace App\Entity\Back;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Table(name="`SS_competitors_products`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\CompetitorsProductsRepository")

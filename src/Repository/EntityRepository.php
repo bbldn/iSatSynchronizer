@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Helper\ExceptionFormatter;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\DBAL\Connection;
 
 abstract class EntityRepository extends Repository
 {
@@ -48,5 +50,31 @@ abstract class EntityRepository extends Repository
 
             return null;
         }
+    }
+
+    /**
+     * @param string $ids
+     * @return array
+     */
+    public function findByBackIds(string $ids): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where("c.backId IN (:ids)")
+            ->setParameter('ids', explode(',', $ids), Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param string $ids
+     * @return array
+     */
+    public function findByFrontIds(string $ids): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where("c.frontId IN (:ids)")
+            ->setParameter('ids', explode(',', $ids), Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult();
     }
 }

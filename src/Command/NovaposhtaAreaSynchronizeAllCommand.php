@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Contract\Novaposhta\AreaSynchronizerContract;
+use App\Contract\Novaposhta\AreaSynchronizerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,14 +10,14 @@ class NovaposhtaAreaSynchronizeAllCommand extends Command
 {
     protected static $defaultName = 'novaposhta:area:synchronize:all';
 
-    /** @var AreaSynchronizerContract $areaSynchronizer */
+    /** @var AreaSynchronizerInterface $areaSynchronizer */
     protected $areaSynchronizer;
 
     /**
      * NovaposhtaAreaSynchronizeAllCommand constructor.
-     * @param AreaSynchronizerContract $areaSynchronizer
+     * @param AreaSynchronizerInterface $areaSynchronizer
      */
-    public function __construct(AreaSynchronizerContract $areaSynchronizer)
+    public function __construct(AreaSynchronizerInterface $areaSynchronizer)
     {
         parent::__construct();
         $this->areaSynchronizer = $areaSynchronizer;

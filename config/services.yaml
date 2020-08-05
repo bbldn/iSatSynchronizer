@@ -110,10 +110,11 @@ services:
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
         - 'http://synchronizer.isat.com.ua:9000/generator'
 
-    App\Contract\Novaposhta\AreaSynchronizerContract: '@App\Service\Synchronizer\Novaposhta\AreaSynchronizer'
-    App\Contract\BackToFront\ProductAttributeSynchronizerContract: '@App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer'
+    App\Contract\Novaposhta\AreaSynchronizerInterface: '@App\Service\Synchronizer\Novaposhta\AreaSynchronizer'
+    App\Contract\BackToFront\ProductAttributeSynchronizerInterface: '@App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer'
+    App\Contract\AgsatProductsCacheLoaderInterface: '@App\Helper\AgsatProductsCacheLoaderFromConsole'
 
     App\Helper\AgsatProductsCacheLoaderFromConsole:
         arguments:
-        - '/home/user/PhpstormProjects/iSatAgsatParser/artisan'
-        - 'agsat:cache:show'
+        - '%env(string:AGSAT_PRODUCTS_CACHE_LOADER_FROM_CONSOLE_PATH)%'
+        - '%env(string:AGSAT_PRODUCTS_CACHE_LOADER_FROM_CONSOLE_COMMAND)%'
