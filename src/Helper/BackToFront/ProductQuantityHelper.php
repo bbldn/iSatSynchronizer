@@ -78,12 +78,14 @@ class ProductQuantityHelper
     {
         $productFront = $this->productFrontRepository->find($product->getFrontId());
         if (null === $productFront) {
-            throw new ProductFrontNotFoundException();
+            $message = "Product Front with id: {$product->getFrontId()} not found";
+            throw new ProductFrontNotFoundException($message);
         }
 
         $productBack = $this->productBackRepository->find($product->getBackId());
         if (null === $productBack) {
-            throw new ProductBackNotFoundException();
+            $message = "Product Back with id: {$product->getBackId()} not found";
+            throw new ProductBackNotFoundException($message);
         }
 
         if (0.0 === $productBack->getPrice()) {

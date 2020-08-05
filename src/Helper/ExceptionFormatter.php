@@ -28,7 +28,8 @@ class ExceptionFormatter
      */
     public static function e(Throwable $e): string
     {
-        $result = ["{message} {$e->getMessage()}"];
+        $className = get_class($e);
+        $result = ["{message} {$className}:{$e->getMessage()}"];
         foreach ($e->getTrace() as $key => $stack) {
             $key++;
             $result[] = "#{$key} {$stack['file']}({$stack['line']}): {$stack['class']}{$stack['type']}{$stack['function']}()";

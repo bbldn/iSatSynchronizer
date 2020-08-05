@@ -2,7 +2,6 @@
 
 namespace App\EventListener\BackToFront;
 
-
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Exception\ProductNotFoundException;
 use App\Helper\BackToFront\ProductQuantityHelper;
@@ -63,7 +62,8 @@ class SynchronizeProductQuantity implements EventSubscriberInterface
     {
         $product = $event->getProduct();
         if (null === $product) {
-            throw new ProductNotFoundException();
+            $message = "Product not found";
+            throw new ProductNotFoundException($message);
         }
 
         $this->productQuantityHelper->action($product);

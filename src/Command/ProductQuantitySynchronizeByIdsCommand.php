@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Back\Product;
 use App\Helper\BackToFront\ProductQuantityHelper;
 use App\Helper\ExceptionFormatter;
 use App\Repository\ProductRepository;
@@ -74,7 +75,7 @@ class ProductQuantitySynchronizeByIdsCommand extends Command
     }
 
     /**
-     * @param array $products
+     * @param Product[] $products
      */
     protected function action(array $products): void
     {

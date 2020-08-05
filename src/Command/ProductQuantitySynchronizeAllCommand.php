@@ -41,6 +41,14 @@ class ProductQuantitySynchronizeAllCommand extends Command
     }
 
     /**
+     *
+     */
+    protected function configure()
+    {
+        $this->setDescription('Synchronize product quantity');
+    }
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
