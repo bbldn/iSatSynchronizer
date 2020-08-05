@@ -27,6 +27,10 @@ class AgsatProductsCacheForAvailability
      */
     public function load(): void
     {
+        if (count($this->cache) > 0) {
+            return;
+        }
+
         $cache = $this->agsatProductsCacheLoader->load();
 
         foreach ($cache as $item) {
