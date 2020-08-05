@@ -4,9 +4,9 @@ namespace App\EventListener\FrontToBack;
 
 use App\Event\FrontToBack\NewOrderEvent;
 use App\Helper\ExceptionFormatter;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
-use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -15,6 +15,9 @@ use Throwable;
 
 class TelegramOrderNew implements EventSubscriberInterface
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var HttpClientInterface $httpClient */
     protected $httpClient;
 
@@ -23,11 +26,17 @@ class TelegramOrderNew implements EventSubscriberInterface
 
     /**
      * TelegramOrderNew constructor.
+     * @param LoggerInterface $logger
      * @param HttpClientInterface $httpClient
      * @param string $url
      */
-    public function __construct(HttpClientInterface $httpClient, string $url)
+    public function __construct(
+        LoggerInterface $logger,
+        HttpClientInterface $httpClient,
+        string $url
+    )
     {
+        $this->logger = $logger;
         $this->httpClient = $httpClient;
         $this->url = $url;
     }
@@ -54,7 +63,7 @@ class TelegramOrderNew implements EventSubscriberInterface
 
             $this->validateResponse($response);
         } catch (Throwable $e) {
-            ExceptionFormatter::e($e);
+            $this->logger->error(ExceptionFormatter::e($e));
         }
     }
 

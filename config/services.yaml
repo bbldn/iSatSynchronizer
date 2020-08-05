@@ -101,6 +101,7 @@ services:
 
     App\EventListener\FrontToBack\TelegramOrderNew:
         arguments:
+        - '@Psr\Log\LoggerInterface'
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
         - 'http://synchronizer.isat.com.ua:9000/tbot'
 
@@ -111,3 +112,8 @@ services:
 
     App\Contract\Novaposhta\AreaSynchronizerContract: '@App\Service\Synchronizer\Novaposhta\AreaSynchronizer'
     App\Contract\BackToFront\ProductAttributeSynchronizerContract: '@App\Service\Synchronizer\BackToFront\ProductAttributeSynchronizer'
+
+    App\Helper\AgsatProductsCacheLoaderFromConsole:
+        arguments:
+        - '/home/user/PhpstormProjects/iSatAgsatParser/artisan'
+        - 'agsat:cache:show'
