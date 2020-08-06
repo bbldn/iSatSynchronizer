@@ -16,6 +16,7 @@ use App\Service\Synchronizer\BackToFront\AddressSynchronizer;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 use App\Helper\Back\Store as StoreBack;
+use Symfony\Component\String\ByteString;
 
 abstract class CustomerSynchronizer extends BackToFrontSynchronizer
 {
@@ -129,7 +130,7 @@ abstract class CustomerSynchronizer extends BackToFrontSynchronizer
     {
         $saul = $customerFront->getSalt();
         if (null === $saul) {
-            $saul = Str::random($this->saulLength);
+            $saul = ByteString::fromRandom($this->saulLength)->toString();
         }
 
         $parsedFIO = StoreBack::parseFirstLastName($customerBack->getFio());

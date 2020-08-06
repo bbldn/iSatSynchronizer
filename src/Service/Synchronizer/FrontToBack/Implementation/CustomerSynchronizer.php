@@ -15,8 +15,8 @@ use App\Repository\Front\AddressRepository as AddressRepositoryFront;
 use App\Repository\Front\CustomerRepository as CustomerFrontRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use DateTime;
-use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\String\ByteString;
 
 class CustomerSynchronizer extends FrontToBackSynchronizer
 {
@@ -98,7 +98,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setStreet(Filler::trim($orderFront->getShippingAddress1()));
         $customerBack->setHouse(Filler::trim(null));
         $customerBack->setMail(Filler::trim($orderFront->getEmail()));
-        $customerBack->setCode(Str::lower(Str::random(32)));
+        $customerBack->setCode(ByteString::fromRandom(32)->lower()->toString());
         $customerBack->setActive(true);
         $customerBack->setAccount(false);
         $customerBack->setDateReg($time);
@@ -204,7 +204,7 @@ class CustomerSynchronizer extends FrontToBackSynchronizer
         $customerBack->setStreet($street);
         $customerBack->setHouse(Filler::trim(null));
         $customerBack->setMail(Filler::trim($customerFront->getEmail()));
-        $customerBack->setCode(Str::lower(Str::random(32)));
+        $customerBack->setCode(ByteString::fromRandom(32)->lower()->toString());
         $customerBack->setActive(true);
         $customerBack->setAccount(false);
         $customerBack->setDateReg($time);

@@ -819,7 +819,7 @@ class Store extends StoreBase
     {
         $name = static::encodingConvert($name);
         $name = trim(mb_substr($name, 0, 70));
-        $name = Str::lower($name);
+        $name = mb_strtolower($name);
         $name = str_replace(['\\', '\'', '/', '+', '%', '?'], '', $name);
         $name = str_replace(['.', ',', ' ', '(', ')'], $separator, $name);
         $name = str_replace($separator . $separator, $separator, $name);
