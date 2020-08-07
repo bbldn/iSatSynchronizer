@@ -4,13 +4,21 @@ namespace App\EventListener\BackToFront;
 
 use App\Entity\Front\ProductDiscontinued as ProductDiscontinuedFront;
 use App\Event\BackToFront\ProductSynchronizedEvent;
+use App\Exception\ProductBackNotFoundException;
+use App\Exception\ProductNotFoundException;
+use App\Helper\ExceptionFormatter;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Front\ProductDiscontinuedRepository as ProductDiscontinuedFrontRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Throwable;
 
 class SynchronizeProductDiscontinued implements EventSubscriberInterface
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var ProductFrontRepository $productFrontRepository */
     protected $productFrontRepository;
 
@@ -25,16 +33,19 @@ class SynchronizeProductDiscontinued implements EventSubscriberInterface
 
     /**
      * SynchronizeProductDiscontinued constructor.
+     * @param LoggerInterface $logger
      * @param ProductFrontRepository $productFrontRepository
      * @param ProductBackRepository $productBackRepository
      * @param ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
      */
     public function __construct(
+        LoggerInterface $logger,
         ProductFrontRepository $productFrontRepository,
         ProductBackRepository $productBackRepository,
         ProductDiscontinuedFrontRepository $productDiscontinuedFrontRepository
     )
     {
+        $this->logger = $logger;
         $this->productFrontRepository = $productFrontRepository;
         $this->productBackRepository = $productBackRepository;
         $this->productDiscontinuedFrontRepository = $productDiscontinuedFrontRepository;
@@ -55,6 +66,20 @@ class SynchronizeProductDiscontinued implements EventSubscriberInterface
      */
     public function action(ProductSynchronizedEvent $event): void
     {
+        try {
+            $this->_action($event);
+        } catch (Throwable $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
+    }
+
+    /**
+     * @param ProductSynchronizedEvent $event
+     * @throws ProductBackNotFoundException
+     * @throws ProductNotFoundException
+     */
+    protected function _action(ProductSynchronizedEvent $event): void
+    {
         if (null === $this->productDiscontinuedTableExists) {
             $this->productDiscontinuedTableExists = $this->productDiscontinuedFrontRepository->tableExists();
         }
@@ -64,17 +89,18 @@ class SynchronizeProductDiscontinued implements EventSubscriberInterface
         }
 
         $product = $event->getProduct();
+        if (null === $product) {
+            throw new ProductNotFoundException("Product not found");
+        }
 
         $productBack = $this->productBackRepository->find($product->getBackId());
         if (null === $productBack) {
-            //@TODO Notify
-            return;
+            throw new ProductBackNotFoundException("ProductBack with id: {$product->getBackId()} not found");
         }
 
         $productFront = $this->productFrontRepository->find($product->getFrontId());
         if (null === $productFront) {
-            //@TODO Notify
-            return;
+            throw new ProductBackNotFoundException("ProductFront with id: {$product->getFrontId()} not found");
         }
 
         if (true === $productBack->getDiscontinued()) {

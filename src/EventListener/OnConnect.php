@@ -16,7 +16,7 @@ class OnConnect
      * @param ConnectionEventArgs $event
      * @throws DBALException
      */
-    public function postConnect(ConnectionEventArgs $event)
+    public function postConnect(ConnectionEventArgs $event): void
     {
         $event->getConnection()->executeQuery(implode(';', $this->queries));
     }

@@ -62,8 +62,7 @@ class SynchronizeProductQuantity implements EventSubscriberInterface
     {
         $product = $event->getProduct();
         if (null === $product) {
-            $message = "Product not found";
-            throw new ProductNotFoundException($message);
+            throw new ProductNotFoundException("Product not found");
         }
 
         $this->productQuantityHelper->action($product);

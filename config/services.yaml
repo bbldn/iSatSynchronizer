@@ -107,6 +107,7 @@ services:
 
     App\EventListener\BackToFront\UpdatePriceList:
         arguments:
+        - '@Psr\Log\LoggerInterface'
         - '@Symfony\Contracts\HttpClient\HttpClientInterface'
         - 'http://synchronizer.isat.com.ua:9000/generator'
 

@@ -5,14 +5,20 @@ namespace App\EventListener\BackToFront;
 use App\Entity\Front\Order as OrderFront;
 use App\Entity\Front\OrderSimpleFields as OrderSimpleFieldsFront;
 use App\Event\BackToFront\OrderSynchronizedEvent;
+use App\Exception\OrderBackNotFoundException;
+use App\Helper\ExceptionFormatter;
 use App\Helper\ShippingConverter;
 use App\Repository\Back\OrderGamePostRepository as OrderBackRepository;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use App\Repository\Front\OrderSimpleFieldsRepository as OrderSimpleFieldsFrontRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SynchronizeOrderSimpleFields implements EventSubscriberInterface
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var OrderSimpleFieldsFrontRepository $orderSimpleFieldsFrontRepository */
     protected $orderSimpleFieldsFrontRepository;
 
@@ -57,6 +63,19 @@ class SynchronizeOrderSimpleFields implements EventSubscriberInterface
      */
     public function action(OrderSynchronizedEvent $event): void
     {
+        try {
+            $this->_action($event);
+        } catch (OrderBackNotFoundException $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
+    }
+
+    /**
+     * @param OrderSynchronizedEvent $event
+     * @throws OrderBackNotFoundException
+     */
+    protected function _action(OrderSynchronizedEvent $event): void
+    {
         if (null === $this->orderSimpleFieldsFrontTableExists) {
             $this->orderSimpleFieldsFrontTableExists = $this->orderSimpleFieldsFrontRepository->tableExists();
         }
@@ -66,10 +85,13 @@ class SynchronizeOrderSimpleFields implements EventSubscriberInterface
         }
 
         $order = $event->getOrder();
+        if (null === $order) {
+            throw new OrderBackNotFoundException("Order not found");
+        }
+
         $orderBack = $this->orderBackRepository->find($order->getBackId());
         if (null === $orderBack) {
-            //@TODO Notify
-            return;
+            throw new OrderBackNotFoundException("Order Back with id: {$order->getBackId()} not found");
         }
 
         $shippingCode = ShippingConverter::backToFront($orderBack->getDelivery());
@@ -79,8 +101,7 @@ class SynchronizeOrderSimpleFields implements EventSubscriberInterface
 
         $orderFront = $this->orderFrontRepository->find($order->getFrontId());
         if (null === $orderFront) {
-            //@TODO Notify
-            return;
+            throw new OrderBackNotFoundException("Order Front with id: {$order->getFrontId()} not found");
         }
 
         $orderSimpleFieldsFront = $this->getOrderSimpleFieldsFront($orderFront);

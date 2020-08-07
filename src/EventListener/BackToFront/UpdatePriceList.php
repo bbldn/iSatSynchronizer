@@ -9,6 +9,7 @@ use App\Event\BackToFront\PriceSynchronizeEvent;
 use App\Event\BackToFront\PriceSynchronizeFastEvent;
 use App\Event\BackToFront\ProductSynchronizedEvent;
 use App\Helper\ExceptionFormatter;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
@@ -20,6 +21,9 @@ use Throwable;
 
 class UpdatePriceList implements EventSubscriberInterface
 {
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /** @var HttpClientInterface $httpClient */
     protected $httpClient;
 
@@ -28,11 +32,13 @@ class UpdatePriceList implements EventSubscriberInterface
 
     /**
      * UpdatePriceList constructor.
+     * @param LoggerInterface $logger
      * @param HttpClientInterface $httpClient
      * @param string $url
      */
-    public function __construct(HttpClientInterface $httpClient, string $url)
+    public function __construct(LoggerInterface $logger, HttpClientInterface $httpClient, string $url)
     {
+        $this->logger = $logger;
         $this->httpClient = $httpClient;
         $this->url = $url;
     }
@@ -64,7 +70,7 @@ class UpdatePriceList implements EventSubscriberInterface
 
             $this->validateResponse($response);
         } catch (Throwable $e) {
-            ExceptionFormatter::e($e);
+            $this->logger->error(ExceptionFormatter::e($e));
         }
     }
 
