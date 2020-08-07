@@ -104,7 +104,7 @@ class SynchronizeProductDiscontinued implements EventSubscriberInterface
         }
 
         $m = sprintf("Discontinued: %s %s", $productBack->getProductId(), $productBack->getDiscontinued());
-        $this->logger->info($m);
+        $this->logger->error($m);
 
         if (true === $productBack->getDiscontinued()) {
             $exists = $this->productDiscontinuedFrontRepository->exists($productFront->getProductId());
