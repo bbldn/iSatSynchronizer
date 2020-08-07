@@ -3,7 +3,7 @@ monolog:
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: info
+            level: error
             channels: ["!event"]
             include_stacktraces: true
         # uncomment to get logging in your browser
