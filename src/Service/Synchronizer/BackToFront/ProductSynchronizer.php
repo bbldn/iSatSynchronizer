@@ -39,6 +39,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
      */
     public function synchronizeByCategoryId(int $id, bool $synchronizeImage = false): void
     {
+        $this->events[ProductSynchronizedEvent::class] = 1;
         $this->events[ProductsSynchronizedEvent::class] = 1;
 
         $productsBack = $this->productBackRepository->findByCategoryId($id);
@@ -46,7 +47,7 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
             $this->synchronizeProduct($productBack, $synchronizeImage);
         }
 
-        if (1 === $this->events[ProductSynchronizedEvent::class]) {
+        if (1 === $this->events[ProductsSynchronizedEvent::class]) {
             $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
         }
     }
