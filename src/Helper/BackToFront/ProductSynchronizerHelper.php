@@ -4,10 +4,13 @@ namespace App\Helper\BackToFront;
 
 use App\Contract\BackToFront\ProductSynchronizerHelperInterface;
 use App\Entity\Front\Category as CategoryFront;
+use App\Exception\CategoryBackNotFoundException;
+use App\Exception\CategoryFrontNotFoundException;
 use App\Helper\ExceptionFormatter;
 use App\Repository\CategoryRepository;
 use App\Repository\Front\CategoryRepository as CategoryFrontRepository;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 class ProductSynchronizerHelper implements ProductSynchronizerHelperInterface
 {
@@ -43,33 +46,38 @@ class ProductSynchronizerHelper implements ProductSynchronizerHelperInterface
      */
     public function getCategoryFrontByCategoryBackId(?int $categoryBackId): ?CategoryFront
     {
+        try {
+            return $this->_getCategoryFrontByCategoryBackId($categoryBackId);
+        } catch (Throwable $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int|null $categoryBackId
+     * @return CategoryFront|null
+     * @throws CategoryBackNotFoundException
+     * @throws CategoryFrontNotFoundException
+     */
+    protected function _getCategoryFrontByCategoryBackId(?int $categoryBackId): ?CategoryFront
+    {
         if (null === $categoryBackId) {
             return null;
         }
 
         $category = $this->categoryRepository->findOneByBackId($categoryBackId);
         if (null === $category) {
-            $message = "Category with backId {$categoryBackId} not found";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return null;
+            throw new CategoryBackNotFoundException("CategoryBack with id: {$categoryBackId} not found");
         }
 
-        $frontId = $category->getFrontId();
-        if (null === $frontId) {
-            $message = "Category front id is null";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return null;
-        }
-
-        $categoryFront = $this->categoryFrontRepository->find($frontId);
+        $categoryFront = $this->categoryFrontRepository->find($category->getFrontId());
 
         if (null === $categoryFront) {
-            $message = "Category description front is null";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return null;
+            throw new CategoryFrontNotFoundException(
+                "CategoryFront with id: {$category->getFrontId()} not found"
+            );
         }
 
         return $categoryFront;

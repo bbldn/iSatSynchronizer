@@ -11,6 +11,8 @@ use App\Event\FrontToBack\OrderClearEvent;
 use App\Event\FrontToBack\UpdateOrderEvent;
 use App\Exception\CustomerFrontNotFoundException;
 use App\Exception\OrderFrontNotFoundException;
+use App\Exception\OrderFrontToBackSynchronizerException;
+use App\Exception\ProductNotFoundException;
 use App\Helper\Back\Store as StoreBack;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
@@ -321,7 +323,12 @@ class OrderSynchronizer extends FrontToBackSynchronizer
             $this->events[NewOrderEvent::class] = 1;
         }
 
-        $this->updateOrderBackFromOrderFront($orderFront, $orderBack);
+        try {
+            $this->updateOrderBackFromOrderFront($orderFront, $orderBack);
+        } catch (OrderFrontToBackSynchronizerException $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
+
         $order = $this->createOrUpdateOrder($order, $orderBack->getId(), $orderFront->getOrderId());
 
         if (1 === $this->events[NewOrderEvent::class]) {
@@ -356,7 +363,7 @@ class OrderSynchronizer extends FrontToBackSynchronizer
      * @param OrderFront $orderFront
      * @param OrderBack $orderBack
      * @return OrderBack
-     *
+     * @throws OrderFrontToBackSynchronizerException
      */
     protected function updateOrderBackFromOrderFront(OrderFront $orderFront, OrderBack $orderBack): OrderBack
     {
@@ -364,20 +371,23 @@ class OrderSynchronizer extends FrontToBackSynchronizer
         $currentOrderBack = $orderBack;
 
         if (0 === count($orderProductsFront)) {
-            $message = "Order without products: {$orderFront->getOrderId()}";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return $orderBack;
+            throw new OrderFrontToBackSynchronizerException(
+                "Order without products: {$orderFront->getOrderId()}"
+            );
         }
 
         foreach ($orderProductsFront as $orderProductFront) {
             $product = $this->productRepository->findOneByFrontId($orderProductFront->getProductId());
 
-            if (null === $product) {
-                $error = "Product with id: {$orderProductFront->getProductId()} not found";
-                $this->logger->error(ExceptionFormatter::f($error));
-
-                return $orderBack;
+            try {
+                if (null === $product) {
+                    throw new ProductNotFoundException(
+                        "Product with id: {$orderProductFront->getProductId()} not found"
+                    );
+                }
+            } catch (ProductNotFoundException $e) {
+                $this->logger->error(ExceptionFormatter::e($e));
+                continue;
             }
 
             if ($currentOrderBack->getProductId() !== $product->getBackId()) {

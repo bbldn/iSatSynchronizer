@@ -2,11 +2,11 @@
 
 namespace App\Service\Synchronizer\Novaposhta;
 
-use App\Contract\Novaposhta\AreaSynchronizerContract;
 use App\Contract\Novaposhta\AreaSynchronizerInterface;
+use App\Exception\NovaposhtaDataException;
 use App\Helper\ExceptionFormatter;
 use App\Service\Synchronizer\Novaposhta\Implementation\AreaSynchronizer as AreaBaseSynchronizer;
-use Exception;
+use Throwable;
 
 class AreaSynchronizer extends AreaBaseSynchronizer implements AreaSynchronizerInterface
 {
@@ -25,19 +25,20 @@ class AreaSynchronizer extends AreaBaseSynchronizer implements AreaSynchronizerI
     {
         try {
             $response = $this->novaPoshtaApi2->getAreas();
-        } catch (Exception $e) {
-            $this->logger->error(ExceptionFormatter::f($e->getMessage()));
+            $this->validateResponse($response);
+        } catch (Throwable $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
 
-            return;
-        }
-
-        if (false === $this->validateResponse($response)) {
             return;
         }
 
 
         foreach ($response['data'] as $key => $item) {
-            $this->createOrUpdateCountry($item, $key);
+            try {
+                $this->createOrUpdateCountry($item, $key);
+            } catch (NovaposhtaDataException $e) {
+                $this->logger->error(ExceptionFormatter::e($e));
+            }
         }
     }
 

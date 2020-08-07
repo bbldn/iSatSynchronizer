@@ -4,11 +4,15 @@ namespace App\EventListener\BackToFront;
 
 use App\Contract\BackToFront\ProductSeoUrlSynchronizerInterface;
 use App\Event\BackToFront\ProductSynchronizedEvent;
+use App\Exception\ProductBackNotFoundException;
+use App\Exception\ProductFrontNotFoundException;
+use App\Exception\ProductNotFoundException;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Throwable;
 
 class SynchronizeProductSeoPro implements EventSubscriberInterface
 {
@@ -57,10 +61,22 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
         ];
     }
 
+    public function action(ProductSynchronizedEvent $event): void
+    {
+        try {
+            $this->_action($event);
+        } catch (Throwable $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
+    }
+
     /**
      * @param ProductSynchronizedEvent $event
+     * @throws ProductBackNotFoundException
+     * @throws ProductFrontNotFoundException
+     * @throws ProductNotFoundException
      */
-    public function action(ProductSynchronizedEvent $event): void
+    public function _action(ProductSynchronizedEvent $event): void
     {
         if (false === $this->synchronizerLoaded) {
             $this->productSeoUrlBackToFrontSynchronizer->load();
@@ -68,20 +84,18 @@ class SynchronizeProductSeoPro implements EventSubscriberInterface
         }
 
         $product = $event->getProduct();
+        if (null === $product) {
+            throw new ProductNotFoundException("Product not found");
+        }
+
         $productBack = $this->productBackRepository->find($product->getBackId());
         if (null === $productBack) {
-            $message = "ProductBack with id {$product->getBackId()} not found";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new ProductBackNotFoundException("ProductBack with id {$product->getBackId()} not found");
         }
 
         $productFront = $this->productFrontRepository->find($product->getFrontId());
         if (null === $productFront) {
-            $message = "ProductFront with id {$product->getFrontId()} not found";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new ProductFrontNotFoundException("ProductFront with id {$product->getFrontId()} not found");
         }
 
         $this->productSeoUrlBackToFrontSynchronizer->synchronizeByProductBackAndProductFront(

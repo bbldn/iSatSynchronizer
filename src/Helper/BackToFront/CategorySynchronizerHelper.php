@@ -3,6 +3,7 @@
 namespace App\Helper\BackToFront;
 
 use App\Contract\BackToFront\CategorySynchronizerHelperInterface;
+use App\Exception\CategoryFrontNotFoundException;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\CategoryRepository;
@@ -54,6 +55,7 @@ class CategorySynchronizerHelper implements CategorySynchronizerHelperInterface
     /**
      * @param int $backId
      * @return int
+     * @throws CategoryFrontNotFoundException
      */
     protected function getParentFrontIdByBackId(int $backId): int
     {
@@ -62,23 +64,14 @@ class CategorySynchronizerHelper implements CategorySynchronizerHelperInterface
             return $this->storeFront->getDefaultCategoryFrontId();
         }
 
-        $frontId = $category->getFrontId();
-        if (null === $frontId) {
-            $error = "Category with id: {$category->getId()} does not have frontId";
-            $this->logger->error(ExceptionFormatter::f($error));
-
-            return $this->storeFront->getDefaultCategoryFrontId();
+        $categoryFront = $this->categoryFrontRepository->find($category->getFrontId());
+        if (null === $categoryFront) {
+            throw new CategoryFrontNotFoundException(
+                "Front Category with id: {$category->getFrontId()} not found"
+            );
         }
 
-        $front = $this->categoryFrontRepository->find($frontId);
-
-        if (null === $front) {
-            $this->logger->error(ExceptionFormatter::f("Front Category with id: {$frontId} not found"));
-
-            return $this->storeFront->getDefaultCategoryFrontId();
-        }
-
-        return $front->getCategoryId();
+        return $categoryFront->getCategoryId();
     }
 
     /**
@@ -90,7 +83,12 @@ class CategorySynchronizerHelper implements CategorySynchronizerHelperInterface
         $parentBackId = $categoryBack->getParent();
         $parentId = $this->storeFront->getDefaultCategoryFrontId();
         if (false === in_array($parentBackId, $this->storeBack->getDefaultRootCategories())) {
-            $parentId = $this->getParentFrontIdByBackId($parentBackId);
+            try {
+                $parentId = $this->getParentFrontIdByBackId($parentBackId);
+            } catch (CategoryFrontNotFoundException $e) {
+                $this->logger->error(ExceptionFormatter::e($e));
+                $parentId = $this->storeFront->getDefaultCategoryFrontId();
+            }
         }
 
         return $parentId;

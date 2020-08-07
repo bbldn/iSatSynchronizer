@@ -3,6 +3,7 @@
 namespace App\EventListener\FrontToBack;
 
 use App\Event\FrontToBack\UpdateOrderEvent;
+use App\Exception\OrderFrontNotFoundException;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Front\OrderRepository as OrderFrontRepository;
 use Psr\Log\LoggerInterface;
@@ -42,13 +43,23 @@ class SetOrderBackToOrderFront implements EventSubscriberInterface
      */
     public function action(UpdateOrderEvent $event): void
     {
+        try {
+            $this->_action($event);
+        } catch (OrderFrontNotFoundException $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
+    }
+
+    /**
+     * @param UpdateOrderEvent $event
+     * @throws OrderFrontNotFoundException
+     */
+    protected function _action(UpdateOrderEvent $event): void
+    {
         $order = $event->getOrder();
         $orderFront = $this->orderFrontRepository->find($order->getFrontId());
         if (null === $orderFront) {
-            $message = "Order Front with id {$order->getFrontId()} not found";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new OrderFrontNotFoundException("Order Front with id {$order->getFrontId()} not found");
         }
 
         $orderFront->setFax((string)$order->getBackId());

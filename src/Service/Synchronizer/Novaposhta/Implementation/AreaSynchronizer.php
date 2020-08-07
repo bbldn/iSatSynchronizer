@@ -3,7 +3,7 @@
 namespace App\Service\Synchronizer\Novaposhta\Implementation;
 
 use App\Entity\Front\Country as CountryFront;
-use App\Helper\ExceptionFormatter;
+use App\Exception\NovaposhtaDataException;
 use App\Repository\Front\CountryRepository as CountryFrontRepository;
 use LisDev\Delivery\NovaPoshtaApi2;
 use Psr\Log\LoggerInterface;
@@ -36,14 +36,12 @@ class AreaSynchronizer extends NovaposhtaSynchronizer
     /**
      * @param array $item
      * @param int $key
+     * @throws NovaposhtaDataException
      */
     protected function createOrUpdateCountry(array $item, int $key): void
     {
         if (false === key_exists('DescriptionRu', $item)) {
-            $message = "Item with number: {$key} is not include `DescriptionRu`";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new NovaposhtaDataException("Item with number: {$key} is not include `DescriptionRu`");
         }
 
         if ('АРК' === $item['DescriptionRu']) {

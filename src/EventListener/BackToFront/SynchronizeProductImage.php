@@ -3,12 +3,16 @@
 namespace App\EventListener\BackToFront;
 
 use App\Event\BackToFront\ProductSynchronizedEvent;
+use App\Exception\ProductBackNotFoundException;
+use App\Exception\ProductFrontNotFoundException;
+use App\Exception\ProductNotFoundException;
 use App\Helper\ExceptionFormatter;
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use App\Service\Synchronizer\BackToFront\ProductImageSynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Throwable;
 
 class SynchronizeProductImage implements EventSubscriberInterface
 {
@@ -57,10 +61,22 @@ class SynchronizeProductImage implements EventSubscriberInterface
         ];
     }
 
+    public function action(ProductSynchronizedEvent $event): void
+    {
+        try {
+            $this->_action($event);
+        } catch (Throwable $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
+    }
+
     /**
      * @param ProductSynchronizedEvent $event
+     * @throws ProductBackNotFoundException
+     * @throws ProductFrontNotFoundException
+     * @throws ProductNotFoundException
      */
-    public function action(ProductSynchronizedEvent $event): void
+    protected function _action(ProductSynchronizedEvent $event): void
     {
         if (false === $event->isSynchronizeImage()) {
             return;
@@ -72,21 +88,20 @@ class SynchronizeProductImage implements EventSubscriberInterface
         }
 
         $product = $event->getProduct();
+        if (null === $product) {
+            throw new ProductNotFoundException("Product not found");
+        }
 
         $productBack = $this->productBackRepository->find($product->getBackId());
         if (null === $productBack) {
-            $message = "Product Back with id: {$product->getBackId()} not found";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new ProductBackNotFoundException("Product Back with id: {$product->getBackId()} not found");
         }
 
         $productFront = $this->productFrontRepository->find($product->getFrontId());
         if (null === $productFront) {
-            $message = "Product Front with id: {$product->getFrontId()} not found";
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new ProductFrontNotFoundException(
+                "Product Front with id: {$product->getFrontId()} not found"
+            );
         }
 
         $this->productImageSynchronizer->clearByProductFrontId($productFront->getProductId());

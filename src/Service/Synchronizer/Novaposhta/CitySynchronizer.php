@@ -3,6 +3,7 @@
 namespace App\Service\Synchronizer\Novaposhta;
 
 use App\Contract\Novaposhta\CitySynchronizerInterface;
+use App\Exception\NovaposhtaDataException;
 use App\Helper\ExceptionFormatter;
 use App\Service\Synchronizer\Novaposhta\Implementation\CitySynchronizer as CityBaseSynchronizer;
 use Exception;
@@ -40,7 +41,11 @@ class CitySynchronizer extends CityBaseSynchronizer implements CitySynchronizerI
         }
 
         foreach ($response['data'] as $key => $item) {
-            $this->createOrUpdateZone($item, $key);
+            try {
+                $this->createOrUpdateZone($item, $key);
+            } catch (NovaposhtaDataException $e) {
+                $this->logger->error(ExceptionFormatter::e($e));
+            }
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Service\Synchronizer\Novaposhta\Implementation;
 
-use App\Helper\ExceptionFormatter;
+use App\Exception\NovaposhtaDataException;
 use App\Service\Synchronizer\Synchronizer;
 use Psr\Log\LoggerInterface;
 
@@ -22,60 +22,39 @@ abstract class NovaposhtaSynchronizer extends Synchronizer
 
     /**
      * @param array $response
-     * @return bool
+     * @throws NovaposhtaDataException
      */
-    protected function validateResponse(array $response): bool
+    protected function validateResponse(array $response): void
     {
         if (false === key_exists('success', $response)) {
-            $message = 'Response does not include the key `success`';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return false;
+            throw new NovaposhtaDataException('Response does not include the key `success`');
         }
 
         if ($response['success'] !== true) {
             $this->handleError($response);
-
-            return false;
         }
 
         if (false === is_array($response['data'])) {
-            $message = '`data` is not array';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return false;
+            throw new NovaposhtaDataException('`data` is not array');
         }
-
-        return true;
     }
 
     /**
      * @param array $response
+     * @throws NovaposhtaDataException
      */
     private function handleError(array $response): void
     {
         if (false === key_exists('errors', $response)) {
-            $message = 'Response does not include the key `errors`';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new NovaposhtaDataException('Response does not include the key `errors`');
         }
 
         if (false === key_exists('errorCodes', $response)) {
-            $message = 'Response does not include the key `errorCodes`';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+            throw new NovaposhtaDataException('Response does not include the key `errorCodes`');
         }
 
-        $errors = $response['errors'];
-        $errorCodes = $response['errorCodes'];
-
-        if (count($errors) === count($errorCodes)) {
-            $message = 'The number of errors is not equal to the number of error codes';
-            $this->logger->error(ExceptionFormatter::f($message));
-
-            return;
+        if (count($response['errors']) !== count($response['errorCodes'])) {
+            throw new NovaposhtaDataException('The number of errors is not equal to the number of error codes');
         }
     }
 }

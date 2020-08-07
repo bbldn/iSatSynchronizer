@@ -5,6 +5,7 @@ namespace App\Service\Synchronizer\BackToFront\Implementation;
 use App\Entity\Back\BuyersGroupsPrices as ProductDiscountBack;
 use App\Entity\Front\CustomerGroup as CustomerGroupFront;
 use App\Entity\Front\ProductDiscount as ProductDiscountFront;
+use App\Exception\ProductBackNotFoundException;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Front\Store as StoreFront;
 use App\Repository\Back\BuyersGroupsPricesRepository as ProductDiscountBackRepository;
@@ -73,7 +74,11 @@ abstract class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     protected function synchronizeProductDiscount(ProductDiscountBack $productDiscountBack): void
     {
         $productDiscountFront = $this->getProductDiscountFrontFromProductDiscountBack($productDiscountBack);
-        $this->updateCategoryFrontFromCategoryBack($productDiscountBack, $productDiscountFront);
+        try {
+            $this->updateCategoryFrontFromCategoryBack($productDiscountBack, $productDiscountFront);
+        } catch (ProductBackNotFoundException $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+        }
     }
 
     /**
@@ -105,6 +110,7 @@ abstract class ProductDiscountSynchronizer extends BackToFrontSynchronizer
      * @param ProductDiscountBack $productDiscountBack
      * @param ProductDiscountFront $productDiscountFront
      * @return ProductDiscountFront
+     * @throws ProductBackNotFoundException
      */
     protected function updateCategoryFrontFromCategoryBack(
         ProductDiscountBack $productDiscountBack,
@@ -113,10 +119,9 @@ abstract class ProductDiscountSynchronizer extends BackToFrontSynchronizer
     {
         $product = $this->productRepository->findOneByBackId($productDiscountBack->getProductId());
         if (null === $product || null === $product->getFrontId()) {
-            $error = "ProductBack with id: {$productDiscountBack->getProductId()} not synchronized";
-            $this->logger->error(ExceptionFormatter::f($error));
-
-            return $productDiscountFront;
+            throw new ProductBackNotFoundException(
+                "ProductBack with id: {$productDiscountBack->getProductId()} not synchronized"
+            );
         }
 
         $this->createProductDiscountFront(

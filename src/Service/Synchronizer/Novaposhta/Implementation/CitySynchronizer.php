@@ -3,6 +3,7 @@
 namespace App\Service\Synchronizer\Novaposhta\Implementation;
 
 use App\Entity\Front\Zone as ZoneFront;
+use App\Exception\NovaposhtaDataException;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
 use App\Repository\Front\CountryRepository as CountryFrontRepository;
@@ -47,15 +48,13 @@ class CitySynchronizer extends NovaposhtaSynchronizer
     /**
      * @param array $item
      * @param int $key
+     * @throws NovaposhtaDataException
      */
     protected function createOrUpdateZone(array $item, int $key): void
     {
         foreach (['Ref', 'DescriptionRu', 'CityID', 'AreaDescriptionRu'] as $value) {
             if (false === key_exists($value, $item)) {
-                $message = "Item with number: {$key} is not include `{$value}`";
-                $this->logger->error(ExceptionFormatter::f($message));
-
-                return;
+                throw new NovaposhtaDataException("Item with number: {$key} is not include `{$value}`");
             }
         }
 

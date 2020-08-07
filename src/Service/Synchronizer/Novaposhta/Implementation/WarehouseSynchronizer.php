@@ -3,6 +3,7 @@
 namespace App\Service\Synchronizer\Novaposhta\Implementation;
 
 use App\Entity\Front\City as CityFront;
+use App\Exception\NovaposhtaDataException;
 use App\Helper\ExceptionFormatter;
 use App\Helper\Filler;
 use App\Repository\Front\CityRepository as CityFrontRepository;
@@ -47,12 +48,20 @@ class WarehouseSynchronizer extends NovaposhtaSynchronizer
      */
     protected function synchronizeWarehouses(array $response, int $zoneId): void
     {
-        if (false === $this->validateResponse($response)) {
+        try {
+            $this->validateResponse($response);
+        } catch (NovaposhtaDataException $e) {
+            $this->logger->error(ExceptionFormatter::e($e));
+
             return;
         }
 
         foreach ($response['data'] as $key => $wirehouse) {
-            $this->createOrUpdateCity($wirehouse, $zoneId, $key);
+            try {
+                $this->createOrUpdateCity($wirehouse, $zoneId, $key);
+            } catch (NovaposhtaDataException $e) {
+                $this->logger->error(ExceptionFormatter::e($e));
+            }
         }
     }
 
@@ -60,15 +69,13 @@ class WarehouseSynchronizer extends NovaposhtaSynchronizer
      * @param array $item
      * @param int $zoneId
      * @param int $key
+     * @throws NovaposhtaDataException
      */
     protected function createOrUpdateCity(array $item, int $zoneId, int $key): void
     {
         foreach (['SiteKey', 'DescriptionRu'] as $value) {
             if (false === key_exists($value, $item)) {
-                $message = "Item with number: {$key} is not include `{$value}`";
-                $this->logger->error(ExceptionFormatter::f($message));
-
-                return;
+                throw new NovaposhtaDataException("Item with number: {$key} is not include `{$value}`");
             }
         }
 
