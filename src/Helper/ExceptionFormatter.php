@@ -29,12 +29,12 @@ class ExceptionFormatter
     public static function e(Throwable $e): string
     {
         $className = get_class($e);
-        $result = ["{message} {$className}:{$e->getMessage()}"];
+        $r = ["{message} {$className}:{$e->getMessage()}"];
         foreach ($e->getTrace() as $key => $stack) {
             $key++;
-            $result[] = "#{$key} {$stack['file']}({$stack['line']}): {$stack['class']}{$stack['type']}{$stack['function']}()";
+            $r[] = "#{$key} {$stack['file']}({$stack['line']}): {$stack['class']}{$stack['type']}{$stack['function']}()";
         }
 
-        return implode(PHP_EOL, $result);
+        return implode(PHP_EOL, $r);
     }
 }

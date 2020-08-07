@@ -49,7 +49,11 @@ class ProductService extends ApiService
      */
     public function updateProductsByIds(string $ids, bool $onlyPriceUpdate = false): array
     {
-        $command = (true === $onlyPriceUpdate) ? 'product:price:update:by-ids': 'product:synchronize:by-ids';
+        if (true === $onlyPriceUpdate) {
+            $command = 'product:price:update:by-ids';
+        } else {
+            $command = 'product:synchronize:by-ids';
+        }
 
         try {
             $this->httpClient->request('POST', "http://localhost:{$this->handlerPort}", [
@@ -69,7 +73,11 @@ class ProductService extends ApiService
      */
     public function updateProductsByCategoriesIds(string $ids, bool $onlyPriceUpdate = false): array
     {
-        $command = (true === $onlyPriceUpdate) ? 'product:price:update:by-category-id': 'product:synchronize:by-category-id';
+        if (true === $onlyPriceUpdate) {
+            $command = 'product:price:update:by-category-id';
+        } else {
+            $command = 'product:synchronize:by-category-id';
+        }
 
         try {
             $this->httpClient->request('POST', "http://localhost:{$this->handlerPort}", [
