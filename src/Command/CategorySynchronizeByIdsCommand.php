@@ -54,6 +54,6 @@ class CategorySynchronizeByIdsCommand extends Command
         $loadImage = $input->getArgument('loadImage') !== null;
         $this->categorySynchronizer->synchronizeByIds($ids, $loadImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

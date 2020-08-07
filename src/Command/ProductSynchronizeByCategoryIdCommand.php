@@ -57,6 +57,6 @@ class ProductSynchronizeByCategoryIdCommand extends Command
             $this->productSynchronize->synchronizeByCategoryId($id, $loadImage);
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

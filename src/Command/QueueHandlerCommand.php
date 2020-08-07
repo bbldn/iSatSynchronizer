@@ -54,7 +54,7 @@ class QueueHandlerCommand extends Command
     {
         $childPid = pcntl_fork();
         if ($childPid) {
-            return 0;
+            return Command::SUCCESS;
         }
         posix_setsid();
         fclose(STDIN);
@@ -63,7 +63,7 @@ class QueueHandlerCommand extends Command
 
         $this->startServer();
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**

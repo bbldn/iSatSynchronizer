@@ -49,6 +49,6 @@ class AttributeSynchronizeAllCommand extends Command
     {
         $this->attributeSynchronizer->synchronizeAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -52,6 +52,6 @@ class CategorySynchronizeAllCommand extends Command
         $loadImage = $input->getArgument('loadImage') !== null;
         $this->categorySynchronizer->synchronizeAll($loadImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

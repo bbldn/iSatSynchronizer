@@ -49,6 +49,6 @@ class CurrencySynchronizeAllCommand extends Command
     {
         $this->currencySynchronizer->synchronizeAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

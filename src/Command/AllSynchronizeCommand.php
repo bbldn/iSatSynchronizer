@@ -73,6 +73,6 @@ class AllSynchronizeCommand extends Command
         $this->attributeSynchronizer->synchronizeAll();
         $this->productSynchronizer->synchronizeAll($resetImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

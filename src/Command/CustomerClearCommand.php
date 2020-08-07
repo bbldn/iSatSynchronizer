@@ -49,6 +49,6 @@ class CustomerClearCommand extends Command
     {
         $this->customerSynchronizer->clear();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

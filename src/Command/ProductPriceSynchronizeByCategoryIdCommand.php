@@ -52,6 +52,6 @@ class ProductPriceSynchronizeByCategoryIdCommand extends Command
         $ids = $this->getIdsFromInput($input);
         $this->productSynchronize->synchronizePriceByCategoryIds($ids);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

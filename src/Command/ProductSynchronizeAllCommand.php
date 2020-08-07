@@ -52,6 +52,6 @@ class ProductSynchronizeAllCommand extends Command
         $loadImage = $input->getArgument('loadImage') !== null;
         $this->productSynchronize->synchronizeAll($loadImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

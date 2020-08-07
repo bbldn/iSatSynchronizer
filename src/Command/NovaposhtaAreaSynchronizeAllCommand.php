@@ -41,6 +41,6 @@ class NovaposhtaAreaSynchronizeAllCommand extends Command
     {
         $this->areaSynchronizer->synchronizeAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

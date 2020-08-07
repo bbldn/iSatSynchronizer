@@ -108,11 +108,11 @@ class OrderService extends ApiService
         $data = [];
 
         foreach ($orders as $key => $order) {
-            $price = round($order->getPrice() * $order->getCurrencyValue(), 2) . ' ' . $order->getCurrencyName();
+            $price = round($order->getPrice() * $order->getCurrencyValue(), 2);
             $data[] = [
                 'number' => $key + 1,
                 'name' => $order->getProductName(),
-                'price' => $price,
+                'price' => "{$price} {$order->getCurrencyName()}",
                 'amount' => $order->getAmount(),
                 'currency_name' => $order->getCurrencyName(),
                 'rate' => $order->getCurrencyValue(),

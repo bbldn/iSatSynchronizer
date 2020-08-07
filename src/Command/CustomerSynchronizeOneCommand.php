@@ -54,6 +54,6 @@ class CustomerSynchronizeOneCommand extends Command
         $password = $input->getArgument('password');
         $this->customerSynchronizer->synchronizeOne((int)$id, $password);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

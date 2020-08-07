@@ -41,6 +41,6 @@ class NovaposhtaWarehouseSynchronizeAllCommand extends Command
     {
         $this->warehousesSynchronizer->synchronizeAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

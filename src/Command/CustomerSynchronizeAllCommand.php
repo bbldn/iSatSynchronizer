@@ -49,6 +49,6 @@ class CustomerSynchronizeAllCommand extends Command
     {
         $this->customerSynchronizer->synchronizeAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

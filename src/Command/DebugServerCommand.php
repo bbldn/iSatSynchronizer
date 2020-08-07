@@ -52,6 +52,6 @@ class DebugServerCommand extends Command
         $server->listen($socket);
         $loop->run();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

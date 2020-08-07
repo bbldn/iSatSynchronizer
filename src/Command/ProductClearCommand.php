@@ -52,6 +52,6 @@ class ProductClearCommand extends Command
         $removeImage = $input->getArgument('removeImage') !== null;
         $this->productSynchronize->clear($removeImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
