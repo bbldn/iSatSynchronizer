@@ -73,6 +73,6 @@ class AllReloadCommand extends Command
         $this->attributeSynchronizer->reload();
         $this->productSynchronizer->reload($reloadImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -49,6 +49,6 @@ class ProductSeoUrlSynchronizeAllCommand extends Command
     {
         $this->productSeoUrlSynchronizer->synchronizeAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

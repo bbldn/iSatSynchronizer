@@ -73,6 +73,6 @@ class OrderSynchronizeByIdsCommand extends Command
             throw new InvalidArgumentException("Invalidate direction: {$direction}");
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

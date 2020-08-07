@@ -73,6 +73,6 @@ class AllClearCommand extends Command
         $this->attributeSynchronizer->clear();
         $this->categorySynchronizer->clear($resetImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

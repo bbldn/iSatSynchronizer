@@ -49,6 +49,6 @@ class OrderClearCommand extends Command
     {
         $this->orderSynchronize->clear();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

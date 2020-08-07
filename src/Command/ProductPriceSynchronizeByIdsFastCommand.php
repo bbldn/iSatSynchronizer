@@ -42,6 +42,6 @@ class ProductPriceSynchronizeByIdsFastCommand extends Command
         $ids = $this->getIdsFromInput($input);
         $this->productDiscountSpeedSynchronizer->synchronizeByIds($ids);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

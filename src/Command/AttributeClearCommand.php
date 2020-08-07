@@ -49,6 +49,6 @@ class AttributeClearCommand extends Command
     {
         $this->attributeSynchronizer->clear();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

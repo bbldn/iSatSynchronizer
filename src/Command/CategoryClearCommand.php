@@ -50,9 +50,8 @@ class CategoryClearCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $removeImage = $input->getArgument('removeImage') !== null;
-
         $this->categorySynchronizer->clear($removeImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

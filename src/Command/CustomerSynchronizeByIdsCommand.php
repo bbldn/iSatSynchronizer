@@ -52,6 +52,6 @@ class CustomerSynchronizeByIdsCommand extends Command
         $ids = $this->getIdsFromInput($input);
         $this->customerSynchronizer->synchronizeByIds($ids);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -54,6 +54,6 @@ class ProductSynchronizeByNameCommand extends Command
         $loadImage = $input->getArgument('loadImage') !== null;
         $this->productSynchronize->synchronizeByName($name, $loadImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

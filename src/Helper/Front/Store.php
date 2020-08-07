@@ -3,7 +3,6 @@
 namespace App\Helper\Front;
 
 use App\Helper\Store as StoreBase;
-use Illuminate\Support\Str;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class Store extends StoreBase

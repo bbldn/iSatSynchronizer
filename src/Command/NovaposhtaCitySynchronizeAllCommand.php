@@ -41,6 +41,6 @@ class NovaposhtaCitySynchronizeAllCommand extends Command
     {
         $this->citySynchronizer->synchronizeAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

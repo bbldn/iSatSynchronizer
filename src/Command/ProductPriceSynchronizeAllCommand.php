@@ -49,6 +49,6 @@ class ProductPriceSynchronizeAllCommand extends Command
     {
         $this->productSynchronize->synchronizePriceAll();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

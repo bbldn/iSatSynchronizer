@@ -52,10 +52,9 @@ class CategorySynchronizeByNameCommand extends Command
     {
         $loadImage = $input->getArgument('loadImage') !== null;
         $name = $input->getArgument('name');
-
         $this->categorySynchronizer->synchronizeByName($name, $loadImage);
 
-        return 0;
+        return Command::SUCCESS;
     }
 
 }

@@ -59,6 +59,6 @@ class ProductSeoUrlSynchronizeByIdsCommand extends Command
         $ids = $this->getIdsFromInput($input);
         $this->productSeoUrlSynchronizer->synchronizeByIds($ids);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
