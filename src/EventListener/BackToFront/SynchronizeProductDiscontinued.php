@@ -103,6 +103,9 @@ class SynchronizeProductDiscontinued implements EventSubscriberInterface
             throw new ProductBackNotFoundException("ProductFront with id: {$product->getFrontId()} not found");
         }
 
+        $m = sprintf("Discontinued: %s %s", $productBack->getProductId(), $productBack->getDiscontinued());
+        $this->logger->info($m);
+
         if (true === $productBack->getDiscontinued()) {
             $exists = $this->productDiscontinuedFrontRepository->exists($productFront->getProductId());
             if (false === $exists) {
