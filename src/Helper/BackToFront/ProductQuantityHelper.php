@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 05.08.20
- * Time: 23:26
- */
 
 namespace App\Helper\BackToFront;
 
@@ -18,6 +12,9 @@ use App\Repository\Back\CompetitorsProductsRepository as CompetitorsProductsBack
 use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use Psr\Log\LoggerInterface;
+
+use App\Entity\Back\Product as ProductBack;
+use App\Entity\Front\Product as ProductFront;
 
 class ProductQuantityHelper
 {
@@ -38,9 +35,6 @@ class ProductQuantityHelper
 
     /** @var StoreFront $storeFront */
     protected $storeFront;
-
-    /** @var bool $agsatCheck */
-    protected $agsatCheck = false;
 
     /**
      * SynchronizeProductQuantity constructor.
@@ -70,7 +64,6 @@ class ProductQuantityHelper
 
     /**
      * @param Product $product
-     * @throws AgsatCacheFormatException
      * @throws ProductBackNotFoundException
      * @throws ProductFrontNotFoundException
      */
@@ -100,18 +93,15 @@ class ProductQuantityHelper
         $productFront->setStockStatusId($this->storeFront->getDefaultProductAvailableStatusId());
         $this->productFrontRepository->persistAndFlush($productFront);
 
-        return;
-
-        if (true === $this->agsatCheck) {
-            $agsatStatus = $this->checkAgsatStatus($product);
-            if ($agsatStatus === $this->storeFront->getDefaultProductAvailableStatusId()) {
-                $productFront->setQuantity(99999);
-                $productFront->setStockStatusId($this->storeFront->getDefaultProductAvailableStatusId());
-                $this->productFrontRepository->persistAndFlush($productFront);
-
-                return;
-            }
-        }
+        //Проверка наличия у Agsat'а
+//        $agsatStatus = $this->checkAgsatStatus($product);
+//        if ($agsatStatus === $this->storeFront->getDefaultProductAvailableStatusId()) {
+//            $productFront->setQuantity(99999);
+//            $productFront->setStockStatusId($this->storeFront->getDefaultProductAvailableStatusId());
+//            $this->productFrontRepository->persistAndFlush($productFront);
+//
+//            return;
+//        }
 
         if ($productBack->getInStock() > 0) {
             $productFront->setQuantity(99999);
