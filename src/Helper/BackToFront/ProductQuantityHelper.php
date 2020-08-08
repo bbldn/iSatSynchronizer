@@ -13,9 +13,6 @@ use App\Repository\Back\ProductRepository as ProductBackRepository;
 use App\Repository\Front\ProductRepository as ProductFrontRepository;
 use Psr\Log\LoggerInterface;
 
-use App\Entity\Back\Product as ProductBack;
-use App\Entity\Front\Product as ProductFront;
-
 class ProductQuantityHelper
 {
     /** @var LoggerInterface $logger */
