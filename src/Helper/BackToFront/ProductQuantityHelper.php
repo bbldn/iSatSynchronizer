@@ -100,15 +100,15 @@ class ProductQuantityHelper
 //            return;
 //        }
 
-        if ($productBack->getInStock() > 0) {
-            $productFront->setQuantity(99999);
-            $productFront->setStockStatusId($this->storeFront->getDefaultProductAvailableStatusId());
-        } else {
-            $productFront->setQuantity(0);
-            $productFront->setStockStatusId($this->storeFront->getDefaultProductNotAvailableStatusId());
-        }
-
-        $this->productFrontRepository->persistAndFlush($productFront);
+//        if ($productBack->getInStock() > 0) {
+//            $productFront->setQuantity(99999);
+//            $productFront->setStockStatusId($this->storeFront->getDefaultProductAvailableStatusId());
+//        } else {
+//            $productFront->setQuantity(0);
+//            $productFront->setStockStatusId($this->storeFront->getDefaultProductNotAvailableStatusId());
+//        }
+//
+//        $this->productFrontRepository->persistAndFlush($productFront);
     }
 
     /**
