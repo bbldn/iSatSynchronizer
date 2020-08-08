@@ -88,7 +88,7 @@ class ProductQuantityHelper
             throw new ProductBackNotFoundException($message);
         }
 
-        if (0.0 === $productBack->getPrice()) {
+        if (true === $productBack->getNoBonus()) {
             $productFront->setQuantity(0);
             $productFront->setStockStatusId($this->storeFront->getDefaultProductNotAvailableStatusId());
             $this->productFrontRepository->persistAndFlush($productFront);
