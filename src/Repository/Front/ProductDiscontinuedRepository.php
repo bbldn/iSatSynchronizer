@@ -4,10 +4,7 @@ namespace App\Repository\Front;
 
 use App\Entity\Front\ProductDiscontinued;
 use App\Helper\ExceptionFormatter;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnexpectedResultException;
 use Psr\Log\LoggerInterface;
 
@@ -57,6 +54,8 @@ class ProductDiscontinuedRepository extends FrontRepository
         $this->createQueryBuilder('pd')
             ->andWhere('pd.productId = :val')
             ->setParameter('val', $id)
-            ->delete();
+            ->delete()
+            ->getQuery()
+            ->execute();
     }
 }
