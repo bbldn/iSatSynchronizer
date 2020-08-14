@@ -52,6 +52,19 @@ class CategorySynchronizer extends CategoryBaseSynchronizer implements CategoryS
     }
 
     /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeLast(bool $synchronizeImage = false): void
+    {
+        $categoryBack = $this->categoryBackRepository->findOneLast();
+        if (null === $categoryBack) {
+            return;
+        }
+
+        $this->synchronizeCategory($categoryBack, $synchronizeImage);
+    }
+
+    /**
      * @param bool $clearImage
      */
     public function clear(bool $clearImage = false): void

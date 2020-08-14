@@ -24,6 +24,10 @@ interface CategorySynchronizerInterface extends CanLoadInterface, CanSynchronize
      */
     public function synchronizeByName(string $name, bool $synchronizeImage = false): void;
 
+    /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeLast(bool $synchronizeImage = false): void;
 
     /**
      * @param bool $synchronizeImage

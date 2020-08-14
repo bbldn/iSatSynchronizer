@@ -7,9 +7,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CategorySynchronizeByNameCommand extends Command
+class CategorySynchronizeLastCommand extends Command
 {
-    protected static $defaultName = 'category:synchronize:by-name';
+    protected static $defaultName = 'category:synchronize:last';
 
     /** @var CategorySynchronizerInterface $categorySynchronizer */
     protected $categorySynchronizer;
@@ -30,7 +30,6 @@ class CategorySynchronizeByNameCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Category one synchronize');
-        $this->addArgument('name', InputArgument::REQUIRED, 'Category name');
         $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Synchronize image');
     }
 
@@ -51,8 +50,7 @@ class CategorySynchronizeByNameCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $loadImage = $input->getArgument('loadImage') !== null;
-        $name = $input->getArgument('name');
-        $this->categorySynchronizer->synchronizeByName($name, $loadImage);
+        $this->categorySynchronizer->synchronizeLast($loadImage);
 
         return Command::SUCCESS;
     }

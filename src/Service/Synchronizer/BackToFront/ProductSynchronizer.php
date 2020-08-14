@@ -232,6 +232,10 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
         $this->events[ProductsSynchronizedEvent::class] = 1;
 
         $productBack = $this->productBackRepository->findOneLast();
+        if (null === $productBack) {
+            return;
+        }
+
         $this->synchronizeProduct($productBack, $synchronizeImage);
 
         if (1 === $this->events[ProductsSynchronizedEvent::class]) {
