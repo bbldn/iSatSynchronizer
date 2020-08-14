@@ -169,7 +169,7 @@ abstract class Repository extends ServiceEntityRepository
             $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
 
             return $this->createQueryBuilder('a')
-                ->orderBy("a.{$identifier}", 'ASC')
+                ->orderBy("a.{$identifier}", 'DESC')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -189,7 +189,7 @@ abstract class Repository extends ServiceEntityRepository
             $identifier = $this->getClassMetadata()->getSingleIdentifierFieldName();
 
             return $this->createQueryBuilder('a')
-                ->orderBy("a.{$identifier}", 'DESC')
+                ->orderBy("a.{$identifier}", 'ASC')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();

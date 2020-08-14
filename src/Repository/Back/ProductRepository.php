@@ -10,6 +10,8 @@ use Psr\Log\LoggerInterface;
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
  * @method Product|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Product|null findOneFirst()
+ * @method Product|null findOneLast()
  * @method Product[]    findAll()
  * @method Product[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Product[]    findByIds(string $ids)
@@ -72,18 +74,6 @@ class ProductRepository extends BackRepository
         return $this->createQueryBuilder('p')
             ->andWhere('p.name LIKE :val')
             ->setParameter('val', "%$name%")
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @return Product[]
-     */
-    public function findLast(): array
-    {
-        return $this->createQueryBuilder('p')
-            ->orderBy('p.productId', 'DESC')
-            ->setMaxResults(1)
             ->getQuery()
             ->getResult();
     }
