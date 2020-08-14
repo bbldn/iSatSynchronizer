@@ -3,10 +3,8 @@
 namespace App\Repository\Back;
 
 use App\Entity\Back\Product;
-use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -74,6 +72,18 @@ class ProductRepository extends BackRepository
         return $this->createQueryBuilder('p')
             ->andWhere('p.name LIKE :val')
             ->setParameter('val', "%$name%")
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function findLast(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.productId', 'DESC')
+            ->setMaxResults(1)
             ->getQuery()
             ->getResult();
     }

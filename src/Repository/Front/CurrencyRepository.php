@@ -6,7 +6,6 @@ use App\Entity\Front\Currency;
 use App\Helper\ExceptionFormatter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnexpectedResultException;
 use Psr\Log\LoggerInterface;
 

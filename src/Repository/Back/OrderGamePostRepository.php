@@ -66,7 +66,7 @@ class OrderGamePostRepository extends BackRepository
 
         if (count($ids) > 0) {
             $queryBuilder = $queryBuilder->andWhere("o.clientId NOT IN (:ids)");
-            $queryBuilder =  $queryBuilder->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+            $queryBuilder = $queryBuilder->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
         }
 
         return $queryBuilder->andWhere('o.documentType = 2')

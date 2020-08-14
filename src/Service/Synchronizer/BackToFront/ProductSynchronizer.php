@@ -15,6 +15,24 @@ use App\Service\Synchronizer\BackToFront\Implementation\ProductSynchronizer as P
 class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSynchronizerInterface
 {
     /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeAll(bool $synchronizeImage = false): void
+    {
+        $this->events[ProductSynchronizedEvent::class] = 1;
+        $this->events[ProductsAllSynchronizedEvent::class] = 1;
+
+        $productsBack = $this->productBackRepository->findAll();
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductsAllSynchronizedEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsAllSynchronizedEvent());
+        }
+    }
+
+    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */
@@ -68,24 +86,6 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
 
         if (1 === $this->events[ProductsSynchronizedEvent::class]) {
             $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
-        }
-    }
-
-    /**
-     * @param bool $synchronizeImage
-     */
-    public function synchronizeAll(bool $synchronizeImage = false): void
-    {
-        $this->events[ProductSynchronizedEvent::class] = 1;
-        $this->events[ProductsAllSynchronizedEvent::class] = 1;
-
-        $productsBack = $this->productBackRepository->findAll();
-        foreach ($productsBack as $productBack) {
-            $this->synchronizeProduct($productBack, $synchronizeImage);
-        }
-
-        if (1 === $this->events[ProductsAllSynchronizedEvent::class]) {
-            $this->eventDispatcher->dispatch(new ProductsAllSynchronizedEvent());
         }
     }
 
@@ -220,6 +220,24 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
 
         if (1 === $this->events[PriceSynchronizeAllFastEvent::class]) {
             $this->eventDispatcher->dispatch(new PriceSynchronizeAllFastEvent());
+        }
+    }
+
+    /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeLast(bool $synchronizeImage = false): void
+    {
+        $this->events[ProductSynchronizedEvent::class] = 1;
+        $this->events[ProductsSynchronizedEvent::class] = 1;
+
+        $productsBack = $this->productBackRepository->findLast();
+        foreach ($productsBack as $productBack) {
+            $this->synchronizeProduct($productBack, $synchronizeImage);
+        }
+
+        if (1 === $this->events[ProductsSynchronizedEvent::class]) {
+            $this->eventDispatcher->dispatch(new ProductsSynchronizedEvent($this->synchronizedProducts));
         }
     }
 }

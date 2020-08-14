@@ -3,9 +3,8 @@
 namespace App\Repository;
 
 use App\Helper\ExceptionFormatter;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\NonUniqueResultException;
 
 abstract class EntityRepository extends Repository
 {

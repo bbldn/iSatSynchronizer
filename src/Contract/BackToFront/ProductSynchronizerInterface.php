@@ -7,6 +7,11 @@ use App\Contract\CanLoadInterface;
 interface ProductSynchronizerInterface extends CanLoadInterface
 {
     /**
+     * @param bool $synchronizeImage
+     */
+    public function synchronizeAll(bool $synchronizeImage = false): void;
+
+    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */
@@ -27,7 +32,7 @@ interface ProductSynchronizerInterface extends CanLoadInterface
     /**
      * @param bool $synchronizeImage
      */
-    public function synchronizeAll(bool $synchronizeImage = false): void;
+    public function synchronizeLast(bool $synchronizeImage = false): void;
 
     /**
      *
