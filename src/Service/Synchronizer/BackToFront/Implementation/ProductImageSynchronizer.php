@@ -264,15 +264,16 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
     protected function synchronizeImage(ProductBack $productBack, ProductFront $productFront): void
     {
         $productFront->setImage($this->defaultImagePath);
-        $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
-        foreach ($productBackImages as $key => $productBackImage) {
-            $this->synchronizeItem(
-                'synchronizeProductImage',
-                $productBackImage,
-                $productFront,
-                $key + 1
-            );
-        }
+//        $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
+//        foreach ($productBackImages as $key => $productBackImage) {
+//            $this->synchronizeItem(
+//                'synchronizeProductImage',
+//                $productBackImage,
+//                $productFront,
+//                $key + 1
+//            );
+//        }
+        $productBackImages = [];
 
         $count = count($productBackImages) + 1;
         $photosBack = $this->photoBackRepository->findByProductBackId($productBack->getProductId());
