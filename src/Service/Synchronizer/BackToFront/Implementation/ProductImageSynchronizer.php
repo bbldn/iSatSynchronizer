@@ -2,6 +2,7 @@
 
 namespace App\Service\Synchronizer\BackToFront\Implementation;
 
+use App\Entity\Back\Image;
 use App\Entity\Back\Photo as PhotoBack;
 use App\Entity\Back\Product as ProductBack;
 use App\Entity\Back\ProductPictures as ProductPicturesBack;
@@ -131,7 +132,10 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param string $imagePath
      * @return ProductImageFront
      */
-    protected function getProductImageFrontByProductIdAndImagePath(int $productId, string $imagePath): ProductImageFront
+    protected function getProductImageFrontByProductIdAndImagePath(
+        int $productId,
+        string $imagePath
+    ): ProductImageFront
     {
         $productImage = $this->productImageFrontRepository->findOneByProductIdAndImagePath($productId, $imagePath);
 
@@ -225,6 +229,35 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
     }
 
     /**
+     * @param string $method
+     * @param Image $photoBack
+     * @param ProductFront $productFront
+     * @param int $number
+     */
+    protected function synchronizeItem(
+        string $method,
+        Image $photoBack,
+        ProductFront $productFront,
+        int $number
+    ): void
+    {
+        /** @var ProductImageFront|null $productFrontImage */
+        $productFrontImage = $this->$method($photoBack, $productFront, $number);
+
+        if (null === $productFrontImage) {
+            return;
+        }
+
+        if ($productFront->getImage() === $this->defaultImagePath) {
+            $productFront->setImage($productFrontImage->getImage());
+        }
+
+        if ($productFront->getImage() === $productFrontImage->getImage()) {
+            $this->productImageFrontRepository->remove($productFrontImage);
+        }
+    }
+
+    /**
      * @param ProductBack $productBack
      * @param ProductFront $productFront
      */
@@ -233,45 +266,23 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
         $productFront->setImage($this->defaultImagePath);
         $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
         foreach ($productBackImages as $key => $productBackImage) {
-            $productFrontImage = $this->synchronizeProductImage(
+            $this->synchronizeItem(
+                'synchronizeProductImage',
                 $productBackImage,
                 $productFront,
                 $key + 1
             );
-
-            if (null === $productFrontImage) {
-                continue;
-            }
-
-            if ($productFront->getImage() === $this->defaultImagePath) {
-                $productFront->setImage($productFrontImage->getImage());
-            }
-
-            if ($productFront->getImage() === $productFrontImage->getImage()) {
-                $this->productImageFrontRepository->remove($productFrontImage);
-            }
         }
 
         $count = count($productBackImages) + 1;
         $photosBack = $this->photoBackRepository->findByProductBackId($productBack->getProductId());
         foreach ($photosBack as $key => $photoBack) {
-            $productFrontImage = $this->synchronizePhoto(
+            $this->synchronizeItem(
+                'synchronizePhoto',
                 $photoBack,
                 $productFront,
                 $key + $count
             );
-
-            if (null === $productFrontImage) {
-                continue;
-            }
-
-            if ($productFront->getImage() === $this->defaultImagePath) {
-                $productFront->setImage($productFrontImage->getImage());
-            }
-
-            if ($productFront->getImage() === $productFrontImage->getImage()) {
-                $this->productImageFrontRepository->remove($productFrontImage);
-            }
         }
 
         $this->productFrontRepository->persistAndFlush($productFront);

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`SS_product_pictures`")
  * @ORM\Entity(repositoryClass="App\Repository\Back\ProductPicturesRepository")
  */
-class ProductPictures
+class ProductPictures implements Image
 {
     /**
      * @var int|null $photoId
