@@ -48,14 +48,14 @@ class UpdatePriceList implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return [
-            ProductSynchronizedEvent::class => 'action',
-            CategorySynchronizedEvent::class => 'action',
-            PriceSynchronizeEvent::class => 'action',
-            PriceSynchronizeFastEvent::class => 'action',
-            PriceSynchronizeAllFastEvent::class => 'action',
-            CurrencySynchronizedEvent::class => 'action',
-        ];
+//        return [
+//            ProductSynchronizedEvent::class => 'action',
+//            CategorySynchronizedEvent::class => 'action',
+//            PriceSynchronizeEvent::class => 'action',
+//            PriceSynchronizeFastEvent::class => 'action',
+//            PriceSynchronizeAllFastEvent::class => 'action',
+//            CurrencySynchronizedEvent::class => 'action',
+//        ];
     }
 
     /**
