@@ -249,9 +249,8 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
         }
 
         if ($productFront->getImage() === $this->defaultImagePath) {
+            var_dump($photoBack->getFileName());
             $productFront->setImage($productFrontImage->getImage());
-            var_dump($method);
-            var_dump($productFrontImage->getImage());
         }
 
         if ($productFront->getImage() === $productFrontImage->getImage()) {
