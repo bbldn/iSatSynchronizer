@@ -61,6 +61,9 @@ class SynchronizeProductImage implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param ProductSynchronizedEvent $event
+     */
     public function action(ProductSynchronizedEvent $event): void
     {
         try {
