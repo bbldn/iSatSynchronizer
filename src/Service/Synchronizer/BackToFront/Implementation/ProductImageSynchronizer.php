@@ -118,7 +118,7 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
      * @param int $number
      * @return ProductImageFront|null
      */
-    protected function synchronizeProductImage(
+    protected function synchronizeProductPicture(
         ProductPicturesBack $productPicturesBack,
         ProductFront $productFront,
         int $number = 1
@@ -267,13 +267,12 @@ abstract class ProductImageSynchronizer extends BackToFrontSynchronizer
         $productBackImages = $this->productPicturesBackRepository->findByProductBackId($productBack->getProductId());
         foreach ($productBackImages as $key => $productBackImage) {
             $this->synchronizeItem(
-                'synchronizeProductImage',
+                'synchronizeProductPicture',
                 $productBackImage,
                 $productFront,
                 $key + 1
             );
         }
-        $productBackImages = [];
 
         $count = count($productBackImages) + 1;
         $photosBack = $this->photoBackRepository->findByProductBackId($productBack->getProductId());
