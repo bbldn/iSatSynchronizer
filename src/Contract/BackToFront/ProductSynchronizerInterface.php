@@ -12,6 +12,11 @@ interface ProductSynchronizerInterface extends CanLoadInterface
     public function synchronizeAll(bool $synchronizeImage = false): void;
 
     /**
+     *
+     */
+    public function synchronizeAllLite(): void;
+
+    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */

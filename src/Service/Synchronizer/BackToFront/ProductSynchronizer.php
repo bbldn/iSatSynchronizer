@@ -33,6 +33,17 @@ class ProductSynchronizer extends ProductBaseSynchronizer implements ProductSync
     }
 
     /**
+     *
+     */
+    public function synchronizeAllLite(): void
+    {
+        $productsBack = $this->productBackRepository->findAll();
+        foreach ($productsBack as $productBack) {
+            $this->productSynchronizerLite->synchronizeProductLite($productBack);
+        }
+    }
+
+    /**
      * @param string $ids
      * @param bool $synchronizeImage
      */
