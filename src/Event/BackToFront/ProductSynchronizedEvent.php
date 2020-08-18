@@ -5,7 +5,7 @@ namespace App\Event\BackToFront;
 use App\Entity\Product;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class ProductSynchronizedEvent extends Event
+class ProductSynchronizedEvent extends Event implements ProductSynchronizedInterface
 {
     /** @var Product $product */
     protected $product;
@@ -34,13 +34,10 @@ class ProductSynchronizedEvent extends Event
 
     /**
      * @param Product $product
-     * @return ProductSynchronizedEvent
      */
-    public function setProduct(Product $product): self
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
-
-        return $this;
     }
 
     /**

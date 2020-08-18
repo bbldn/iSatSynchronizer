@@ -45,6 +45,7 @@ use App\Repository\Front\ProductRewardRepository as ProductRewardFrontRepository
 use App\Repository\Front\ProductSpecialRepository as ProductSpecialFrontRepository;
 use App\Repository\Front\ProductStoreRepository as ProductStoreFrontRepository;
 use App\Repository\ProductRepository;
+use App\Service\Synchronizer\BackToFront\ProductSynchronizerLite;
 use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -135,6 +136,9 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
     /** @var ManufacturerHelperInterface $manufacturerHelper */
     protected $manufacturerHelper;
 
+    /** @var ProductSynchronizerLite $productSynchronizerLite */
+    protected $productSynchronizerLite;
+
     /** @var bool $synchronizeImage */
     protected $synchronizeImage = false;
 
@@ -182,6 +186,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
      * @param ProductSynchronizerHelperInterface $productSynchronizerHelper
      * @param DescriptionHelperInterface $descriptionHelper
      * @param ManufacturerHelperInterface $manufacturerHelper
+     * @param ProductSynchronizerLite $productSynchronizerLite
      */
     public function __construct(
         LoggerInterface $logger,
@@ -211,7 +216,8 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         CurrencyBackRepository $currencyBackRepository,
         ProductSynchronizerHelperInterface $productSynchronizerHelper,
         DescriptionHelperInterface $descriptionHelper,
-        ManufacturerHelperInterface $manufacturerHelper
+        ManufacturerHelperInterface $manufacturerHelper,
+        ProductSynchronizerLite $productSynchronizerLite
     )
     {
         $this->logger = $logger;
@@ -242,6 +248,7 @@ abstract class ProductSynchronizer extends BackToFrontSynchronizer
         $this->productSynchronizerHelper = $productSynchronizerHelper;
         $this->descriptionHelper = $descriptionHelper;
         $this->manufacturerHelper = $manufacturerHelper;
+        $this->productSynchronizerLite = $productSynchronizerLite;
     }
 
     /**

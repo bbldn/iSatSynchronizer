@@ -56,6 +56,7 @@ class QueueHandlerCommand extends Command
         if ($childPid) {
             return Command::SUCCESS;
         }
+
         posix_setsid();
         fclose(STDIN);
         fclose(STDOUT);

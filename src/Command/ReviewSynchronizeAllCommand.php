@@ -37,7 +37,7 @@ class ReviewSynchronizeAllCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize reviews');
         $this->addArgument('direction', InputArgument::REQUIRED, 'Direction');

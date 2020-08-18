@@ -37,7 +37,7 @@ class OrderSynchronizeAllCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize orders');
         $this->addArgument('direction', InputArgument::REQUIRED, 'Direction');

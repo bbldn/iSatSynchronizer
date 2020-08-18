@@ -27,7 +27,7 @@ class CustomerSynchronizeOneCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize customers');
         $this->addArgument('id', InputArgument::REQUIRED, 'idCustomer');

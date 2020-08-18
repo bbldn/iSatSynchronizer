@@ -7,15 +7,15 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProductSynchronizeAllCommand extends Command
+class ProductSynchronizeByCategoryIdLiteCommand extends Command
 {
-    protected static $defaultName = 'product:synchronize:all';
+    protected static $defaultName = 'product:synchronize:by-category-id:lite';
 
     /** @var ProductSynchronizerInterface $productSynchronize */
     protected $productSynchronize;
 
     /**
-     * ProductSynchronizeAllCommand constructor.
+     * ProductSynchronizeByCategoryIdCommand constructor.
      * @param ProductSynchronizerInterface $productSynchronizer
      */
     public function __construct(ProductSynchronizerInterface $productSynchronizer)
@@ -29,8 +29,8 @@ class ProductSynchronizeAllCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setDescription('Synchronize products');
-        $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Load image');
+        $this->setDescription('Synchronize product');
+        $this->addArgument('ids', InputArgument::REQUIRED, 'ids');
     }
 
     /**
@@ -49,8 +49,11 @@ class ProductSynchronizeAllCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $loadImage = $input->getArgument('loadImage') !== null;
-        $this->productSynchronize->synchronizeAll($loadImage);
+        $ids = $this->parseIdArray($input);
+
+        foreach ($ids as $id) {
+            $this->productSynchronize->synchronizeByCategoryIdLite($id);
+        }
 
         return Command::SUCCESS;
     }

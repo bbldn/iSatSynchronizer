@@ -27,7 +27,7 @@ class ProductSynchronizeLastCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Product one synchronize last');
         $this->addArgument('loadImage', InputArgument::OPTIONAL, 'Synchronize image');

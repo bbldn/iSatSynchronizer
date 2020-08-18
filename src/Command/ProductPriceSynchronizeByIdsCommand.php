@@ -27,7 +27,7 @@ class ProductPriceSynchronizeByIdsCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Products price synchronize');
         $this->addArgument('ids', InputArgument::REQUIRED, 'Ids');

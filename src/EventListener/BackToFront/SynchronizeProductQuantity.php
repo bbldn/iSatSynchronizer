@@ -3,6 +3,8 @@
 namespace App\EventListener\BackToFront;
 
 use App\Event\BackToFront\ProductSynchronizedEvent;
+use App\Event\BackToFront\ProductSynchronizedInterface;
+use App\Event\BackToFront\ProductSynchronizedLiteEvent;
 use App\Exception\ProductNotFoundException;
 use App\Helper\BackToFront\ProductQuantityHelper;
 use App\Helper\ExceptionFormatter;
@@ -39,13 +41,14 @@ class SynchronizeProductQuantity implements EventSubscriberInterface
     {
         return [
             ProductSynchronizedEvent::class => 'action',
+            ProductSynchronizedLiteEvent::class => 'action',
         ];
     }
 
     /**
-     * @param ProductSynchronizedEvent $event
+     * @param ProductSynchronizedInterface $event
      */
-    public function action(ProductSynchronizedEvent $event): void
+    public function action(ProductSynchronizedInterface $event): void
     {
         try {
             $this->_action($event);
@@ -55,10 +58,10 @@ class SynchronizeProductQuantity implements EventSubscriberInterface
     }
 
     /**
-     * @param ProductSynchronizedEvent $event
+     * @param ProductSynchronizedInterface $event
      * @throws Throwable
      */
-    protected function _action(ProductSynchronizedEvent $event): void
+    protected function _action(ProductSynchronizedInterface $event): void
     {
         $product = $event->getProduct();
         if (null === $product) {

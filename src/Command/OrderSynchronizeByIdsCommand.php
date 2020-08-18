@@ -37,7 +37,7 @@ class OrderSynchronizeByIdsCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Order one synchronize');
         $this->addArgument('direction', InputArgument::REQUIRED, 'Direction');

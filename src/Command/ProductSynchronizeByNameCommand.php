@@ -27,7 +27,7 @@ class ProductSynchronizeByNameCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Product one synchronize by name');
         $this->addArgument('name', InputArgument::REQUIRED, 'Product `name`');

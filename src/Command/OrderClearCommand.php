@@ -26,7 +26,7 @@ class OrderClearCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Clear orders');
     }

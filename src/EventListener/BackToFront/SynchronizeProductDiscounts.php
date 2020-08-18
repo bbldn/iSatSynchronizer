@@ -7,6 +7,8 @@ use App\Event\BackToFront\PriceSynchronizeAllFastEvent;
 use App\Event\BackToFront\PriceSynchronizeEvent;
 use App\Event\BackToFront\PriceSynchronizeFastEvent;
 use App\Event\BackToFront\ProductSynchronizedEvent;
+use App\Event\BackToFront\ProductSynchronizedInterface;
+use App\Event\BackToFront\ProductSynchronizedLiteEvent;
 use App\Exception\ProductNotFoundException;
 use App\Helper\ExceptionFormatter;
 use Psr\Log\LoggerInterface;
@@ -43,6 +45,7 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
+            ProductSynchronizedLiteEvent::class => 'action',
             ProductSynchronizedEvent::class => 'action',
             PriceSynchronizeEvent::class => 'actionData',
             PriceSynchronizeFastEvent::class => 'actionDataFast',
@@ -50,7 +53,10 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
         ];
     }
 
-    public function action(ProductSynchronizedEvent $event): void
+    /**
+     * @param ProductSynchronizedInterface $event
+     */
+    public function action(ProductSynchronizedInterface $event): void
     {
         try {
             $this->_action($event);
@@ -60,10 +66,10 @@ class SynchronizeProductDiscounts implements EventSubscriberInterface
     }
 
     /**
-     * @param ProductSynchronizedEvent $event
+     * @param ProductSynchronizedInterface $event
      * @throws ProductNotFoundException
      */
-    protected function _action(ProductSynchronizedEvent $event): void
+    protected function _action(ProductSynchronizedInterface $event): void
     {
         if (false === $this->synchronizerLoaded) {
             $this->productDiscountBackToFrontSynchronizer->load();

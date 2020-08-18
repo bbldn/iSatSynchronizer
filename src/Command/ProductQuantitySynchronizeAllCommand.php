@@ -43,7 +43,7 @@ class ProductQuantitySynchronizeAllCommand extends Command
     /**
      *
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize product quantity');
     }
