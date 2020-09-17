@@ -241,9 +241,11 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
         $categoryDescriptionFront->setCategoryId($categoryFront->getCategoryId());
         $categoryDescriptionFront->setLanguageId($this->storeFront->getDefaultLanguageId());
         $categoryDescriptionFront->setName(Filler::securityString(Store::encodingConvert($categoryBack->getName())));
-        $categoryDescriptionFront->setDescription(
-            Filler::securityString(Store::encodingConvert($categoryBack->getDescription()))
-        );
+        if (null === $categoryDescriptionFront->getDescription()) {
+            $categoryDescriptionFront->setDescription(
+                Filler::securityString(Store::encodingConvert($categoryBack->getDescription()))
+            );
+        }
 
         if (null === $categoryDescriptionFront->getMetaTitle()) {
             $categoryDescriptionFront->setMetaTitle('');
