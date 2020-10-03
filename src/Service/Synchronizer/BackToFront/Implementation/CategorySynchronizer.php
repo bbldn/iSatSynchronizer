@@ -209,10 +209,7 @@ abstract class CategorySynchronizer extends BackToFrontSynchronizer
         }
 
         $categoryFront->setSortOrder($categoryBack->getSortOrder());
-
-        if (null === $categoryFront->getStatus() || true === $categoryFront->getStatus()) {
-            $categoryFront->setStatus($categoryBack->getEnabled());
-        }
+        $categoryFront->setStatus($categoryBack->getEnabled());
 
         $this->categoryFrontRepository->persistAndFlush($categoryFront);
 
