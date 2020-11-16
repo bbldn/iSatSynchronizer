@@ -2,7 +2,6 @@
 
 namespace App\Entity\Front;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,6 +42,12 @@ class Review
      * @ORM\Column(type="string", name="`text`")
      */
     protected $text;
+
+    /**
+     * @var string|null $reply
+     * @ORM\Column(type="string", name="`reply`")
+     */
+    protected $reply;
 
     /**
      * @var int|null $rating
@@ -148,6 +153,25 @@ class Review
     public function setText(string $text): self
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReply(): ?string
+    {
+        return $this->reply;
+    }
+
+    /**
+     * @param string|null $reply
+     * @return Review
+     */
+    public function setReply(?string $reply): self
+    {
+        $this->reply = $reply;
 
         return $this;
     }

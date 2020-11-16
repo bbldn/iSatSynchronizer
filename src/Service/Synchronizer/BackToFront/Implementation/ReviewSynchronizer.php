@@ -4,16 +4,15 @@ namespace App\Service\Synchronizer\BackToFront\Implementation;
 
 use App\Entity\Back\Discussions as ReviewBack;
 use App\Entity\Front\Review as ReviewFront;
-use App\Entity\Front\ReviewAnswer as ReviewAnswerFront;
 use App\Entity\Review;
 use App\Helper\Front\Store as StoreFront;
 use App\Helper\Store;
 use App\Repository\Back\DiscussionsRepository as ReviewBackRepository;
-use App\Repository\Front\ReviewAnswerRepository as ReviewAnswerFrontRepository;
 use App\Repository\Front\ReviewRepository as ReviewFrontRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ReviewRepository;
 use DateTime;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 abstract class ReviewSynchronizer extends BackToFrontSynchronizer
@@ -36,12 +35,6 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
     /** @var ProductRepository $productRepository */
     protected $productRepository;
 
-    /** @var ReviewAnswerFrontRepository $reviewAnswerFrontRepository */
-    protected $reviewAnswerFrontRepository;
-
-    /** @var bool $reviewAnswerTableExists */
-    protected $reviewAnswerTableExists = false;
-
     /**
      * ReviewSynchronizer constructor.
      * @param LoggerInterface $logger
@@ -50,7 +43,6 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param ReviewBackRepository $reviewBackRepository
      * @param ReviewRepository $reviewRepository
      * @param ProductRepository $productRepository
-     * @param ReviewAnswerFrontRepository $reviewAnswerFrontRepository
      */
     public function __construct(
         LoggerInterface $logger,
@@ -58,8 +50,7 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
         ReviewFrontRepository $reviewFrontRepository,
         ReviewBackRepository $reviewBackRepository,
         ReviewRepository $reviewRepository,
-        ProductRepository $productRepository,
-        ReviewAnswerFrontRepository $reviewAnswerFrontRepository
+        ProductRepository $productRepository
     )
     {
         $this->logger = $logger;
@@ -68,17 +59,17 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
         $this->reviewBackRepository = $reviewBackRepository;
         $this->reviewRepository = $reviewRepository;
         $this->productRepository = $productRepository;
-        $this->reviewAnswerFrontRepository = $reviewAnswerFrontRepository;
     }
 
     /**
      * @param ReviewBack $reviewBack
+     * @throws Exception
      */
     protected function synchronizeReviewBack(ReviewBack $reviewBack): void
     {
         $review = $this->reviewRepository->findOneByBackId($reviewBack->getDid());
         $reviewFront = $this->getReviewFrontFromReview($review);
-        $this->updateReviewFrontAndOtherFromReviewBack($reviewFront, $reviewBack);
+        $this->updateReviewFrontFromReviewBack($reviewFront, $reviewBack);
         $this->createOrUpdateReview($review, $reviewBack->getDid(), $reviewFront->getReviewId());
     }
 
@@ -105,86 +96,27 @@ abstract class ReviewSynchronizer extends BackToFrontSynchronizer
      * @param ReviewFront $reviewFront
      * @param ReviewBack $reviewBack
      * @return ReviewFront
-     */
-    protected function updateReviewFrontAndOtherFromReviewBack(
-        ReviewFront $reviewFront,
-        ReviewBack $reviewBack
-    ): ReviewFront
-    {
-        $this->updateReviewFrontFromReviewBack($reviewFront, $reviewBack);
-        $this->updateReviewAnswerFrontFromReviewBack($reviewFront, $reviewBack);
-
-        return $reviewFront;
-    }
-
-    /**
-     * @param ReviewFront $reviewFront
-     * @param ReviewBack $reviewBack
-     * @return ReviewFront
+     * @throws Exception
      */
     protected function updateReviewFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ReviewFront
     {
         $product = $this->productRepository->findOneByBackId($reviewBack->getProductId());
-        if (null === $product) {
-            $productFrontId = 0;
-        } else {
-            $productFrontId = $product->getFrontId();
-        }
+        $productFrontId = null === $product ? 0 : $product->getFrontId();
+        $date = $reviewBack->getAddTime() ?? new DateTime();
 
         $reviewFront->setProductId($productFrontId);
         $reviewFront->setCustomerId($this->storeFront->getDefaultCustomerId());
         $reviewFront->setAuthor(Store::encodingConvert($reviewBack->getAuthor()));
         $reviewFront->setText(Store::encodingConvert($reviewBack->getBody()));
+        $reviewFront->setReply(trim(Store::encodingConvert($reviewBack->getAnswer())));
         $reviewFront->setRating($reviewBack->getStars());
         $reviewFront->setStatus($reviewBack->getEnabled());
-
-        if (null === $reviewBack->getAddTime()) {
-            $date = new DateTime();
-        } else {
-            $date = $reviewBack->getAddTime();
-        }
-
         $reviewFront->setDateAdded($date);
         $reviewFront->setDateModified($date);
 
         $this->reviewFrontRepository->persistAndFlush($reviewFront);
 
         return $reviewFront;
-    }
-
-    /**
-     * @param ReviewFront $reviewFront
-     * @param ReviewBack $reviewBack
-     * @return ReviewAnswerFront|null
-     */
-    protected function updateReviewAnswerFrontFromReviewBack(ReviewFront $reviewFront, ReviewBack $reviewBack): ?ReviewAnswerFront
-    {
-        $text = trim(Store::encodingConvert($reviewBack->getAnswer()));
-        if (mb_strlen($text) === 0 || false === $this->reviewAnswerTableExists) {
-            return null;
-        }
-
-        $reviewAnswerFront = $this->getReviewAnswerFrontByReviewFrontId($reviewFront->getReviewId());
-        $reviewAnswerFront->setReviewId($reviewFront->getReviewId());
-        $reviewAnswerFront->setText($text);
-
-        $this->reviewAnswerFrontRepository->persistAndFlush($reviewAnswerFront);
-
-        return $reviewAnswerFront;
-    }
-
-    /**
-     * @param int $reviewFrontId
-     * @return ReviewAnswerFront
-     */
-    protected function getReviewAnswerFrontByReviewFrontId(int $reviewFrontId): ReviewAnswerFront
-    {
-        $reviewAnswerFront = $this->reviewAnswerFrontRepository->find($reviewFrontId);
-        if (null !== $reviewAnswerFront) {
-            return $reviewAnswerFront;
-        }
-
-        return new ReviewAnswerFront();
     }
 
     /**

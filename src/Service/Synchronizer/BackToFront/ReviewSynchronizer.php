@@ -4,6 +4,7 @@ namespace App\Service\Synchronizer\BackToFront;
 
 use App\Contract\BackToFront\ReviewSynchronizerInterface;
 use App\Service\Synchronizer\BackToFront\Implementation\ReviewSynchronizer as ReviewBackSynchronizer;
+use Exception;
 
 class ReviewSynchronizer extends ReviewBackSynchronizer implements ReviewSynchronizerInterface
 {
@@ -13,11 +14,10 @@ class ReviewSynchronizer extends ReviewBackSynchronizer implements ReviewSynchro
     public function load(): void
     {
         parent::load();
-        $this->reviewAnswerTableExists = $this->reviewAnswerFrontRepository->tableExists();
     }
 
     /**
-     *
+     * @throws Exception
      */
     public function synchronizeAll(): void
     {
@@ -29,6 +29,7 @@ class ReviewSynchronizer extends ReviewBackSynchronizer implements ReviewSynchro
 
     /**
      * @param string $ids
+     * @throws Exception
      */
     public function synchronizeByIds(string $ids): void
     {
@@ -48,15 +49,10 @@ class ReviewSynchronizer extends ReviewBackSynchronizer implements ReviewSynchro
 
         $this->reviewRepository->resetAutoIncrements();
         $this->reviewFrontRepository->resetAutoIncrements();
-
-        if (true === $this->reviewAnswerTableExists) {
-            $this->reviewAnswerFrontRepository->clear();
-            $this->reviewAnswerFrontRepository->resetAutoIncrements();
-        }
     }
 
     /**
-     *
+     * @throws Exception
      */
     public function reload(): void
     {
